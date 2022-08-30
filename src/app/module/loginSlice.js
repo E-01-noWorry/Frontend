@@ -13,7 +13,10 @@ export const loginThunk = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const data = await instance.post("/user/login", payload);
-      localStorage.setItem("user", data.data.token);
+      console.log(data)
+      localStorage.setItem("token", data.data.token);
+      localStorage.setItem("nickname", data.data.nickname);
+      localStorage.setItem("userKey", data.data.userKey);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);

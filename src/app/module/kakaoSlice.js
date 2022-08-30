@@ -13,15 +13,17 @@ const initialState = {
   export const kakaoLoginThunk = createAsyncThunk(
     "kakaoUser/login",
     async (payload, thunkAPI) => {
+      console.log(payload)
       try {
-        const data = await instance.get(`/auth/kakao/callback?code=${payload}`)
-        localStorage.setItem('token', data.user.token)
-        return thunkAPI.fulfillWithValue(data);
+        const data = await instance.get(`/auth/kakao/callback`)
+        console.log(data)
+        return thunkAPI.fulfillWithValue(data.response);
       } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
       }
     }
   );
+
   
   export const kakaoLoginSlice = createSlice({
     name: "login",
@@ -29,6 +31,8 @@ const initialState = {
     reducers: {},
     extraReducers: {
       [kakaoLoginThunk.fulfilled]: (state, action) => {
+        console.log(state)
+        console.log(action)
       },
       [kakaoLoginThunk.rejected]: (state, action) => {
         

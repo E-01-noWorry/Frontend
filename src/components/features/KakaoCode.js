@@ -11,9 +11,10 @@ const KakaoCode = () => {
     let code = params.get("code");
 
     dispatch(kakaoLoginThunk(code))
+  
 
     return (
-      <p>잠시만 기다려 주세요! 로그인 중입니다.</p>    
+      <button>잠시만 기다려 주세요! 로그인 중입니다.</button>    
     );
 
 };
