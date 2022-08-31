@@ -8,14 +8,14 @@ import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import KakaoLogin from "../components/features/KakaoLogin"
-
+import { kakaoLoginThunk } from "../app/module/kakaoSlice";
 
 const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginState = useSelector((state)=>state.login)
-
+  
   const [login, setLogin] = useState({
     userId: "",
     password: "",
