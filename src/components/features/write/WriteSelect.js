@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import WriteImageUpload from './WriteImageUpload';
 import { __postSelect } from '../../../app/module/selectSlice';
-import { TIME_ARR, CATEGORY_ARR } from '../../../shared/Array';
+import { TIME_ARR, CATEGORY_ARR } from '../../../shared/array';
 import styled from 'styled-components';
 
 const WriteSelect = () => {
@@ -11,7 +11,7 @@ const WriteSelect = () => {
   const navigate = useNavigate();
 
   const [numArr, setNumArr] = useState([1, 2]);
-  const [content, setContent] = useState('');
+  const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [options, setOptions] = useState({ 1: '', 2: '' });
   const [images, setImages] = useState({ 1: '', 2: '' });
@@ -46,7 +46,7 @@ const WriteSelect = () => {
 
   const submitHandler = () => {
     const payload = {
-      title: content,
+      title: title,
       category: category,
       options: Object.values(options).filter((option) => option !== ''),
       image: Object.values(images).filter((image) => image !== ''),
@@ -70,12 +70,12 @@ const WriteSelect = () => {
         <h2>고민 작성</h2>
         <div>
           <StTextArea
-            value={content}
-            onChange={(event) => setContent(event.target.value)}
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
             maxLength="80"
             placeholder="고민을 작성해주세요"
           />
-          <span>{content.length}/80자</span>
+          <span>{title.length}/80자</span>
         </div>
       </div>
 
