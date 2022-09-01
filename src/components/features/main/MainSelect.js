@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { cleanUp, __getAllSelect } from '../../../app/module/selectSlice';
+import {
+  cleanUp,
+  __getAllSelect,
+  __getScrollSelect,
+} from '../../../app/module/selectSlice';
 import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/array';
 import styled from 'styled-components';
 
@@ -24,6 +28,42 @@ const MainSelect = () => {
       dispatch(cleanUp());
     };
   }, [dispatch, getAllSelect]);
+
+  ////////////////////////////////////////////////////////////////////
+  //무한 스크롤 부분
+  // const [page, setPage] = useState(1);
+  // const [ref, setRef] = useState(null);
+
+  // const onIntersect = ([entry], observer) => {
+  //   if (entry.isIntersecting) {
+  //     setPage((prev) => prev + 1);
+  //     observer.unobserve(entry.target);
+  //   }
+  // };
+
+  // const defaultOption = {
+  //   root: null,
+  //   rootMargin: '80px',
+  //   threshold: 0.5,
+  // };
+
+  // useEffect(() => {
+  //   let observer;
+  //   if (ref) {
+  //     observer = new IntersectionObserver(onIntersect, defaultOption);
+  //     observer.observe(ref);
+  //   }
+  //   return () => observer?.disconnect();
+  // }, [ref]);
+
+  // const getScrollSelect = useCallback(() => {
+  //   dispatch(__getScrollSelect(page));
+  // });
+
+  // useEffect(() => {
+  //   getScrollSelect();
+  // }, [page]);
+  ////////////////////////////////////////////////////////////////////
 
   return (
     <>
@@ -65,6 +105,7 @@ const MainSelect = () => {
           </div>
         </StContentBox>
       ))}
+      {/* <p ref={setRef}>더보기</p> */}
     </>
   );
 };
@@ -73,6 +114,6 @@ export default MainSelect;
 
 const StContentBox = styled.div`
   width: 30rem;
-  height: 5rem;
+  height: 20rem;
   border: 1px solid red;
 `;

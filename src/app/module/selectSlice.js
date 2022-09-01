@@ -1,6 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import instance from './instance';
 
+export const __getScrollSelect = createAsyncThunk(
+  '/getScrollSelect',
+  async (page, thunkAPI) => {
+    try {
+      const { data } = await instance.get(`/select?page=${page}`);
+      return thunkAPI.fulfillWithValue(data.result);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
 export const __getAllSelect = createAsyncThunk(
   '/getAllSelect',
   async (_, thunkAPI) => {
@@ -63,6 +75,19 @@ const selectSlice = createSlice({
     },
   },
   extraReducers: {
+    //모든 선택게시물 조회
+    [__getScrollSelect.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__getScrollSelect.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.selects = action.payload;
+    },
+    [__getScrollSelect.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+
     //모든 선택게시물 조회
     [__getAllSelect.pending]: (state) => {
       state.isLoading = true;
