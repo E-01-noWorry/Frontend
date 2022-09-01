@@ -37,16 +37,11 @@ const Detail = () => {
         {parseInt(userKey) === content?.userKey ? (
           <button onClick={deleteHandler}>삭제</button>
         ) : null}
-        <h1>{content.title}</h1>
+        <div>캐릭터 이미지</div>
         <div>{content.nickname}</div>
         <div>{content.category}</div>
+        <h1>{content.title}</h1>
         <div>{content.deadLine}</div>
-        <StImageBox>
-          {content.image?.map((image) => (
-            <img key={image} src={image} alt={image} />
-          ))}
-        </StImageBox>
-        <div>{content.content}</div>
         <Vote content={content} selectKey={selectKey} userKey={userKey} />
       </div>
     </div>
@@ -54,11 +49,3 @@ const Detail = () => {
 };
 
 export default Detail;
-
-const StImageBox = styled.div`
-  height: 10rem;
-
-  img {
-    height: 100%;
-  }
-`;
