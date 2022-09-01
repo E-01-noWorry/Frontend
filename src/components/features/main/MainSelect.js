@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { cleanUp, __getAllSelect } from '../../../app/module/selectSlice';
-import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/Array';
+import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/array';
 import styled from 'styled-components';
 
 const MainSelect = () => {
@@ -10,12 +10,16 @@ const MainSelect = () => {
   const navigate = useNavigate();
   const contents = useSelector((state) => state.select.selects);
 
+  const [filter, setFilter] = useState('');
+  const [category, setCategory] = useState('');
+
   const getAllSelect = useCallback(() => {
     dispatch(__getAllSelect());
   }, [dispatch]);
 
   useEffect(() => {
     getAllSelect();
+
     return () => {
       dispatch(cleanUp());
     };
@@ -28,17 +32,37 @@ const MainSelect = () => {
         <div>알람 아이콘</div>
       </div>
       <div>
-        <div>기본순</div>
-        <div>카테고리</div>
+        <select onChange={(e) => setFilter(e.target.value)} value={filter}>
+          {FILTER_ARR.map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+        <select onChange={(e) => setCategory(e.target.value)} value={category}>
+          <option>카테고리</option>
+          {CATEGORY_ARR.map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
       </div>
       {contents.map((content) => (
         <StContentBox
           key={content?.selectKey}
           onClick={() => navigate(`/detail/${content?.selectKey}`)}
         >
+          <div>
+            <span>{content?.category}</span>
+            <span>{content?.total || 0}명이 참여중</span>
+          </div>
           <h1>{content?.title}</h1>
-          <span>{content?.nickname}</span>
-          <span>{content?.deadLine}</span>
+          <span>{content?.options.join(' vs ')}</span>
+          <div>
+            <span>작성자 {content?.nickname}</span>
+            <span>{content?.deadLine}</span>
+          </div>
         </StContentBox>
       ))}
     </>
