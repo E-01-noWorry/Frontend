@@ -25,41 +25,32 @@ const Vote = ({ content, selectKey, userKey }) => {
   }, [dispatch, selectKey]);
 
   const voteHandler = () => {
-    dispatch(__postVote({ isSelect, selectKey }));
+    dispatch(__postVote({ isSelect, selectKey })).then(() => {
+      setIsSelect(0);
+    });
   };
+
+  console.log(voteResult, msg, error);
 
   return (
     <>
-      <StVoteResultBox>
-        <div>{voteResult.total} 명이 투표에 참여했습니다!</div>
-        {msg.includes('조회 성공') ? (
-          <div>
-            <div>투표한 번호: {voteResult?.isVote}</div>
-            <div>1번: {voteResult?.[1]} %</div>
-            <div>2번: {voteResult?.[2]} %</div>
-            <div>3번: {voteResult?.[3]} %</div>
-            <div>4번: {voteResult?.[4]} %</div>
-          </div>
-        ) : null}
-
-        <div>
-          {userKey ? (
-            <span>투표에 참여해 주세요</span>
-          ) : (
-            <span>
-              <StLoginPortal onClick={() => navigate('/login')}>
-                로그인
-              </StLoginPortal>
-              하고 투표에 참여해 보세요
-            </span>
-          )}
-        </div>
-      </StVoteResultBox>
-
-      {msg.includes('하지 않음') ? (
-        <StVoteBox isSelect={isSelect}>
+      {msg.includes('조회 성공') ? (
+        <StVoteResultBox>
           {content.options?.map((option, idx) => (
-            <StSelectItem key={option} onClick={() => setIsSelect(idx + 1)}>
+            <StSelectItem bgImage={content.image[idx]} key={idx}>
+              <div>{voteResult?.[idx + 1] || 0}%</div>
+              <div>{option}</div>
+            </StSelectItem>
+          ))}
+        </StVoteResultBox>
+      ) : (
+        <StVoteBox bgImage={content.image} isSelect={isSelect}>
+          {content.options?.map((option, idx) => (
+            <StSelectItem
+              bgImage={content.image[idx]}
+              key={idx}
+              onClick={() => setIsSelect(idx + 1)}
+            >
               <input
                 type="radio"
                 hidden
@@ -68,11 +59,11 @@ const Vote = ({ content, selectKey, userKey }) => {
                 onChange={() => setIsSelect(idx + 1)}
               />
               <label htmlFor={option}>{option}</label>
+              <button onClick={voteHandler}>클릭 후 투표</button>
             </StSelectItem>
           ))}
-          <button onClick={voteHandler}>선택</button>
         </StVoteBox>
-      ) : null}
+      )}
     </>
   );
 };
@@ -83,26 +74,38 @@ const StVoteBox = styled.div`
   border: 1px solid green;
 
   div:nth-child(${(props) => props.isSelect}) {
-    background-color: red;
-  }
-`;
+    transition-duration: 0.5s;
+    background-color: gray;
+    filter: brightness(70%);
 
-const StSelectItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: aliceblue;
-  width: 5rem;
-  height: 3rem;
+    label {
+      transform: translateY(-2rem);
+    }
+
+    button {
+      display: block;
+    }
+  }
 `;
 
 const StVoteResultBox = styled.div`
   border: 1px solid blue;
 `;
 
-const StLoginPortal = styled.span`
-  &:hover {
-    font-weight: 600;
-    text-decoration: underline;
+const StSelectItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 10rem;
+  height: 10rem;
+
+  background-image: url(${(props) => props.bgImage});
+  background-size: cover;
+  background-color: aliceblue;
+
+  button {
+    display: none;
   }
 `;
