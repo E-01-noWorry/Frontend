@@ -6,14 +6,11 @@ import {
   __getVoteResult,
   __postVote,
 } from '../../../app/module/voteSlice';
-import { useNavigate } from 'react-router-dom';
 
-const Vote = ({ content, selectKey, userKey }) => {
+const Vote = ({ content, selectKey }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const voteResult = useSelector((state) => state.vote.voteResult);
   const msg = useSelector((state) => state.vote.msg);
-  const error = useSelector((state) => state.vote.error);
   const [isSelect, setIsSelect] = useState();
 
   useEffect(() => {
@@ -29,8 +26,6 @@ const Vote = ({ content, selectKey, userKey }) => {
       setIsSelect(0);
     });
   };
-
-  console.log(voteResult, msg, error);
 
   return (
     <>
