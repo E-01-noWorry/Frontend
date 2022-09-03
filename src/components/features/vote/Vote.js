@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import instance from '../../../app/module/instance';
+import { cleanUpVote, __getVoteResult } from '../../../app/module/voteSlice';
 import styled from 'styled-components';
-import {
-  cleanUpVote,
-  __getVoteResult,
-  __postVote,
-} from '../../../app/module/voteSlice';
 
 const Vote = ({ content, selectKey }) => {
   const dispatch = useDispatch();
   const voteResult = useSelector((state) => state.vote.voteResult);
   const msg = useSelector((state) => state.vote.msg);
+
+  //투표 선택을 관리하는 State
   const [isSelect, setIsSelect] = useState();
 
   useEffect(() => {
@@ -19,12 +18,16 @@ const Vote = ({ content, selectKey }) => {
     return () => {
       dispatch(cleanUpVote());
     };
-  }, [dispatch, selectKey]);
+  }, [dispatch, selectKey, isSelect]);
 
-  const voteHandler = () => {
-    dispatch(__postVote({ isSelect, selectKey })).then(() => {
+  //투표 POST API
+  const voteHandler = async () => {
+    try {
+      await instance.post(`/select/vote/${selectKey}`, { choice: isSelect });
       setIsSelect(0);
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -39,7 +42,7 @@ const Vote = ({ content, selectKey }) => {
           ))}
         </StVoteResultBox>
       ) : (
-        <StVoteBox bgImage={content.image} isSelect={isSelect}>
+        <StVoteBox isSelect={isSelect}>
           {content.options?.map((option, idx) => (
             <StSelectItem
               bgImage={content.image[idx]}
