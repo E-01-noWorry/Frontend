@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Router from './router/router';
-import styled, { ThemeProvider } from 'styled-components';
-import { darkTheme, defaultTheme } from './shared/themes/Theme';
+import { ThemeProvider } from 'styled-components';
+import { darkTheme, defaultTheme } from './shared/themes/theme';
 import GlobalStyles from './shared/themes/GlobalStyles';
 
 const App = () => {
