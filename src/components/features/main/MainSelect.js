@@ -1,78 +1,75 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  cleanUp,
-  __getAllSelect,
-  __getScrollSelect,
-} from '../../../app/module/selectSlice';
+import instance from '../../../app/module/instance';
 import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/array';
 import styled from 'styled-components';
 
 const MainSelect = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const contents = useSelector((state) => state.select.selects);
+  const [contents, setContents] = useState([]);
 
+  //필터와 카테고리를 관리하는 State
   const [filter, setFilter] = useState('');
   const [category, setCategory] = useState('');
 
-  const getAllSelect = useCallback(() => {
-    dispatch(__getAllSelect());
-  }, [dispatch]);
+  //무한 스크롤을 관리하는 State
+  const [page, setPage] = useState(1);
+  const [ref, setRef] = useState(null);
+
+  //선택 게시글 불러오기
+  const getScrollSelect = async () => {
+    try {
+      if (filter === '인기순') {
+        const { data } = await instance.get(`/select/filter?page=${page}`);
+        setContents([...contents, ...data.data]);
+      } else {
+        const { data } = await instance.get(`/select?page=${page}`);
+        setContents([...contents, ...data.result]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다.
+  const onIntersect = ([entry], observer) => {
+    if (entry.isIntersecting) {
+      setPage((prev) => prev + 1);
+      observer.unobserve(entry.target);
+    }
+  };
 
   useEffect(() => {
-    getAllSelect();
+    getScrollSelect();
+  }, [filter, page]);
 
-    return () => {
-      dispatch(cleanUp());
-    };
-  }, [dispatch, getAllSelect]);
+  //Intersection Observer API의 기본 옵션 설정
+  const defaultOption = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.8,
+  };
 
-  ////////////////////////////////////////////////////////////////////
-  //무한 스크롤 부분
-  // const [page, setPage] = useState(1);
-  // const [ref, setRef] = useState(null);
+  //매번 갱신되기 전 마지막 게시글에 붙어있는 ref를 감시하라고 지정해준다
+  useEffect(() => {
+    let observer;
+    if (ref) {
+      observer = new IntersectionObserver(onIntersect, defaultOption);
+      observer.observe(ref);
+    }
+    return () => observer?.disconnect();
+  }, [ref]);
 
-  // const onIntersect = ([entry], observer) => {
-  //   if (entry.isIntersecting) {
-  //     setPage((prev) => prev + 1);
-  //     observer.unobserve(entry.target);
-  //   }
-  // };
-
-  // const defaultOption = {
-  //   root: null,
-  //   rootMargin: '80px',
-  //   threshold: 0.5,
-  // };
-
-  // useEffect(() => {
-  //   let observer;
-  //   if (ref) {
-  //     observer = new IntersectionObserver(onIntersect, defaultOption);
-  //     observer.observe(ref);
-  //   }
-  //   return () => observer?.disconnect();
-  // }, [ref]);
-
-  // const getScrollSelect = useCallback(() => {
-  //   dispatch(__getScrollSelect(page));
-  // });
-
-  // useEffect(() => {
-  //   getScrollSelect();
-  // }, [page]);
-  ////////////////////////////////////////////////////////////////////
+  //필터가 변경되면 filter값을 바꿔주고 겹침을 방지하기 위해 contents를 빈배열로 바꿔준다
+  const filterHandler = (event) => {
+    setFilter(event.target.value);
+    setContents([]);
+  };
 
   return (
     <>
       <div>
-        <h1>로고</h1>
-        <div>알람 아이콘</div>
-      </div>
-      <div>
-        <select onChange={(e) => setFilter(e.target.value)} value={filter}>
+        <select onChange={filterHandler} defaultValue={filter}>
           {FILTER_ARR.map((item) => (
             <option key={item} value={item}>
               {item}
@@ -88,24 +85,26 @@ const MainSelect = () => {
           ))}
         </select>
       </div>
-      {contents.map((content) => (
+
+      {contents?.map((content, idx) => (
         <StContentBox
-          key={content?.selectKey}
-          onClick={() => navigate(`/detail/${content?.selectKey}`)}
+          key={content.selectKey}
+          onClick={() => navigate(`/detail/${content.selectKey}`)}
+          //마지막 게시글에 ref를 달아준다
+          ref={idx === contents.length - 1 ? setRef : null}
         >
           <div>
-            <span>{content?.category}</span>
-            <span>{content?.total || 0}명이 참여중</span>
+            <span>{content.category}</span>
+            <span>{content.total || 0}명이 참여중</span>
           </div>
-          <h1>{content?.title}</h1>
-          <span>{content?.options.join(' vs ')}</span>
+          <h1>{content.title}</h1>
+          <span>{content.options?.join(' vs ')}</span>
           <div>
-            <span>작성자 {content?.nickname}</span>
-            <span>{content?.deadLine}</span>
+            <span>작성자 {content.nickname}</span>
+            <span>{content.deadLine}</span>
           </div>
         </StContentBox>
       ))}
-      {/* <p ref={setRef}>더보기</p> */}
     </>
   );
 };
@@ -114,6 +113,6 @@ export default MainSelect;
 
 const StContentBox = styled.div`
   width: 30rem;
-  height: 20rem;
+  height: 15rem;
   border: 1px solid red;
 `;
