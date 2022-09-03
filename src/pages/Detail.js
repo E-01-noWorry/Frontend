@@ -1,33 +1,33 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
-import {
-  cleanUp,
-  __deleteSelect,
-  __getDetailSelect,
-} from '../app/module/selectSlice';
+import instance from '../app/module/instance';
+import { cleanUp, __getDetailSelect } from '../app/module/selectSlice';
 import Vote from '../components/features/vote/Vote';
 
 const Detail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const content = useSelector((state) => state.select.select);
+
   const { selectKey } = useParams();
   const userKey = localStorage.getItem('userKey');
 
   useEffect(() => {
     dispatch(__getDetailSelect(selectKey));
-
     return () => {
       dispatch(cleanUp());
     };
   }, [dispatch, selectKey]);
 
-  const deleteHandler = () => {
-    dispatch(__deleteSelect(selectKey)).then(() => {
+  //투표 게시글 DELETE API
+  const deleteHandler = async () => {
+    try {
+      await instance.delete(`/select/${selectKey}`);
       navigate('/', { state: 'select' });
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
