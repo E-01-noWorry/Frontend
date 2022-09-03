@@ -4,11 +4,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import instance from '../app/module/instance';
 import { cleanUp, __getDetailSelect } from '../app/module/selectSlice';
 import Vote from '../components/features/vote/Vote';
+import Comment from '../components/features/comment/comment';
 
 const Detail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const content = useSelector((state) => state.select.select);
+
+  //yuncheol, props로 유저정보 및 댓글 가져오기위해 추가
+  const user = useSelector((state) => state);
 
   const { selectKey } = useParams();
   const userKey = localStorage.getItem('userKey');
@@ -44,6 +48,8 @@ const Detail = () => {
         <div>{content.deadLine}</div>
         <Vote content={content} selectKey={selectKey} userKey={userKey} />
       </div>
+      {/*yuncheol, Comment 컴포넌트 추가 */}
+      <Comment content={content} user={user} />
     </div>
   );
 };
