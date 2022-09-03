@@ -1,27 +1,28 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import instance from '../../../app/module/instance';
 import WriteImageUpload from './WriteImageUpload';
-import { __postSelect } from '../../../app/module/selectSlice';
-import { TIME_ARR, CATEGORY_ARR } from '../../../shared/Array';
+import { TIME_ARR, CATEGORY_ARR } from '../../../shared/array';
 import styled from 'styled-components';
 
 const WriteSelect = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  //서버에 전송할 payload를 관리하는 State
   const [numArr, setNumArr] = useState([1, 2]);
-  const [content, setContent] = useState('');
+  const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [options, setOptions] = useState({ 1: '', 2: '' });
   const [images, setImages] = useState({ 1: '', 2: '' });
   const [time, setTime] = useState(1);
 
+  //선택지 핸들러
   const optionChangeHandler = (event) => {
     const { name, value } = event.target;
     setOptions({ ...options, [name]: value });
   };
 
+  //선택지 추가 핸들러
   const optionAddHandler = () => {
     if (numArr.length >= 4) {
       alert('선택지는 최대 4개까지 작성 가능합니다');
@@ -30,6 +31,7 @@ const WriteSelect = () => {
     }
   };
 
+  //선택지 삭제 핸들러
   const optionDeleteHandler = (payload) => {
     if (numArr.length <= 2) {
       alert('선택지는 최소 2개가 있어야 합니다');
@@ -39,22 +41,27 @@ const WriteSelect = () => {
     }
   };
 
+  //마감시간 설정 핸들러
   const timeHandler = (event) => {
     const time = event.target.getAttribute('time');
     setTime(time);
   };
 
-  const submitHandler = () => {
+  //고민 게시글 작성 POST API
+  const submitHandler = async () => {
     const payload = {
-      title: content,
+      title: title,
       category: category,
       options: Object.values(options).filter((option) => option !== ''),
       image: Object.values(images).filter((image) => image !== ''),
       time: time,
     };
-    dispatch(__postSelect(payload)).then(() => {
+    try {
+      await instance.post('/select', payload);
       navigate('/', { state: 'select' });
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -70,12 +77,12 @@ const WriteSelect = () => {
         <h2>고민 작성</h2>
         <div>
           <StTextArea
-            value={content}
-            onChange={(event) => setContent(event.target.value)}
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
             maxLength="80"
             placeholder="고민을 작성해주세요"
           />
-          <span>{content.length}/80자</span>
+          <span>{title.length}/80자</span>
         </div>
       </div>
 
@@ -100,11 +107,11 @@ const WriteSelect = () => {
           <StOptionBox key={num}>
             <div>
               <h3>선택지 {idx + 1}</h3>
-              {num > 2 ? (
+              {num > 2 && (
                 <button onClick={() => optionDeleteHandler(num)}>
                   선택지 삭제
                 </button>
-              ) : null}
+              )}
             </div>
             <div>
               <textarea

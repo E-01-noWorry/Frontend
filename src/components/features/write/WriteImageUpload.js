@@ -1,14 +1,10 @@
 import React from 'react';
-/////////////////////////////////////////////////////////////////
-//Amazon S3 이미지 관련 임포트
 import S3 from 'react-aws-s3';
 import { v4 as uuidv4 } from 'uuid';
-/////////////////////////////////////////////////////////////////
 
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
 const WriteImageUpload = ({ setImages, images, num }) => {
-  //////////////////////////////////////////////////////////////
   // S3 이미지 업로드 후 images State에 이미지 URL 넣는 로직
   const config = {
     bucketName: 'mainproject-image-bucket',
@@ -28,7 +24,6 @@ const WriteImageUpload = ({ setImages, images, num }) => {
       })
       .catch((err) => console.log(err));
   };
-  //////////////////////////////////////////////////////////////
 
   return (
     <input

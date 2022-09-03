@@ -4,6 +4,7 @@ import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
 import Write from '../pages/Write';
 import Detail from '../pages/Detail';
+import ChatRoom from '../pages/ChatRoom';
 
 const Router = () => {
   return (
@@ -14,6 +15,7 @@ const Router = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/write" element={<Write />} />
         <Route path="/detail/:selectKey" element={<Detail />} />
+        <Route path="/chatroom/:roomKey" element={<ChatRoom />} />
       </Routes>
     </BrowserRouter>
   );

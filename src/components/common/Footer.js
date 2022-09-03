@@ -9,7 +9,7 @@ const Footer = () => {
       <button onClick={() => navigate('/', { state: 'select' })}>
         선택페이지
       </button>
-      <button onClick={() => navigate('/', { state: 'worry' })}>
+      <button onClick={() => navigate('/', { state: 'room' })}>
         고민상담방
       </button>
       <button onClick={() => navigate('/mypage')}>마이페이지</button>
