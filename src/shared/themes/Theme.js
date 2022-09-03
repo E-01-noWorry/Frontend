@@ -3,7 +3,7 @@ export const darkTheme = {
   //white
 };
 
-export const lightTheme = {
+export const defaultTheme = {
   //black
 };
 
@@ -11,7 +11,7 @@ export const lightTheme = {
 //font-size : 16px, 20px, 32px
 //종종 12px,13px,14px도 있는데 어떻게하지?
 export const Theme = {
-  lightTheme,
+  defaultTheme,
   darkTheme,
 };
 

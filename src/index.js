@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { store } from './app/config/store';
 import { Provider } from 'react-redux';
-import GlobalStyles from './shared/GlobalStyles';
+import GlobalStyles from './shared/themes/GlobalStyles';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
