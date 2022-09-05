@@ -22,7 +22,7 @@ const WriteRoom = () => {
   return (
     <div>
       <div>
-        <button onClick={() => navigate('/', { state: { page: 'room' } })}>
+        <button onClick={() => navigate('/', { state: 'room' })}>
           뒤로 가기
         </button>
         <h1>채팅방 생성</h1>
