@@ -1,22 +1,26 @@
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Main from '../pages/Main';
-import Login from '../pages/Login';
-import SignUp from '../pages/SignUp';
-import Write from '../pages/Write';
-import Detail from '../pages/Detail';
-import ChatRoom from '../pages/ChatRoom';
+
+const Main = lazy(() => import('../pages/Main'));
+const Login = lazy(() => import('../pages/Login'));
+const SignUp = lazy(() => import('../pages/SignUp'));
+const Write = lazy(() => import('../pages/Write'));
+const Detail = lazy(() => import('../pages/Detail'));
+const ChatRoom = lazy(() => import('../pages/ChatRoom'));
 
 const Router = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/write" element={<Write />} />
-        <Route path="/detail/:selectKey" element={<Detail />} />
-        <Route path="/chatroom/:roomKey" element={<ChatRoom />} />
-      </Routes>
+      <Suspense fallback={<p>Loading...</p>}>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/write" element={<Write />} />
+          <Route path="/detail/:selectKey" element={<Detail />} />
+          <Route path="/chatroom/:roomKey" element={<ChatRoom />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 };
