@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import instance from '../../../app/module/instance';
-import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/array';
+import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/Array';
 import styled from 'styled-components';
 import {
   fontBold,

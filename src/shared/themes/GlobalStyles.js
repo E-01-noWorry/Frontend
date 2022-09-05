@@ -30,13 +30,6 @@ const GlobalStyles = createGlobalStyle`
   a {
     text-decoration: none;
   }
-
-  // 나중에 미디어 쿼리 적용할때 사용
-  /* @media screen and (max-width: 767px) {} 
-  @media screen and (max-width: 600px) {}
-  @media screen and (max-width: 575px) {} 
-  @media screen and (max-width: 480px) {} 
-  @media screen and (max-width: 360px) {} */
 `;
 
 export default GlobalStyles;

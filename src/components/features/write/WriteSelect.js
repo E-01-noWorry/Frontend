@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import instance from '../../../app/module/instance';
 import WriteImageUpload from './WriteImageUpload';
-import { TIME_ARR, CATEGORY_ARR } from '../../../shared/array';
+import { TIME_ARR, CATEGORY_ARR } from '../../../shared/Array';
 import styled from 'styled-components';
 import {
   fontBold,
