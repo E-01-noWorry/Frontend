@@ -3,14 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import instance from '../../../app/module/instance';
 import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/array';
 import styled from 'styled-components';
+import {
+  fontBold,
+  fontExtraBold,
+  fontMedium,
+  fontSmall,
+} from '../../../shared/themes/textStyle';
+import { borderBoxDefault } from '../../../shared/themes/boxStyle';
+import { remainedTime } from '../../../shared/timeCalculation';
 
 const MainSelect = () => {
   const navigate = useNavigate();
   const [contents, setContents] = useState([]);
 
   //필터와 카테고리를 관리하는 State
-  const [filter, setFilter] = useState('');
-  const [category, setCategory] = useState('');
+  const [filter, setFilter] = useState('기본순');
+  const [category, setCategory] = useState('카테고리');
 
   //무한 스크롤을 관리하는 State
   const [page, setPage] = useState(1);
@@ -22,6 +30,11 @@ const MainSelect = () => {
       if (filter === '인기순') {
         const { data } = await instance.get(`/select/filter?page=${page}`);
         setContents([...contents, ...data.data]);
+      } else if (category && category !== '카테고리') {
+        const { data } = await instance.get(
+          `/select/category/${category}?page=${page}`,
+        );
+        setContents([...contents, ...data.result]);
       } else {
         const { data } = await instance.get(`/select?page=${page}`);
         setContents([...contents, ...data.result]);
@@ -41,7 +54,7 @@ const MainSelect = () => {
 
   useEffect(() => {
     getScrollSelect();
-  }, [filter, page]);
+  }, [category, filter, page]);
 
   //Intersection Observer API의 기본 옵션 설정
   const defaultOption = {
@@ -60,23 +73,33 @@ const MainSelect = () => {
     return () => observer?.disconnect();
   }, [ref]);
 
-  //필터가 변경되면 filter값을 바꿔주고 겹침을 방지하기 위해 contents를 빈배열로 바꿔준다
+  //필터 핸들러
   const filterHandler = (event) => {
     setFilter(event.target.value);
+    setCategory('카테고리');
     setContents([]);
+    setPage(1); //page도 바꿔줘야 필터를 바꿨을때 제대로 작동한다
+  };
+
+  //카테고리 핸들러
+  const categoryHandler = (event) => {
+    setCategory(event.target.value);
+    setFilter('기본순');
+    setContents([]);
+    setPage(1);
   };
 
   return (
     <>
-      <div>
-        <select onChange={filterHandler} defaultValue={filter}>
+      <StFilterDiv>
+        <select onChange={filterHandler} value={filter}>
           {FILTER_ARR.map((item) => (
             <option key={item} value={item}>
               {item}
             </option>
           ))}
         </select>
-        <select onChange={(e) => setCategory(e.target.value)} value={category}>
+        <select onChange={categoryHandler} value={category}>
           <option>카테고리</option>
           {CATEGORY_ARR.map((item) => (
             <option key={item} value={item}>
@@ -84,35 +107,126 @@ const MainSelect = () => {
             </option>
           ))}
         </select>
-      </div>
+      </StFilterDiv>
 
-      {contents?.map((content, idx) => (
-        <StContentBox
-          key={content.selectKey}
-          onClick={() => navigate(`/detail/${content.selectKey}`)}
-          //마지막 게시글에 ref를 달아준다
-          ref={idx === contents.length - 1 ? setRef : null}
-        >
-          <div>
-            <span>{content.category}</span>
-            <span>{content.total || 0}명이 참여중</span>
-          </div>
-          <h1>{content.title}</h1>
-          <span>{content.options?.join(' vs ')}</span>
-          <div>
-            <span>작성자 {content.nickname}</span>
-            <span>{content.deadLine}</span>
-          </div>
-        </StContentBox>
-      ))}
+      <StContentBoxWrap>
+        {contents?.map((content, idx) => (
+          <StContentBox
+            key={content.selectKey}
+            onClick={() => navigate(`/detail/${content.selectKey}`)}
+            //마지막 게시글에 ref를 달아준다
+            ref={idx === contents.length - 1 ? setRef : null}
+          >
+            <StContentInner>
+              <StInnerCategory>{content.category}</StInnerCategory>
+              <StInnerCurrent>
+                {content.total || 0}명이 투표 참여중
+              </StInnerCurrent>
+            </StContentInner>
+            <StInnerTitle>{content.title}</StInnerTitle>
+            <StInnerOption>{content.options?.join(' vs ')}</StInnerOption>
+            <StContentInner style={{ marginTop: '32px' }}>
+              <StInnerNickname>
+                작성자 <span>{content.nickname}</span>
+              </StInnerNickname>
+              <StInnerTime>
+                남은시간 {remainedTime(content.deadLine)}
+              </StInnerTime>
+            </StContentInner>
+          </StContentBox>
+        ))}
+      </StContentBoxWrap>
     </>
   );
 };
 
 export default MainSelect;
 
+const StFilterDiv = styled.div`
+  display: flex;
+  width: 100%;
+  margin: 2.19rem 0;
+  gap: 2.9rem;
+
+  select {
+    ${fontMedium}
+
+    border: none;
+    background-color: transparent;
+
+    &:focus {
+      outline-style: none;
+    }
+  }
+
+  option {
+    ${fontMedium}
+  }
+`;
+
+const StContentBoxWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+`;
+
 const StContentBox = styled.div`
-  width: 30rem;
-  height: 15rem;
-  border: 1px solid red;
+  ${borderBoxDefault};
+  height: 100%;
+  align-items: flex-start;
+  padding: 1.6rem;
+
+  background-color: #fff;
+
+  &:hover,
+  &:active {
+    background-color: #d4d4d4;
+  }
+`;
+
+const StContentInner = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StInnerCategory = styled.div`
+  ${fontSmall}
+  line-height: 1.95rem;
+
+  height: 2rem;
+  padding: 0 0.5rem;
+  border-radius: 1rem;
+
+  background-color: #ececec;
+`;
+
+const StInnerCurrent = styled.div`
+  ${fontSmall}
+  line-height: 2.2rem;
+
+  height: 2rem;
+`;
+
+const StInnerTitle = styled.div`
+  ${fontExtraBold}
+  margin-top: 1rem;
+`;
+
+const StInnerOption = styled.div`
+  ${fontMedium}
+  margin-top: 0.6rem;
+`;
+
+const StInnerNickname = styled.div`
+  ${fontSmall};
+
+  span {
+    ${fontBold};
+  }
+`;
+
+const StInnerTime = styled.div`
+  ${fontSmall};
 `;
