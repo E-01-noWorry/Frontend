@@ -1,6 +1,8 @@
 import React from 'react';
 import S3 from 'react-aws-s3';
+import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+import { fontBold, fontSmall } from '../../../shared/themes/textStyle';
 
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
@@ -26,13 +28,27 @@ const WriteImageUpload = ({ setImages, images, num }) => {
   };
 
   return (
-    <input
-      name={num}
-      type="file"
-      accept="image/*"
-      onChange={(event) => handleFileInput(event)}
-    />
+    <StImageLabel>
+      <input
+        name={num}
+        hidden
+        type="file"
+        accept="image/*"
+        onChange={(event) => handleFileInput(event)}
+      />
+      <StImageUpload>이미지 첨부(선택)</StImageUpload>
+    </StImageLabel>
   );
 };
 
 export default WriteImageUpload;
+
+const StImageLabel = styled.label`
+  display: flex;
+  align-items: center;
+`;
+
+const StImageUpload = styled.span`
+  ${fontSmall}
+  ${fontBold}
+`;

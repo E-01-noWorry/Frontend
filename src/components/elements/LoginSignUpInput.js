@@ -3,19 +3,17 @@ import styled from 'styled-components';
 
 const LoginSignUpInput = styled.input`
   /* 공통 스타일 */
-  display: inline-flex;
-  border-radius: 4px;
-  font-weight: bold;
-  padding: 1rem;
-
-  /* 크기 */
-  height: 2.25rem;
-  font-size: 1rem;
-
-  /* 기타 */
-  & + & {
-    margin-left: 1rem;
-  }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 1.6rem;
+  margin-top: 1.6rem;
+  width: 100%;
+  height: 56px;
+  border: none;
+  background: #ececec;
+  border-radius: 20px;
 `;
 
 function Button({ children, ...rest }) {

@@ -8,12 +8,22 @@ const ChatRoom = () => {
 
   const { roomKey } = useParams();
   const userKey = localStorage.getItem('userKey');
+  const nickname = localStorage.getItem('nickname');
 
   const socket = useRef();
   const sendMessage = useRef();
 
   const [chatState, setChatState] = useState([]);
   const [roomInfo, setRoomInfo] = useState({});
+
+  const deleteRoom = async () => {
+    try {
+      await instance.delete(`/room/${roomKey}`);
+      navigate('/', { state: 'room' });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getAllchat = async () => {
     try {
@@ -29,8 +39,6 @@ const ChatRoom = () => {
     getAllchat();
   }, []);
 
-  console.log(chatState);
-
   // useEffect(() => {
   //   socket.current = io(process.env.REACT_APP_API);
   //   socket.current.emit('join-room', roomKey, userKey);
@@ -44,17 +52,17 @@ const ChatRoom = () => {
   //    setChatState([...chatState, { chat: message, User: { nickname } }]);
   //   });
 
-  //   socket.current.on('welcome', (nickname) => {
-  //     setChatState([
-  //       ...chatState,
-  //       { chat: `${nickname}님이 입장했습니다`, system: 'system' },
-  //     ]);
-  //   });
+  // socket.current.on('welcome', (nickname) => {
+  //   setChatState([
+  //     ...chatState,
+  //     { chat: `${nickname}님이 입장했습니다`, User: {nickname: 'system'} },
+  //   ]);
+  // });
 
   //   socket.current.on('bye', (nickname) => {
   //     setChatState([
   //       ...chatState,
-  //       { chat: `${nickname}님이 나갔습니다`, system: 'system' },
+  //       { chat: `${nickname}님이 나갔습니다`, User: {nickname: 'system'} },
   //     ]);
   //   });
   // }, [chatState]);
@@ -68,6 +76,10 @@ const ChatRoom = () => {
       //   roomKey,
       //   userKey,
       // );
+      setChatState([
+        ...chatState,
+        { chat: sendMessage.current.value, User: { nickname } },
+      ]);
       sendMessage.current.value = '';
     }
   };
@@ -80,11 +92,13 @@ const ChatRoom = () => {
   return (
     <div>
       <div>
-        <button onClick={() => navigate(-1)}>뒤로 가기</button>
+        <button onClick={() => navigate('/', { state: 'room' })}>
+          뒤로 가기
+        </button>
         <h1>{roomInfo.host}</h1>
         <span>{roomInfo.currentPeople}</span>
         {parseInt(userKey) === roomInfo?.userKey ? (
-          <button>삭제</button>
+          <button onClick={deleteRoom}>삭제</button>
         ) : (
           <button onClick={leaveRoomHandler}>나가기</button>
         )}

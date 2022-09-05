@@ -1,15 +1,12 @@
 import React, { useEffect, useSelector, useState } from 'react';
 import styled from 'styled-components';
-import LoginSignUpInput from '../../elements/LoginSignUpInput';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
   writeCommentThunk,
   getCommentThunk,
-  deleteCommentThunk,
 } from '../../../app/module/commentSlice';
 import EditComment from './editComment';
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Comment = (props) => {
@@ -36,40 +33,21 @@ const Comment = (props) => {
     setWriteComment({ ...setWriteComment, [name]: value });
   };
 
-  const onSubmit = (event) => {
-    event.preventDefault();
+  const onClickSubmit = () => {
     dispatch(
       writeCommentThunk({
         ...writeComment,
         selectKey: params.selectKey,
       }),
     );
+    setWriteComment({
+      comment: '',
+    });
   };
-
-  useEffect(() => {
-    if (writeComment.comment === '') {
-      toast.error(`${props.user?.comment?.error?.errMsg}`, {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000,
-      });
-    } else if (props.user?.comment?.error === null) {
-      return null;
-    }
-  }, [props.user.comment.error]);
-
-  console.log(props);
 
   return (
     <div>
       <CommentContainer>
-        <p>댓글창</p>
-        <br />
-        <form onSubmit={onSubmit}>
-          <p>내용</p>
-          <LoginSignUpInput name="comment" onChange={onChangeHandler} />
-          <button>제출</button>
-          <ToastContainer />
-        </form>
         <div>
           {allComments?.map((a) => (
             <CommentsDetail key={a?.commentKey}>
@@ -77,6 +55,17 @@ const Comment = (props) => {
             </CommentsDetail>
           ))}
         </div>
+        <WriteBox>
+          <Write
+            type="text"
+            placeholder="더 좋은 의견을 남겨주세요."
+            name="comment"
+            onChange={onChangeHandler}
+            maxLength="50"
+            value={writeComment.comment}
+          />
+          <SubmitButton onClick={onClickSubmit}>제출</SubmitButton>
+        </WriteBox>
       </CommentContainer>
     </div>
   );
@@ -85,12 +74,40 @@ export default Comment;
 
 const CommentContainer = styled.div`
   width: 100%;
-  border: 1px solid black;
   margin-top: 1rem;
+  padding-bottom: 7rem;
 `;
+
+const WriteBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 8px 8px 8px 8px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 7.2rem;
+
+  background: #f5f5f5;
+`;
+
+const Write = styled.input`
+  width: 100%;
+  padding: 1.75rem 19.1rem 1.75rem 2rem;
+  border-radius: 20px;
+  border: 0 solid black;
+`;
+
 const CommentsDetail = styled.div`
-  border: 1px solid red;
-  margin-bottom: 1rem;
-  height: 8rem;
-  padding: 0.5rem;
+  border-top: 1px solid #d9d9d9;
+  height: 11.9rem;
+  box-sizing: border-box;
+  padding: 0.5rem 0.5rem 2.4rem 0.5rem;
+  overflow: hidden;
+`;
+
+const SubmitButton = styled.button`
+  position: fixed;
+  bottom: 2.7rem;
+  right: 3.2rem;
 `;
