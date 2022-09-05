@@ -14,10 +14,13 @@ const GlobalStyles = createGlobalStyle`
 
   body {
     letter-spacing: -0.05rem;
-
     font-size: 1.6rem;
     font-weight: 400;
+    
   }
+
+//placeholder 색상
+  ::placeholder {color: #AFAFAF}
 
   button {
     cursor: pointer;
