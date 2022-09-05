@@ -10,13 +10,17 @@ const GlobalStyles = createGlobalStyle`
 
   * {
     box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
   }
 
   body {
     letter-spacing: -0.05rem;
 
+    font-family: 'Noto Sans KR', sans-serif;
     font-size: 1.6rem;
     font-weight: 400;
+
+    background-color: #f5f5f5;
   }
 
   button {
