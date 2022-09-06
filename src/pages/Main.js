@@ -11,16 +11,6 @@ const Main = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  const dispatch = useDispatch();
-
-  const href = window.location.href;
-  let params = new URL(document.URL).searchParams;
-  let code = params.get('code');
-
-  useEffect(() => {
-    dispatch(kakaoLoginThunk(code));
-  }, [dispatch]);
-
   const writeButtonHandler = () => {
     navigate('/write', { state });
   };

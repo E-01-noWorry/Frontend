@@ -32,16 +32,6 @@ const Login = () => {
     dispatch(loginThunk(login));
   };
 
-  //   로그인 오류시 오류메시지 alert
-  useEffect(() => {
-    if (loginState?.error?.errMsg) {
-      toast.error(`${loginState?.error?.errMsg}`, {
-        position: toast.POSITION.BOTTOM_LEFT,
-        autoClose: 2000,
-      });
-    }
-  }, [loginState]);
-
   return (
     <div>
       <BodyPadding>
@@ -66,6 +56,9 @@ const Login = () => {
             type="password"
             placeholder="패스워드를 입력해주세요"
           />
+          {loginState?.error?.errMsg ? (
+            <LoginErrorMsg>*아이디와 비밀번호를 확인해주세요</LoginErrorMsg>
+          ) : null}
           <LoginButton
             onClick={() => {
               onClickLogin();
@@ -116,7 +109,7 @@ const LoginHeader = styled.p`
   width: 100%;
   position: absolute;
   right: 0px;
-  top: 1.8rem;
+  top: 2.2rem;
   ${fontLarge}
   z-index: -1;
 `;
@@ -126,6 +119,11 @@ const LoginContainer = styled.div``;
 const LetterContainer = styled.p`
   text-align: center;
   margin-top: 3.5rem;
+`;
+
+const LoginErrorMsg = styled.p`
+  color: #ff7878;
+  ${fontSmall}
 `;
 
 const Black = styled.span`
