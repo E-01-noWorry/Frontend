@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import instance from '../../../app/module/instance';
 import { cleanUpVote, __getVoteResult } from '../../../app/module/voteSlice';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { borderBoxDefault } from '../../../shared/themes/boxStyle';
+import {
+  fontBold,
+  fontExtra,
+  fontExtraBold,
+  fontMedium,
+} from '../../../shared/themes/textStyle';
+import { remainedTime } from '../../../shared/timeCalculation';
 
 const Vote = ({ content, selectKey }) => {
   const dispatch = useDispatch();
@@ -32,17 +40,17 @@ const Vote = ({ content, selectKey }) => {
 
   return (
     <>
-      {msg.includes('조회 성공') ? (
+      {msg.includes('조회 성공') || remainedTime(content.deadLine) <= 0 ? (
         <StVoteResultBox>
           {content.options?.map((option, idx) => (
-            <StSelectItem bgImage={content.image[idx]} key={idx}>
+            <StSelectResult bgImage={content.image[idx]} key={idx}>
               <div>{voteResult?.[idx + 1] || 0}%</div>
               <div>{option}</div>
-            </StSelectItem>
+            </StSelectResult>
           ))}
         </StVoteResultBox>
       ) : (
-        <StVoteBox isSelect={isSelect}>
+        <StVoteBox isSelect={isSelect} image={content.image}>
           {content.options?.map((option, idx) => (
             <StSelectItem
               bgImage={content.image[idx]}
@@ -68,40 +76,125 @@ const Vote = ({ content, selectKey }) => {
 
 export default Vote;
 
+const StVoteResultBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+
+  margin: 2.4rem 0 4.8rem 0;
+
+  border-radius: 2rem;
+  background-color: #ededed;
+`;
+
+const StSelectResult = styled.div`
+  ${borderBoxDefault}
+  padding: 2.65rem 1.6rem;
+  justify-content: space-between;
+  background-color: #d6d6d6;
+
+  ${(props) =>
+    props.bgImage &&
+    css`
+      background-image: linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.5),
+          rgba(0, 0, 0, 0.5)
+        ),
+        url(${(props) => props.bgImage});
+      background-size: cover;
+      background-position: center center;
+
+      color: #fff;
+      text-shadow: 0px 0px 8px rgba(0, 0, 0, 0.6);
+    `}
+
+  div:nth-child(1) {
+    ${fontExtra};
+    ${fontExtraBold};
+    line-height: 4.8rem;
+  }
+
+  div:nth-child(2) {
+    ${fontMedium};
+    line-height: 2.1rem;
+  }
+`;
+
 const StVoteBox = styled.div`
-  border: 1px solid green;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+
+  margin: 2.4rem 0 4.8rem 0;
+
+  border-radius: 2rem;
+  background-color: #ededed;
 
   div:nth-child(${(props) => props.isSelect}) {
-    transition-duration: 0.5s;
-    background-color: gray;
-    filter: brightness(70%);
+    color: #fff;
+
+    display: flex;
+    justify-content: space-between;
+
+    transition-duration: 0.3s;
+    background-color: #595959;
+
+    ${(props) =>
+      props.image &&
+      css`
+        background: linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.5),
+            rgba(0, 0, 0, 0.5)
+          ),
+          url(${(props) => props.image[props.isSelect - 1]});
+        background-size: cover;
+        background-position: center center;
+      `}
 
     label {
-      transform: translateY(-2rem);
+      line-height: 2.4rem;
     }
 
     button {
       display: block;
+      width: 100%;
+      height: 4.8rem;
+      background-color: #fff;
+
+      font-size: 1.6rem;
+      ${fontBold};
+
+      border: none;
+      border-radius: 1.5rem;
     }
   }
 `;
 
-const StVoteResultBox = styled.div`
-  border: 1px solid blue;
-`;
-
 const StSelectItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  ${borderBoxDefault}
+  padding: 1.6rem;
 
-  width: 10rem;
-  height: 10rem;
+  ${fontBold}
+
+  ${(props) =>
+    props.bgImage &&
+    css`
+      color: #fff;
+      text-shadow: 0px 0px 8px rgba(0, 0, 0, 0.6);
+    `}
 
   background-image: url(${(props) => props.bgImage});
   background-size: cover;
-  background-color: aliceblue;
+  background-position: center center;
+  background-color: #fff;
 
   button {
     display: none;
