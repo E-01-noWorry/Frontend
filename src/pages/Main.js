@@ -1,4 +1,4 @@
-import React, from 'react';
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MainSelect from '../components/features/main/MainSelect';
 import MainRoom from '../components/features/main/MainRoom';
