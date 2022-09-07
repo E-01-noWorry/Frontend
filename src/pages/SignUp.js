@@ -231,7 +231,7 @@ const SignUpHeader = styled.p`
   width: 100%;
   position: absolute;
   right: 0px;
-  top: 1.8rem;
+  top: 2.2rem;
   ${fontLarge}
   z-index: -1;
 `;

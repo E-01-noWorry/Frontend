@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
+import React, from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MainSelect from '../components/features/main/MainSelect';
 import MainRoom from '../components/features/main/MainRoom';
 import WriteButton from '../components/elements/WriteButton';
 import Footer from '../components/common/Footer';
-import { useDispatch } from 'react-redux';
-import { kakaoLoginThunk } from '../app/module/kakaoSlice';
 import BodyPadding from '../components/common/BodyPadding';
 import styled from 'styled-components';
 import { IconLarge } from '../shared/themes/iconStyle';
@@ -13,15 +11,6 @@ import { IconLarge } from '../shared/themes/iconStyle';
 const Main = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-
-  const dispatch = useDispatch();
-
-  let params = new URL(document.URL).searchParams;
-  let code = params.get('code');
-
-  useEffect(() => {
-    dispatch(kakaoLoginThunk(code));
-  }, [dispatch, code]);
 
   const writeButtonHandler = () => {
     navigate('/write', { state });

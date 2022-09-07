@@ -34,10 +34,15 @@ const EditComment = (props) => {
     dispatch(deleteCommentThunk(commentKey));
   };
 
+  //댓글 수정버튼 클릭 시, 작성했던 댓글 불러오기
+  //수정하기 버튼의 onClick에 적용
+  const commentValue = props.allComments.comment;
+
   const onClickEditMode = () => {
     setEdit((status) => !status);
   };
 
+  //수정완료 버튼
   const onClickEdit = (commentKey) => {
     dispatch(editCommentThunk({ ...editComment, commentKey }));
   };
@@ -63,6 +68,7 @@ const EditComment = (props) => {
               name="comment"
               onChange={onChange}
               placeholder="입력해주세요."
+              value={editComment.comment}
             />
           </EditContainer>
           <EditButtons>
@@ -96,8 +102,6 @@ const EditComment = (props) => {
                   ? `${Math.floor(weeks)}주 전`
                   : months < 12
                   ? `${Math.floor(months)}개월 전`
-                  : months < 12
-                  ? `${Math.floor(months)}개월 전`
                   : null}
               </MinutesBefore>
             </Names>
@@ -113,7 +117,17 @@ const EditComment = (props) => {
               ) : null}
 
               {props.allComments.userKey === parseInt(getUserKey) ? (
-                <Button onClick={onClickEditMode}>수정</Button>
+                <Button
+                  onClick={() => {
+                    onClickEditMode();
+                    //작성했던 내용 불러오기
+                    setEditComment({
+                      comment: commentValue,
+                    });
+                  }}
+                >
+                  수정
+                </Button>
               ) : null}
             </Buttons>
           </DefaultBox>
