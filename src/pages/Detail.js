@@ -1,27 +1,31 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+
 import instance from '../app/module/instance';
 import { cleanUp, __getDetailSelect } from '../app/module/selectSlice';
+
+import Header from '../components/common/Header';
+import BodyPadding from '../components/common/BodyPadding';
 import Vote from '../components/features/vote/Vote';
 import Comment from '../components/features/comment/comment';
-import styled from 'styled-components';
+import ProfileImg from '../components/elements/ProfileImg';
+
+import { remainedTime } from '../shared/timeCalculation';
+
 import {
   fontExtraBold,
   fontLarge,
   fontMedium,
 } from '../shared/themes/textStyle';
-import { remainedTime } from '../shared/timeCalculation';
-import BodyPadding from '../components/common/BodyPadding';
-import ProfileImg from '../components/elements/ProfileImg';
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
+
+import styled from 'styled-components';
 
 const Detail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const content = useSelector((state) => state.select.select);
-
-  //yuncheol, props로 유저정보 및 댓글 가져오기위해 추가
   const user = useSelector((state) => state);
 
   const { selectKey } = useParams();
@@ -40,18 +44,18 @@ const Detail = () => {
       await instance.delete(`/select/${selectKey}`);
       navigate('/', { state: 'select' });
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.errMsg);
     }
   };
 
   return (
     <>
-      <StHeader>
+      <Header>
         <StHeaderIcon onClick={() => navigate(-1)}></StHeaderIcon>
         {parseInt(userKey) === content?.userKey && (
           <StHeaderIcon onClick={deleteHandler}></StHeaderIcon>
         )}
-      </StHeader>
+      </Header>
 
       <BodyPadding>
         <StInfoWrap>
@@ -70,7 +74,7 @@ const Detail = () => {
           </StDeadLine>
         </StInfoWrap>
 
-        <Vote content={content} selectKey={selectKey} userKey={userKey} />
+        <Vote content={content} selectKey={selectKey} />
       </BodyPadding>
 
       <Comment content={content} user={user} />
@@ -79,17 +83,6 @@ const Detail = () => {
 };
 
 export default Detail;
-
-const StHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 0 2rem;
-
-  width: 100%;
-  height: 6.4rem;
-`;
 
 const StHeaderIcon = styled.div`
   ${IconLarge};
@@ -101,38 +94,34 @@ const StInfoWrap = styled.div`
   flex-direction: column;
   align-items: center;
 
-  margin-top: 1.6rem;
+  margin-top: 8rem;
 `;
 
 const StNickname = styled.div`
+  margin-top: 0.2rem;
+
   ${fontMedium}
   line-height: 2.1rem;
-
-  height: 2.1rem;
-
-  margin-top: 0.2rem;
 `;
 
 const StCategory = styled.div`
-  ${fontMedium};
-  line-height: 2.1rem;
-
-  height: 2.1rem;
   padding: 0 0.4rem;
+  margin-top: 2rem;
+  background-color: #d8d8d8;
+
   border-radius: calc(2.1rem / 2);
 
-  margin-top: 2rem;
-
-  background-color: #d8d8d8;
+  ${fontMedium};
+  line-height: 2.1rem;
 `;
 
 const StTitle = styled.div`
+  width: 100%;
+  margin: 0.8rem 2rem;
+
   ${fontLarge};
   ${fontExtraBold};
   line-height: 3rem;
-
-  width: 100%;
-  margin: 0.8rem 2rem;
   text-align: center;
 `;
 
@@ -140,9 +129,10 @@ const StDeadLine = styled.div`
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  ${fontMedium};
 
   margin-top: 0.8rem;
+
+  ${fontMedium};
 
   span:nth-child(2) {
     color: #ff6363;
