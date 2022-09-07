@@ -12,7 +12,7 @@ import { fontSmall } from '../shared/themes/textStyle';
 import Header from '../components/common/Header';
 import BodyPadding from '../components/common/BodyPadding';
 import { fontLarge } from '../shared/themes/textStyle';
-import LoginButton from '../components/elements/LoginButton';
+import GlobalButton from '../components/elements/GlobalButton';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -59,13 +59,13 @@ const Login = () => {
           {loginState?.error?.errMsg ? (
             <LoginErrorMsg>*아이디와 비밀번호를 확인해주세요</LoginErrorMsg>
           ) : null}
-          <LoginButton
+          <GlobalButton
             onClick={() => {
               onClickLogin();
             }}
           >
             로그인
-          </LoginButton>
+          </GlobalButton>
           <ToastContainer />
           <KakaoLogin />
           <GoogleLogin />

@@ -5,12 +5,13 @@ import BodyPadding from '../components/common/BodyPadding';
 import Footer from '../components/common/Footer';
 import { fontLarge, fontSmall, fontMedium } from '../shared/themes/textStyle';
 import { fontExtraBold, fontBold } from '../shared/themes/textStyle';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ProfileImg from '../components/elements/ProfileImg';
 
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { state } = useLocation();
 
   //티어별 상세정보
   const [white, setWhite] = useState(false);
@@ -157,7 +158,7 @@ const MyPage = () => {
         <Logout onClick={onClickLogOut}>로그아웃</Logout>
       ) : null}
 
-      <Footer></Footer>
+      <Footer state={state} />
     </div>
   );
 };
