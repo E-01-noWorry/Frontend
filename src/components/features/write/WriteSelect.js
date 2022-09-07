@@ -10,6 +10,7 @@ import {
   fontSmall,
 } from '../../../shared/themes/textStyle';
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
+import { IconLarge, IconMedium } from '../../../shared/themes/iconStyle';
 
 const WriteSelect = () => {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ const WriteSelect = () => {
   const optionDeleteHandler = (payload) => {
     setNumArr(numArr.filter((num) => num !== payload));
     setOptions({ ...options, [payload]: '' });
+    setImages((prev) => ({ ...prev, [payload]: '' }));
   };
 
   //마감시간 설정 핸들러
@@ -47,121 +49,188 @@ const WriteSelect = () => {
 
   //고민 게시글 작성 POST API
   const submitHandler = async () => {
-    const payload = {
-      title: title,
-      category: category,
-      options: Object.values(options).filter((option) => option !== ''),
-      image: Object.values(images).filter((image) => image !== ''),
-      time: parseInt(time),
-    };
-    try {
-      await instance.post('/select', payload);
-      navigate('/', { state: 'select' });
-    } catch (error) {
-      console.log(error);
+    const optionArr = Object.values(options).filter((option) => option !== '');
+    const imageArr = Object.values(images).filter((image) => image !== '');
+
+    if (imageArr !== 0 && optionArr.length !== imageArr.length) {
+      alert('사진 업로드 시엔 모든 선택지에 사진을 올려주세요.');
+    } else {
+      let formData = new FormData();
+
+      const payload = {
+        title,
+        category,
+        options: optionArr,
+        time: parseInt(time),
+      };
+
+      formData.append('data', JSON.stringify(payload));
+      if (imageArr[0]) {
+        formData.append('images', imageArr);
+      }
+
+      console.log(formData.get('data'));
+      console.log(formData.get('images'));
     }
+
+    // const payload = {
+    //   title: title,
+    //   category: category,
+    //   options: Object.values(options).filter((option) => option !== ''),
+    //   image: Object.values(images).filter((image) => image !== ''),
+    //   time: parseInt(time),
+    // };
+    // try {
+    //   await instance.post('/select', payload);
+    //   navigate('/', { state: 'select' });
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
-    <StContainer>
-      <div>
-        <button onClick={() => navigate('/', { state: 'select' })}>
-          뒤로 가기
-        </button>
+    <>
+      <StHeader>
+        <StHeaderIcon
+          onClick={() => navigate('/', { state: 'select' })}
+        ></StHeaderIcon>
         <h1>투표 만들기</h1>
-      </div>
+        <StHeaderIcon />
+      </StHeader>
 
-      <StContentBox>
-        <StInnerTitle>고민 작성</StInnerTitle>
-        <StInnerText>
-          <textarea
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-            maxLength="80"
-            placeholder="고민을 작성해주세요"
-          />
-          <span>{title.length}/80자</span>
-        </StInnerText>
-      </StContentBox>
+      <StContainer>
+        <StContentBox>
+          <StInnerTitle>고민 작성</StInnerTitle>
+          <StInnerText>
+            <textarea
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              maxLength="80"
+              placeholder="고민을 작성해주세요"
+              style={{ height: '8.9rem' }}
+            />
+            <span>{title.length}/80자</span>
+          </StInnerText>
+        </StContentBox>
 
-      <StContentBox>
-        <StInnerTitle>카테고리 선택</StInnerTitle>
-        <StInnerCategory>
-          {CATEGORY_ARR.map((item) => (
-            <div key={item} onClick={() => setCategory(item)}>
-              <input
-                type="radio"
-                id={item}
-                checked={category === item}
-                onChange={() => setCategory(item)}
-              />
-              <label htmlFor={item}>{item}</label>
-            </div>
-          ))}
-        </StInnerCategory>
-      </StContentBox>
-
-      <StContentBox>
-        <StInnerTitle>선택지 작성</StInnerTitle>
-        <StInnerOptions>
-          {numArr.map((num, idx) => (
-            <div key={num}>
-              <StInnerSubtitle>
-                <div>선택지 {idx + 1}</div>
-
-                {numArr.length > 2 && (
-                  <div onClick={() => optionDeleteHandler(num)}>삭제</div>
-                )}
-              </StInnerSubtitle>
-              <StInnerText>
-                <textarea
-                  name={num}
-                  value={options[num]}
-                  onChange={optionChangeHandler}
-                  maxLength="40"
-                  placeholder="선택지를 작성해주세요"
+        <StContentBox>
+          <StInnerTitle>카테고리 선택</StInnerTitle>
+          <StInnerCategory>
+            {CATEGORY_ARR.map((item) => (
+              <div key={item} onClick={() => setCategory(item)}>
+                <input
+                  type="radio"
+                  id={item}
+                  checked={category === item}
+                  onChange={() => setCategory(item)}
                 />
-                <WriteImageUpload
-                  setImages={setImages}
-                  images={images}
-                  num={num}
-                />
-                <span>{options[num]?.length || '0'}/40자</span>
-              </StInnerText>
-            </div>
-          ))}
-        </StInnerOptions>
-        {numArr.length < 4 && (
-          <button onClick={optionAddHandler}>선택지 추가하기</button>
-        )}
-      </StContentBox>
+                <label htmlFor={item}>{item}</label>
+              </div>
+            ))}
+          </StInnerCategory>
+        </StContentBox>
 
-      <StContentBox>
-        <StInnerTitle>투표 종료시간 선택</StInnerTitle>
-        <StInnerButton selectTime={time}>
-          {TIME_ARR.map((time) => (
-            <div key={time} time={time} onClick={timeHandler}>
-              {time}시간
-            </div>
-          ))}
-          <StInnerTime time={time}></StInnerTime>
-        </StInnerButton>
-      </StContentBox>
+        <StContentBox>
+          <StInnerTitle>선택지 작성</StInnerTitle>
+          <StInnerOptions>
+            {numArr.map((num, idx) => (
+              <div key={num}>
+                <StInnerSubtitle>
+                  <div>선택지 {idx + 1}</div>
 
-      <StInnerSubmit>
-        <span>투표는 등록 후 수정이 불가능하니 유의해 주세요</span>
-        <button onClick={submitHandler}>등록하기</button>
-      </StInnerSubmit>
-    </StContainer>
+                  {numArr.length > 2 && (
+                    <div onClick={() => optionDeleteHandler(num)}>삭제</div>
+                  )}
+                </StInnerSubtitle>
+                <StInnerText>
+                  <textarea
+                    name={num}
+                    value={options[num]}
+                    onChange={optionChangeHandler}
+                    maxLength="40"
+                    placeholder="선택지를 작성해주세요"
+                  />
+                  <span>{options[num]?.length || '0'}/40자</span>
+                  <WriteImageUpload setImages={setImages} num={num} />
+                </StInnerText>
+              </div>
+            ))}
+          </StInnerOptions>
+        </StContentBox>
+
+        <StContentBox>
+          {numArr.length < 4 && (
+            <StButton onClick={optionAddHandler} bgColor={'#fff'}>
+              <StPlusIcon></StPlusIcon>
+              <span>선택지 추가하기</span>
+            </StButton>
+          )}
+        </StContentBox>
+
+        <StContentBox>
+          <StInnerTitle>투표 종료시간 선택</StInnerTitle>
+          <StInnerButton selectTime={time}>
+            {TIME_ARR.map((time) => (
+              <div key={time} time={time} onClick={timeHandler}>
+                {time}시간
+              </div>
+            ))}
+            <StInnerTime time={time}></StInnerTime>
+          </StInnerButton>
+        </StContentBox>
+
+        <StInnerSubmit>
+          <span>투표는 등록 후 수정이 불가능하니 유의해 주세요</span>
+          <StButton onClick={submitHandler} bgColor={'#000'} fontColor={'#fff'}>
+            등록하기
+          </StButton>
+        </StInnerSubmit>
+      </StContainer>
+    </>
   );
 };
 
 export default WriteSelect;
 
+const StButton = styled.div`
+  background-color: ${(props) => props.bgColor};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+
+  width: 100%;
+  height: 5.6rem;
+  border-radius: 2rem;
+
+  ${fontBold};
+  color: ${(props) => props.fontColor || '#000'};
+`;
+
+const StPlusIcon = styled.div`
+  ${IconMedium};
+  background-color: green;
+`;
+
+const StHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  height: 6.4rem;
+`;
+
+const StHeaderIcon = styled.div`
+  ${IconLarge};
+  background-color: green;
+`;
+
 const StContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-top: 1.7rem;
 
   gap: 3.2rem;
 `;
@@ -182,7 +251,8 @@ const StInnerTitle = styled.div`
 const StInnerText = styled.div`
   position: relative;
   ${borderBoxDefault};
-  height: 12.1rem;
+  height: 100%;
+  min-height: 12.1rem;
   align-items: flex-start;
   padding: 1.6rem;
 
@@ -190,7 +260,7 @@ const StInnerText = styled.div`
 
   textarea {
     width: 100%;
-    height: 100%;
+    height: 6.9rem;
 
     background-color: transparent;
     resize: none;
@@ -203,8 +273,10 @@ const StInnerText = styled.div`
 
   & > span {
     ${fontSmall};
+    line-height: 2rem;
+
     position: absolute;
-    bottom: 1.6rem;
+    top: 8.6rem;
     right: 1.6rem;
   }
 `;
@@ -350,6 +422,8 @@ const StInnerSubmit = styled.div`
   width: 100%;
 
   align-items: center;
+
+  margin-bottom: 1.6rem;
 
   span {
     ${fontSmall}
