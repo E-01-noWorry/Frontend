@@ -6,8 +6,8 @@ export const IconExtra = css`
   justify-content: center;
   align-items: center;
 
-  width: 4rem;
-  height: 4rem;
+  width: 4.8rem;
+  height: 4.8rem;
 `;
 
 export const IconLarge = css`
@@ -15,8 +15,8 @@ export const IconLarge = css`
   justify-content: center;
   align-items: center;
 
-  width: 2.8rem;
-  height: 2.8rem;
+  width: 3.2rem;
+  height: 3.2rem;
 `;
 
 export const IconMedium = css`

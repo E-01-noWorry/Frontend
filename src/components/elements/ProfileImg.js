@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-const ProfileImg = () => {
-  return <Profile></Profile>;
+const ProfileImg = ({ className }) => {
+  return <Profile className={className}></Profile>;
 };
 export default ProfileImg;
 
