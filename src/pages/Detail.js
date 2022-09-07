@@ -12,6 +12,9 @@ import {
   fontMedium,
 } from '../shared/themes/textStyle';
 import { remainedTime } from '../shared/timeCalculation';
+import BodyPadding from '../components/common/BodyPadding';
+import ProfileImg from '../components/elements/ProfileImg';
+import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
 
 const Detail = () => {
   const dispatch = useDispatch();
@@ -43,22 +46,33 @@ const Detail = () => {
 
   return (
     <>
-      <button onClick={() => navigate(-1)}>뒤로 가기</button>
-      {parseInt(userKey) === content?.userKey ? (
-        <button onClick={deleteHandler}>삭제</button>
-      ) : null}
-      <StInfoWrap>
-        <StProfile></StProfile>
-        <StNickname>{content.nickname}</StNickname>
-        <StCategory>{content.category}</StCategory>
-        <StTitle>{content.title}</StTitle>
-        <StDeadLine>
-          <span>아이콘</span>
-          <span>{remainedTime(content.deadLine)}</span>
-        </StDeadLine>
-      </StInfoWrap>
-      <Vote content={content} selectKey={selectKey} userKey={userKey} />
-      {/*yuncheol, Comment 컴포넌트 추가 */}
+      <StHeader>
+        <StHeaderIcon onClick={() => navigate(-1)}></StHeaderIcon>
+        {parseInt(userKey) === content?.userKey && (
+          <StHeaderIcon onClick={deleteHandler}></StHeaderIcon>
+        )}
+      </StHeader>
+
+      <BodyPadding>
+        <StInfoWrap>
+          <ProfileImg />
+
+          <StNickname>{content.nickname}</StNickname>
+
+          <StCategory>{content.category}</StCategory>
+
+          <StTitle>{content.title}</StTitle>
+
+          <StDeadLine>
+            <StIcon></StIcon>
+            <span>{remainedTime(content.deadLine)}</span>
+            {remainedTime(content.deadLine) ? null : <span>투표마감</span>}
+          </StDeadLine>
+        </StInfoWrap>
+
+        <Vote content={content} selectKey={selectKey} userKey={userKey} />
+      </BodyPadding>
+
       <Comment content={content} user={user} />
     </>
   );
@@ -66,20 +80,28 @@ const Detail = () => {
 
 export default Detail;
 
+const StHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 2rem;
+
+  width: 100%;
+  height: 6.4rem;
+`;
+
+const StHeaderIcon = styled.div`
+  ${IconLarge};
+  background-color: green;
+`;
+
 const StInfoWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 
   margin-top: 1.6rem;
-`;
-
-const StProfile = styled.div`
-  background-color: green;
-  width: 4rem;
-  height: 4rem;
-
-  border-radius: 50%;
 `;
 
 const StNickname = styled.div`
@@ -110,16 +132,24 @@ const StTitle = styled.div`
   line-height: 3rem;
 
   width: 100%;
-  padding: 8px 20px;
+  margin: 0.8rem 2rem;
   text-align: center;
 `;
 
 const StDeadLine = styled.div`
   display: flex;
+  align-items: center;
   gap: 0.35rem;
   ${fontMedium};
+
+  margin-top: 0.8rem;
 
   span:nth-child(2) {
     color: #ff6363;
   }
+`;
+
+const StIcon = styled.div`
+  ${IconSmall};
+  background-color: green;
 `;

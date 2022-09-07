@@ -8,9 +8,12 @@ const WriteButton = ({ onClick }) => {
 export default WriteButton;
 
 const StWriteButton = styled.button`
-  margin-bottom: 10rem;
-  width: 3rem;
-  height: 3rem;
+  position: fixed;
+  bottom: 8rem;
+  right: 2.4rem;
+  background-color: #9b9b9b;
+  width: 6.4rem;
+  height: 6.4rem;
   border: none;
   border-radius: 50%;
 `;
