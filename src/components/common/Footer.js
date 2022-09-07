@@ -1,51 +1,74 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { IconLarge } from '../../shared/themes/iconStyle';
+import { fontSmall } from '../../shared/themes/textStyle';
 
-const Footer = () => {
+const Footer = ({ state }) => {
   const navigate = useNavigate();
 
   return (
-    <FooterLine>
-      <ButtonContainer>
-        <Button onClick={() => navigate('/', { state: 'select' })}>
-          고민투표
-        </Button>
-        <Button onClick={() => navigate('/', { state: 'room' })}>
-          고민상담
-        </Button>
-        <Button onClick={() => navigate('/mypage')}>마이페이지</Button>
-      </ButtonContainer>
-    </FooterLine>
+    <StFooter state={state}>
+      <StIconWrap onClick={() => navigate('/', { state: 'select' })}>
+        <StIcon></StIcon>
+        <StText>고민투표</StText>
+      </StIconWrap>
+
+      <StIconWrap onClick={() => navigate('/', { state: 'room' })}>
+        <StIcon></StIcon>
+        <StText>고민상담</StText>
+      </StIconWrap>
+
+      <StIconWrap>
+        <StIcon></StIcon>
+        <StText>소라고동</StText>
+      </StIconWrap>
+
+      <StIconWrap onClick={() => navigate('/mypage')}>
+        <StIcon></StIcon>
+        <StText>마이페이지</StText>
+      </StIconWrap>
+    </StFooter>
   );
 };
 
 export default Footer;
 
-const FooterLine = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0.5rem 0;
-  height: 5.6rem;
+const StFooter = styled.div`
   position: fixed;
   bottom: 0;
-  width: 100%;
-`;
+  left: 0;
 
-const ButtonContainer = styled.div`
   display: flex;
-  width: 80%;
-  margin: 0 auto;
   justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  height: 6rem;
+  padding: 0 2rem;
+  background-color: #f5f5f5;
+
+  &
+    > div:nth-child(${(props) =>
+        props.state === 'select' ? 1 : props.state === 'room' ? 2 : null}) {
+    color: #000;
+  }
 `;
 
-const Button = styled.button`
-  border: none;
-  background-color: #fff;
-  color: gray;
+const StIconWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  &:focus {
-    color: black;
-  }
+  color: #787878;
+`;
+
+const StIcon = styled.div`
+  ${IconLarge};
+  background-color: green;
+`;
+
+const StText = styled.div`
+  ${fontSmall};
+  line-height: 1.8rem;
 `;
