@@ -5,12 +5,12 @@ import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/Array';
 import styled from 'styled-components';
 import {
   fontBold,
-  fontExtraBold,
   fontMedium,
   fontSmall,
 } from '../../../shared/themes/textStyle';
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { remainedTime } from '../../../shared/timeCalculation';
+import { IconSmall } from '../../../shared/themes/iconStyle';
 
 const MainSelect = () => {
   const navigate = useNavigate();
@@ -29,18 +29,18 @@ const MainSelect = () => {
     try {
       if (filter === '인기순') {
         const { data } = await instance.get(`/select/filter?page=${page}`);
-        setContents([...contents, ...data.data]);
+        setContents((prev) => [...prev, ...data.data]);
       } else if (category && category !== '카테고리') {
         const { data } = await instance.get(
           `/select/category/${category}?page=${page}`,
         );
-        setContents([...contents, ...data.result]);
+        setContents((prev) => [...prev, ...data.result]);
       } else {
         const { data } = await instance.get(`/select?page=${page}`);
-        setContents([...contents, ...data.result]);
+        setContents((prev) => [...prev, ...data.result]);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.errMsg);
     }
   };
 
@@ -54,13 +54,13 @@ const MainSelect = () => {
 
   useEffect(() => {
     getScrollSelect();
-  }, [category, filter, page]);
+  }, [filter, category, page]);
 
   //Intersection Observer API의 기본 옵션 설정
   const defaultOption = {
     root: null,
     rootMargin: '0px',
-    threshold: 0.8,
+    threshold: 0.5,
   };
 
   //매번 갱신되기 전 마지막 게시글에 붙어있는 ref를 감시하라고 지정해준다
@@ -99,6 +99,7 @@ const MainSelect = () => {
             </option>
           ))}
         </select>
+
         <select onChange={categoryHandler} value={category}>
           <option>카테고리</option>
           {CATEGORY_ARR.map((item) => (
@@ -117,22 +118,29 @@ const MainSelect = () => {
             //마지막 게시글에 ref를 달아준다
             ref={idx === contents.length - 1 ? setRef : null}
           >
-            <StContentInner>
+            <StContentHeader>
               <StInnerCategory>{content.category}</StInnerCategory>
-              <StInnerCurrent>
-                {content.total || 0}명이 투표 참여중
-              </StInnerCurrent>
-            </StContentInner>
-            <StInnerTitle>{content.title}</StInnerTitle>
-            <StInnerOption>{content.options?.join(' vs ')}</StInnerOption>
-            <StContentInner style={{ marginTop: '32px' }}>
               <StInnerNickname>
                 작성자 <span>{content.nickname}</span>
               </StInnerNickname>
+            </StContentHeader>
+
+            <StInnerTitle>{content.title}</StInnerTitle>
+
+            <StInnerOption>{content.options?.join(' vs ')}</StInnerOption>
+
+            <StContentFooter>
+              <StInnerCurrent>
+                <StIcon></StIcon>
+                <span>{content.total || 0}</span>
+              </StInnerCurrent>
               <StInnerTime>
-                남은시간 {remainedTime(content.deadLine)}
+                <span>
+                  {remainedTime(content.deadLine) ? '남은시간' : '투표마감'}
+                </span>
+                <span>{remainedTime(content.deadLine)}</span>
               </StInnerTime>
-            </StContentInner>
+            </StContentFooter>
           </StContentBox>
         ))}
       </StContentBoxWrap>
@@ -168,6 +176,8 @@ const StContentBoxWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
+
+  margin-bottom: 8.4rem;
 `;
 
 const StContentBox = styled.div`
@@ -184,11 +194,21 @@ const StContentBox = styled.div`
   }
 `;
 
-const StContentInner = styled.div`
+const StContentHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+
+  width: 100%;
+`;
+
+const StContentFooter = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
+  margin-top: 3.2rem;
 `;
 
 const StInnerCategory = styled.div`
@@ -203,24 +223,37 @@ const StInnerCategory = styled.div`
 `;
 
 const StInnerCurrent = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   ${fontSmall}
   line-height: 2.2rem;
 
   height: 2rem;
 `;
 
+const StIcon = styled.div`
+  ${IconSmall};
+  background-color: green;
+`;
+
 const StInnerTitle = styled.div`
-  ${fontExtraBold}
+  ${fontBold};
+  line-height: 2.1rem;
+
   margin-top: 1rem;
 `;
 
 const StInnerOption = styled.div`
   ${fontMedium}
+  line-height: 1.8rem;
+
   margin-top: 0.6rem;
 `;
 
 const StInnerNickname = styled.div`
   ${fontSmall};
+  line-height: 2rem;
 
   span {
     ${fontBold};
@@ -228,5 +261,8 @@ const StInnerNickname = styled.div`
 `;
 
 const StInnerTime = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   ${fontSmall};
 `;
