@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import instance from '../../../app/module/instance';
+
 import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/Array';
-import styled from 'styled-components';
+import { remainedTime } from '../../../shared/timeCalculation';
+
 import {
   fontBold,
   fontMedium,
   fontSmall,
 } from '../../../shared/themes/textStyle';
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
-import { remainedTime } from '../../../shared/timeCalculation';
 import { IconSmall } from '../../../shared/themes/iconStyle';
+
+import styled from 'styled-components';
 
 const MainSelect = () => {
   const navigate = useNavigate();
+
   const [contents, setContents] = useState([]);
+  const [modal, setModal] = useState('');
 
   //필터와 카테고리를 관리하는 State
   const [filter, setFilter] = useState('기본순');
@@ -40,9 +46,14 @@ const MainSelect = () => {
         setContents((prev) => [...prev, ...data.result]);
       }
     } catch (error) {
+      setModal(error.response.data.errMsg);
       console.log(error.response.data.errMsg);
     }
   };
+
+  useEffect(() => {
+    getScrollSelect();
+  }, [filter, category, page]);
 
   //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다.
   const onIntersect = ([entry], observer) => {
@@ -51,10 +62,6 @@ const MainSelect = () => {
       observer.unobserve(entry.target);
     }
   };
-
-  useEffect(() => {
-    getScrollSelect();
-  }, [filter, category, page]);
 
   //Intersection Observer API의 기본 옵션 설정
   const defaultOption = {
@@ -90,7 +97,7 @@ const MainSelect = () => {
   };
 
   return (
-    <>
+    <StMainWrap>
       <StFilterDiv>
         <select onChange={filterHandler} value={filter}>
           {FILTER_ARR.map((item) => (
@@ -144,24 +151,30 @@ const MainSelect = () => {
           </StContentBox>
         ))}
       </StContentBoxWrap>
-    </>
+    </StMainWrap>
   );
 };
 
 export default MainSelect;
 
+const StMainWrap = styled.div`
+  margin-top: 8.5rem;
+  margin-bottom: 8.4rem;
+`;
+
 const StFilterDiv = styled.div`
   display: flex;
-  width: 100%;
-  margin: 2.19rem 0;
   gap: 2.9rem;
 
-  select {
-    ${fontMedium}
+  width: 100%;
+  margin: 2.19rem 0;
 
-    border: none;
+  select {
     background-color: transparent;
 
+    border: none;
+
+    ${fontMedium}
     &:focus {
       outline-style: none;
     }
@@ -176,16 +189,14 @@ const StContentBoxWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
-
-  margin-bottom: 8.4rem;
 `;
 
 const StContentBox = styled.div`
   ${borderBoxDefault};
-  height: 100%;
   align-items: flex-start;
-  padding: 1.6rem;
 
+  height: 100%;
+  padding: 1.6rem;
   background-color: #fff;
 
   &:hover,
@@ -205,31 +216,31 @@ const StContentHeader = styled.div`
 
 const StContentFooter = styled.div`
   display: flex;
-  width: 100%;
   justify-content: space-between;
   align-items: center;
+
+  width: 100%;
   margin-top: 3.2rem;
 `;
 
 const StInnerCategory = styled.div`
-  ${fontSmall}
-  line-height: 1.95rem;
-
   height: 2rem;
   padding: 0 0.5rem;
+  background-color: #ececec;
+
   border-radius: 1rem;
 
-  background-color: #ececec;
+  ${fontSmall}
+  line-height: 1.95rem;
 `;
 
 const StInnerCurrent = styled.div`
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  ${fontSmall}
-  line-height: 2.2rem;
 
-  height: 2rem;
+  ${fontSmall}
+  line-height: 2rem;
 `;
 
 const StIcon = styled.div`
@@ -238,17 +249,17 @@ const StIcon = styled.div`
 `;
 
 const StInnerTitle = styled.div`
+  margin-top: 1rem;
+
   ${fontBold};
   line-height: 2.1rem;
-
-  margin-top: 1rem;
 `;
 
 const StInnerOption = styled.div`
+  margin-top: 0.6rem;
+
   ${fontMedium}
   line-height: 1.8rem;
-
-  margin-top: 0.6rem;
 `;
 
 const StInnerNickname = styled.div`
@@ -264,5 +275,6 @@ const StInnerTime = styled.div`
   display: flex;
   align-items: center;
   gap: 0.4rem;
+
   ${fontSmall};
 `;

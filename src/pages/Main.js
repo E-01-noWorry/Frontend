@@ -1,12 +1,16 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import MainSelect from '../components/features/main/MainSelect';
+
+import Header from '../components/common/Header';
+import BodyPadding from '../components/common/BodyPadding';
 import MainRoom from '../components/features/main/MainRoom';
+import MainSelect from '../components/features/main/MainSelect';
 import WriteButton from '../components/elements/WriteButton';
 import Footer from '../components/common/Footer';
-import BodyPadding from '../components/common/BodyPadding';
-import styled from 'styled-components';
+
 import { IconLarge } from '../shared/themes/iconStyle';
+
+import styled from 'styled-components';
 
 const Main = () => {
   const navigate = useNavigate();
@@ -18,10 +22,10 @@ const Main = () => {
 
   return (
     <>
-      <StHeader>
+      <Header>
         <StLogo>로고</StLogo>
         <StIcon></StIcon>
-      </StHeader>
+      </Header>
 
       <BodyPadding>
         {state === 'room' ? <MainRoom /> : <MainSelect />}
@@ -34,17 +38,6 @@ const Main = () => {
 };
 
 export default Main;
-
-const StHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 0 2rem;
-
-  width: 100%;
-  height: 6.4rem;
-`;
 
 const StLogo = styled.div`
   display: flex;
