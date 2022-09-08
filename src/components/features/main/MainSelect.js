@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 import instance from '../../../app/module/instance';
 
+import BodyPadding from '../../common/BodyPadding';
+import SelectContentBox from '../../common/SelectContentBox';
+
 import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/Array';
 
 import { fontMedium } from '../../../shared/themes/textStyle';
 
 import styled from 'styled-components';
-import SelectContentBox from '../../common/SelectContentBox';
+import { IconSmall } from '../../../shared/themes/iconStyle';
 
 const MainSelect = () => {
   const [contents, setContents] = useState([]);
@@ -16,6 +19,9 @@ const MainSelect = () => {
   //필터와 카테고리를 관리하는 State
   const [filter, setFilter] = useState('기본순');
   const [category, setCategory] = useState('카테고리');
+
+  const [filterModal, setFilterModal] = useState(false);
+  const [categoryModal, setCategoryModal] = useState(false);
 
   //무한 스크롤을 관리하는 State
   const [page, setPage] = useState(1);
@@ -32,7 +38,7 @@ const MainSelect = () => {
           `/select/category/${category}?page=${page}`,
         );
         setContents((prev) => [...prev, ...data.result]);
-      } else {
+      } else if (filter === '기본순' || category === '카테고리') {
         const { data } = await instance.get(`/select?page=${page}`);
         setContents((prev) => [...prev, ...data.result]);
       }
@@ -66,72 +72,132 @@ const MainSelect = () => {
 
   //필터 핸들러
   const filterHandler = (event) => {
-    setFilter(event.target.value);
-    setCategory('카테고리');
-    setContents([]);
-    setPage(1); //page도 바꿔줘야 필터를 바꿨을때 제대로 작동한다
+    if (filter !== event.target.getAttribute('value')) {
+      setFilter(event.target.getAttribute('value'));
+      setCategory('카테고리');
+      setContents([]);
+      setPage(1);
+    }
   };
 
   //카테고리 핸들러
   const categoryHandler = (event) => {
-    setCategory(event.target.value);
-    setFilter('기본순');
-    setContents([]);
-    setPage(1);
+    if (category !== event.target.getAttribute('value')) {
+      setCategory(event.target.getAttribute('value'));
+      setFilter('기본순');
+      setContents([]);
+      setPage(1);
+    }
+  };
+
+  const filterOpenHandler = () => {
+    setFilterModal((prev) => !prev);
+    setCategoryModal(false);
+  };
+
+  const categoryOpenHandler = () => {
+    setCategoryModal((prev) => !prev);
+    setFilterModal(false);
   };
 
   return (
-    <StMainWrap>
+    <>
       <StFilterDiv>
-        <select onChange={filterHandler} value={filter}>
-          {FILTER_ARR.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
+        <StFilter onClick={filterOpenHandler}>
+          <span>{filter}</span>
+          <StArrowIcon></StArrowIcon>
+          <StFilterModal setter={filterModal}>
+            {FILTER_ARR.map((item) => (
+              <span key={item} value={item} onClick={filterHandler}>
+                {item}
+              </span>
+            ))}
+          </StFilterModal>
+        </StFilter>
 
-        <select onChange={categoryHandler} value={category}>
-          <option>카테고리</option>
-          {CATEGORY_ARR.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
+        <StFilter onClick={categoryOpenHandler}>
+          <span>{category}</span>
+          <StArrowIcon></StArrowIcon>
+          <StCategoryModal setter={categoryModal}>
+            {CATEGORY_ARR.map((item) => (
+              <span key={item} value={item} onClick={categoryHandler}>
+                {item}
+              </span>
+            ))}
+          </StCategoryModal>
+        </StFilter>
       </StFilterDiv>
 
-      <SelectContentBox contents={contents} setRef={setRef} />
-    </StMainWrap>
+      <BodyPadding>
+        <StMainWrap>
+          <SelectContentBox contents={contents} setRef={setRef} />
+        </StMainWrap>
+      </BodyPadding>
+    </>
   );
 };
 
 export default MainSelect;
 
 const StMainWrap = styled.div`
-  margin-top: 8.5rem;
+  margin-top: 13rem;
   margin-bottom: 8.4rem;
 `;
 
 const StFilterDiv = styled.div`
+  position: fixed;
+  top: 6.4rem;
+
   display: flex;
+  align-items: center;
   gap: 2.9rem;
 
   width: 100%;
-  margin: 2.19rem 0;
+  height: 5rem;
+  padding: 0 2rem;
+  background-color: #f5f5f5;
+`;
 
-  select {
-    background-color: transparent;
+const StFilter = styled.div`
+  display: flex;
+  align-items: center;
 
-    border: none;
-
-    ${fontMedium}
-    &:focus {
-      outline-style: none;
-    }
-  }
-
-  option {
+  span {
     ${fontMedium}
   }
+`;
+
+const StFilterModal = styled.div`
+  position: fixed;
+  top: 10.8rem;
+
+  display: flex;
+  flex-direction: column;
+
+  transform-origin: center top;
+  transition-duration: 0.1s;
+  transform: scaleY(${(props) => (props.setter ? 1 : 0)});
+
+  background-color: #fff;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
+
+  border-radius: 1rem;
+
+  span {
+    display: block;
+
+    height: 3rem;
+    padding: 0 1rem;
+
+    line-height: 3rem;
+  }
+`;
+
+const StCategoryModal = styled(StFilterModal)`
+  transform: scaleY(${(props) => (props.setter ? 1 : 0)});
+`;
+
+const StArrowIcon = styled.div`
+  ${IconSmall};
+  background-color: green;
 `;
