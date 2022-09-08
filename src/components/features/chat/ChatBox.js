@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import ProfileImg from '../../elements/ProfileImg';
 
@@ -9,6 +9,12 @@ import { fontMedium, fontSmall } from '../../../shared/themes/textStyle';
 import styled from 'styled-components';
 
 const ChatBox = ({ chatState, userKey }) => {
+  const scrollRef = useRef();
+
+  useEffect(() => {
+    scrollRef.current.scrollIntoView();
+  }, [chatState]);
+
   return (
     <StChatWrap>
       {chatState.map((chat, idx) => (
@@ -50,6 +56,7 @@ const ChatBox = ({ chatState, userKey }) => {
           </div>
         </StChat>
       ))}
+      <div ref={scrollRef} />
     </StChatWrap>
   );
 };
