@@ -5,12 +5,14 @@ import select from '../module/selectSlice';
 import vote from '../module/voteSlice';
 import commentSlice from '../module/commentSlice';
 import room from '../module/roomSlice';
+import myPageSlice from '../module/myPageSlice';
 
 export const store = configureStore({
   reducer: {
     signUp: signUpSlice.reducer,
     login: loginSlice.reducer,
     comment: commentSlice.reducer,
+    myPageSlice: myPageSlice.reducer,
     select,
     vote,
     room,

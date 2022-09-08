@@ -116,9 +116,11 @@ const MyPage = () => {
             </TierInfoLetter>
             <VoteLetter>고민투표</VoteLetter>
             <VoteContainer>
-              <PostedVoted>
-                <button>내가 등록한 고민 투표</button>
-              </PostedVoted>
+              <PostVoted>
+                <button onClick={() => navigate('/postvoted')}>
+                  내가 등록한 고민 투표
+                </button>
+              </PostVoted>
               <Voted>내가 투표한 고민 투표</Voted>
             </VoteContainer>
             <VoteLetter>고민상담</VoteLetter>
@@ -143,7 +145,7 @@ const MyPage = () => {
           <BodyPadding>
             <VoteLetter>고민투표</VoteLetter>
             <VoteContainer>
-              <PostedVoted>내가 등록한 고민 투표</PostedVoted>
+              <PostVoted>내가 등록한 고민 투표</PostVoted>
               <Voted>내가 투표한 고민 투표</Voted>
             </VoteContainer>
             <VoteLetter>고민상담</VoteLetter>
@@ -223,7 +225,7 @@ const VoteContainer = styled.div`
   border-radius: 20px;
 `;
 
-const PostedVoted = styled.div`
+const PostVoted = styled.div`
   margin: 1.4rem 0;
 `;
 const Voted = styled.div`
