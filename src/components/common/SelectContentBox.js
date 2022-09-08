@@ -1,10 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+
+import { remainedTime } from '../../shared/timeCalculation';
+
 import { borderBoxDefault } from '../../shared/themes/boxStyle';
 import { IconSmall } from '../../shared/themes/iconStyle';
 import { fontBold, fontMedium, fontSmall } from '../../shared/themes/textStyle';
-import { remainedTime } from '../../shared/timeCalculation';
+
+import IconPeople from '../../static/icons/Variety=people, Status=untab.svg';
+
+import styled from 'styled-components';
 
 const SelectContentBox = ({ contents, setRef }) => {
   const navigate = useNavigate();
@@ -31,7 +36,9 @@ const SelectContentBox = ({ contents, setRef }) => {
 
           <StContentFooter>
             <StInnerCurrent>
-              <StIcon></StIcon>
+              <StIcon>
+                <img src={IconPeople} />
+              </StIcon>
               <span>{content.total || 0}</span>
             </StInnerCurrent>
             <StInnerTime>
@@ -107,7 +114,6 @@ const StInnerCurrent = styled.div`
 
 const StIcon = styled.div`
   ${IconSmall};
-  background-color: green;
 `;
 
 const StInnerTitle = styled.div`

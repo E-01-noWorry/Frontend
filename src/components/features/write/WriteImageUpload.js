@@ -8,6 +8,8 @@ import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconMedium, IconSmall } from '../../../shared/themes/iconStyle';
 import { fontBold, fontSmall } from '../../../shared/themes/textStyle';
 
+import IconImage from '../../../static/icons/Variety=image, Status=untab.svg';
+
 import styled from 'styled-components';
 
 // window.Buffer = window.Buffer || require('buffer').Buffer;
@@ -77,7 +79,9 @@ const WriteImageUpload = ({ setImages, num }) => {
             accept="image/*"
             onChange={(event) => fileHandler(event)}
           />
-          <StImageIcon></StImageIcon>
+          <StImageIcon>
+            <img src={IconImage} />
+          </StImageIcon>
           <StImageUpload>이미지 첨부(선택)</StImageUpload>
         </StImageLabel>
       )}
@@ -125,7 +129,6 @@ const StImageLabel = styled.label`
 
 const StImageIcon = styled.div`
   ${IconSmall};
-  background-color: green;
 `;
 
 const StImageUpload = styled.span`

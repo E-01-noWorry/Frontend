@@ -13,11 +13,15 @@ import { CATEGORY_ARR } from '../../../shared/Array';
 
 import {
   fontBold,
+  fontLarge,
   fontMedium,
   fontSmall,
 } from '../../../shared/themes/textStyle';
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconLarge, IconMedium } from '../../../shared/themes/iconStyle';
+
+import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
+import IconAdd from '../../../static/icons/Variety=add, Status=untab.svg';
 
 import styled from 'styled-components';
 
@@ -96,10 +100,10 @@ const WriteSelect = () => {
   return (
     <>
       <Header>
-        <StHeaderIcon
-          onClick={() => navigate('/', { state: 'select' })}
-        ></StHeaderIcon>
-        <h1>투표 만들기</h1>
+        <StHeaderIcon onClick={() => navigate('/main', { state: 'select' })}>
+          <img src={IconBack} />
+        </StHeaderIcon>
+        <StHeaderTitle>투표 만들기</StHeaderTitle>
         <StHeaderIcon />
       </Header>
 
@@ -172,7 +176,9 @@ const WriteSelect = () => {
                 color={'#000'}
                 fw={'bold'}
               >
-                <StPlusIcon></StPlusIcon>
+                <StPlusIcon>
+                  <img src={IconAdd} />
+                </StPlusIcon>
                 <span>선택지 추가하기</span>
               </GlobalButton>
             )}
@@ -197,7 +203,10 @@ export default WriteSelect;
 
 const StHeaderIcon = styled.div`
   ${IconLarge};
-  background-color: green;
+`;
+
+const StHeaderTitle = styled.div`
+  ${fontLarge};
 `;
 
 const StContainer = styled.div`
@@ -308,7 +317,6 @@ const StInnerSubtitle = styled.div`
 
 const StPlusIcon = styled.div`
   ${IconMedium};
-  background-color: green;
 `;
 
 const StInnerSubmit = styled.div`

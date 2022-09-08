@@ -11,9 +11,12 @@ import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconLarge, IconSmall } from '../../../shared/themes/iconStyle';
 import {
   fontBold,
+  fontLarge,
   fontMedium,
   fontSmall,
 } from '../../../shared/themes/textStyle';
+
+import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
 
 import styled from 'styled-components';
 
@@ -74,10 +77,10 @@ const WriteRoom = () => {
   return (
     <>
       <Header>
-        <StHeaderIcon
-          onClick={() => navigate('/', { state: 'room' })}
-        ></StHeaderIcon>
-        <h1>채팅방 만들기</h1>
+        <StHeaderIcon onClick={() => navigate('/main', { state: 'room' })}>
+          <img src={IconBack} />
+        </StHeaderIcon>
+        <StHeaderTitle>채팅방 만들기</StHeaderTitle>
         <StHeaderIcon />
       </Header>
 
@@ -149,6 +152,14 @@ const WriteRoom = () => {
 
 export default WriteRoom;
 
+const StHeaderIcon = styled.div`
+  ${IconLarge};
+`;
+
+const StHeaderTitle = styled.div`
+  ${fontLarge};
+`;
+
 const StContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -157,11 +168,6 @@ const StContainer = styled.div`
   width: 100%;
   margin-top: 8.1rem;
   margin-bottom: 1.6rem;
-`;
-
-const StHeaderIcon = styled.div`
-  ${IconLarge};
-  background-color: green;
 `;
 
 const StContentBox = styled.div`

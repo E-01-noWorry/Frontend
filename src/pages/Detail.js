@@ -20,6 +20,11 @@ import {
 } from '../shared/themes/textStyle';
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
 
+import IconBack from '../static/icons/Variety=back, Status=untab.svg';
+import IconDelete from '../static/icons/Variety=delete, Status=untab.svg';
+import IconTimer from '../static/icons/Variety=timer, Status=untab.svg';
+import IconTimeOver from '../static/icons/Variety=timeover, Status=untab.svg';
+
 import styled from 'styled-components';
 
 const Detail = () => {
@@ -42,7 +47,7 @@ const Detail = () => {
   const deleteHandler = async () => {
     try {
       await instance.delete(`/select/${selectKey}`);
-      navigate('/', { state: 'select' });
+      navigate('/main', { state: 'select' });
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
@@ -51,9 +56,13 @@ const Detail = () => {
   return (
     <>
       <Header>
-        <StHeaderIcon onClick={() => navigate(-1)}></StHeaderIcon>
+        <StHeaderIcon onClick={() => navigate(-1)}>
+          <img src={IconBack} />
+        </StHeaderIcon>
         {parseInt(userKey) === content?.userKey && (
-          <StHeaderIcon onClick={deleteHandler}></StHeaderIcon>
+          <StHeaderIcon onClick={deleteHandler}>
+            <img src={IconDelete} />
+          </StHeaderIcon>
         )}
       </Header>
 
@@ -68,9 +77,21 @@ const Detail = () => {
           <StTitle>{content.title}</StTitle>
 
           <StDeadLine>
-            <StIcon></StIcon>
-            <span>{remainedTime(content.deadLine)}</span>
-            {content.completion ? <span>투표마감</span> : null}
+            {content.completion ? (
+              <>
+                <StIcon>
+                  <img src={IconTimeOver} />
+                </StIcon>
+                <span>투표마감</span>
+              </>
+            ) : (
+              <>
+                <StIcon>
+                  <img src={IconTimer} />
+                </StIcon>
+                <span>{remainedTime(content.deadLine)}</span>
+              </>
+            )}
           </StDeadLine>
         </StInfoWrap>
 
@@ -86,7 +107,6 @@ export default Detail;
 
 const StHeaderIcon = styled.div`
   ${IconLarge};
-  background-color: green;
 `;
 
 const StInfoWrap = styled.div`
@@ -141,5 +161,4 @@ const StDeadLine = styled.div`
 
 const StIcon = styled.div`
   ${IconSmall};
-  background-color: green;
 `;

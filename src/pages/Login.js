@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import LoginSignUpInput from '../components/elements/LoginSignUpInput';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginThunk } from '../app/module/loginSlice';
 import { toast, ToastContainer } from 'react-toastify';
@@ -13,9 +13,13 @@ import Header from '../components/common/Header';
 import BodyPadding from '../components/common/BodyPadding';
 import { fontLarge } from '../shared/themes/textStyle';
 import GlobalButton from '../components/elements/GlobalButton';
+import { IconLarge } from '../shared/themes/iconStyle';
+
+import IconBack from '../static/icons/Variety=back, Status=untab.svg';
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const loginState = useSelector((state) => state.login);
 
   const [login, setLogin] = useState({
@@ -34,15 +38,15 @@ const Login = () => {
 
   return (
     <div>
+      <Header>
+        <StHeaderIcon onClick={() => navigate(-1)}>
+          <img src={IconBack} />
+        </StHeaderIcon>
+        <StHeaderTitle>로그인</StHeaderTitle>
+        <StHeaderIcon></StHeaderIcon>
+      </Header>
+
       <BodyPadding>
-        <Header>
-          <HeaderContainer>
-            <Link to="/">
-              <Aarow>&#8592;</Aarow>
-            </Link>
-            <LoginHeader>로그인</LoginHeader>
-          </HeaderContainer>
-        </Header>
         <LoginContainer>
           <LoginSignUpInput
             onChange={onChangeHandler}
@@ -93,28 +97,38 @@ const Login = () => {
 
 export default Login;
 
-const HeaderContainer = styled.div`
-  width: 100%;
+const StHeaderIcon = styled.div`
+  ${IconLarge};
 `;
 
-const Aarow = styled.span`
-  color: #000;
-  font-size: 3rem;
-  position: relative;
+const StHeaderTitle = styled.div`
+  ${fontLarge};
 `;
 
-const LoginHeader = styled.p`
-  text-align: center;
-  display: inline;
-  width: 100%;
-  position: absolute;
-  right: 0px;
-  top: 2.2rem;
-  ${fontLarge}
-  z-index: -1;
-`;
+// const HeaderContainer = styled.div`
+//   width: 100%;
+// `;
 
-const LoginContainer = styled.div``;
+// const Aarow = styled.span`
+//   color: #000;
+//   font-size: 3rem;
+//   position: relative;
+// `;
+
+// const LoginHeader = styled.p`
+//   text-align: center;
+//   display: inline;
+//   width: 100%;
+//   position: absolute;
+//   right: 0px;
+//   top: 2.2rem;
+//   ${fontLarge}
+//   z-index: -1;
+// `;
+
+const LoginContainer = styled.div`
+  margin-top: 8.8rem;
+`;
 
 const LetterContainer = styled.p`
   text-align: center;
