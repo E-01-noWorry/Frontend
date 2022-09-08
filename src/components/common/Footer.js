@@ -1,8 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+
 import { IconLarge } from '../../shared/themes/iconStyle';
 import { fontSmall } from '../../shared/themes/textStyle';
+
+import styled from 'styled-components';
 
 const Footer = ({ state }) => {
   const navigate = useNavigate();
@@ -24,7 +26,7 @@ const Footer = ({ state }) => {
         <StText>소라고동</StText>
       </StIconWrap>
 
-      <StIconWrap onClick={() => navigate('/mypage')}>
+      <StIconWrap onClick={() => navigate('/mypage', { state: 'mypage' })}>
         <StIcon></StIcon>
         <StText>마이페이지</StText>
       </StIconWrap>
@@ -50,7 +52,13 @@ const StFooter = styled.div`
 
   &
     > div:nth-child(${(props) =>
-        props.state === 'select' ? 1 : props.state === 'room' ? 2 : null}) {
+        props.state === 'select'
+          ? 1
+          : props.state === 'room'
+          ? 2
+          : props.state === 'mypage'
+          ? 4
+          : null}) {
     color: #000;
   }
 `;

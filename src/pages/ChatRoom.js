@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { io } from 'socket.io-client';
-import styled from 'styled-components';
+
 import instance from '../app/module/instance';
+import { io } from 'socket.io-client';
+
 import BodyPadding from '../components/common/BodyPadding';
-import ProfileImg from '../components/elements/ProfileImg';
-import { fontMedium, fontSmall } from '../shared/themes/textStyle';
-import { nowTime } from '../shared/timeCalculation';
+import FooterInput from '../components/common/FooterInput';
+import Header from '../components/common/Header';
+import { ModalExit } from '../components/common/Modal';
+
+import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
+import { fontLarge, fontMedium } from '../shared/themes/textStyle';
+
+import styled from 'styled-components';
+import ChatBox from '../components/features/chat/ChatBox';
 
 const ChatRoom = () => {
   const navigate = useNavigate();
@@ -17,6 +24,7 @@ const ChatRoom = () => {
   const socket = useRef();
   const sendMessage = useRef();
 
+  const [modalExit, setModalExit] = useState(false);
   const [chatState, setChatState] = useState([]);
   const [roomInfo, setRoomInfo] = useState({});
 
@@ -26,7 +34,7 @@ const ChatRoom = () => {
       setRoomInfo(data.result);
       setChatState(data.loadChat);
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.errMsg);
     }
   };
 
@@ -110,169 +118,99 @@ const ChatRoom = () => {
 
   return (
     <div>
-      <div>
-        <button onClick={() => navigate('/', { state: 'room' })}>
-          뒤로 가기
-        </button>
-        <h1>{roomInfo.host}</h1>
-        <span>{roomInfo.currentPeople}</span>
-        {parseInt(userKey) === roomInfo?.userKey ? (
-          <button onClick={leaveRoomHandler}>삭제</button>
-        ) : (
-          <button onClick={leaveRoomHandler}>나가기</button>
-        )}
-      </div>
+      {modalExit && (
+        <ModalExit
+          leave={leaveRoomHandler}
+          setter={() => setModalExit(false)}
+        />
+      )}
 
-      <div>
+      <Header>
+        <StHeaderIcon onClick={() => navigate('/', { state: 'room' })}>
+          뒤
+        </StHeaderIcon>
+        <StHeaderInfo>
+          <h1>{roomInfo.host}</h1>
+          <span>{roomInfo.currentPeople}</span>
+        </StHeaderInfo>
+        {parseInt(userKey) === roomInfo?.userKey ? (
+          <StHeaderIcon onClick={leaveRoomHandler}>삭</StHeaderIcon>
+        ) : (
+          <StHeaderIcon onClick={() => setModalExit(true)}>나</StHeaderIcon>
+        )}
+      </Header>
+
+      <StHeaderTitle>
+        <StSpeakIcon></StSpeakIcon>
         <span>{roomInfo.title}</span>
-      </div>
+      </StHeaderTitle>
 
       <BodyPadding>
-        {chatState.map((chat, idx) => (
-          <StChat key={idx}>
-            <div
-              className={
-                chat.userKey === 12
-                  ? 'system'
-                  : chat.userKey === parseInt(userKey)
-                  ? 'right'
-                  : 'left'
-              }
-            >
-              {chat.User.nickname === 'admin99' ? (
-                <div className="middle">
-                  <div className="chat">{chat.chat}</div>
-                </div>
-              ) : (
-                <>
-                  <ProfileImg className="img" />
-
-                  <div className="middle">
-                    <div className="nickname">{chat.User.nickname}</div>
-                    <div className="chat">{chat.chat}</div>
-                  </div>
-
-                  <span className="time">{nowTime(chat.createdAt)}</span>
-                </>
-              )}
-            </div>
-          </StChat>
-        ))}
+        <ChatBox chatState={chatState} userKey={userKey} />
       </BodyPadding>
 
-      <div>
+      <FooterInput>
         <form onSubmit={sendMessageHandler}>
           <input ref={sendMessage} placeholder="메세지를 입력하세요" />
-          <button>전송버튼</button>
+          <StSendIcon onClick={sendMessageHandler}></StSendIcon>
         </form>
-      </div>
+      </FooterInput>
     </div>
   );
 };
 
 export default ChatRoom;
 
-const StChat = styled.div`
+const StHeaderIcon = styled.div`
+  ${IconLarge};
+  background-color: green;
+`;
+
+const StSpeakIcon = styled.div`
+  ${IconSmall};
+  background-color: green;
+`;
+
+const StHeaderInfo = styled.div`
   display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  h1 {
+    ${fontLarge};
+  }
+
+  span {
+    ${fontLarge};
+  }
+`;
+
+const StHeaderTitle = styled.div`
+  position: fixed;
+  top: 6.4rem;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+
   width: 100%;
-  height: 100%;
+  height: 3.4rem;
+  padding: 0 5rem;
+  background-color: #f5f5f5;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
 
-  .system {
-    display: inline-block;
-    background-color: #d3d3d3;
-    height: 2.6rem;
-    padding: 3px 6px;
-    border-radius: 1.3rem;
-    margin: 1rem auto;
-
-    .chat {
-      ${fontSmall};
-      line-height: 2rem;
-      color: #fff;
-    }
+  span {
+    ${fontMedium}
   }
+`;
 
-  .right {
-    display: flex;
-    flex-direction: row-reverse;
-    width: 100%;
-    height: 100%;
-    margin: 1.2rem 0;
+const StSendIcon = styled.div`
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
 
-    .img {
-      margin-left: 0.8rem;
-    }
-
-    .middle {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-
-      .nickname {
-        ${fontSmall};
-        line-height: 2rem;
-      }
-
-      .chat {
-        display: inline-block;
-
-        ${fontMedium};
-        line-height: 2.1rem;
-        color: #fff;
-
-        max-width: 21.3rem;
-        border-radius: 2rem 0.4rem 2rem 2rem;
-        padding: 1rem;
-        background-color: #515151;
-      }
-    }
-
-    .time {
-      font-size: 1.2rem;
-      line-height: 1.8rem;
-      margin-right: 1rem;
-      margin-top: auto;
-    }
-  }
-
-  .left {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    margin: 1.2rem 0;
-
-    .img {
-      margin-right: 0.8rem;
-    }
-
-    .middle {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-
-      .nickname {
-        ${fontSmall};
-        line-height: 2rem;
-      }
-
-      .chat {
-        display: inline-block;
-
-        ${fontMedium};
-        line-height: 2.1rem;
-
-        max-width: 21.3rem;
-        border-radius: 0.4rem 2rem 2rem 2rem;
-        padding: 1rem;
-        background-color: #e4e4e4;
-      }
-    }
-
-    .time {
-      font-size: 1.2rem;
-      line-height: 1.8rem;
-      margin-left: 1rem;
-      margin-top: auto;
-    }
-  }
+  ${IconLarge};
+  background-color: green;
 `;

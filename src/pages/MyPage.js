@@ -5,12 +5,13 @@ import BodyPadding from '../components/common/BodyPadding';
 import Footer from '../components/common/Footer';
 import { fontLarge, fontSmall, fontMedium } from '../shared/themes/textStyle';
 import { fontExtraBold, fontBold } from '../shared/themes/textStyle';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ProfileImg from '../components/elements/ProfileImg';
 
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { state } = useLocation();
 
   //티어별 상세정보
   const [white, setWhite] = useState(false);
@@ -115,9 +116,11 @@ const MyPage = () => {
             </TierInfoLetter>
             <VoteLetter>고민투표</VoteLetter>
             <VoteContainer>
-              <PostedVoted>
-                <button>내가 등록한 고민 투표</button>
-              </PostedVoted>
+              <PostVoted>
+                <button onClick={() => navigate('/postvoted')}>
+                  내가 등록한 고민 투표
+                </button>
+              </PostVoted>
               <Voted>내가 투표한 고민 투표</Voted>
             </VoteContainer>
             <VoteLetter>고민상담</VoteLetter>
@@ -142,7 +145,7 @@ const MyPage = () => {
           <BodyPadding>
             <VoteLetter>고민투표</VoteLetter>
             <VoteContainer>
-              <PostedVoted>내가 등록한 고민 투표</PostedVoted>
+              <PostVoted>내가 등록한 고민 투표</PostVoted>
               <Voted>내가 투표한 고민 투표</Voted>
             </VoteContainer>
             <VoteLetter>고민상담</VoteLetter>
@@ -157,7 +160,7 @@ const MyPage = () => {
         <Logout onClick={onClickLogOut}>로그아웃</Logout>
       ) : null}
 
-      <Footer></Footer>
+      <Footer state={state} />
     </div>
   );
 };
@@ -222,7 +225,7 @@ const VoteContainer = styled.div`
   border-radius: 20px;
 `;
 
-const PostedVoted = styled.div`
+const PostVoted = styled.div`
   margin: 1.4rem 0;
 `;
 const Voted = styled.div`

@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+
 import instance from '../../../app/module/instance';
 import { __getAllRoom } from '../../../app/module/roomSlice';
+
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconSmall } from '../../../shared/themes/iconStyle';
 import {
@@ -12,10 +13,14 @@ import {
   fontSmall,
 } from '../../../shared/themes/textStyle';
 
+import styled from 'styled-components';
+
 const MainRoom = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const rooms = useSelector((state) => state.room.rooms);
+
+  const [modal, setModal] = useState('');
 
   const getAllRoom = useCallback(() => {
     dispatch(__getAllRoom());
@@ -31,12 +36,13 @@ const MainRoom = () => {
       await instance.post(`/room/${roomKey}`);
       navigate(`/chatroom/${roomKey}`);
     } catch (error) {
+      setModal(error.response.data.errMsg);
       console.log(error.response.data.errMsg);
     }
   };
 
   return (
-    <>
+    <StMainWrap>
       <StContentBoxWrap>
         {rooms?.map((room) => (
           <StContentBox
@@ -44,6 +50,7 @@ const MainRoom = () => {
             onClick={() => joinRoomHandler(room.roomKey)}
           >
             <StInnerTitle>{room.title}</StInnerTitle>
+
             <StInnerKeywordWrap>
               {room.hashTag?.map((item) => (
                 <StInnerKeyword key={item}>#{item} </StInnerKeyword>
@@ -54,7 +61,7 @@ const MainRoom = () => {
               <StInnerCurrent>
                 <StPeopleIcon></StPeopleIcon>
                 <span>
-                  {room.currentPeople}/{room.max}
+                  {room.currentPeople}/{room.max}명
                 </span>
               </StInnerCurrent>
 
@@ -65,27 +72,29 @@ const MainRoom = () => {
           </StContentBox>
         ))}
       </StContentBoxWrap>
-    </>
+    </StMainWrap>
   );
 };
 
 export default MainRoom;
 
+const StMainWrap = styled.div`
+  margin-top: 8.5rem;
+  margin-bottom: 8.4rem;
+`;
+
 const StContentBoxWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
-
-  margin-top: 1.2rem;
-  margin-bottom: 8.4rem;
 `;
 
 const StContentBox = styled.div`
   ${borderBoxDefault};
-  height: 100%;
   align-items: flex-start;
-  padding: 1.6rem;
 
+  height: 100%;
+  padding: 1.6rem;
   background-color: #fff;
 
   &:hover,
@@ -95,25 +104,25 @@ const StContentBox = styled.div`
 `;
 
 const StInnerTitle = styled.div`
+  margin-top: 1rem;
+
   ${fontBold};
   line-height: 2.1rem;
-
-  height: 2.1rem;
-  margin-top: 1rem;
 `;
 
 const StInnerKeywordWrap = styled.div`
   display: flex;
   gap: 0.6rem;
 
-  margin-top: 0.4rem;
+  margin-top: 0.8rem;
 `;
 
 const StContentFooter = styled.div`
   display: flex;
-  width: 100%;
   justify-content: space-between;
   align-items: center;
+
+  width: 100%;
   margin-top: 3.2rem;
 `;
 
@@ -127,23 +136,22 @@ const StInnerNickname = styled.div`
 `;
 
 const StInnerKeyword = styled.span`
-  ${fontSmall}
-  line-height: 2rem;
-
-  height: 2rem;
+  height: 100%;
   padding: 0 0.5rem;
+  background-color: #ececec;
+
   border-radius: 1rem;
 
-  background-color: #ececec;
+  ${fontSmall}
+  line-height: 2rem;
 `;
 
 const StInnerCurrent = styled.div`
-  ${fontMedium};
-  line-height: 2.1rem;
-
   display: flex;
   gap: 0.25rem;
-  height: 2.1rem;
+
+  ${fontMedium};
+  line-height: 2.1rem;
 `;
 
 const StPeopleIcon = styled.div`

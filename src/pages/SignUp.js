@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import BodyPadding from '../components/common/BodyPadding';
 import Header from '../components/common/Header';
 import { fontLarge, fontSmall } from '../shared/themes/textStyle';
+import GlobalButton from '../components/elements/GlobalButton';
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -206,7 +207,7 @@ const SignUp = () => {
             signUpInfo.nickname.match(nicknameRegEx) !== null ? (
             <Correct>*익명으로 안심하고 고민을 이야기할 수 있어요.</Correct>
           ) : null}
-          <SignUpButton onClick={onClickSignUp}>가입하기</SignUpButton>
+          <GlobalButton onClick={onClickSignUp}>가입하기</GlobalButton>
           <ToastContainer />
         </SignUpContainer>
       </BodyPadding>
@@ -246,18 +247,4 @@ const Correct = styled.p`
   color: #5f5f5f;
   ${fontSmall}
   margin-bottom: 1.6rem;
-`;
-
-const SignUpButton = styled.button`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 8px;
-  color: #fff;
-  width: 100%;
-  height: 5.6rem;
-  font-size: 1.6rem;
-  background: #000000;
-  border-radius: 20px;
 `;
