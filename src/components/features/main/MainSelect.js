@@ -1,24 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import instance from '../../../app/module/instance';
 
 import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/Array';
-import { remainedTime } from '../../../shared/timeCalculation';
 
-import {
-  fontBold,
-  fontMedium,
-  fontSmall,
-} from '../../../shared/themes/textStyle';
-import { borderBoxDefault } from '../../../shared/themes/boxStyle';
-import { IconSmall } from '../../../shared/themes/iconStyle';
+import { fontMedium } from '../../../shared/themes/textStyle';
 
 import styled from 'styled-components';
+import SelectContentBox from '../../common/SelectContentBox';
 
 const MainSelect = () => {
-  const navigate = useNavigate();
-
   const [contents, setContents] = useState([]);
   const [modal, setModal] = useState('');
 
@@ -63,18 +54,11 @@ const MainSelect = () => {
     }
   };
 
-  //Intersection Observer API의 기본 옵션 설정
-  const defaultOption = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.5,
-  };
-
   //매번 갱신되기 전 마지막 게시글에 붙어있는 ref를 감시하라고 지정해준다
   useEffect(() => {
     let observer;
     if (ref) {
-      observer = new IntersectionObserver(onIntersect, defaultOption);
+      observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
       observer.observe(ref);
     }
     return () => observer?.disconnect();
@@ -117,40 +101,7 @@ const MainSelect = () => {
         </select>
       </StFilterDiv>
 
-      <StContentBoxWrap>
-        {contents?.map((content, idx) => (
-          <StContentBox
-            key={content.selectKey}
-            onClick={() => navigate(`/detail/${content.selectKey}`)}
-            //마지막 게시글에 ref를 달아준다
-            ref={idx === contents.length - 1 ? setRef : null}
-          >
-            <StContentHeader>
-              <StInnerCategory>{content.category}</StInnerCategory>
-              <StInnerNickname>
-                작성자 <span>{content.nickname}</span>
-              </StInnerNickname>
-            </StContentHeader>
-
-            <StInnerTitle>{content.title}</StInnerTitle>
-
-            <StInnerOption>{content.options?.join(' vs ')}</StInnerOption>
-
-            <StContentFooter>
-              <StInnerCurrent>
-                <StIcon></StIcon>
-                <span>{content.total || 0}</span>
-              </StInnerCurrent>
-              <StInnerTime>
-                <span>
-                  {remainedTime(content.deadLine) ? '남은시간' : '투표마감'}
-                </span>
-                <span>{remainedTime(content.deadLine)}</span>
-              </StInnerTime>
-            </StContentFooter>
-          </StContentBox>
-        ))}
-      </StContentBoxWrap>
+      <SelectContentBox contents={contents} setRef={setRef} />
     </StMainWrap>
   );
 };
@@ -183,98 +134,4 @@ const StFilterDiv = styled.div`
   option {
     ${fontMedium}
   }
-`;
-
-const StContentBoxWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2.4rem;
-`;
-
-const StContentBox = styled.div`
-  ${borderBoxDefault};
-  align-items: flex-start;
-
-  height: 100%;
-  padding: 1.6rem;
-  background-color: #fff;
-
-  &:hover,
-  &:active {
-    background-color: #d4d4d4;
-  }
-`;
-
-const StContentHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
-
-  width: 100%;
-`;
-
-const StContentFooter = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  width: 100%;
-  margin-top: 3.2rem;
-`;
-
-const StInnerCategory = styled.div`
-  height: 2rem;
-  padding: 0 0.5rem;
-  background-color: #ececec;
-
-  border-radius: 1rem;
-
-  ${fontSmall}
-  line-height: 1.95rem;
-`;
-
-const StInnerCurrent = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-
-  ${fontSmall}
-  line-height: 2rem;
-`;
-
-const StIcon = styled.div`
-  ${IconSmall};
-  background-color: green;
-`;
-
-const StInnerTitle = styled.div`
-  margin-top: 1rem;
-
-  ${fontBold};
-  line-height: 2.1rem;
-`;
-
-const StInnerOption = styled.div`
-  margin-top: 0.6rem;
-
-  ${fontMedium}
-  line-height: 1.8rem;
-`;
-
-const StInnerNickname = styled.div`
-  ${fontSmall};
-  line-height: 2rem;
-
-  span {
-    ${fontBold};
-  }
-`;
-
-const StInnerTime = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-
-  ${fontSmall};
 `;
