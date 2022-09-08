@@ -170,6 +170,7 @@ const WriteSelect = () => {
                 onClick={optionAddHandler}
                 bgc={'#fff'}
                 color={'#000'}
+                fw={'bold'}
               >
                 <StPlusIcon></StPlusIcon>
                 <span>선택지 추가하기</span>

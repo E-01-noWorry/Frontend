@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { fontExtraBold } from '../../shared/themes/textStyle';
+import { fontBold, fontExtraBold } from '../../shared/themes/textStyle';
 
 const GlobalButton = ({ children, ...rest }) => {
   return <StGlobalButton {...rest}>{children}</StGlobalButton>;
@@ -23,6 +23,6 @@ const StGlobalButton = styled.div`
   border: ${(props) => props.border || null};
   border-radius: ${(props) => props.borderR || '2rem'};
 
-  ${fontExtraBold};
+  ${(props) => (props.fw === 'bold' ? fontBold : fontExtraBold)}
   color: ${(props) => props.color || '#fff'};
 `;
