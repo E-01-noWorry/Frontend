@@ -4,7 +4,6 @@ import loginSlice from '../module/loginSlice';
 import select from '../module/selectSlice';
 import vote from '../module/voteSlice';
 import commentSlice from '../module/commentSlice';
-import room from '../module/roomSlice';
 import myPageSlice from '../module/myPageSlice';
 
 export const store = configureStore({
@@ -15,7 +14,6 @@ export const store = configureStore({
     myPageSlice: myPageSlice.reducer,
     select,
     vote,
-    room,
   },
   middleware: getDefaultMiddleware({
     serializableCheck: false,

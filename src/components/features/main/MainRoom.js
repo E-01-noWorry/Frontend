@@ -1,34 +1,30 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import instance from '../../../app/module/instance';
-import { __getAllRoom } from '../../../app/module/roomSlice';
+
+import { ModalBasic } from '../../common/Modal';
 
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
-import { IconSmall } from '../../../shared/themes/iconStyle';
+import { IconMedium, IconSmall } from '../../../shared/themes/iconStyle';
 import {
   fontBold,
   fontMedium,
   fontSmall,
 } from '../../../shared/themes/textStyle';
 
+import IconPerson from '../../../static/icons/Variety=person, Status=untab.svg';
+import IconSearch from '../../../static/icons/Variety=search, Status=untab.svg';
+
 import styled from 'styled-components';
+import BodyPadding from '../../common/BodyPadding';
 
 const MainRoom = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const rooms = useSelector((state) => state.room.rooms);
 
   const [modal, setModal] = useState('');
-
-  const getAllRoom = useCallback(() => {
-    dispatch(__getAllRoom());
-  }, [dispatch]);
-
-  useEffect(() => {
-    getAllRoom();
-  }, [getAllRoom]);
+  const [rooms, setRooms] = useState([]);
+  const searchRef = useRef();
 
   //고민 채팅방 입장 POST API
   const joinRoomHandler = async (roomKey) => {
@@ -37,49 +33,140 @@ const MainRoom = () => {
       navigate(`/chatroom/${roomKey}`);
     } catch (error) {
       setModal(error.response.data.errMsg);
+    }
+  };
+
+  const searchHandler = async (event) => {
+    event.preventDefault();
+    // try {
+    //   await instance.get();
+    // } catch (error) {
+    //   console.log(error.response.data.errMsg);
+    // }
+    searchRef.current.value = '';
+  };
+
+  const getAllRoom = async () => {
+    try {
+      const { data } = await instance.get('/room');
+      setRooms((prev) => [...prev, ...data.result]);
+    } catch (error) {
       console.log(error.response.data.errMsg);
     }
   };
 
+  useEffect(() => {
+    getAllRoom();
+  }, []);
+
   return (
-    <StMainWrap>
-      <StContentBoxWrap>
-        {rooms?.map((room) => (
-          <StContentBox
-            key={room.roomKey}
-            onClick={() => joinRoomHandler(room.roomKey)}
-          >
-            <StInnerTitle>{room.title}</StInnerTitle>
+    <>
+      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
 
-            <StInnerKeywordWrap>
-              {room.hashTag?.map((item) => (
-                <StInnerKeyword key={item}>#{item} </StInnerKeyword>
-              ))}
-            </StInnerKeywordWrap>
+      <StSearchWrap>
+        <form onSubmit={searchHandler}>
+          <input
+            maxLength={10}
+            placeholder="채팅방 이름/고민, 태그 검색(10자 이내)"
+            ref={searchRef}
+          />
+          <div>
+            <img src={IconSearch} />
+          </div>
+        </form>
+        <StCancel>취소</StCancel>
+      </StSearchWrap>
 
-            <StContentFooter>
-              <StInnerCurrent>
-                <StPeopleIcon></StPeopleIcon>
-                <span>
-                  {room.currentPeople}/{room.max}명
-                </span>
-              </StInnerCurrent>
+      <BodyPadding>
+        <StMainWrap>
+          <StContentBoxWrap>
+            {rooms?.map((room) => (
+              <StContentBox
+                key={room.roomKey}
+                onClick={() => joinRoomHandler(room.roomKey)}
+              >
+                <StInnerTitle>{room.title}</StInnerTitle>
 
-              <StInnerNickname>
-                작성자 <span>{room.host}</span>
-              </StInnerNickname>
-            </StContentFooter>
-          </StContentBox>
-        ))}
-      </StContentBoxWrap>
-    </StMainWrap>
+                <StInnerKeywordWrap>
+                  {room.hashTag?.map((item) => (
+                    <StInnerKeyword key={item}>#{item} </StInnerKeyword>
+                  ))}
+                </StInnerKeywordWrap>
+
+                <StContentFooter>
+                  <StInnerCurrent>
+                    <StPeopleIcon>
+                      <img src={IconPerson} />
+                    </StPeopleIcon>
+                    <span>
+                      {room.currentPeople}/{room.max}명
+                    </span>
+                  </StInnerCurrent>
+
+                  <StInnerNickname>
+                    작성자 <span>{room.host}</span>
+                  </StInnerNickname>
+                </StContentFooter>
+              </StContentBox>
+            ))}
+          </StContentBoxWrap>
+        </StMainWrap>
+      </BodyPadding>
+    </>
   );
 };
 
 export default MainRoom;
 
+const StSearchWrap = styled.div`
+  position: fixed;
+  top: 6.4rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+
+  width: 100%;
+  height: 5.5rem;
+  padding: 0 2rem;
+  background-color: #f5f5f5;
+
+  form {
+    position: relative;
+    width: 100%;
+
+    input {
+      width: 100%;
+      height: 4rem;
+      padding: 0 1.5rem;
+      background-color: #ededed;
+
+      border: none;
+      border-radius: 2rem;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    div {
+      position: absolute;
+      top: 0.8rem;
+      right: 0.8rem;
+      ${IconMedium};
+    }
+  }
+`;
+
+const StCancel = styled.div`
+  width: 3rem;
+
+  ${fontMedium}
+`;
+
 const StMainWrap = styled.div`
-  margin-top: 8.5rem;
+  margin-top: 14rem;
   margin-bottom: 8.4rem;
 `;
 
@@ -156,5 +243,4 @@ const StInnerCurrent = styled.div`
 
 const StPeopleIcon = styled.div`
   ${IconSmall};
-  background-color: green;
 `;
