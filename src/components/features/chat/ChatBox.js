@@ -26,6 +26,15 @@ const ChatBox = ({ chatState, userKey }) => {
               <div className="middle">
                 <div className="chat">{chat.chat}</div>
               </div>
+            ) : chatState[idx]?.User.nickname ===
+                chatState[idx - 1]?.User.nickname &&
+              nowTime(chatState[idx].createdAt) ===
+                nowTime(chatState[idx - 1].createdAt) ? (
+              <>
+                <div className="sametime">
+                  <div className="chat">{chat.chat}</div>
+                </div>
+              </>
             ) : (
               <>
                 <ProfileImg className="img" />
@@ -83,7 +92,7 @@ const StChat = styled.div`
 
     width: 100%;
     height: 100%;
-    margin: 1rem 0;
+    margin: 1.2rem 0;
 
     .img {
       margin-left: 0.8rem;
@@ -98,20 +107,25 @@ const StChat = styled.div`
         ${fontSmall};
         line-height: 2rem;
       }
+    }
 
-      .chat {
-        display: inline-block;
+    .sametime {
+      margin-top: -1.2rem;
+      margin-right: 4.8rem;
+    }
 
-        max-width: 21.3rem;
-        padding: 1rem;
-        background-color: #515151;
+    .chat {
+      display: inline-block;
 
-        border-radius: 2rem 0.4rem 2rem 2rem;
+      max-width: 21.3rem;
+      padding: 1rem;
+      background-color: #515151;
 
-        ${fontMedium};
-        line-height: 2.1rem;
-        color: #fff;
-      }
+      border-radius: 2rem 0.4rem 2rem 2rem;
+
+      ${fontMedium};
+      line-height: 2.1rem;
+      color: #fff;
     }
 
     .time {
@@ -129,7 +143,7 @@ const StChat = styled.div`
 
     width: 100%;
     height: 100%;
-    margin: 1rem 0;
+    margin: 1.2rem 0;
 
     .img {
       margin-right: 0.8rem;
@@ -144,19 +158,24 @@ const StChat = styled.div`
         ${fontSmall};
         line-height: 2rem;
       }
+    }
 
-      .chat {
-        display: inline-block;
+    .sametime {
+      margin-top: -1.2rem;
+      margin-left: 4.8rem;
+    }
 
-        max-width: 21.3rem;
-        padding: 1rem;
-        background-color: #e4e4e4;
+    .chat {
+      display: inline-block;
 
-        border-radius: 0.4rem 2rem 2rem 2rem;
+      max-width: 21.3rem;
+      padding: 1rem;
+      background-color: #e4e4e4;
 
-        ${fontMedium};
-        line-height: 2.1rem;
-      }
+      border-radius: 0.4rem 2rem 2rem 2rem;
+
+      ${fontMedium};
+      line-height: 2.1rem;
     }
 
     .time {
