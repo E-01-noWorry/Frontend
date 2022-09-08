@@ -70,7 +70,7 @@ const Detail = () => {
           <StDeadLine>
             <StIcon></StIcon>
             <span>{remainedTime(content.deadLine)}</span>
-            {remainedTime(content.deadLine) ? null : <span>투표마감</span>}
+            {content.completion ? <span>투표마감</span> : null}
           </StDeadLine>
         </StInfoWrap>
 

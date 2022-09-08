@@ -35,9 +35,7 @@ const SelectContentBox = ({ contents, setRef }) => {
               <span>{content.total || 0}</span>
             </StInnerCurrent>
             <StInnerTime>
-              <span>
-                {remainedTime(content.deadLine) ? '남은시간' : '투표마감'}
-              </span>
+              <span>{content.completion ? '투표마감' : '남은시간'}</span>
               <span>{remainedTime(content.deadLine)}</span>
             </StInnerTime>
           </StContentFooter>

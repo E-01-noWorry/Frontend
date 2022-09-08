@@ -44,7 +44,7 @@ const Vote = ({ content, selectKey }) => {
 
   return (
     <>
-      {msg.includes('조회 성공') || remainedTime(content.deadLine) <= 0 ? (
+      {msg.includes('조회 성공') || content.completion ? (
         <StVoteResultBox>
           {content.options?.map((option, idx) => (
             <StSelectResult bgImage={content.image[idx]} key={idx}>
@@ -75,6 +75,7 @@ const Vote = ({ content, selectKey }) => {
                 bgc={'#fff'}
                 color={'#000'}
                 borderR={'1.5rem'}
+                fw={'bold'}
               >
                 클릭 후 투표
               </GlobalButton>
@@ -162,7 +163,7 @@ const StVoteBox = styled.div`
     transition-duration: 0.3s;
 
     ${(props) =>
-      props.image &&
+      props.image?.[0] &&
       css`
         background: linear-gradient(
             0deg,
@@ -191,9 +192,6 @@ const StSelectItem = styled.div`
   ${borderBoxDefault}
   padding: 1.6rem;
 
-  background-image: url(${(props) => props.bgImage});
-  background-size: cover;
-  background-position: center center;
   background-color: #fff;
 
   ${fontBold}
@@ -207,6 +205,10 @@ const StSelectItem = styled.div`
   ${(props) =>
     props.bgImage &&
     css`
+      background-image: url(${(props) => props.bgImage});
+      background-size: cover;
+      background-position: center center;
+
       label {
         color: #fff;
         text-shadow: 0px 0px 8px rgba(0, 0, 0, 0.6);
