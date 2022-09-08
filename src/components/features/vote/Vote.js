@@ -12,7 +12,6 @@ import {
   fontExtraBold,
   fontMedium,
 } from '../../../shared/themes/textStyle';
-import { remainedTime } from '../../../shared/timeCalculation';
 
 import styled, { css } from 'styled-components';
 
