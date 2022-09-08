@@ -3,6 +3,19 @@ import React from 'react';
 import styled from 'styled-components';
 import { fontBold, fontMedium } from '../../shared/themes/textStyle';
 
+export const ModalBasic = ({ children, setter }) => {
+  return (
+    <StModalBg>
+      <StModalWindow>
+        <StModalText>{children}</StModalText>
+        <StModalButton>
+          <div onClick={setter}>확인</div>
+        </StModalButton>
+      </StModalWindow>
+    </StModalBg>
+  );
+};
+
 export const ModalExit = ({ leave, setter }) => {
   return (
     <StModalBg>
@@ -79,11 +92,11 @@ const StModalButton = styled.div`
     justify-content: center;
     align-items: center;
 
-    width: 50%;
+    width: 100%;
     height: 100%;
   }
 
-  div:nth-child(1) {
-    border-right: 0.1rem solid #e7e7e7;
+  div:nth-child(2) {
+    border-left: 0.1rem solid #e7e7e7;
   }
 `;
