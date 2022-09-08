@@ -7,14 +7,13 @@ import { io } from 'socket.io-client';
 import BodyPadding from '../components/common/BodyPadding';
 import FooterInput from '../components/common/FooterInput';
 import Header from '../components/common/Header';
-import ProfileImg from '../components/elements/ProfileImg';
-
-import { nowTime } from '../shared/timeCalculation';
+import { ModalExit } from '../components/common/Modal';
 
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
-import { fontLarge, fontMedium, fontSmall } from '../shared/themes/textStyle';
+import { fontLarge, fontMedium } from '../shared/themes/textStyle';
 
 import styled from 'styled-components';
+import ChatBox from '../components/features/chat/ChatBox';
 
 const ChatRoom = () => {
   const navigate = useNavigate();
@@ -25,6 +24,7 @@ const ChatRoom = () => {
   const socket = useRef();
   const sendMessage = useRef();
 
+  const [modalExit, setModalExit] = useState(false);
   const [chatState, setChatState] = useState([]);
   const [roomInfo, setRoomInfo] = useState({});
 
@@ -118,6 +118,13 @@ const ChatRoom = () => {
 
   return (
     <div>
+      {modalExit && (
+        <ModalExit
+          leave={leaveRoomHandler}
+          setter={() => setModalExit(false)}
+        />
+      )}
+
       <Header>
         <StHeaderIcon onClick={() => navigate('/', { state: 'room' })}>
           뒤
@@ -129,7 +136,7 @@ const ChatRoom = () => {
         {parseInt(userKey) === roomInfo?.userKey ? (
           <StHeaderIcon onClick={leaveRoomHandler}>삭</StHeaderIcon>
         ) : (
-          <StHeaderIcon onClick={leaveRoomHandler}>나</StHeaderIcon>
+          <StHeaderIcon onClick={() => setModalExit(true)}>나</StHeaderIcon>
         )}
       </Header>
 
@@ -139,38 +146,7 @@ const ChatRoom = () => {
       </StHeaderTitle>
 
       <BodyPadding>
-        <StChatWrap>
-          {chatState.map((chat, idx) => (
-            <StChat key={idx}>
-              <div
-                className={
-                  chat.userKey === 12
-                    ? 'system'
-                    : chat.userKey === parseInt(userKey)
-                    ? 'right'
-                    : 'left'
-                }
-              >
-                {chat.User.nickname === 'admin99' ? (
-                  <div className="middle">
-                    <div className="chat">{chat.chat}</div>
-                  </div>
-                ) : (
-                  <>
-                    <ProfileImg className="img" />
-
-                    <div className="middle">
-                      <div className="nickname">{chat.User.nickname}</div>
-                      <div className="chat">{chat.chat}</div>
-                    </div>
-
-                    <span className="time">{nowTime(chat.createdAt)}</span>
-                  </>
-                )}
-              </div>
-            </StChat>
-          ))}
-        </StChatWrap>
+        <ChatBox chatState={chatState} userKey={userKey} />
       </BodyPadding>
 
       <FooterInput>
@@ -216,6 +192,7 @@ const StHeaderTitle = styled.div`
 
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6rem;
 
   width: 100%;
@@ -229,11 +206,6 @@ const StHeaderTitle = styled.div`
   }
 `;
 
-const StChatWrap = styled.div`
-  margin-top: 11rem;
-  margin-bottom: 8rem;
-`;
-
 const StSendIcon = styled.div`
   position: absolute;
   right: 2rem;
@@ -241,121 +213,4 @@ const StSendIcon = styled.div`
 
   ${IconLarge};
   background-color: green;
-`;
-
-const StChat = styled.div`
-  display: flex;
-
-  width: 100%;
-  height: 100%;
-
-  //시스템 메세지 CSS
-  .system {
-    display: inline-block;
-    background-color: #d3d3d3;
-
-    height: 2.6rem;
-    padding: 3px 6px;
-    margin: 1.2rem auto;
-
-    border-radius: 1.3rem;
-
-    .chat {
-      ${fontSmall};
-      line-height: 2rem;
-      color: #fff;
-    }
-  }
-
-  //나의 채팅 CSS
-  .right {
-    display: flex;
-    flex-direction: row-reverse;
-
-    width: 100%;
-    height: 100%;
-    margin: 1rem 0;
-
-    .img {
-      margin-left: 0.8rem;
-    }
-
-    .middle {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-
-      .nickname {
-        ${fontSmall};
-        line-height: 2rem;
-      }
-
-      .chat {
-        display: inline-block;
-
-        max-width: 21.3rem;
-        padding: 1rem;
-        background-color: #515151;
-
-        border-radius: 2rem 0.4rem 2rem 2rem;
-
-        ${fontMedium};
-        line-height: 2.1rem;
-        color: #fff;
-      }
-    }
-
-    .time {
-      margin-right: 1rem;
-      margin-top: auto;
-
-      font-size: 1.2rem;
-      line-height: 1.8rem;
-    }
-  }
-
-  //다른 사람의 채팅 CSS
-  .left {
-    display: flex;
-
-    width: 100%;
-    height: 100%;
-    margin: 1rem 0;
-
-    .img {
-      margin-right: 0.8rem;
-    }
-
-    .middle {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-
-      .nickname {
-        ${fontSmall};
-        line-height: 2rem;
-      }
-
-      .chat {
-        display: inline-block;
-
-        max-width: 21.3rem;
-        padding: 1rem;
-        background-color: #e4e4e4;
-
-        border-radius: 0.4rem 2rem 2rem 2rem;
-
-        ${fontMedium};
-        line-height: 2.1rem;
-      }
-    }
-
-    .time {
-      margin-left: 1rem;
-      margin-top: auto;
-
-      font-size: 1.2rem;
-      line-height: 1.8rem;
-    }
-  }
 `;
