@@ -24,6 +24,7 @@ import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
 import IconAdd from '../../../static/icons/Variety=add, Status=untab.svg';
 
 import styled from 'styled-components';
+import axios from 'axios';
 
 const WriteSelect = () => {
   const navigate = useNavigate();
@@ -61,40 +62,36 @@ const WriteSelect = () => {
     const optionArr = Object.values(options).filter((option) => option !== '');
     const imageArr = Object.values(images).filter((image) => image !== '');
 
-    if (imageArr !== 0 && optionArr.length !== imageArr.length) {
+    if (imageArr.length !== 0 && optionArr.length !== imageArr.length) {
       alert('사진 업로드 시엔 모든 선택지에 사진을 올려주세요.');
     } else {
       let formData = new FormData();
 
-      const payload = {
-        title,
-        category,
-        options: optionArr,
-        time: parseInt(time),
-      };
-
-      formData.append('data', JSON.stringify(payload));
+      formData.append('title', title);
+      formData.append('category', category);
+      formData.append('options', optionArr);
+      formData.append('time', time);
       if (imageArr[0]) {
-        formData.append('images', imageArr);
+        for (let i = 0; i < imageArr.length; i++) {
+          formData.append('image', imageArr[i]);
+        }
       }
 
-      console.log(formData.get('data'));
-      console.log(formData.get('images'));
+      try {
+        await axios({
+          method: 'POST',
+          url: `${process.env.REACT_APP_API}/select`,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          data: formData,
+        });
+        navigate('/', { state: 'select' });
+      } catch (error) {
+        console.log(error.response.data.errMsg);
+      }
     }
-
-    // const payload = {
-    //   title: title,
-    //   category: category,
-    //   options: Object.values(options).filter((option) => option !== ''),
-    //   image: Object.values(images).filter((image) => image !== ''),
-    //   time: parseInt(time),
-    // };
-    // try {
-    //   await instance.post('/select', payload);
-    //   navigate('/', { state: 'select' });
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
 
   return (
