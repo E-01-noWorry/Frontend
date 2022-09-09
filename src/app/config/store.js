@@ -15,9 +15,13 @@ export const store = configureStore({
     select,
     vote,
   },
-  middleware: getDefaultMiddleware({
-    serializableCheck: false,
-  }),
+
+  devTools: process.env.NODE_ENV !== 'production',
+
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export default store;
