@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 
 const GoogleLogin = () => {
+  const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_CALLBACK_URL}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
+
   return (
-    <a>
+    <a href={GOOGLE_AUTH_URL}>
       <Google>구글</Google>
     </a>
   );

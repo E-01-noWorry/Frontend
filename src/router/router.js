@@ -6,6 +6,7 @@ const Main = lazy(() => import('../pages/Main'));
 const SignUp = lazy(() => import('../pages/SignUp'));
 const Login = lazy(() => import('../pages/Login'));
 const KakaoCode = lazy(() => import('../components/features/KakaoCode'));
+const GoogleRedirect = lazy(() => import('../pages/GoogleRedirect'));
 const MyPage = lazy(() => import('../pages/MyPage'));
 const PostVoted = lazy(() => import('../components/features/mypage/postVoted'));
 const Write = lazy(() => import('../pages/Write'));
@@ -23,6 +24,10 @@ const Router = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/api/auth/kakao/callback" element={<KakaoCode />} />
+          <Route
+            path="/api/auth/google/callback"
+            element={<GoogleRedirect />}
+          />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/postvoted" element={<PostVoted />} />
 
