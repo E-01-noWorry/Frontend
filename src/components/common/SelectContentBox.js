@@ -14,14 +14,19 @@ import styled from 'styled-components';
 const SelectContentBox = ({ contents, setRef }) => {
   const navigate = useNavigate();
 
+  if (contents.length === 0) {
+    return <StNoneContents>게시글이 없습니다.</StNoneContents>;
+  }
+
   return (
     <StContentBoxWrap>
       {contents?.map((content, idx) => (
         <StContentBox
           key={content.selectKey}
           onClick={() => navigate(`/detail/${content.selectKey}`)}
-          //마지막 게시글에 ref를 달아준다
+          //마지막 게시글에 ref를 달아줍니다
           ref={idx === contents.length - 1 ? setRef : null}
+          completion={content.completion}
         >
           <StContentHeader>
             <StInnerCategory>{content.category}</StInnerCategory>
@@ -30,9 +35,16 @@ const SelectContentBox = ({ contents, setRef }) => {
             </StInnerNickname>
           </StContentHeader>
 
-          <StInnerTitle>{content.title}</StInnerTitle>
+          <StInnerTitle completion={content.completion}>
+            {content.title}
+          </StInnerTitle>
 
-          <StInnerOption>{content.options?.join(' vs ')}</StInnerOption>
+          <StInnerOption>
+            {/* 선택지 내용이 길면 26글자에서 잘라줍니다 */}
+            {content.options?.join(' vs ').length > 26
+              ? content.options?.join(' vs ').slice(0, 26) + '...'
+              : content.options?.join(' vs ')}
+          </StInnerOption>
 
           <StContentFooter>
             <StInnerCurrent>
@@ -54,10 +66,21 @@ const SelectContentBox = ({ contents, setRef }) => {
 
 export default SelectContentBox;
 
+const StNoneContents = styled.div`
+  width: 100%;
+  margin-top: 15.4rem;
+
+  ${fontMedium}
+  text-align: center;
+`;
+
 const StContentBoxWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
+
+  margin-top: 13rem;
+  margin-bottom: 8.4rem;
 `;
 
 const StContentBox = styled.div`
@@ -66,7 +89,9 @@ const StContentBox = styled.div`
 
   height: 100%;
   padding: 1.6rem;
-  background-color: #fff;
+  background-color: ${(props) => (props.completion ? '#F4F3F0' : '#fff')};
+
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
 
   &:hover,
   &:active {
@@ -121,6 +146,7 @@ const StInnerTitle = styled.div`
 
   ${fontBold};
   line-height: 2.1rem;
+  color: ${(props) => (props.completion ? '#767676' : '#000')};
 `;
 
 const StInnerOption = styled.div`
