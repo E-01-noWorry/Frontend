@@ -1,13 +1,17 @@
 import React from 'react';
 
-import styled from 'styled-components';
 import { fontBold, fontMedium } from '../../shared/themes/textStyle';
+
+import styled from 'styled-components';
 
 export const ModalBasic = ({ children, setter }) => {
   return (
     <StModalBg>
       <StModalWindow>
-        <StModalText>{children}</StModalText>
+        <StModalText>
+          <span></span>
+          <span>{children}</span>
+        </StModalText>
         <StModalButton>
           <div onClick={setter}>확인</div>
         </StModalButton>
@@ -52,9 +56,12 @@ const StModalBg = styled.div`
 
 const StModalWindow = styled.div`
   width: 29rem;
+  padding: 0 1rem;
   background-color: #fff;
 
   border-radius: 2rem;
+
+  line-height: 2.1rem;
 `;
 
 const StModalText = styled.div`
@@ -62,7 +69,7 @@ const StModalText = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.5rem;
 
   height: 10.2rem;
 
@@ -72,6 +79,7 @@ const StModalText = styled.div`
 
   span:nth-child(2) {
     ${fontMedium}
+    text-align: center;
   }
 
   span:nth-child(3) {
@@ -84,6 +92,7 @@ const StModalButton = styled.div`
   align-items: center;
 
   height: 5.6rem;
+  margin: 0 -1rem;
 
   border-top: 0.1rem solid #e7e7e7;
 

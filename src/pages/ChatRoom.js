@@ -7,7 +7,8 @@ import { io } from 'socket.io-client';
 import BodyPadding from '../components/common/BodyPadding';
 import FooterInput from '../components/common/FooterInput';
 import Header from '../components/common/Header';
-import { ModalExit } from '../components/common/Modal';
+import ChatBox from '../components/features/chat/ChatBox';
+import { ModalBasic, ModalExit } from '../components/common/Modal';
 
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
 import { fontBold, fontLarge, fontMedium } from '../shared/themes/textStyle';
@@ -19,7 +20,6 @@ import IconAnnounce from '../static/icons/Variety=announce, Status=untab.svg';
 import IconSend from '../static/icons/Variety=send, Status=untab.svg';
 
 import styled from 'styled-components';
-import ChatBox from '../components/features/chat/ChatBox';
 
 const ChatRoom = () => {
   const navigate = useNavigate();
@@ -30,7 +30,9 @@ const ChatRoom = () => {
   const socket = useRef();
   const sendMessage = useRef();
 
+  const [hostByeModal, setHostBeyModal] = useState('');
   const [modalExit, setModalExit] = useState(false);
+
   const [chatState, setChatState] = useState([]);
   const [roomInfo, setRoomInfo] = useState({});
 
@@ -93,8 +95,9 @@ const ChatRoom = () => {
 
     socket.current.on('byeHost', () => {
       setChatState([]);
-      alert('호스트가 채팅방을 삭제했습니다. 메인 화면으로 이동합니다.');
-      navigate('/main', { state: 'room' });
+      setHostBeyModal(
+        `호스트가 채팅방을 삭제했습니다. 메인 화면으로 이동합니다.`,
+      );
     });
   }, [chatState]);
 
@@ -129,6 +132,12 @@ const ChatRoom = () => {
           leave={leaveRoomHandler}
           setter={() => setModalExit(false)}
         />
+      )}
+
+      {hostByeModal && (
+        <ModalBasic setter={() => navigate('/main', { state: 'room' })}>
+          {hostByeModal}
+        </ModalBasic>
       )}
 
       <Header>

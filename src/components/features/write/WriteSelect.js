@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import instance from '../../../app/module/instance';
+import axios from 'axios';
 
+import { ModalBasic } from '../../common/Modal';
 import GlobalButton from '../../elements/GlobalButton';
 import BodyPadding from '../../common/BodyPadding';
 import Header from '../../common/Header';
@@ -24,13 +25,13 @@ import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
 import IconAdd from '../../../static/icons/Variety=add, Status=untab.svg';
 
 import styled from 'styled-components';
-import axios from 'axios';
 
 const WriteSelect = () => {
   const navigate = useNavigate();
 
   const [numArr, setNumArr] = useState([1, 2]);
   const [modal, setModal] = useState('');
+  const [uploadModal, setUploadModal] = useState('');
 
   //서버에 전송할 payload
   const [title, setTitle] = useState('');
@@ -63,7 +64,7 @@ const WriteSelect = () => {
     const imageArr = Object.values(images).filter((image) => image !== '');
 
     if (imageArr.length !== 0 && optionArr.length !== imageArr.length) {
-      alert('사진 업로드 시엔 모든 선택지에 사진을 올려주세요.');
+      setModal('사진 업로드 시 모든 선택지에 사진을 올려주세요.');
     } else {
       let formData = new FormData();
 
@@ -87,15 +88,23 @@ const WriteSelect = () => {
           },
           data: formData,
         });
-        navigate('/', { state: 'select' });
+        setUploadModal('게시글 등록 완료!');
       } catch (error) {
-        console.log(error.response.data.errMsg);
+        setModal(error.response.data.errMsg);
       }
     }
   };
 
   return (
     <>
+      {uploadModal && (
+        <ModalBasic setter={() => navigate('/main', { state: 'select' })}>
+          {uploadModal}
+        </ModalBasic>
+      )}
+
+      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+
       <Header>
         <StHeaderIcon onClick={() => navigate('/main', { state: 'select' })}>
           <img src={IconBack} />
@@ -154,10 +163,10 @@ const WriteSelect = () => {
                       name={num}
                       value={options[num]}
                       onChange={optionChangeHandler}
-                      maxLength={20}
+                      maxLength={15}
                       placeholder="선택지를 작성해주세요"
                     />
-                    <span>{options[num]?.length || '0'}/20자</span>
+                    <span>{options[num]?.length || '0'}/15자</span>
                     <WriteImageUpload setImages={setImages} num={num} />
                   </StInnerText>
                 </div>
