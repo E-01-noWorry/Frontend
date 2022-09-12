@@ -132,7 +132,7 @@ const WriteSelect = () => {
           <StContentBox>
             <StInnerTitle>카테고리 선택</StInnerTitle>
             <StInnerCategory>
-              {CATEGORY_ARR.map((item) => (
+              {CATEGORY_ARR.slice(1).map((item) => (
                 <div key={item} onClick={() => setCategory(item)}>
                   <input
                     type="radio"
