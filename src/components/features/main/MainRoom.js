@@ -39,11 +39,11 @@ const MainRoom = () => {
   //고민 채팅방 키워드 검색
   const searchHandler = async (event) => {
     event.preventDefault();
-    // try {
-    //   await instance.get();
-    // } catch (error) {
-    //   console.log(error.response.data.errMsg);
-    // }
+    try {
+      await instance.get(`/room/search?searchWord=${searchRef.current.value}`);
+    } catch (error) {
+      setModal(error.response.data.errMsg);
+    }
     searchRef.current.value = '';
   };
 
