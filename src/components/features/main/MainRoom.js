@@ -26,6 +26,19 @@ const MainRoom = () => {
   const [rooms, setRooms] = useState([]);
   const searchRef = useRef();
 
+  const getAllRoom = async () => {
+    try {
+      const { data } = await instance.get('/room');
+      setRooms((prev) => [...prev, ...data.result]);
+    } catch (error) {
+      console.log(error.response.data.errMsg);
+    }
+  };
+
+  useEffect(() => {
+    getAllRoom();
+  }, []);
+
   //고민 채팅방 입장 POST API
   const joinRoomHandler = async (roomKey) => {
     try {
@@ -40,25 +53,22 @@ const MainRoom = () => {
   const searchHandler = async (event) => {
     event.preventDefault();
     try {
-      await instance.get(`/room/search?searchWord=${searchRef.current.value}`);
+      const { data } = await instance.get(
+        `/room/search?searchWord=${searchRef.current.value}`,
+      );
+      setRooms([...data.result]);
     } catch (error) {
       setModal(error.response.data.errMsg);
     }
     searchRef.current.value = '';
   };
 
-  const getAllRoom = async () => {
-    try {
-      const { data } = await instance.get('/room');
-      setRooms((prev) => [...prev, ...data.result]);
-    } catch (error) {
-      console.log(error.response.data.errMsg);
-    }
-  };
-
-  useEffect(() => {
+  //고민 채팅방 검색 취소버튼
+  const searchCancelHandler = () => {
+    searchRef.current.value = '';
+    setRooms([]);
     getAllRoom();
-  }, []);
+  };
 
   return (
     <>
@@ -75,7 +85,7 @@ const MainRoom = () => {
             <img src={IconSearch} />
           </div>
         </form>
-        <StCancel onClick={() => (searchRef.current.value = '')}>취소</StCancel>
+        <StCancel onClick={searchCancelHandler}>취소</StCancel>
       </StSearchWrap>
 
       <BodyPadding>
