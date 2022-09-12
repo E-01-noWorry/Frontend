@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import instance from '../../../app/module/instance';
 
+import BodyPadding from '../../common/BodyPadding';
 import { ModalBasic } from '../../common/Modal';
 
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
@@ -17,7 +18,6 @@ import IconPerson from '../../../static/icons/Variety=person, Status=untab.svg';
 import IconSearch from '../../../static/icons/Variety=search, Status=untab.svg';
 
 import styled from 'styled-components';
-import BodyPadding from '../../common/BodyPadding';
 
 const MainRoom = () => {
   const navigate = useNavigate();
@@ -36,6 +36,7 @@ const MainRoom = () => {
     }
   };
 
+  //고민 채팅방 키워드 검색
   const searchHandler = async (event) => {
     event.preventDefault();
     // try {
@@ -70,47 +71,45 @@ const MainRoom = () => {
             placeholder="채팅방 이름/고민, 태그 검색(10자 이내)"
             ref={searchRef}
           />
-          <div>
+          <div onClick={searchHandler}>
             <img src={IconSearch} />
           </div>
         </form>
-        <StCancel>취소</StCancel>
+        <StCancel onClick={() => (searchRef.current.value = '')}>취소</StCancel>
       </StSearchWrap>
 
       <BodyPadding>
-        <StMainWrap>
-          <StContentBoxWrap>
-            {rooms?.map((room) => (
-              <StContentBox
-                key={room.roomKey}
-                onClick={() => joinRoomHandler(room.roomKey)}
-              >
-                <StInnerTitle>{room.title}</StInnerTitle>
+        <StContentBoxWrap>
+          {rooms?.map((room) => (
+            <StContentBox
+              key={room.roomKey}
+              onClick={() => joinRoomHandler(room.roomKey)}
+            >
+              <StInnerTitle>{room.title}</StInnerTitle>
 
-                <StInnerKeywordWrap>
-                  {room.hashTag?.map((item) => (
-                    <StInnerKeyword key={item}>#{item} </StInnerKeyword>
-                  ))}
-                </StInnerKeywordWrap>
+              <StInnerKeywordWrap>
+                {room.hashTag?.map((item) => (
+                  <StInnerKeyword key={item}>#{item} </StInnerKeyword>
+                ))}
+              </StInnerKeywordWrap>
 
-                <StContentFooter>
-                  <StInnerCurrent>
-                    <StPeopleIcon>
-                      <img src={IconPerson} />
-                    </StPeopleIcon>
-                    <span>
-                      {room.currentPeople}/{room.max}명
-                    </span>
-                  </StInnerCurrent>
+              <StContentFooter>
+                <StInnerCurrent>
+                  <StPeopleIcon>
+                    <img src={IconPerson} />
+                  </StPeopleIcon>
+                  <span>
+                    {room.currentPeople}/{room.max}명
+                  </span>
+                </StInnerCurrent>
 
-                  <StInnerNickname>
-                    작성자 <span>{room.host}</span>
-                  </StInnerNickname>
-                </StContentFooter>
-              </StContentBox>
-            ))}
-          </StContentBoxWrap>
-        </StMainWrap>
+                <StInnerNickname>
+                  작성자 <span>{room.host}</span>
+                </StInnerNickname>
+              </StContentFooter>
+            </StContentBox>
+          ))}
+        </StContentBoxWrap>
       </BodyPadding>
     </>
   );
@@ -165,15 +164,13 @@ const StCancel = styled.div`
   ${fontMedium}
 `;
 
-const StMainWrap = styled.div`
-  margin-top: 14rem;
-  margin-bottom: 8.4rem;
-`;
-
 const StContentBoxWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
+
+  margin-top: 14rem;
+  margin-bottom: 8.4rem;
 `;
 
 const StContentBox = styled.div`
@@ -183,6 +180,8 @@ const StContentBox = styled.div`
   height: 100%;
   padding: 1.6rem;
   background-color: #fff;
+
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
 
   &:hover,
   &:active {

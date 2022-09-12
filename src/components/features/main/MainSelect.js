@@ -8,13 +8,12 @@ import SelectContentBox from '../../common/SelectContentBox';
 import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/Array';
 
 import { fontMedium } from '../../../shared/themes/textStyle';
+import { IconSmall } from '../../../shared/themes/iconStyle';
 
 import styled from 'styled-components';
-import { IconSmall } from '../../../shared/themes/iconStyle';
 
 const MainSelect = () => {
   const [contents, setContents] = useState([]);
-  const [modal, setModal] = useState('');
 
   //필터와 카테고리를 관리하는 State
   const [filter, setFilter] = useState('기본순');
@@ -43,7 +42,6 @@ const MainSelect = () => {
         setContents((prev) => [...prev, ...data.result]);
       }
     } catch (error) {
-      setModal(error.response.data.errMsg);
       console.log(error.response.data.errMsg);
     }
   };
@@ -80,6 +78,12 @@ const MainSelect = () => {
     }
   };
 
+  //필터 셀렉트 박스 토글
+  const filterOpenHandler = () => {
+    setFilterModal((prev) => !prev);
+    setCategoryModal(false);
+  };
+
   //카테고리 핸들러
   const categoryHandler = (event) => {
     if (category !== event.target.getAttribute('value')) {
@@ -90,11 +94,7 @@ const MainSelect = () => {
     }
   };
 
-  const filterOpenHandler = () => {
-    setFilterModal((prev) => !prev);
-    setCategoryModal(false);
-  };
-
+  //카테고리 셀렉트 박스 토글
   const categoryOpenHandler = () => {
     setCategoryModal((prev) => !prev);
     setFilterModal(false);
@@ -102,7 +102,7 @@ const MainSelect = () => {
 
   return (
     <>
-      <StFilterDiv>
+      <StFilterDiv length={contents.length}>
         <StFilter onClick={filterOpenHandler}>
           <span>{filter}</span>
           <StArrowIcon></StArrowIcon>
@@ -129,20 +129,13 @@ const MainSelect = () => {
       </StFilterDiv>
 
       <BodyPadding>
-        <StMainWrap>
-          <SelectContentBox contents={contents} setRef={setRef} />
-        </StMainWrap>
+        <SelectContentBox contents={contents} setRef={setRef} />
       </BodyPadding>
     </>
   );
 };
 
 export default MainSelect;
-
-const StMainWrap = styled.div`
-  margin-top: 13rem;
-  margin-bottom: 8.4rem;
-`;
 
 const StFilterDiv = styled.div`
   position: fixed;
@@ -156,6 +149,8 @@ const StFilterDiv = styled.div`
   height: 5rem;
   padding: 0 2rem;
   background-color: #f5f5f5;
+
+  border-bottom: ${(props) => (props.length ? null : '1px solid #dbdbdb')};
 `;
 
 const StFilter = styled.div`
