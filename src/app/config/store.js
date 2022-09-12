@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import signUpSlice from '../module/signUpSlice';
 import loginSlice from '../module/loginSlice';
 import select from '../module/selectSlice';
