@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+
 import instance from '../app/module/instance';
 
 const GoogleRedirect = () => {
   const navigate = useNavigate();
   const [searchParams, _] = useSearchParams();
+
   const code = searchParams.get('code');
 
   const googleLogin = async () => {

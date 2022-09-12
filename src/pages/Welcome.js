@@ -7,9 +7,9 @@ import GlobalButton from '../components/elements/GlobalButton';
 import { isLogin } from '../shared/isLogin';
 
 import { fontBold, fontMedium, fontSmall } from '../shared/themes/textStyle';
+import { IconSmall } from '../shared/themes/iconStyle';
 
 import styled from 'styled-components';
-import { IconSmall } from '../shared/themes/iconStyle';
 
 const Welcome = () => {
   const navigate = useNavigate();

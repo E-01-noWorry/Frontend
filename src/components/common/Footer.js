@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { IconLarge } from '../../shared/themes/iconStyle';
-import { fontSmall } from '../../shared/themes/textStyle';
+import { fontExtraSmall } from '../../shared/themes/textStyle';
 
 import IconVoteTab from '../../static/icons/Variety=vote, Status=tab.svg';
 import IconVoteUntab from '../../static/icons/Variety=vote, Status=untab.svg';
@@ -71,9 +71,11 @@ const StFooter = styled.div`
   align-items: center;
 
   width: 100%;
-  height: 6rem;
-  padding: 0 2rem;
+  height: 7.2rem;
+  padding: 0.5rem 2.5rem 1.7rem 2.5rem;
   background-color: #f5f5f5;
+
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.25);
 
   &
     > div:nth-child(${(props) =>
@@ -101,6 +103,6 @@ const StIcon = styled.div`
 `;
 
 const StText = styled.div`
-  ${fontSmall};
+  ${fontExtraSmall};
   line-height: 1.8rem;
 `;

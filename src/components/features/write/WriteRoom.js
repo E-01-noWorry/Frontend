@@ -25,9 +25,8 @@ const WriteRoom = () => {
 
   const [title, setTitle] = useState('');
   const [keyword, setKeyword] = useState('');
-  const [countPeople, setCountPeople] = useState(2);
-
   const [keywordArr, setKeywordArr] = useState([]);
+  const [countPeople, setCountPeople] = useState(2);
 
   const keywordHandler = (event) => {
     event.preventDefault();
@@ -70,7 +69,7 @@ const WriteRoom = () => {
       const { data } = await instance.post('/room', payload);
       navigate(`/chatroom/${data.result.roomKey}`);
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.errMsg);
     }
   };
 

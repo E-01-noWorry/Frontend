@@ -16,7 +16,7 @@ export default WriteButton;
 
 const StWriteButton = styled.div`
   position: fixed;
-  bottom: 8rem;
+  bottom: 9.6rem;
   right: 2.4rem;
 
   display: flex;
@@ -27,8 +27,8 @@ const StWriteButton = styled.div`
   height: 6.4rem;
   background-color: #9b9b9b;
 
-  border: none;
   border-radius: 50%;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
 
   img {
     width: 3.8rem;

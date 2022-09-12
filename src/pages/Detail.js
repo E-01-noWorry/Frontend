@@ -38,6 +38,7 @@ const Detail = () => {
 
   useEffect(() => {
     dispatch(__getDetailSelect(selectKey));
+
     return () => {
       dispatch(cleanUp());
     };
