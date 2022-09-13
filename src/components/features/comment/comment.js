@@ -46,31 +46,61 @@ const Comment = (props) => {
   };
 
   return (
-    <div>
-      <CommentContainer>
-        <div>
-          {allComments?.map((a) => (
-            <CommentsDetail key={a?.commentKey}>
-              <EditComment allComments={a} user={user} />
-            </CommentsDetail>
-          ))}
-        </div>
-        <WriteBox>
-          <Write
-            type="text"
-            placeholder="더 좋은 의견을 남겨주세요."
-            name="comment"
-            onChange={onChangeHandler}
-            maxLength="50"
-            value={writeComment.comment}
-          />
-          <SubmitButton onClick={onClickSubmit}>제출</SubmitButton>
-        </WriteBox>
-      </CommentContainer>
-    </div>
+    <Container>
+      {allComments.length === 0 ? (
+        <>
+          <NoComments>댓글이 없습니다.</NoComments>
+          <WriteBox>
+            <Write
+              type="text"
+              placeholder="더 좋은 의견을 남겨주세요."
+              name="comment"
+              onChange={onChangeHandler}
+              maxLength="50"
+              value={writeComment.comment}
+            />
+            <SubmitButton onClick={onClickSubmit}>제출</SubmitButton>
+          </WriteBox>
+        </>
+      ) : (
+        <CommentContainer>
+          <div>
+            {allComments?.map((a) => (
+              <CommentsDetail key={a?.commentKey}>
+                <EditComment allComments={a} user={user} />
+              </CommentsDetail>
+            ))}
+          </div>
+          <WriteBox>
+            <Write
+              type="text"
+              placeholder="더 좋은 의견을 남겨주세요."
+              name="comment"
+              onChange={onChangeHandler}
+              maxLength="50"
+              value={writeComment.comment}
+            />
+            <SubmitButton onClick={onClickSubmit}>제출</SubmitButton>
+          </WriteBox>
+        </CommentContainer>
+      )}
+    </Container>
   );
 };
 export default Comment;
+
+const Container = styled.div`
+  padding-bottom: 10rem;
+`;
+
+const NoComments = styled.p`
+  display: flex;
+  border-top: 1px solid #dbdbdb;
+  height: 10rem;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+`;
 
 const CommentContainer = styled.div`
   width: 100%;

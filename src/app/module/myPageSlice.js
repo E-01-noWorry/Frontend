@@ -5,13 +5,30 @@ import instance from './instance';
 
 const initialState = {
   data: [],
+  point: '',
 };
 
-export const postVotedThunk = createAsyncThunk(
+export const editNickNameThunk = createAsyncThunk(
   'mypage/postvoted',
   async (payload, thunkAPI) => {
     try {
-      const data = await instance.get(`my/select?page=${payload.page}`);
+      const data = await instance.put(`user/${payload.userKey}`, {
+        nickname: payload.nickname,
+      });
+      localStorage.setItem('nickname', data.data.nickname);
+      return thunkAPI.fulfillWithValue(data.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const getMyPointThunk = createAsyncThunk(
+  'mypage/mypoint',
+  async (payload, thunkAPI) => {
+    try {
+      const data = await instance.get(`/my`);
+
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -24,13 +41,14 @@ export const myPageSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [postVotedThunk.fulfilled]: (state, action) => {
-      const ab = action.payload.result;
-      state.data = ab;
-      console.log(current(state));
+    [editNickNameThunk.fulfilled]: (state, action) => {
+      state.data = action.payload;
     },
-    [postVotedThunk.rejected]: (state, action) => {},
+    [editNickNameThunk.rejected]: (state, action) => {},
+    [getMyPointThunk.fulfilled]: (state, action) => {
+      state.point = action.payload.result.point;
+    },
+    [getMyPointThunk.rejected]: (state, action) => {},
   },
 });
-
 export default myPageSlice;

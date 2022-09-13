@@ -16,7 +16,7 @@ import BodyPadding from '../../common/BodyPadding';
 import Header from '../../common/Header';
 import instance from '../../../app/module/instance';
 
-const PostVoted = () => {
+const Voted = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -36,8 +36,7 @@ const PostVoted = () => {
   // 데이터 불러오기
   const getPostVoted = async () => {
     try {
-      const data = await instance.get(`my/select?page=${page}`);
-
+      const data = await instance.get(`my/vote?page=${page}`);
       setPostVoted((prev) => [...prev, ...data.data.result]);
     } catch (error) {
       console.log(error);
@@ -54,10 +53,9 @@ const PostVoted = () => {
         <HeaderContainer>
           <Aarow onClick={() => navigate('/mypage')}>&#8592;</Aarow>
 
-          <LoginHeader>내가 등록한 고민 투표</LoginHeader>
+          <LoginHeader>내가 투표한 고민 투표</LoginHeader>
         </HeaderContainer>
       </Header>
-
       {postVoted.length === 0 ? (
         <p style={{ fontSize: '100px' }}>투표가 없습니다.</p>
       ) : (
@@ -98,7 +96,7 @@ const PostVoted = () => {
     </>
   );
 };
-export default PostVoted;
+export default Voted;
 
 const HeaderContainer = styled.div`
   width: 100%;

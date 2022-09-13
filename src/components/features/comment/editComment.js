@@ -131,7 +131,10 @@ const EditComment = (props) => {
               ) : null}
             </Buttons>
           </DefaultBox>
-          <CommentBox>{props.allComments.comment}</CommentBox>
+          <CommentBox>
+            {props.allComments.comment}
+            <Recomment>답글 달기</Recomment>
+          </CommentBox>
         </>
       )}
     </BodyPadding>
@@ -218,4 +221,10 @@ const Buttons = styled.div`
 const Names = styled.div`
   display: flex;
   justify-content: center;
+`;
+
+const Recomment = styled.p`
+  margin-top: 0.8rem;
+  ${fontSmall}
+  color: #FBA138
 `;

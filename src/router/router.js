@@ -9,7 +9,12 @@ const Detail = lazy(() => import('../pages/Detail'));
 const ChatRoom = lazy(() => import('../pages/ChatRoom'));
 const MyPage = lazy(() => import('../pages/MyPage'));
 const KakaoCode = lazy(() => import('../components/features/KakaoCode'));
-const PostVoted = lazy(() => import('../components/features/mypage/postVoted'));
+const PostVoted = lazy(() => import('../components/features/mypage/PostVoted'));
+const Voted = lazy(() => import('../components/features/mypage/Voted'));
+const MadeRoom = lazy(() => import('../components/features/mypage/MadeRoom'));
+const OperatingRoom = lazy(() =>
+  import('../components/features/mypage/OperatingRoom'),
+);
 
 const Router = () => {
   return (
@@ -25,6 +30,9 @@ const Router = () => {
           <Route path="/chatroom/:roomKey" element={<ChatRoom />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/postvoted" element={<PostVoted />} />
+          <Route path="/voted" element={<Voted />} />
+          <Route path="/maderoom" element={<MadeRoom />} />
+          <Route path="/operatingroom" element={<OperatingRoom />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
