@@ -18,14 +18,13 @@ jobs:
       - name: Checkout source code.
         uses: actions/checkout@v2
 
-
       - name: Install Dependencies
         run: npm install
 
       - name: Build
         run: npm run build
-          env:
-            CI: false
+        env:
+          CI: ''
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
