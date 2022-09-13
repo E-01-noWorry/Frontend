@@ -11,7 +11,7 @@ const Detail = lazy(() => import('../pages/Detail'));
 const ChatRoom = lazy(() => import('../pages/ChatRoom'));
 const MyPage = lazy(() => import('../pages/MyPage'));
 const KakaoCode = lazy(() => import('../components/features/KakaoCode'));
-const PostVoted = lazy(() => import('../components/features/mypage/PostVoted'));
+const PostVoted = lazy(() => import('../components/features/mypage/postVoted'));
 const Voted = lazy(() => import('../components/features/mypage/Voted'));
 const MadeRoom = lazy(() => import('../components/features/mypage/MadeRoom'));
 const OperatingRoom = lazy(() =>
