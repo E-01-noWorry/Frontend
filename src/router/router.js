@@ -5,13 +5,18 @@ const Welcome = lazy(() => import('../pages/Welcome'));
 const Main = lazy(() => import('../pages/Main'));
 const SignUp = lazy(() => import('../pages/SignUp'));
 const Login = lazy(() => import('../pages/Login'));
-const KakaoCode = lazy(() => import('../components/features/KakaoCode'));
 const GoogleRedirect = lazy(() => import('../pages/GoogleRedirect'));
-const MyPage = lazy(() => import('../pages/MyPage'));
-const PostVoted = lazy(() => import('../components/features/mypage/postVoted'));
 const Write = lazy(() => import('../pages/Write'));
 const Detail = lazy(() => import('../pages/Detail'));
 const ChatRoom = lazy(() => import('../pages/ChatRoom'));
+const MyPage = lazy(() => import('../pages/MyPage'));
+const KakaoCode = lazy(() => import('../components/features/KakaoCode'));
+const PostVoted = lazy(() => import('../components/features/mypage/PostVoted'));
+const Voted = lazy(() => import('../components/features/mypage/Voted'));
+const MadeRoom = lazy(() => import('../components/features/mypage/MadeRoom'));
+const OperatingRoom = lazy(() =>
+  import('../components/features/mypage/OperatingRoom'),
+);
 
 const Router = () => {
   return (
@@ -34,6 +39,10 @@ const Router = () => {
           <Route path="/write" element={<Write />} />
           <Route path="/detail/:selectKey" element={<Detail />} />
           <Route path="/chatroom/:roomKey" element={<ChatRoom />} />
+
+          <Route path="/voted" element={<Voted />} />
+          <Route path="/maderoom" element={<MadeRoom />} />
+          <Route path="/operatingroom" element={<OperatingRoom />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
