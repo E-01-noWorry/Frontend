@@ -26,9 +26,13 @@ const MainRoom = () => {
   const [rooms, setRooms] = useState([]);
   const searchRef = useRef();
 
+  //무한 스크롤을 관리하는 State
+  const [page, setPage] = useState(1);
+  const [ref, setRef] = useState(null);
+
   const getAllRoom = async () => {
     try {
-      const { data } = await instance.get('/room');
+      const { data } = await instance.get(`/room?page=${page}`);
       setRooms((prev) => [...prev, ...data.result]);
     } catch (error) {
       console.log(error.response.data.errMsg);
@@ -37,7 +41,25 @@ const MainRoom = () => {
 
   useEffect(() => {
     getAllRoom();
-  }, []);
+  }, [page]);
+
+  //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다.
+  const onIntersect = ([entry], observer) => {
+    if (entry.isIntersecting) {
+      setPage((prev) => prev + 1);
+      observer.unobserve(entry.target);
+    }
+  };
+
+  //매번 갱신되기 전 마지막 게시글에 붙어있는 ref를 감시하라고 지정해준다
+  useEffect(() => {
+    let observer;
+    if (ref) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
+      observer.observe(ref);
+    }
+    return () => observer?.disconnect();
+  }, [ref]);
 
   //고민 채팅방 입장 POST API
   const joinRoomHandler = async (roomKey) => {
@@ -67,6 +89,7 @@ const MainRoom = () => {
   const searchCancelHandler = () => {
     searchRef.current.value = '';
     setRooms([]);
+    setPage(1);
     getAllRoom();
   };
 
@@ -90,10 +113,12 @@ const MainRoom = () => {
 
       <BodyPadding>
         <StContentBoxWrap>
-          {rooms?.map((room) => (
+          {rooms?.map((room, idx) => (
             <StContentBox
               key={room.roomKey}
               onClick={() => joinRoomHandler(room.roomKey)}
+              //마지막 게시글에 ref를 달아줍니다
+              ref={idx === rooms.length - 1 ? setRef : null}
             >
               <StInnerTitle>{room.title}</StInnerTitle>
 
