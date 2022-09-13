@@ -1,18 +1,29 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import ProfileImg from '../../elements/ProfileImg';
 
 import { nowTime } from '../../../shared/timeCalculation';
 
-import { fontMedium, fontSmall } from '../../../shared/themes/textStyle';
+import {
+  fontExtraSmall,
+  fontMedium,
+  fontSmall,
+} from '../../../shared/themes/textStyle';
 
 import styled from 'styled-components';
 
 const ChatBox = ({ chatState, userKey }) => {
+  const scrollRef = useRef();
+
+  useEffect(() => {
+    scrollRef.current.scrollIntoView();
+  }, [chatState]);
+
   return (
     <StChatWrap>
       {chatState.map((chat, idx) => (
         <StChat key={idx}>
+          {/* userKey로 시스템메세지, 내 메세지, 상대의 메세지를 판단합니다 */}
           <div
             className={
               chat.userKey === 12
@@ -22,12 +33,11 @@ const ChatBox = ({ chatState, userKey }) => {
                 : 'left'
             }
           >
-            {chat.User.nickname === 'admin99' ? (
+            {chat.userKey === 12 ? (
               <div className="middle">
                 <div className="chat">{chat.chat}</div>
               </div>
-            ) : chatState[idx]?.User.nickname ===
-                chatState[idx - 1]?.User.nickname &&
+            ) : chatState[idx]?.userKey === chatState[idx - 1]?.userKey &&
               nowTime(chatState[idx].createdAt) ===
                 nowTime(chatState[idx - 1].createdAt) ? (
               <>
@@ -50,6 +60,7 @@ const ChatBox = ({ chatState, userKey }) => {
           </div>
         </StChat>
       ))}
+      <div ref={scrollRef} />
     </StChatWrap>
   );
 };
@@ -129,10 +140,10 @@ const StChat = styled.div`
     }
 
     .time {
-      margin-right: 1rem;
+      margin-right: 1.6rem;
       margin-top: auto;
 
-      font-size: 1.2rem;
+      ${fontExtraSmall};
       line-height: 1.8rem;
     }
   }
@@ -179,10 +190,10 @@ const StChat = styled.div`
     }
 
     .time {
-      margin-left: 1rem;
+      margin-left: 1.6rem;
       margin-top: auto;
 
-      font-size: 1.2rem;
+      ${fontExtraSmall};
       line-height: 1.8rem;
     }
   }

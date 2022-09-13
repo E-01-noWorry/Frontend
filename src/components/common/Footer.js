@@ -2,7 +2,14 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { IconLarge } from '../../shared/themes/iconStyle';
-import { fontSmall } from '../../shared/themes/textStyle';
+import { fontExtraSmall } from '../../shared/themes/textStyle';
+
+import IconVoteTab from '../../static/icons/Variety=vote, Status=tab.svg';
+import IconVoteUntab from '../../static/icons/Variety=vote, Status=untab.svg';
+import IconChatTab from '../../static/icons/Variety=chat, Status=tab.svg';
+import IconChatUntab from '../../static/icons/Variety=chat, Status=untab.svg';
+import IconProfileTab from '../../static/icons/Variety=profile, Status=tab.svg';
+import IconProfileUntab from '../../static/icons/Variety=profile, Status=untab.svg';
 
 import styled from 'styled-components';
 
@@ -11,13 +18,25 @@ const Footer = ({ state }) => {
 
   return (
     <StFooter state={state}>
-      <StIconWrap onClick={() => navigate('/', { state: 'select' })}>
-        <StIcon></StIcon>
+      <StIconWrap onClick={() => navigate('/main', { state: 'select' })}>
+        <StIcon>
+          {state === 'select' ? (
+            <img src={IconVoteTab} />
+          ) : (
+            <img src={IconVoteUntab} />
+          )}
+        </StIcon>
         <StText>고민투표</StText>
       </StIconWrap>
 
-      <StIconWrap onClick={() => navigate('/', { state: 'room' })}>
-        <StIcon></StIcon>
+      <StIconWrap onClick={() => navigate('/main', { state: 'room' })}>
+        <StIcon>
+          {state === 'room' ? (
+            <img src={IconChatTab} />
+          ) : (
+            <img src={IconChatUntab} />
+          )}
+        </StIcon>
         <StText>고민상담</StText>
       </StIconWrap>
 
@@ -27,7 +46,13 @@ const Footer = ({ state }) => {
       </StIconWrap>
 
       <StIconWrap onClick={() => navigate('/mypage', { state: 'mypage' })}>
-        <StIcon></StIcon>
+        <StIcon>
+          {state === 'mypage' ? (
+            <img src={IconProfileTab} />
+          ) : (
+            <img src={IconProfileUntab} />
+          )}
+        </StIcon>
         <StText>마이페이지</StText>
       </StIconWrap>
     </StFooter>
@@ -46,9 +71,11 @@ const StFooter = styled.div`
   align-items: center;
 
   width: 100%;
-  height: 6rem;
-  padding: 0 2rem;
+  height: 7.2rem;
+  padding: 0.5rem 2.5rem 1.7rem 2.5rem;
   background-color: #f5f5f5;
+
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.25);
 
   &
     > div:nth-child(${(props) =>
@@ -73,10 +100,9 @@ const StIconWrap = styled.div`
 
 const StIcon = styled.div`
   ${IconLarge};
-  background-color: green;
 `;
 
 const StText = styled.div`
-  ${fontSmall};
+  ${fontExtraSmall};
   line-height: 1.8rem;
 `;

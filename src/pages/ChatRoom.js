@@ -7,13 +7,19 @@ import { io } from 'socket.io-client';
 import BodyPadding from '../components/common/BodyPadding';
 import FooterInput from '../components/common/FooterInput';
 import Header from '../components/common/Header';
-import { ModalExit } from '../components/common/Modal';
+import ChatBox from '../components/features/chat/ChatBox';
+import { ModalBasic, ModalExit } from '../components/common/Modal';
 
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
-import { fontLarge, fontMedium } from '../shared/themes/textStyle';
+import { fontBold, fontLarge, fontMedium } from '../shared/themes/textStyle';
+
+import IconBack from '../static/icons/Variety=back, Status=untab.svg';
+import IconLogout from '../static/icons/Variety=logout, Status=untab.svg';
+import IconDelete from '../static/icons/Variety=delete, Status=untab.svg';
+import IconAnnounce from '../static/icons/Variety=announce, Status=untab.svg';
+import IconSend from '../static/icons/Variety=send, Status=untab.svg';
 
 import styled from 'styled-components';
-import ChatBox from '../components/features/chat/ChatBox';
 
 const ChatRoom = () => {
   const navigate = useNavigate();
@@ -24,7 +30,9 @@ const ChatRoom = () => {
   const socket = useRef();
   const sendMessage = useRef();
 
+  const [hostByeModal, setHostBeyModal] = useState('');
   const [modalExit, setModalExit] = useState(false);
+
   const [chatState, setChatState] = useState([]);
   const [roomInfo, setRoomInfo] = useState({});
 
@@ -87,8 +95,9 @@ const ChatRoom = () => {
 
     socket.current.on('byeHost', () => {
       setChatState([]);
-      alert('호스트가 채팅방을 삭제했습니다. 메인 화면으로 이동합니다.');
-      navigate('/', { state: 'room' });
+      setHostBeyModal(
+        `호스트가 채팅방을 삭제했습니다. 메인 화면으로 이동합니다.`,
+      );
     });
   }, [chatState]);
 
@@ -110,9 +119,9 @@ const ChatRoom = () => {
       const param = { roomKey: parseInt(roomKey), userKey: parseInt(userKey) };
       socket.current.emit('leave-room', param);
       await instance.delete(`/room/${roomKey}`);
-      navigate('/', { state: 'room' });
+      navigate('/main', { state: 'room' });
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.errMsg);
     }
   };
 
@@ -125,23 +134,35 @@ const ChatRoom = () => {
         />
       )}
 
+      {hostByeModal && (
+        <ModalBasic setter={() => navigate('/main', { state: 'room' })}>
+          {hostByeModal}
+        </ModalBasic>
+      )}
+
       <Header>
-        <StHeaderIcon onClick={() => navigate('/', { state: 'room' })}>
-          뒤
+        <StHeaderIcon onClick={() => navigate('/main', { state: 'room' })}>
+          <img src={IconBack} />
         </StHeaderIcon>
         <StHeaderInfo>
           <h1>{roomInfo.host}</h1>
           <span>{roomInfo.currentPeople}</span>
         </StHeaderInfo>
         {parseInt(userKey) === roomInfo?.userKey ? (
-          <StHeaderIcon onClick={leaveRoomHandler}>삭</StHeaderIcon>
+          <StHeaderIcon onClick={leaveRoomHandler}>
+            <img src={IconDelete} />
+          </StHeaderIcon>
         ) : (
-          <StHeaderIcon onClick={() => setModalExit(true)}>나</StHeaderIcon>
+          <StHeaderIcon onClick={() => setModalExit(true)}>
+            <img src={IconLogout} />
+          </StHeaderIcon>
         )}
       </Header>
 
       <StHeaderTitle>
-        <StSpeakIcon></StSpeakIcon>
+        <StSpeakIcon>
+          <img src={IconAnnounce} />
+        </StSpeakIcon>
         <span>{roomInfo.title}</span>
       </StHeaderTitle>
 
@@ -152,7 +173,9 @@ const ChatRoom = () => {
       <FooterInput>
         <form onSubmit={sendMessageHandler}>
           <input ref={sendMessage} placeholder="메세지를 입력하세요" />
-          <StSendIcon onClick={sendMessageHandler}></StSendIcon>
+          <StSendIcon onClick={sendMessageHandler}>
+            <img src={IconSend} />
+          </StSendIcon>
         </form>
       </FooterInput>
     </div>
@@ -163,12 +186,14 @@ export default ChatRoom;
 
 const StHeaderIcon = styled.div`
   ${IconLarge};
-  background-color: green;
 `;
 
 const StSpeakIcon = styled.div`
   ${IconSmall};
-  background-color: green;
+
+  img {
+    width: 2rem;
+  }
 `;
 
 const StHeaderInfo = styled.div`
@@ -203,6 +228,7 @@ const StHeaderTitle = styled.div`
 
   span {
     ${fontMedium}
+    ${fontBold}
   }
 `;
 
@@ -212,5 +238,4 @@ const StSendIcon = styled.div`
   top: 2rem;
 
   ${IconLarge};
-  background-color: green;
 `;

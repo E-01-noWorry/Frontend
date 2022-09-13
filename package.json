@@ -8,10 +8,9 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
-    "buffer": "^6.0.3",
-    "json-server": "^0.17.0",
+    "moment": "^2.29.4",
+    "npm-run-all": "^4.1.5",
     "react": "^18.2.0",
-    "react-aws-s3": "^1.5.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
     "react-intersection-observer": "^9.4.0",
@@ -23,7 +22,6 @@
     "socket.io-client": "^4.5.1",
     "styled-components": "^5.3.5",
     "styled-reset": "^4.4.2",
-    "uuid": "^8.3.2",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.5.4",
     "workbox-broadcast-update": "^6.5.4",
@@ -42,7 +40,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "aws s3 sync ./build s3://gomgom.site --profile=kimyoungjin",
+    "invalidate": "aws cloudfront create-invalidation --profile=kimyoungjin --distribution-id E8N4QNRJ08106 --paths /*",
+    "all": "npm-run-all -s build deploy invalidate"
   },
   "eslintConfig": {
     "extends": [

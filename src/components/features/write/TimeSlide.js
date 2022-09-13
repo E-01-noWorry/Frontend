@@ -1,14 +1,15 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
 
 import { TIME_ARR } from '../../../shared/Array';
 import { fontBold, fontMedium } from '../../../shared/themes/textStyle';
 
+import styled, { css } from 'styled-components';
+
 const TimeSlide = ({ time, setTime }) => {
   //마감시간 설정 핸들러
   const timeHandler = (event) => {
-    const time = event.target.getAttribute('time');
-    setTime(time);
+    const chooseTime = event.target.getAttribute('time');
+    setTime(chooseTime);
   };
 
   return (

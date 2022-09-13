@@ -1,40 +1,18 @@
 import React from 'react';
 import { useState } from 'react';
 
-// import S3 from 'react-aws-s3';
-// import { v4 as uuidv4 } from 'uuid';
-
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconMedium, IconSmall } from '../../../shared/themes/iconStyle';
 import { fontBold, fontSmall } from '../../../shared/themes/textStyle';
 
+import IconImage from '../../../static/icons/Variety=image, Status=untab.svg';
+
 import styled from 'styled-components';
 
-// window.Buffer = window.Buffer || require('buffer').Buffer;
-
 const WriteImageUpload = ({ setImages, num }) => {
-  //   // S3 이미지 업로드 후 images State에 이미지 URL 넣는 로직
-  //   const config = {
-  //     bucketName: 'mainproject-image-bucket',
-  //     region: 'ap-northeast-2',
-  //     accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-  //     secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-  //   };
-  //   const ReactS3Client = new S3(config);
-
-  //   const handleFileInput = (event) => {
-  //     const { name } = event.target;
-  //     const file = event.target.files[0];
-  //     const newFileName = uuidv4(); //파일 이름 랜덤으로 바꿔주는 패키지
-  //     ReactS3Client.uploadFile(file, newFileName)
-  //       .then((data) => {
-  //         setImages({ ...images, [name]: data.location });
-  //       })
-  //       .catch((err) => console.log(err));
-  //   };
-
   const [previewImg, setPreviewImg] = useState({});
 
+  //이미지 미리보기
   const encodeFile = (file, name) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -77,7 +55,9 @@ const WriteImageUpload = ({ setImages, num }) => {
             accept="image/*"
             onChange={(event) => fileHandler(event)}
           />
-          <StImageIcon></StImageIcon>
+          <StImageIcon>
+            <img src={IconImage} />
+          </StImageIcon>
           <StImageUpload>이미지 첨부(선택)</StImageUpload>
         </StImageLabel>
       )}
@@ -89,7 +69,7 @@ export default WriteImageUpload;
 
 const StPreview = styled.div`
   ${borderBoxDefault};
-
+  height: 15rem;
   margin-top: 2.8rem;
 
   background: url(${(props) => props.previewImg});
@@ -125,7 +105,6 @@ const StImageLabel = styled.label`
 
 const StImageIcon = styled.div`
   ${IconSmall};
-  background-color: green;
 `;
 
 const StImageUpload = styled.span`

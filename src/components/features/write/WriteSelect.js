@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import instance from '../../../app/module/instance';
+import axios from 'axios';
 
+import { ModalBasic } from '../../common/Modal';
 import GlobalButton from '../../elements/GlobalButton';
 import BodyPadding from '../../common/BodyPadding';
 import Header from '../../common/Header';
@@ -13,11 +14,15 @@ import { CATEGORY_ARR } from '../../../shared/Array';
 
 import {
   fontBold,
+  fontLarge,
   fontMedium,
   fontSmall,
 } from '../../../shared/themes/textStyle';
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconLarge, IconMedium } from '../../../shared/themes/iconStyle';
+
+import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
+import IconAdd from '../../../static/icons/Variety=add, Status=untab.svg';
 
 import styled from 'styled-components';
 
@@ -26,6 +31,7 @@ const WriteSelect = () => {
 
   const [numArr, setNumArr] = useState([1, 2]);
   const [modal, setModal] = useState('');
+  const [uploadModal, setUploadModal] = useState('');
 
   //서버에 전송할 payload
   const [title, setTitle] = useState('');
@@ -57,49 +63,53 @@ const WriteSelect = () => {
     const optionArr = Object.values(options).filter((option) => option !== '');
     const imageArr = Object.values(images).filter((image) => image !== '');
 
-    if (imageArr !== 0 && optionArr.length !== imageArr.length) {
-      alert('사진 업로드 시엔 모든 선택지에 사진을 올려주세요.');
+    if (imageArr.length !== 0 && optionArr.length !== imageArr.length) {
+      setModal('사진 업로드 시 모든 선택지에 사진을 올려주세요.');
     } else {
       let formData = new FormData();
 
-      const payload = {
-        title,
-        category,
-        options: optionArr,
-        time: parseInt(time),
-      };
-
-      formData.append('data', JSON.stringify(payload));
+      formData.append('title', title);
+      formData.append('category', category);
+      formData.append('options', optionArr);
+      formData.append('time', time);
       if (imageArr[0]) {
-        formData.append('images', imageArr);
+        for (let i = 0; i < imageArr.length; i++) {
+          formData.append('image', imageArr[i]);
+        }
       }
 
-      console.log(formData.get('data'));
-      console.log(formData.get('images'));
+      try {
+        await axios({
+          method: 'POST',
+          url: `${process.env.REACT_APP_API}/select`,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          data: formData,
+        });
+        setUploadModal('게시글 등록 완료!');
+      } catch (error) {
+        setModal(error.response.data.errMsg);
+      }
     }
-
-    // const payload = {
-    //   title: title,
-    //   category: category,
-    //   options: Object.values(options).filter((option) => option !== ''),
-    //   image: Object.values(images).filter((image) => image !== ''),
-    //   time: parseInt(time),
-    // };
-    // try {
-    //   await instance.post('/select', payload);
-    //   navigate('/', { state: 'select' });
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
 
   return (
     <>
+      {uploadModal && (
+        <ModalBasic setter={() => navigate('/main', { state: 'select' })}>
+          {uploadModal}
+        </ModalBasic>
+      )}
+
+      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+
       <Header>
-        <StHeaderIcon
-          onClick={() => navigate('/', { state: 'select' })}
-        ></StHeaderIcon>
-        <h1>투표 만들기</h1>
+        <StHeaderIcon onClick={() => navigate('/main', { state: 'select' })}>
+          <img src={IconBack} />
+        </StHeaderIcon>
+        <StHeaderTitle>투표 만들기</StHeaderTitle>
         <StHeaderIcon />
       </Header>
 
@@ -122,7 +132,7 @@ const WriteSelect = () => {
           <StContentBox>
             <StInnerTitle>카테고리 선택</StInnerTitle>
             <StInnerCategory>
-              {CATEGORY_ARR.map((item) => (
+              {CATEGORY_ARR.slice(1).map((item) => (
                 <div key={item} onClick={() => setCategory(item)}>
                   <input
                     type="radio"
@@ -153,10 +163,10 @@ const WriteSelect = () => {
                       name={num}
                       value={options[num]}
                       onChange={optionChangeHandler}
-                      maxLength={20}
+                      maxLength={15}
                       placeholder="선택지를 작성해주세요"
                     />
-                    <span>{options[num]?.length || '0'}/20자</span>
+                    <span>{options[num]?.length || '0'}/15자</span>
                     <WriteImageUpload setImages={setImages} num={num} />
                   </StInnerText>
                 </div>
@@ -172,7 +182,9 @@ const WriteSelect = () => {
                 color={'#000'}
                 fw={'bold'}
               >
-                <StPlusIcon></StPlusIcon>
+                <StPlusIcon>
+                  <img src={IconAdd} />
+                </StPlusIcon>
                 <span>선택지 추가하기</span>
               </GlobalButton>
             )}
@@ -197,7 +209,10 @@ export default WriteSelect;
 
 const StHeaderIcon = styled.div`
   ${IconLarge};
-  background-color: green;
+`;
+
+const StHeaderTitle = styled.div`
+  ${fontLarge};
 `;
 
 const StContainer = styled.div`
@@ -308,7 +323,6 @@ const StInnerSubtitle = styled.div`
 
 const StPlusIcon = styled.div`
   ${IconMedium};
-  background-color: green;
 `;
 
 const StInnerSubmit = styled.div`

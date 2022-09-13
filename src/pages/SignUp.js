@@ -11,6 +11,9 @@ import BodyPadding from '../components/common/BodyPadding';
 import Header from '../components/common/Header';
 import { fontLarge, fontSmall } from '../shared/themes/textStyle';
 import GlobalButton from '../components/elements/GlobalButton';
+import { IconLarge } from '../shared/themes/iconStyle';
+
+import IconBack from '../static/icons/Variety=back, Status=untab.svg';
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -88,15 +91,23 @@ const SignUp = () => {
 
   return (
     <div>
+      <Header>
+        <StHeaderIcon onClick={() => navigate(-1)}>
+          <img src={IconBack} />
+        </StHeaderIcon>
+        <StHeaderTitle>회원가입</StHeaderTitle>
+        <StHeaderIcon></StHeaderIcon>
+      </Header>
+
       <BodyPadding>
-        <Header>
+        {/* <Header>
           <HeaderContainer>
             <Link to="/login">
               <Aarow>&#8592;</Aarow>
             </Link>
             <SignUpHeader>회원가입</SignUpHeader>
           </HeaderContainer>
-        </Header>
+        </Header> */}
         <SignUpContainer>
           아이디
           <LoginSignUpInput
@@ -217,27 +228,38 @@ const SignUp = () => {
 
 export default SignUp;
 
-const HeaderContainer = styled.div`
-  width: 100%;
+const StHeaderIcon = styled.div`
+  ${IconLarge};
 `;
 
-const Aarow = styled.span`
-  color: #000;
-  font-size: 3rem;
-  position: relative;
-`;
-const SignUpHeader = styled.p`
-  text-align: center;
-  display: inline;
-  width: 100%;
-  position: absolute;
-  right: 0px;
-  top: 2.2rem;
-  ${fontLarge}
-  z-index: -1;
+const StHeaderTitle = styled.div`
+  ${fontLarge};
 `;
 
-const SignUpContainer = styled.div``;
+// const HeaderContainer = styled.div`
+//   width: 100%;
+// `;
+
+// const Aarow = styled.span`
+//   color: #000;
+//   font-size: 3rem;
+//   position: relative;
+// `;
+// const SignUpHeader = styled.p`
+//   text-align: center;
+//   display: inline;
+//   width: 100%;
+//   position: absolute;
+//   right: 0px;
+//   top: 2.2rem;
+//   ${fontLarge}
+//   z-index: -1;
+// `;
+
+const SignUpContainer = styled.div`
+  margin-top: 6.4rem;
+`;
+
 const Incorrect = styled.p`
   color: #ff7878;
   ${fontSmall}

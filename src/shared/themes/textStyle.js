@@ -17,6 +17,10 @@ export const fontSmall = css`
   font-size: 1.3rem;
 `;
 
+export const fontExtraSmall = css`
+  font-size: 1.2rem;
+`;
+
 //폰트 두께
 export const fontExtraBold = css`
   font-weight: 700;

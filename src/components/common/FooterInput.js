@@ -14,8 +14,8 @@ const StFooterInput = styled.div`
   left: 0;
 
   width: 100%;
-  height: 7.2rem;
-  padding: 0.8rem;
+  height: 8.8rem;
+  padding: 0.8rem 0.8rem 2.4rem 0.8rem;
   background-color: #f5f5f5;
 
   input {

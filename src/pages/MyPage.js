@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import BodyPadding from '../components/common/BodyPadding';
@@ -6,12 +6,25 @@ import Footer from '../components/common/Footer';
 import { fontLarge, fontSmall, fontMedium } from '../shared/themes/textStyle';
 import { fontExtraBold, fontBold } from '../shared/themes/textStyle';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ProfileImg from '../components/elements/ProfileImg';
-
+import { editNickNameThunk, getMyPointThunk } from '../app/module/myPageSlice';
+import { css } from 'styled-components';
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { state } = useLocation();
+  const userNickname = useSelector((state) => state.myPageSlice.data);
+  const userPoint = useSelector((state) => state.myPageSlice.point);
+  const [tierInfo, setTierInfo] = useState(false);
+
+  const onClickTireInfo = () => {
+    setTierInfo((status) => !status);
+  };
+  //나의 포인트 조회
+  useEffect(() => {
+    if (localStorage.getItem('userKey')) {
+      dispatch(getMyPointThunk());
+    }
+  }, [dispatch]);
 
   //티어별 상세정보
   const [white, setWhite] = useState(false);
@@ -64,69 +77,175 @@ const MyPage = () => {
     window.location.reload('/mypage');
   };
 
-  //내가 등록한 고민 투표
-  const onClickPosted = () => {};
+  //닉네임변경
+  const [editNickname, setEditNickname] = useState('');
+  const [editMode, setEditMode] = useState(false);
+  const userKey = localStorage.getItem('userKey');
+  const onClickEditNickName = () => {
+    setEditMode((status) => !status);
+    if (editMode === true) {
+      dispatch(editNickNameThunk({ ...editNickname, userKey: userKey }));
+    }
+  };
+
+  const onChangeEditNickName = (event) => {
+    const { name, value } = event.target;
+    setEditNickname({ [name]: value });
+  };
 
   return (
     <div style={{ paddingBottom: '7rem' }}>
       {loggined !== null ? (
         <>
           <MyPageHeadContainer>
-            <ProfileImg />
-            <Badge>Yellow</Badge>
-            <Nickname>{localStorage.getItem('nickname')}</Nickname>
+            <ProfileImgLarge />
+            <Badge userPoint={userPoint}>
+              {userPoint <= 10
+                ? 'White'
+                : userPoint > 10 && userPoint <= 25
+                ? 'Yellow'
+                : userPoint > 25 && userPoint <= 50
+                ? 'Green'
+                : userPoint > 50 && userPoint <= 100
+                ? 'Blue'
+                : userPoint > 100
+                ? 'Purple'
+                : null}
+            </Badge>
+            <Nickname>
+              {editMode ? (
+                <EditNicknameInput
+                  name="nickname"
+                  onChange={onChangeEditNickName}
+                  type="text"
+                />
+              ) : (
+                <>
+                  {userNickname && localStorage.getItem('nickname')}
+                  <span style={{ fontWeight: '400px' }}>님</span>
+                </>
+              )}
+            </Nickname>
+            <EditNickname onClick={onClickEditNickName}>
+              {editMode ? '수정완료' : '변경'}
+            </EditNickname>
           </MyPageHeadContainer>
-          <TierInfo>
-            <TierLetter>등급 기준 알아보기</TierLetter>
-            <Tiers>
-              <TierButton autoFocus onFocus={onFocusWhite} onBlur={onBlurWhite}>
-                White
-              </TierButton>
-              <TierButton onFocus={onFocusYellow} onBlur={onBlurYellow}>
-                Yellow
-              </TierButton>
-              <TierButton onFocus={onFocusGreen} onBlur={onBlurGreen}>
-                Green
-              </TierButton>
-              <TierButton onFocus={onFocusBlue} onBlur={onBlurBlue}>
-                Blue
-              </TierButton>
-              <TierButton onFocus={onFocusPurple} onBlur={onBlurPurple}>
-                Purple
-              </TierButton>
-            </Tiers>
-          </TierInfo>
+          <ScoreContainer>
+            <MyScore>
+              <ScoreInfo1>
+                현재등급
+                <ScoreDetail>
+                  {userPoint <= 10
+                    ? 'White'
+                    : userPoint > 10 && userPoint <= 25
+                    ? 'Yellow'
+                    : userPoint > 25 && userPoint <= 50
+                    ? 'Green'
+                    : userPoint > 50 && userPoint <= 100
+                    ? 'Blue'
+                    : userPoint > 100
+                    ? 'Purple'
+                    : null}
+                </ScoreDetail>
+              </ScoreInfo1>
+              <ScoreInfo2>
+                모은점수{' '}
+                <ScoreDetail>
+                  {userPoint === null ? '0' : userPoint}
+                </ScoreDetail>
+              </ScoreInfo2>
+              <ScoreInfo3>
+                다음등급{' '}
+                <ScoreDetail>
+                  {userPoint <= 10
+                    ? `${11 - userPoint}점 남음`
+                    : userPoint >= 10 && userPoint <= 25
+                    ? `${26 - userPoint}점 남음`
+                    : userPoint >= 25 && userPoint <= 50
+                    ? `${51 - userPoint}점 남음`
+                    : userPoint >= 51 && userPoint <= 100
+                    ? `${101 - userPoint}점 남음`
+                    : '-'}
+                </ScoreDetail>
+              </ScoreInfo3>
+            </MyScore>
+          </ScoreContainer>
+
+          <TierLetter onClick={onClickTireInfo}>
+            등급별 혜택/달성조건 알아보기
+          </TierLetter>
+
+          {tierInfo ? (
+            <TierInfoContainer>
+              <TierInfo>
+                <Tiers>
+                  <TierButton
+                    autoFocus
+                    onFocus={onFocusWhite}
+                    onBlur={onBlurWhite}
+                  >
+                    White
+                  </TierButton>
+                  <TierButton onFocus={onFocusYellow} onBlur={onBlurYellow}>
+                    Yellow
+                  </TierButton>
+                  <TierButton onFocus={onFocusGreen} onBlur={onBlurGreen}>
+                    Green
+                  </TierButton>
+                  <TierButton onFocus={onFocusBlue} onBlur={onBlurBlue}>
+                    Blue
+                  </TierButton>
+                  <TierButton onFocus={onFocusPurple} onBlur={onBlurPurple}>
+                    Purple
+                  </TierButton>
+                </Tiers>
+              </TierInfo>
+
+              <TierInfoLetter>
+                {white
+                  ? '최다 득표 투표 항목과 본인 투표 일치가 0~100회 일때'
+                  : null}
+                {yellow
+                  ? '최다 득표 투표 항목과 본인 투표 일치가 101~200회 일때'
+                  : null}
+                {green
+                  ? '최다 득표 투표 항목과 본인 투표 일치가 201~300회 일때'
+                  : null}
+                {blue
+                  ? '최다 득표 투표 항목과 본인 투표 일치가 301~400회 일때'
+                  : null}
+                {purple
+                  ? '최다 득표 투표 항목과 본인 투표 일치가 401~500회 일때'
+                  : null}
+              </TierInfoLetter>
+            </TierInfoContainer>
+          ) : null}
           <BodyPadding>
-            <TierInfoLetter>
-              {white
-                ? '최다 득표 투표 항목과 본인 투표 일치가 0~100회 일때'
-                : null}
-              {yellow
-                ? '최다 득표 투표 항목과 본인 투표 일치가 101~200회 일때'
-                : null}
-              {green
-                ? '최다 득표 투표 항목과 본인 투표 일치가 201~300회 일때'
-                : null}
-              {blue
-                ? '최다 득표 투표 항목과 본인 투표 일치가 301~400회 일때'
-                : null}
-              {purple
-                ? '최다 득표 투표 항목과 본인 투표 일치가 401~500회 일때'
-                : null}
-            </TierInfoLetter>
             <VoteLetter>고민투표</VoteLetter>
             <VoteContainer>
               <PostVoted>
-                <button onClick={() => navigate('/postvoted')}>
+                <Contents onClick={() => navigate('/postvoted')}>
                   내가 등록한 고민 투표
-                </button>
+                </Contents>
               </PostVoted>
-              <Voted>내가 투표한 고민 투표</Voted>
+              <Voted>
+                <Contents onClick={() => navigate('/voted')}>
+                  내가 투표한 고민 투표
+                </Contents>
+              </Voted>
             </VoteContainer>
             <VoteLetter>고민상담</VoteLetter>
             <VoteContainer>
-              <MadeRoom>내가 만든 고민 상담방</MadeRoom>
-              <OperatingRoom>대화중인 고민 상담방</OperatingRoom>
+              <MadeRoom>
+                <Contents onClick={() => navigate('/maderoom')}>
+                  내가 만든 고민 상담방
+                </Contents>
+              </MadeRoom>
+              <OperatingRoom>
+                <Contents onClick={() => navigate('/operatingroom')}>
+                  대화중인 고민 상담방
+                </Contents>
+              </OperatingRoom>
             </VoteContainer>
           </BodyPadding>
         </>
@@ -145,13 +264,29 @@ const MyPage = () => {
           <BodyPadding>
             <VoteLetter>고민투표</VoteLetter>
             <VoteContainer>
-              <PostVoted>내가 등록한 고민 투표</PostVoted>
-              <Voted>내가 투표한 고민 투표</Voted>
+              <PostVoted>
+                <Contents onClick={() => window.alert('로그인후이용해주세요')}>
+                  내가 등록한 고민 투표
+                </Contents>
+              </PostVoted>
+              <Voted>
+                <Contents onClick={() => window.alert('로그인후이용해주세요')}>
+                  내가 투표한 고민 투표
+                </Contents>
+              </Voted>
             </VoteContainer>
             <VoteLetter>고민상담</VoteLetter>
             <VoteContainer>
-              <MadeRoom>내가 만든 고민 상담방</MadeRoom>
-              <OperatingRoom>대화중인 고민 상담방</OperatingRoom>
+              <MadeRoom>
+                <Contents onClick={() => window.alert('로그인후이용해주세요')}>
+                  내가 만든 고민 상담방
+                </Contents>
+              </MadeRoom>
+              <OperatingRoom>
+                <Contents onClick={() => window.alert('로그인후이용해주세요')}>
+                  대화중인 고민 상담방
+                </Contents>
+              </OperatingRoom>
             </VoteContainer>
           </BodyPadding>
         </>
@@ -174,6 +309,15 @@ const MyPageHeadContainer = styled.div`
   ${fontLarge}
   ${fontExtraBold}
   background-color: #FFFFFF;
+`;
+
+const ProfileImgLarge = styled.div`
+  width: 6.5rem;
+  height: 6.5rem;
+  background: #d9d9d9;
+  border-radius: 999px;
+  display: inline-block;
+  margin-right: 1rem;
 `;
 
 const Buttons = styled.div`
@@ -223,44 +367,155 @@ const VoteContainer = styled.div`
   margin-bottom: 3.2rem;
   background: #ffffff;
   border-radius: 20px;
+  box-shadow: 0 0.4rem 1rem 0 #cccccc;
+`;
+
+const Contents = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  padding: 0 0.7rem 0 2.2rem;
+  cursor: pointer;
 `;
 
 const PostVoted = styled.div`
   margin: 1.4rem 0;
+  width: 100%;
+  height: 50vh;
 `;
 const Voted = styled.div`
   margin: 1.4rem 0;
+  width: 100%;
+  height: 50vh;
 `;
 const MadeRoom = styled.div`
   margin: 1.4rem 0;
+  width: 100%;
+  height: 50vh;
 `;
 const OperatingRoom = styled.div`
   margin: 1.4rem 0;
+  width: 100%;
+  height: 50vh;
 `;
 
 const Badge = styled.p`
   display: inline;
   margin-right: 65%;
   position: absolute;
-  top: 2.5rem;
-  left: 6.8rem;
+  top: 3.3rem;
+  left: 9.4rem;
   width: 5rem;
   height: 2rem;
-  padding: 0.2rem 0.6rem;
+  padding: 0.3rem 0.6rem 0 0.6rem;
   border-radius: 99rem;
   align-items: center;
-  background-color: #ffd232;
   color: #fff;
+  ${(props) =>
+    props.userPoint <= 10
+      ? css`
+          background-color: #ececec;
+        `
+      : props.userPoint > 10 && props.userPoint <= 25
+      ? css`
+          background-color: #fdd74f;
+        `
+      : props.userPoint > 25 && props.userPoint <= 50
+      ? css`
+          background-color: #91dc6e;
+        `
+      : props.userPoint > 50 && props.userPoint <= 100
+      ? css`
+          background-color: #70a0ff;
+        `
+      : props.userPoint > 100
+      ? css`
+          background-color: #a57aff;
+        `
+      : null}
   ${fontBold}
   ${fontSmall}
+  text-align: center;
 `;
 
 const Nickname = styled.p`
   display: inline;
   ${fontLarge}
-  position:absolute;
-  top: 4.8rem;
-  left: 6.8rem;
+  position: relative;
+  bottom: 1.5rem;
+  margin-right: 0.6rem;
+`;
+
+const EditNickname = styled.button`
+  border: none;
+  position: relative;
+  bottom: 2rem;
+  border-radius: 99rem;
+  width: 6.8rem;
+  padding: 0.8rem;
+  height: 3.6rem;
+`;
+
+const EditNicknameInput = styled.input`
+  border: none;
+  border-bottom: 1px solid black;
+  position: relative;
+  width: 50%;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+const ScoreContainer = styled.div`
+  padding: 0 2rem;
+  background: #ffffff;
+`;
+
+const MyScore = styled.div`
+  border: 1px solid #e6e6e6;
+  border-radius: 2rem;
+  width: 100%;
+  height: 6.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+`;
+
+const ScoreInfo1 = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  align-items: center;
+  ${fontBold}
+`;
+const ScoreInfo2 = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  align-items: center;
+  ${fontBold}
+  border-left: 1px solid #e6e6e6;
+  border-right: 1px solid #e6e6e6;
+`;
+
+const ScoreInfo3 = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  align-items: center;
+  ${fontBold}
+`;
+const ScoreDetail = styled.p`
+  font-weight: 400;
+  color: #595959;
+  margin-top: 1.1rem;
+`;
+
+const TierInfoContainer = styled.div`
+  margin-top: -3.5rem;
 `;
 
 const TierInfo = styled.div`
@@ -269,16 +524,25 @@ const TierInfo = styled.div`
   align-items: flex-start;
   padding: 1.4rem 0 1.6rem 0;
   width: 100%;
-  height: 9.3rem;
+  height: 5.5rem;
   margin-bottom: 2.4rem;
   background: #ffffff;
   border-radius: 0px 0px 20px 20px;
+  box-shadow: 0 0.4rem 0.4rem #cccccc;
 `;
 
 const TierLetter = styled.p`
-  ${fontBold}
-  margin-left: 2rem;
-  margin-bottom: 1.6rem;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  ${fontSmall}
+  text-align: center;
+  padding: 1rem 0;
+  background-color: #fff;
+  margin-bottom: 2.4rem;
+  border-radius: 0px 0px 20px 20px;
+  box-shadow: 0 0.4rem 0.4rem 0 #cccccc;
 `;
 
 const Tiers = styled.div`
@@ -327,9 +591,14 @@ const TierInfoLetter = styled.p`
   text-align: center;
   ${fontMedium}
   padding-bottom: 2rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
   border-bottom: 1px solid #e6e6e6;
 `;
 
-const Logout = styled.button`
-  margin-top: 5.5rem;
+const Logout = styled.div`
+  text-align: center;
+  ${fontSmall}
+  color:#767676;
+  cursor: pointer;
 `;

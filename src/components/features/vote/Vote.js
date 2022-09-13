@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import GlobalButton from '../../elements/GlobalButton';
 
 import instance from '../../../app/module/instance';
 import { cleanUpVote, __getVoteResult } from '../../../app/module/voteSlice';
+
+import GlobalButton from '../../elements/GlobalButton';
+import { ModalBasic } from '../../common/Modal';
 
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import {
@@ -12,17 +14,16 @@ import {
   fontExtraBold,
   fontMedium,
 } from '../../../shared/themes/textStyle';
-import { remainedTime } from '../../../shared/timeCalculation';
 
 import styled, { css } from 'styled-components';
 
 const Vote = ({ content, selectKey }) => {
   const dispatch = useDispatch();
   const voteResult = useSelector((state) => state.vote.voteResult);
-  const msg = useSelector((state) => state.vote.msg);
+  const msg = useSelector((state) => state.vote.msg); //msg의 값으로 UI를 구분합니다
 
-  //투표 선택을 관리하는 State
-  const [isSelect, setIsSelect] = useState();
+  const [modal, setModal] = useState('');
+  const [isSelect, setIsSelect] = useState(); //투표 선택을 관리하는 State
 
   useEffect(() => {
     dispatch(__getVoteResult(selectKey));
@@ -38,13 +39,16 @@ const Vote = ({ content, selectKey }) => {
       await instance.post(`/select/vote/${selectKey}`, { choice: isSelect });
       setIsSelect(0);
     } catch (error) {
-      console.log(error.response.data.errMsg);
+      setModal(error.response.data.errMsg);
     }
   };
 
   return (
     <>
+      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+
       {msg.includes('조회 성공') || content.completion ? (
+        //자기 자신의 게시물을 봤을때, 투표를 했을때, 마감 기한이 끝난 게시물을 누구나 확인할때
         <StVoteResultBox>
           {content.options?.map((option, idx) => (
             <StSelectResult bgImage={content.image[idx]} key={idx}>
@@ -54,6 +58,7 @@ const Vote = ({ content, selectKey }) => {
           ))}
         </StVoteResultBox>
       ) : (
+        //타인이 쓴 글에 아직 투표하지 않았을때, 비로그인 상태이고 마감기한이 끝나지 않았을때
         <StVoteBox isSelect={isSelect} image={content.image}>
           {content.options?.map((option, idx) => (
             <StSelectItem
@@ -105,10 +110,13 @@ const StVoteResultBox = styled.div`
 
 const StSelectResult = styled.div`
   ${borderBoxDefault}
-  justify-content: space-between;
+  gap: 0.8rem;
 
+  height: 15rem;
   padding: 2.65rem 1.6rem;
-  background-color: #d6d6d6;
+  background-color: #fff;
+
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
 
   //투표 결과 퍼센트
   div:nth-child(1) {
@@ -189,14 +197,17 @@ const StVoteBox = styled.div`
 `;
 
 const StSelectItem = styled.div`
-  ${borderBoxDefault}
+  ${borderBoxDefault};
+  height: 15rem;
   padding: 1.6rem;
-
   background-color: #fff;
+
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
 
   ${fontBold}
 
   //클릭 후 투표 버튼
+  //안보이다가 onclick 발생시 위의 코드에서 block으로 바뀝니다
   div {
     display: none;
   }

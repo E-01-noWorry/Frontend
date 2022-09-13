@@ -1,8 +1,8 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
 import { fontBold, fontExtraBold } from '../../shared/themes/textStyle';
+
+import styled from 'styled-components';
 
 const GlobalButton = ({ children, ...rest }) => {
   return <StGlobalButton {...rest}>{children}</StGlobalButton>;
@@ -20,8 +20,9 @@ const StGlobalButton = styled.div`
   height: ${(props) => props.h || '5.6rem'};
   background-color: ${(props) => props.bgc || '#000'};
 
-  border: ${(props) => props.border || null};
   border-radius: ${(props) => props.borderR || '2rem'};
+  box-shadow: ${(props) =>
+    props.noneShadow ? null : '0px 4px 10px rgba(0, 0, 0, 0.15)'};
 
   ${(props) => (props.fw === 'bold' ? fontBold : fontExtraBold)}
   color: ${(props) => props.color || '#fff'};

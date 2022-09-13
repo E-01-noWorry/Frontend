@@ -8,7 +8,7 @@ export const __getDetailSelect = createAsyncThunk(
       const { data } = await instance.get(`/select/${selectKey}`);
       return thunkAPI.fulfillWithValue(data.result);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.response.data.errMsg);
     }
   },
 );
