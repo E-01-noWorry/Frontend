@@ -4,11 +4,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import instance from '../app/module/instance';
 import { io } from 'socket.io-client';
 
+import ProfileImg from '../components/elements/ProfileImg';
 import BodyPadding from '../components/common/BodyPadding';
 import FooterInput from '../components/common/FooterInput';
 import Header from '../components/common/Header';
 import ChatBox from '../components/features/chat/ChatBox';
-import { ModalBasic, ModalExit } from '../components/common/Modal';
+import { ModalBasic, ModalDelete, ModalExit } from '../components/common/Modal';
 
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
 import { fontBold, fontLarge, fontMedium } from '../shared/themes/textStyle';
@@ -30,11 +31,14 @@ const ChatRoom = () => {
   const socket = useRef();
   const sendMessage = useRef();
 
-  const [hostByeModal, setHostBeyModal] = useState('');
+  const [hostByeModal, setHostByeModal] = useState('');
   const [modalExit, setModalExit] = useState(false);
+  const [modalDelete, setModalDelete] = useState(false);
 
+  const [isSelect, setIsSelect] = useState(0);
   const [chatState, setChatState] = useState([]);
   const [roomInfo, setRoomInfo] = useState({});
+  const [nowUsers, setNowUsers] = useState([]);
 
   const getAllchat = async () => {
     try {
@@ -95,9 +99,7 @@ const ChatRoom = () => {
 
     socket.current.on('byeHost', () => {
       setChatState([]);
-      setHostBeyModal(
-        `호스트가 채팅방을 삭제했습니다. 메인 화면으로 이동합니다.`,
-      );
+      setHostByeModal(`호스트가 채팅방을 삭제했습니다.`);
     });
   }, [chatState]);
 
@@ -118,11 +120,37 @@ const ChatRoom = () => {
     try {
       const param = { roomKey: parseInt(roomKey), userKey: parseInt(userKey) };
       socket.current.emit('leave-room', param);
+
       await instance.delete(`/room/${roomKey}`);
+
       navigate('/main', { state: 'room' });
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
+  };
+
+  const deleteModalOpenHandler = () => {
+    setModalDelete(true);
+    const param = { roomKey: parseInt(roomKey), userKey: parseInt(userKey) };
+    socket.current.emit('showUsers', param);
+
+    socket.current.on('receive', (data) => {
+      setNowUsers([...data]);
+    });
+  };
+
+  const deleteModalCloseHandler = () => {
+    setModalDelete(false);
+    setIsSelect(0);
+  };
+
+  const recommendHandler = () => {
+    const param = {
+      roomKey: parseInt(roomKey),
+      userKey: parseInt(nowUsers[isSelect]?.userKey),
+    };
+    socket.current.emit('recommend', param);
+    leaveRoomHandler();
   };
 
   return (
@@ -132,6 +160,30 @@ const ChatRoom = () => {
           leave={leaveRoomHandler}
           setter={() => setModalExit(false)}
         />
+      )}
+
+      {modalDelete && (
+        <ModalDelete
+          leave={leaveRoomHandler}
+          setter={deleteModalCloseHandler}
+          recommend={recommendHandler}
+        >
+          <StUserInfoWrap number={isSelect}>
+            {nowUsers.slice(1).map((user, idx) => (
+              <StUserInfo key={user.userKey} htmlFor={user.userKey}>
+                <ProfileImg />
+                <input
+                  type="radio"
+                  hidden
+                  id={user.userKey}
+                  checked={isSelect === idx + 1}
+                  onChange={() => setIsSelect(idx + 1)}
+                />
+                <span>{user.nickname}</span>
+              </StUserInfo>
+            ))}
+          </StUserInfoWrap>
+        </ModalDelete>
       )}
 
       {hostByeModal && (
@@ -144,12 +196,14 @@ const ChatRoom = () => {
         <StHeaderIcon onClick={() => navigate('/main', { state: 'room' })}>
           <img src={IconBack} />
         </StHeaderIcon>
+
         <StHeaderInfo>
           <h1>{roomInfo.host}</h1>
           <span>{roomInfo.currentPeople}</span>
         </StHeaderInfo>
+
         {parseInt(userKey) === roomInfo?.userKey ? (
-          <StHeaderIcon onClick={leaveRoomHandler}>
+          <StHeaderIcon onClick={deleteModalOpenHandler}>
             <img src={IconDelete} />
           </StHeaderIcon>
         ) : (
@@ -238,4 +292,31 @@ const StSendIcon = styled.div`
   top: 2rem;
 
   ${IconLarge};
+`;
+
+const StUserInfoWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4.3rem;
+
+  width: 100%;
+  margin-top: 0.7rem;
+
+  label:nth-child(${(props) => props.number}) {
+    span {
+      color: orange;
+    }
+  }
+`;
+
+const StUserInfo = styled.label`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  span {
+    ${fontMedium}
+    line-height: 1.4rem;
+  }
 `;
