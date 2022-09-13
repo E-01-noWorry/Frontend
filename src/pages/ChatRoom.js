@@ -179,7 +179,7 @@ const ChatRoom = () => {
                   checked={isSelect === idx + 1}
                   onChange={() => setIsSelect(idx + 1)}
                 />
-                <span>{user.nickname}</span>
+                <span>{user?.nickname}</span>
               </StUserInfo>
             ))}
           </StUserInfoWrap>

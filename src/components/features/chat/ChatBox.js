@@ -50,7 +50,7 @@ const ChatBox = ({ chatState, userKey }) => {
                 <ProfileImg className="img" />
 
                 <div className="middle">
-                  <div className="nickname">{chat.User.nickname}</div>
+                  <div className="nickname">{chat.User?.nickname}</div>
                   <div className="chat">{chat.chat}</div>
                 </div>
 

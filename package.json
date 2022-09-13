@@ -42,7 +42,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "aws s3 sync ./build s3://gomgom.site --profile=kimyoungjin",
-    "invalidate": "aws cloudfront create-invalidation --profile=kimyoungjin --distribution-id E8N4QNRJ08106 --paths /*",
+    "invalidate": "aws cloudfront create-invalidation --profile=kimyoungjin --distribution-id E1AG9G9UPAPOC4 --paths /*",
     "all": "npm-run-all -s build deploy invalidate"
   },
   "eslintConfig": {
