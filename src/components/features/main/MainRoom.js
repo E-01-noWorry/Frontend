@@ -26,6 +26,41 @@ const MainRoom = () => {
   const [rooms, setRooms] = useState([]);
   const searchRef = useRef();
 
+  //무한 스크롤을 관리하는 State
+  const [page, setPage] = useState(1);
+  const [ref, setRef] = useState(null);
+
+  const getAllRoom = async () => {
+    try {
+      const { data } = await instance.get(`/room?page=${page}`);
+      setRooms((prev) => [...prev, ...data.result]);
+    } catch (error) {
+      console.log(error.response.data.errMsg);
+    }
+  };
+
+  useEffect(() => {
+    getAllRoom();
+  }, [page]);
+
+  //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다.
+  const onIntersect = ([entry], observer) => {
+    if (entry.isIntersecting) {
+      setPage((prev) => prev + 1);
+      observer.unobserve(entry.target);
+    }
+  };
+
+  //매번 갱신되기 전 마지막 게시글에 붙어있는 ref를 감시하라고 지정해준다
+  useEffect(() => {
+    let observer;
+    if (ref) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
+      observer.observe(ref);
+    }
+    return () => observer?.disconnect();
+  }, [ref]);
+
   //고민 채팅방 입장 POST API
   const joinRoomHandler = async (roomKey) => {
     try {
@@ -39,26 +74,24 @@ const MainRoom = () => {
   //고민 채팅방 키워드 검색
   const searchHandler = async (event) => {
     event.preventDefault();
-    // try {
-    //   await instance.get();
-    // } catch (error) {
-    //   console.log(error.response.data.errMsg);
-    // }
+    try {
+      const { data } = await instance.get(
+        `/room/search?searchWord=${searchRef.current.value}`,
+      );
+      setRooms([...data.result]);
+    } catch (error) {
+      setModal(error.response.data.errMsg);
+    }
     searchRef.current.value = '';
   };
 
-  const getAllRoom = async () => {
-    try {
-      const { data } = await instance.get('/room');
-      setRooms((prev) => [...prev, ...data.result]);
-    } catch (error) {
-      console.log(error.response.data.errMsg);
-    }
-  };
-
-  useEffect(() => {
+  //고민 채팅방 검색 취소버튼
+  const searchCancelHandler = () => {
+    searchRef.current.value = '';
+    setRooms([]);
+    setPage(1);
     getAllRoom();
-  }, []);
+  };
 
   return (
     <>
@@ -75,15 +108,17 @@ const MainRoom = () => {
             <img src={IconSearch} />
           </div>
         </form>
-        <StCancel onClick={() => (searchRef.current.value = '')}>취소</StCancel>
+        <StCancel onClick={searchCancelHandler}>취소</StCancel>
       </StSearchWrap>
 
       <BodyPadding>
         <StContentBoxWrap>
-          {rooms?.map((room) => (
+          {rooms?.map((room, idx) => (
             <StContentBox
               key={room.roomKey}
               onClick={() => joinRoomHandler(room.roomKey)}
+              //마지막 게시글에 ref를 달아줍니다
+              ref={idx === rooms.length - 1 ? setRef : null}
             >
               <StInnerTitle>{room.title}</StInnerTitle>
 
