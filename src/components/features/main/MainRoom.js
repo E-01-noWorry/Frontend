@@ -76,7 +76,7 @@ const MainRoom = () => {
     event.preventDefault();
     try {
       const { data } = await instance.get(
-        `/room/search?searchWord=${searchRef.current.value}`,
+        `/room/search?searchWord=${searchRef.current.value}&page=${page}`,
       );
       setRooms([...data.result]);
     } catch (error) {
