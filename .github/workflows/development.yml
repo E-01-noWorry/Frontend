@@ -14,6 +14,15 @@ jobs:
       matrix:
         node-versions: [16.x]
 
+    env:
+      CI: ''
+      REACT_APP_API: ${{ secrets.REACT_APP_API }}
+      REACT_APP_SOCKET: ${{ secrets.REACT_APP_SOCKET }}
+      REACT_APP_CLIENT_ID: ${{ secrets.REACT_APP_CLIENT_ID }}
+      REACT_APP_REDIRECT_URI: ${{ secrets.REACT_APP_REDIRECT_URI }}
+      REACT_APP_GOOGLE_ID: ${{ secrets.REACT_APP_GOOGLE_ID }}
+      REACT_APP_GOOGLE_CALLBACK_URL: ${{ secrets.REACT_APP_GOOGLE_CALLBACK_URL }}
+
     steps:
       - name: Checkout source code.
         uses: actions/checkout@v2
@@ -23,8 +32,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          CI: ''
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
