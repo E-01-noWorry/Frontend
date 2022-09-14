@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import instance from '../app/module/instance';
@@ -40,7 +40,7 @@ const ChatRoom = () => {
   const [roomInfo, setRoomInfo] = useState({});
   const [nowUsers, setNowUsers] = useState([]);
 
-  const getAllchat = async () => {
+  const getAllchat = useCallback(async () => {
     try {
       const { data } = await instance.get(`/room/${roomKey}`);
       setRoomInfo(data.result);
@@ -48,7 +48,7 @@ const ChatRoom = () => {
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
-  };
+  }, [roomKey]);
 
   useEffect(() => {
     getAllchat();
@@ -60,7 +60,7 @@ const ChatRoom = () => {
     return () => {
       socket.current.disconnect();
     };
-  }, []);
+  }, [getAllchat, roomKey, userKey]);
 
   useEffect(() => {
     socket.current.on('message', (data) => {
@@ -194,7 +194,7 @@ const ChatRoom = () => {
 
       <Header>
         <StHeaderIcon onClick={() => navigate('/main', { state: 'room' })}>
-          <img src={IconBack} />
+          <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
 
         <StHeaderInfo>
@@ -204,18 +204,18 @@ const ChatRoom = () => {
 
         {parseInt(userKey) === roomInfo?.userKey ? (
           <StHeaderIcon onClick={deleteModalOpenHandler}>
-            <img src={IconDelete} />
+            <img src={IconDelete} alt="IconDelete" />
           </StHeaderIcon>
         ) : (
           <StHeaderIcon onClick={() => setModalExit(true)}>
-            <img src={IconLogout} />
+            <img src={IconLogout} alt="IconLogout" />
           </StHeaderIcon>
         )}
       </Header>
 
       <StHeaderTitle>
         <StSpeakIcon>
-          <img src={IconAnnounce} />
+          <img src={IconAnnounce} alt="IconAnnounce" />
         </StSpeakIcon>
         <span>{roomInfo.title}</span>
       </StHeaderTitle>
@@ -228,7 +228,7 @@ const ChatRoom = () => {
         <form onSubmit={sendMessageHandler}>
           <input ref={sendMessage} placeholder="메세지를 입력하세요" />
           <StSendIcon onClick={sendMessageHandler}>
-            <img src={IconSend} />
+            <img src={IconSend} alt="IconSend" />
           </StSendIcon>
         </form>
       </FooterInput>

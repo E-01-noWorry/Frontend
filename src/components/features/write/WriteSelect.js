@@ -107,7 +107,7 @@ const WriteSelect = () => {
 
       <Header>
         <StHeaderIcon onClick={() => navigate('/main', { state: 'select' })}>
-          <img src={IconBack} />
+          <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         <StHeaderTitle>투표 만들기</StHeaderTitle>
         <StHeaderIcon />
@@ -183,7 +183,7 @@ const WriteSelect = () => {
                 fw={'bold'}
               >
                 <StPlusIcon>
-                  <img src={IconAdd} />
+                  <img src={IconAdd} alt="IconAdd" />
                 </StPlusIcon>
                 <span>선택지 추가하기</span>
               </GlobalButton>

@@ -58,11 +58,11 @@ const Detail = () => {
     <>
       <Header>
         <StHeaderIcon onClick={() => navigate(-1)}>
-          <img src={IconBack} />
+          <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         {parseInt(userKey) === content?.userKey && (
           <StHeaderIcon onClick={deleteHandler}>
-            <img src={IconDelete} />
+            <img src={IconDelete} alt="IconDelete" />
           </StHeaderIcon>
         )}
       </Header>
@@ -81,14 +81,14 @@ const Detail = () => {
             {content.completion ? (
               <>
                 <StIcon>
-                  <img src={IconTimeOver} />
+                  <img src={IconTimeOver} alt="IconTimeOver" />
                 </StIcon>
                 <span>투표마감</span>
               </>
             ) : (
               <>
                 <StIcon>
-                  <img src={IconTimer} />
+                  <img src={IconTimer} alt="IconTimer" />
                 </StIcon>
                 <span>{remainedTime(content.deadLine)}</span>
               </>

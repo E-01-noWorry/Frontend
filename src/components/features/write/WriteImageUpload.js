@@ -27,14 +27,17 @@ const WriteImageUpload = ({ setImages, num }) => {
     });
   };
 
+  //이미지 images에 담기
   const fileHandler = (event) => {
     const { name } = event.target;
     const file = event.target.files[0];
 
+    //이미지 리사이징
     imageCompression(file, {
       maxSizeMB: 1,
       maxWidthOrHeight: 1920,
     }).then((compressedFile) => {
+      //리사이징 후에 파일이 blob으로 바뀌므로 다시 파일로 변환해준다
       const newFile = new File([compressedFile], file.name, {
         type: file.type,
       });
@@ -43,6 +46,7 @@ const WriteImageUpload = ({ setImages, num }) => {
     });
   };
 
+  //이미지 삭제(previewImg, images에 담긴 이미지 모두 삭제해준다)
   const deletePreviewHandler = (payload) => {
     setPreviewImg((prev) => ({ ...prev, [payload]: '' }));
     setImages((prev) => ({ ...prev, [payload]: '' }));
@@ -69,7 +73,7 @@ const WriteImageUpload = ({ setImages, num }) => {
             onChange={(event) => fileHandler(event)}
           />
           <StImageIcon>
-            <img src={IconImage} />
+            <img src={IconImage} alt="IconImage" />
           </StImageIcon>
           <StImageUpload>이미지 첨부(선택)</StImageUpload>
         </StImageLabel>

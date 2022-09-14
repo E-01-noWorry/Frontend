@@ -37,9 +37,7 @@ const WriteRoom = () => {
   const keywordHandler = (event) => {
     event.preventDefault();
 
-    if (keywordArr.length >= 3) {
-      setModal('해시태그는 3개까지만 가능합니다.');
-    } else if (keywordArr.includes(keyword)) {
+    if (keywordArr.includes(keyword)) {
       setModal('중복된 해시태그가 있습니다.');
     } else {
       setKeywordArr((prev) => [...prev, keyword.replace(' ', '')]);
@@ -85,7 +83,7 @@ const WriteRoom = () => {
 
       <Header>
         <StHeaderIcon onClick={() => navigate('/main', { state: 'room' })}>
-          <img src={IconBack} />
+          <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         <StHeaderTitle>채팅방 만들기</StHeaderTitle>
         <StHeaderIcon />

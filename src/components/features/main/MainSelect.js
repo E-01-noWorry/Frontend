@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import instance from '../../../app/module/instance';
 
@@ -29,7 +29,7 @@ const MainSelect = () => {
   const [ref, setRef] = useState(null);
 
   //선택 게시글 불러오기
-  const getScrollSelect = async () => {
+  const getScrollSelect = useCallback(async () => {
     try {
       if (filter === '인기순') {
         const { data } = await instance.get(`/select/filter?page=${page}`);
@@ -46,11 +46,11 @@ const MainSelect = () => {
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
-  };
+  }, [filter, category, page]);
 
   useEffect(() => {
     getScrollSelect();
-  }, [filter, category, page]);
+  }, [getScrollSelect]);
 
   //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다.
   const onIntersect = ([entry], observer) => {

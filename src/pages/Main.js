@@ -36,7 +36,7 @@ const Main = () => {
       <Header>
         <StLogo>로고</StLogo>
         <StIcon>
-          <img src={IconArm} />
+          <img src={IconArm} alt="IconArm" />
         </StIcon>
       </Header>
 
