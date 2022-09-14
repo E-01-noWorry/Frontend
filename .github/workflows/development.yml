@@ -6,10 +6,6 @@ on:
       - dev
     types: [closed]
 
-  push:
-    branches:
-      - dev
-
 jobs:
   deploy:
     if: github.event.pull_request.merged == true
