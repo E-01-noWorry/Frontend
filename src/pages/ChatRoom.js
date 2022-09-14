@@ -261,6 +261,7 @@ const StHeaderInfo = styled.div`
 
   span {
     ${fontLarge};
+    color: ${({ theme }) => theme.sub3};
   }
 `;
 
@@ -277,7 +278,7 @@ const StHeaderTitle = styled.div`
   width: 100%;
   height: 3.4rem;
   padding: 0 5rem;
-  background-color: #f5f5f5;
+  background-color: ${({ theme }) => theme.bg};
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
 
   span {
@@ -296,16 +297,23 @@ const StSendIcon = styled.div`
 
 const StUserInfoWrap = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 4.3rem;
+  justify-content: flex-start;
+  gap: 2rem;
+  row-gap: 1.5rem;
 
-  width: 100%;
   margin-top: 0.7rem;
+  width: 28rem;
+
+  span {
+    color: ${({ theme }) => theme.sub2};
+    margin-top: 0.2rem;
+  }
 
   label:nth-child(${(props) => props.number}) {
     span {
-      color: orange;
+      color: ${({ theme }) => theme.main2};
     }
   }
 `;
@@ -314,6 +322,8 @@ const StUserInfo = styled.label`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  width: 8rem;
 
   span {
     ${fontMedium}

@@ -6,8 +6,10 @@ import GlobalButton from '../components/elements/GlobalButton';
 
 import { isLogin } from '../shared/isLogin';
 
-import { fontBold, fontMedium, fontSmall } from '../shared/themes/textStyle';
+import { fontSmall } from '../shared/themes/textStyle';
 import { IconSmall } from '../shared/themes/iconStyle';
+
+import IconNext from '../static/icons/Variety=next, Status=untab.svg';
 
 import styled from 'styled-components';
 
@@ -18,7 +20,7 @@ const Welcome = () => {
     if (isLogin()) {
       navigate('/main', { state: 'select' });
     }
-  }, []);
+  }, [navigate]);
 
   if (isLogin()) {
     return <p>Loading...</p>;
@@ -29,22 +31,14 @@ const Welcome = () => {
       <StWelcomeWrap>
         <StLogo>LOGO</StLogo>
 
-        <StTitle>익명의 사람들과 고민을 나누고 해결해봐요</StTitle>
-
-        <StSubTitle>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc facilisi
-          nullam in mattis tempus scelerisque.
-        </StSubTitle>
-
         <StButtonWrap>
           <GlobalButton onClick={() => navigate('/login')}>
             시작하기
           </GlobalButton>
 
           <GlobalButton
-            bgc={'transparent'}
-            color={'#000'}
-            border={'1px solid #000'}
+            bgc={({ theme }) => theme.white}
+            font={({ theme }) => theme.main2}
             onClick={() => navigate('/main', { state: 'select' })}
           >
             고민 둘러보기
@@ -55,7 +49,9 @@ const Welcome = () => {
           <div>아직 회원이 아닌가요?</div>
           <div onClick={() => navigate('/signUp')}>
             회원가입
-            <StIcon></StIcon>
+            <StIcon>
+              <img src={IconNext} alt="IconNext" />
+            </StIcon>
           </div>
         </StNaviLogin>
       </StWelcomeWrap>
@@ -70,11 +66,12 @@ const StWelcomeWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  margin-top: 9rem;
 `;
 
 const StLogo = styled.div`
+  position: absolute;
+  top: 20rem;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,30 +82,16 @@ const StLogo = styled.div`
   background-color: green;
 `;
 
-const StTitle = styled.div`
-  margin-top: 3.2rem;
-
-  ${fontBold}
-  font-size: 1.8rem;
-  line-height: 2.7rem;
-`;
-
-const StSubTitle = styled.div`
-  width: 100%;
-  margin-top: 0.8rem;
-
-  ${fontMedium};
-  line-height: 2.1rem;
-  text-align: center;
-`;
-
 const StButtonWrap = styled.div`
+  position: absolute;
+  bottom: 14rem;
+
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
 
-  margin-top: 10rem;
   width: 100%;
+  padding: 0 2rem;
 `;
 
 const StNaviLogin = styled.div`
@@ -116,22 +99,27 @@ const StNaviLogin = styled.div`
   bottom: 3.2rem;
 
   display: flex;
+  align-items: center;
   gap: 0.8rem;
 
   div:nth-child(1) {
     ${fontSmall}
-    line-height: 2rem;
+    color: ${({ theme }) => theme.sub2};
   }
 
   div:nth-child(2) {
     display: flex;
     align-items: center;
+
     ${fontSmall}
-    line-height: 2rem;
   }
 `;
 
 const StIcon = styled.div`
   ${IconSmall}
-  background-color: green;
+
+  img {
+    width: 2rem;
+    height: 2rem;
+  }
 `;

@@ -10,6 +10,8 @@ import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/Array';
 import { fontMedium } from '../../../shared/themes/textStyle';
 import { IconSmall } from '../../../shared/themes/iconStyle';
 
+import IconNext from '../../../static/icons/Variety=next, Status=untab.svg';
+
 import styled from 'styled-components';
 
 const MainSelect = () => {
@@ -105,7 +107,9 @@ const MainSelect = () => {
       <StFilterDiv length={contents.length}>
         <StFilter onClick={filterOpenHandler}>
           <span>{filter}</span>
-          <StArrowIcon></StArrowIcon>
+          <StArrowIcon>
+            <img src={IconNext} alt="IconNext" />
+          </StArrowIcon>
           <StFilterModal setter={filterModal}>
             {FILTER_ARR.map((item) => (
               <span key={item} value={item} onClick={filterHandler}>
@@ -117,7 +121,9 @@ const MainSelect = () => {
 
         <StFilter onClick={categoryOpenHandler}>
           <span>{category}</span>
-          <StArrowIcon></StArrowIcon>
+          <StArrowIcon>
+            <img src={IconNext} alt="IconNext" />
+          </StArrowIcon>
           <StCategoryModal setter={categoryModal}>
             {CATEGORY_ARR.map((item) => (
               <span key={item} value={item} onClick={categoryHandler}>
@@ -146,11 +152,14 @@ const StFilterDiv = styled.div`
   gap: 2.9rem;
 
   width: 100%;
-  height: 5rem;
+  height: 6.4rem;
   padding: 0 2rem;
-  background-color: #f5f5f5;
+  background-color: ${({ theme }) => theme.bg};
 
-  border-bottom: ${(props) => (props.length ? null : '1px solid #dbdbdb')};
+  border-bottom: ${(props) =>
+    props.length ? null : `1px solid ${props.theme.sub4}`};
+
+  z-index: 9;
 `;
 
 const StFilter = styled.div`
@@ -159,6 +168,7 @@ const StFilter = styled.div`
 
   span {
     ${fontMedium}
+    color: ${({ theme }) => theme.sub2};
   }
 `;
 
@@ -174,15 +184,15 @@ const StFilterModal = styled.div`
   transform: scaleY(${(props) => (props.setter ? 1 : 0)});
 
   background-color: #fff;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
 
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
   border-radius: 1rem;
 
   span {
     display: block;
 
     height: 3rem;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
 
     line-height: 3rem;
   }
@@ -194,5 +204,11 @@ const StCategoryModal = styled(StFilterModal)`
 
 const StArrowIcon = styled.div`
   ${IconSmall};
-  background-color: green;
+
+  img {
+    width: 2rem;
+    height: 2rem;
+
+    transform: rotate(90deg);
+  }
 `;

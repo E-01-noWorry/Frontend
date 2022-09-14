@@ -8,6 +8,7 @@ import { IconMedium, IconSmall } from '../../../shared/themes/iconStyle';
 import { fontBold, fontSmall } from '../../../shared/themes/textStyle';
 
 import IconImage from '../../../static/icons/Variety=image, Status=untab.svg';
+import IconImageDelete from '../../../static/icons/Variety=image delete, Status=L.svg';
 
 import styled from 'styled-components';
 
@@ -34,8 +35,11 @@ const WriteImageUpload = ({ setImages, num }) => {
       maxSizeMB: 1,
       maxWidthOrHeight: 1920,
     }).then((compressedFile) => {
-      encodeFile(compressedFile, name);
-      setImages((prev) => ({ ...prev, [name]: compressedFile }));
+      const newFile = new File([compressedFile], file.name, {
+        type: file.type,
+      });
+      encodeFile(newFile, name);
+      setImages((prev) => ({ ...prev, [name]: newFile }));
     });
   };
 
@@ -49,7 +53,9 @@ const WriteImageUpload = ({ setImages, num }) => {
       {previewImg[num] ? (
         <StPreview previewImg={previewImg[num]}>
           <StDeleteButton onClick={() => deletePreviewHandler(num)}>
-            <StCancelIcon></StCancelIcon>
+            <StCancelIcon>
+              <img src={IconImageDelete} alt="IconImageDelete" />
+            </StCancelIcon>
             <span>삭제</span>
           </StDeleteButton>
         </StPreview>
@@ -101,7 +107,6 @@ const StDeleteButton = styled.div`
 
 const StCancelIcon = styled.div`
   ${IconMedium};
-  background-color: green;
 `;
 
 const StImageLabel = styled.label`
@@ -118,4 +123,5 @@ const StImageUpload = styled.span`
   ${fontSmall}
   ${fontBold}
   line-height: 2rem;
+  color: ${({ theme }) => theme.sub1};
 `;

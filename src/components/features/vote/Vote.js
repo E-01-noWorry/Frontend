@@ -77,8 +77,8 @@ const Vote = ({ content, selectKey }) => {
               <GlobalButton
                 onClick={voteHandler}
                 h={'4.8rem'}
-                bgc={'#fff'}
-                color={'#000'}
+                bgc={({ theme }) => theme.white}
+                font={({ theme }) => theme.black}
                 borderR={'1.5rem'}
                 fw={'bold'}
               >
@@ -103,7 +103,7 @@ const StVoteResultBox = styled.div`
   height: 100%;
   padding: 2rem;
   margin: 2.4rem 0 4.8rem 0;
-  background-color: #ededed;
+  background-color: ${({ theme }) => theme.sub5};
 
   border-radius: 2rem;
 `;
@@ -114,9 +114,9 @@ const StSelectResult = styled.div`
 
   height: 15rem;
   padding: 2.65rem 1.6rem;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.main2};
 
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  color: ${({ theme }) => theme.white};
 
   //투표 결과 퍼센트
   div:nth-child(1) {
@@ -143,7 +143,7 @@ const StSelectResult = styled.div`
       background-size: cover;
       background-position: center center;
 
-      color: #fff;
+      color: ${({ theme }) => theme.white};
       text-shadow: 0px 0px 8px rgba(0, 0, 0, 0.6);
     `}
 `;
@@ -157,7 +157,7 @@ const StVoteBox = styled.div`
   height: 100%;
   padding: 2rem;
   margin: 2.4rem 0 4.8rem 0;
-  background-color: #ededed;
+  background-color: ${({ theme }) => theme.sub5};
 
   border-radius: 2rem;
 
@@ -166,7 +166,7 @@ const StVoteBox = styled.div`
     display: flex;
     justify-content: space-between;
 
-    background-color: #595959;
+    background-color: ${({ theme }) => theme.main2};
 
     transition-duration: 0.3s;
 
@@ -185,7 +185,7 @@ const StVoteBox = styled.div`
 
     //클릭한 선택지의 이름
     label {
-      color: #fff;
+      color: ${({ theme }) => theme.white};
       line-height: 2.4rem;
     }
 
@@ -199,10 +199,8 @@ const StVoteBox = styled.div`
 const StSelectItem = styled.div`
   ${borderBoxDefault};
   height: 15rem;
-  padding: 1.6rem;
+  padding: 2.6rem 1.6rem;
   background-color: #fff;
-
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
 
   ${fontBold}
 
