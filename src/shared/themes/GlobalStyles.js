@@ -14,17 +14,14 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    letter-spacing: -0.05rem;
-
-    font-family: 'Noto Sans KR', sans-serif;
     font-size: 1.6rem;
     font-weight: 400;
+    font-family: 'Noto Sans KR', sans-serif;
 
-    background-color: #f5f5f5;
-  }
+    letter-spacing: -0.05rem;
+    color: ${({ theme }) => theme.black};
 
-  button {
-    cursor: pointer;
+    background-color: ${({ theme }) => theme.bg};
   }
 
   a {

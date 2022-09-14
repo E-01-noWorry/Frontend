@@ -1,11 +1,26 @@
-export const darkTheme = {};
+const darkTheme = {};
 
-export const defaultTheme = {};
+const defaultTheme = {
+  bg: '#F8F3EB', //figma Bg
 
-//여기는 다크모드 외에 공통적으로 처리하면 좋을것 같은 부분
-//font-size : 16px, 20px, 32px
-//종종 12px,13px,14px도 있는데 어떻게하지?
-export const Theme = {
+  black: '#1E1D1D', //figma Black
+  white: '#FFFEFC', //figma White
+
+  main1: '#FF7A00', //figma Point color
+  main2: '#FF9B25', //figma Main
+  main3: '#FFAF51',
+  main4: '#FFC076',
+
+  sub1: '#74706A', //figma Dark Grey
+  sub2: '#95918C', //figma Mid Grey
+  sub3: '#B9B5B1', //figma Grey
+  sub4: '#EBE5DD', //figma Light Grey
+  sub5: '#E8E1D8', //figma Warm Grey
+
+  warning: '#EA4713',
+};
+
+const Theme = {
   defaultTheme,
   darkTheme,
 };
