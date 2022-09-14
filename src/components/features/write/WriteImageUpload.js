@@ -1,6 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
 
+import imageCompression from 'browser-image-compression';
+
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconMedium, IconSmall } from '../../../shared/themes/iconStyle';
 import { fontBold, fontSmall } from '../../../shared/themes/textStyle';
@@ -28,8 +30,13 @@ const WriteImageUpload = ({ setImages, num }) => {
     const { name } = event.target;
     const file = event.target.files[0];
 
-    encodeFile(file, name);
-    setImages((prev) => ({ ...prev, [name]: file }));
+    imageCompression(file, {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+    }).then((compressedFile) => {
+      encodeFile(compressedFile, name);
+      setImages((prev) => ({ ...prev, [name]: compressedFile }));
+    });
   };
 
   const deletePreviewHandler = (payload) => {
