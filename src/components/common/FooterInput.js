@@ -16,7 +16,7 @@ const StFooterInput = styled.div`
   width: 100%;
   height: 8.8rem;
   padding: 0.8rem 0.8rem 2.4rem 0.8rem;
-  background-color: #f5f5f5;
+  background-color: ${({ theme }) => theme.bg};
 
   input {
     width: 100%;

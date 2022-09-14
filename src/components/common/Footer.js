@@ -42,7 +42,7 @@ const Footer = ({ state }) => {
 
       <StIconWrap>
         <StIcon></StIcon>
-        <StText>소라고동</StText>
+        <StText>곰곰해답</StText>
       </StIconWrap>
 
       <StIconWrap onClick={() => navigate('/mypage', { state: 'mypage' })}>
@@ -73,9 +73,9 @@ const StFooter = styled.div`
   width: 100%;
   height: 7.2rem;
   padding: 0.5rem 2.5rem 1.7rem 2.5rem;
-  background-color: #f5f5f5;
+  background-color: ${({ theme }) => theme.bg};
 
-  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.25);
+  border-top: 1px solid ${({ theme }) => theme.sub4};
 
   &
     > div:nth-child(${(props) =>
@@ -86,7 +86,7 @@ const StFooter = styled.div`
           : props.state === 'mypage'
           ? 4
           : null}) {
-    color: #000;
+    color: ${({ theme }) => theme.black};
   }
 `;
 
@@ -95,7 +95,7 @@ const StIconWrap = styled.div`
   flex-direction: column;
   align-items: center;
 
-  color: #787878;
+  color: ${({ theme }) => theme.sub1};
 `;
 
 const StIcon = styled.div`

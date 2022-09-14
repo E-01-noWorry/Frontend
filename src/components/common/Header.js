@@ -18,7 +18,7 @@ const StHeader = styled.div`
   width: 100%;
   height: 6.4rem;
   padding: 0 2rem;
-  background-color: #f5f5f5;
+  background-color: ${({ theme }) => theme.bg};
 
   z-index: 9;
 `;

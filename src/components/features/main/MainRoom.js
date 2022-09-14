@@ -134,7 +134,7 @@ const MainRoom = () => {
                     <img src={IconPerson} />
                   </StPeopleIcon>
                   <span>
-                    {room.currentPeople}/{room.max}명
+                    {room.currentPeople}/{room.max}
                   </span>
                 </StInnerCurrent>
 
@@ -162,9 +162,9 @@ const StSearchWrap = styled.div`
   gap: 2rem;
 
   width: 100%;
-  height: 5.5rem;
+  height: 6.4rem;
   padding: 0 2rem;
-  background-color: #f5f5f5;
+  background-color: ${({ theme }) => theme.bg};
 
   form {
     position: relative;
@@ -174,7 +174,7 @@ const StSearchWrap = styled.div`
       width: 100%;
       height: 4rem;
       padding: 0 1.5rem;
-      background-color: #ededed;
+      background-color: ${({ theme }) => theme.white};
 
       border: none;
       border-radius: 2rem;
@@ -205,7 +205,7 @@ const StContentBoxWrap = styled.div`
   gap: 2.4rem;
 
   margin-top: 14rem;
-  margin-bottom: 8.4rem;
+  margin-bottom: 9.6rem;
 `;
 
 const StContentBox = styled.div`
@@ -214,14 +214,7 @@ const StContentBox = styled.div`
 
   height: 100%;
   padding: 1.6rem;
-  background-color: #fff;
-
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-
-  &:hover,
-  &:active {
-    background-color: #d4d4d4;
-  }
+  background-color: ${({ theme }) => theme.white};
 `;
 
 const StInnerTitle = styled.div`
@@ -250,6 +243,7 @@ const StContentFooter = styled.div`
 const StInnerNickname = styled.div`
   ${fontSmall};
   line-height: 2rem;
+  color: ${({ theme }) => theme.sub2};
 
   span {
     ${fontBold};
@@ -259,12 +253,13 @@ const StInnerNickname = styled.div`
 const StInnerKeyword = styled.span`
   height: 100%;
   padding: 0 0.5rem;
-  background-color: #ececec;
+  background-color: ${({ theme }) => theme.sub4};
 
   border-radius: 1rem;
 
   ${fontSmall}
   line-height: 2rem;
+  color: ${({ theme }) => theme.sub2};
 `;
 
 const StInnerCurrent = styled.div`
@@ -273,6 +268,7 @@ const StInnerCurrent = styled.div`
 
   ${fontMedium};
   line-height: 2.1rem;
+  color: ${({ theme }) => theme.main2};
 `;
 
 const StPeopleIcon = styled.div`

@@ -81,7 +81,7 @@ const StChat = styled.div`
   //시스템 메세지 CSS
   .system {
     display: inline-block;
-    background-color: #d3d3d3;
+    background-color: ${({ theme }) => theme.sub3};
 
     height: 2.6rem;
     padding: 3px 6px;
@@ -92,7 +92,7 @@ const StChat = styled.div`
     .chat {
       ${fontSmall};
       line-height: 2rem;
-      color: #fff;
+      color: ${({ theme }) => theme.white};
     }
   }
 
@@ -117,6 +117,7 @@ const StChat = styled.div`
       .nickname {
         ${fontSmall};
         line-height: 2rem;
+        color: ${({ theme }) => theme.sub2};
       }
     }
 
@@ -130,13 +131,13 @@ const StChat = styled.div`
 
       max-width: 21.3rem;
       padding: 1rem;
-      background-color: #515151;
+      background-color: ${({ theme }) => theme.main2};
 
       border-radius: 2rem 0.4rem 2rem 2rem;
 
       ${fontMedium};
       line-height: 2.1rem;
-      color: #fff;
+      color: ${({ theme }) => theme.white};
     }
 
     .time {
@@ -145,6 +146,7 @@ const StChat = styled.div`
 
       ${fontExtraSmall};
       line-height: 1.8rem;
+      color: ${({ theme }) => theme.sub3};
     }
   }
 
@@ -168,6 +170,7 @@ const StChat = styled.div`
       .nickname {
         ${fontSmall};
         line-height: 2rem;
+        color: ${({ theme }) => theme.sub2};
       }
     }
 
@@ -181,7 +184,7 @@ const StChat = styled.div`
 
       max-width: 21.3rem;
       padding: 1rem;
-      background-color: #e4e4e4;
+      background-color: ${({ theme }) => theme.white};
 
       border-radius: 0.4rem 2rem 2rem 2rem;
 
@@ -195,6 +198,7 @@ const StChat = styled.div`
 
       ${fontExtraSmall};
       line-height: 1.8rem;
+      color: ${({ theme }) => theme.sub3};
     }
   }
 `;

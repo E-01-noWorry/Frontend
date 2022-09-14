@@ -8,6 +8,8 @@ import { IconSmall } from '../../shared/themes/iconStyle';
 import { fontBold, fontMedium, fontSmall } from '../../shared/themes/textStyle';
 
 import IconPeople from '../../static/icons/Variety=people, Status=untab.svg';
+import IconTimer from '../../static/icons/Variety=timer, Status=untab.svg';
+import IconTimeOver from '../../static/icons/Variety=timeover, Status=untab.svg';
 
 import styled from 'styled-components';
 
@@ -29,7 +31,9 @@ const SelectContentBox = ({ contents, setRef }) => {
           completion={content.completion}
         >
           <StContentHeader>
-            <StInnerCategory>{content.category}</StInnerCategory>
+            <StInnerCategory completion={content.completion}>
+              {content.category}
+            </StInnerCategory>
             <StInnerNickname>
               작성자 <span>{content.nickname}</span>
             </StInnerNickname>
@@ -39,7 +43,7 @@ const SelectContentBox = ({ contents, setRef }) => {
             {content.title}
           </StInnerTitle>
 
-          <StInnerOption>
+          <StInnerOption completion={content.completion}>
             {/* 선택지 내용이 길면 26글자에서 잘라줍니다 */}
             {content.options?.join(' vs ').length > 26
               ? content.options?.join(' vs ').slice(0, 26) + '...'
@@ -47,16 +51,27 @@ const SelectContentBox = ({ contents, setRef }) => {
           </StInnerOption>
 
           <StContentFooter>
+            <StInnerTime>
+              {content.completion ? (
+                <StIcon>
+                  <img src={IconTimeOver} />
+                </StIcon>
+              ) : (
+                <>
+                  <StIcon>
+                    <img src={IconTimer} />
+                  </StIcon>
+                  <span>{remainedTime(content.deadLine)}</span>
+                </>
+              )}
+              <span>{content.completion ? '투표마감' : '남음'}</span>
+            </StInnerTime>
             <StInnerCurrent>
               <StIcon>
                 <img src={IconPeople} />
               </StIcon>
               <span>{content.total || 0}</span>
             </StInnerCurrent>
-            <StInnerTime>
-              <span>{content.completion ? '투표마감' : '남은시간'}</span>
-              <span>{remainedTime(content.deadLine)}</span>
-            </StInnerTime>
           </StContentFooter>
         </StContentBox>
       ))}
@@ -79,90 +94,85 @@ const StContentBoxWrap = styled.div`
   flex-direction: column;
   gap: 2.4rem;
 
-  margin-top: 13rem;
-  margin-bottom: 8.4rem;
+  margin-top: 12.8rem;
+  margin-bottom: 9.6rem;
 `;
 
 const StContentBox = styled.div`
+  position: relative;
+
   ${borderBoxDefault};
   align-items: flex-start;
+  justify-content: flex-start;
 
-  height: 100%;
+  height: 16rem;
   padding: 1.6rem;
-  background-color: ${(props) => (props.completion ? '#F4F3F0' : '#fff')};
-
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-
-  &:hover,
-  &:active {
-    background-color: #d4d4d4;
-  }
+  background-color: ${(props) =>
+    props.completion ? props.theme.sub4 : props.theme.white};
 `;
 
 const StContentHeader = styled.div`
+  position: absolute;
+  top: 1.6rem;
+
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 0.4rem;
 
   width: 100%;
 `;
 
-const StContentFooter = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  width: 100%;
-  margin-top: 3.2rem;
-`;
-
 const StInnerCategory = styled.div`
-  height: 2rem;
-  padding: 0 0.5rem;
-  background-color: #ececec;
+  padding: 0 0.6rem;
+  background-color: ${(props) =>
+    props.completion ? props.theme.main4 : props.theme.main2};
 
   border-radius: 1rem;
 
   ${fontSmall}
-  line-height: 1.95rem;
-`;
-
-const StInnerCurrent = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-
-  ${fontSmall}
   line-height: 2rem;
-`;
-
-const StIcon = styled.div`
-  ${IconSmall};
-`;
-
-const StInnerTitle = styled.div`
-  margin-top: 1rem;
-
-  ${fontBold};
-  line-height: 2.1rem;
-  color: ${(props) => (props.completion ? '#767676' : '#000')};
-`;
-
-const StInnerOption = styled.div`
-  margin-top: 0.6rem;
-
-  ${fontMedium}
-  line-height: 1.8rem;
+  color: ${({ theme }) => theme.white};
 `;
 
 const StInnerNickname = styled.div`
   ${fontSmall};
   line-height: 2rem;
+  color: ${({ theme }) => theme.sub2};
 
   span {
     ${fontBold};
   }
+`;
+
+const StInnerTitle = styled.div`
+  margin-top: 2.6rem;
+
+  ${fontBold};
+  line-height: 2.1rem;
+  color: ${(props) =>
+    props.completion ? props.theme.sub2 : props.theme.black};
+`;
+
+const StInnerOption = styled.div`
+  margin-top: 0.4rem;
+
+  ${fontMedium}
+  line-height: 1.8rem;
+  color: ${({ theme }) => theme.sub2};
+`;
+
+const StContentFooter = styled.div`
+  position: absolute;
+  bottom: 1.6rem;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+`;
+
+const StIcon = styled.div`
+  ${IconSmall};
 `;
 
 const StInnerTime = styled.div`
@@ -171,4 +181,18 @@ const StInnerTime = styled.div`
   gap: 0.4rem;
 
   ${fontSmall};
+  color: ${({ theme }) => theme.sub2};
+`;
+
+const StInnerCurrent = styled.div`
+  position: absolute;
+  right: 3.6rem;
+
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  ${fontSmall}
+  line-height: 2rem;
+  color: ${({ theme }) => theme.sub1};
 `;

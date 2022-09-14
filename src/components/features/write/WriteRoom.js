@@ -17,8 +17,12 @@ import {
 } from '../../../shared/themes/textStyle';
 
 import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
+import IconErase from '../../../static/icons/Variety=erase, Status=untab, Size=S.svg';
+import IconPlus from '../../../static/icons/Variety=plus, Status=untab, Size=XL.svg';
+import IconMinus from '../../../static/icons/Variety=minus, Status=untab, Size=XL.svg';
 
 import styled from 'styled-components';
+import { ModalBasic } from '../../common/Modal';
 
 const WriteRoom = () => {
   const navigate = useNavigate();
@@ -26,15 +30,17 @@ const WriteRoom = () => {
   const [title, setTitle] = useState('');
   const [keyword, setKeyword] = useState('');
   const [keywordArr, setKeywordArr] = useState([]);
-  const [countPeople, setCountPeople] = useState(2);
+  const [countPeople, setCountPeople] = useState(1);
+
+  const [modal, setModal] = useState(false);
 
   const keywordHandler = (event) => {
     event.preventDefault();
 
     if (keywordArr.length >= 3) {
-      alert('해시태그는 3개까지만이에요');
+      setModal('해시태그는 3개까지만 가능합니다.');
     } else if (keywordArr.includes(keyword)) {
-      alert('중복된 해시태그가 있네요');
+      setModal('중복된 해시태그가 있습니다.');
     } else {
       setKeywordArr((prev) => [...prev, keyword.replace(' ', '')]);
     }
@@ -47,13 +53,13 @@ const WriteRoom = () => {
   };
 
   const countPlusHandler = () => {
-    if (countPeople < 9) {
+    if (countPeople < 8) {
       setCountPeople((prev) => prev + 1);
     }
   };
 
   const countMinusHandler = () => {
-    if (countPeople > 2) {
+    if (countPeople > 1) {
       setCountPeople((prev) => prev - 1);
     }
   };
@@ -75,6 +81,8 @@ const WriteRoom = () => {
 
   return (
     <>
+      {modal && <ModalBasic setter={() => setModal(false)}>{modal}</ModalBasic>}
+
       <Header>
         <StHeaderIcon onClick={() => navigate('/main', { state: 'room' })}>
           <img src={IconBack} />
@@ -109,7 +117,9 @@ const WriteRoom = () => {
                     onClick={() => keywordDeleteHandler(item)}
                   >
                     <div>#{item}</div>
-                    <StDeleteIcon></StDeleteIcon>
+                    <StDeleteIcon>
+                      <img src={IconErase} alt="IconErase" />
+                    </StDeleteIcon>
                   </StKeyword>
                 ))}
                 <form onSubmit={keywordHandler}>
@@ -133,12 +143,16 @@ const WriteRoom = () => {
           <StContentBox>
             <StInnerTitle>최대 참여 인원수</StInnerTitle>
             <StInnerSubtitle>
-              본인을 제외한 참여자 인원을 정해주세요
+              본인을 제외한 참여자 인원을 정해주세요 (1~8명)
             </StInnerSubtitle>
             <StCountBox>
-              <StCountButton onClick={countMinusHandler}>-</StCountButton>
+              <StCountButton onClick={countMinusHandler}>
+                <img src={IconMinus} alt="IconMinus" />
+              </StCountButton>
               <div>{countPeople}</div>
-              <StCountButton onClick={countPlusHandler}>+</StCountButton>
+              <StCountButton onClick={countPlusHandler}>
+                <img src={IconPlus} alt="IconPlus" />
+              </StCountButton>
             </StCountBox>
           </StContentBox>
 
@@ -165,7 +179,7 @@ const StContainer = styled.div`
   gap: 3.2rem;
 
   width: 100%;
-  margin-top: 8.1rem;
+  margin-top: 6.4rem;
   margin-bottom: 1.6rem;
 `;
 
@@ -192,7 +206,7 @@ const StInnerText = styled.div`
   height: 100%;
   min-height: 12.1rem;
   padding: 1.6rem;
-  background-color: #ededed;
+  background-color: ${({ theme }) => theme.white};
 
   textarea {
     width: 100%;
@@ -215,6 +229,7 @@ const StInnerText = styled.div`
 
     ${fontSmall};
     line-height: 2rem;
+    color: ${({ theme }) => theme.sub1};
   }
 `;
 
@@ -245,8 +260,8 @@ const StKeyword = styled.div`
   gap: 0.5rem;
 
   height: 3.2rem;
-  padding: 1.1rem;
-  background-color: #fff;
+  padding: 1.1rem 0.7rem 1.1rem 1.1rem;
+  background-color: ${({ theme }) => theme.sub4};
 
   border-radius: 1.6rem;
 
@@ -257,7 +272,6 @@ const StKeyword = styled.div`
 
 const StDeleteIcon = styled.div`
   ${IconSmall}
-  background-color: green;
 `;
 
 const StInnerSubtitle = styled.div`
@@ -265,6 +279,7 @@ const StInnerSubtitle = styled.div`
 
   ${fontMedium};
   line-height: 2.1rem;
+  color: ${({ theme }) => theme.sub2};
 `;
 
 const StCountBox = styled.div`
@@ -276,7 +291,12 @@ const StCountBox = styled.div`
   height: 7.6rem;
   padding: 1.4rem;
   margin-top: 2rem;
-  background-color: #ededed;
+  background-color: ${({ theme }) => theme.white};
+
+  & > div:nth-child(2) {
+    ${fontBold};
+    ${fontLarge}
+  }
 `;
 
 const StCountButton = styled.div`
@@ -286,7 +306,10 @@ const StCountButton = styled.div`
 
   width: 4.8rem;
   height: 4.8rem;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.sub4};
 
   border-radius: 1.4rem;
+
+  img {
+  }
 `;

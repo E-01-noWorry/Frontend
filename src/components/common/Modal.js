@@ -3,6 +3,8 @@ import React from 'react';
 import { fontBold, fontMedium, fontSmall } from '../../shared/themes/textStyle';
 import { IconLarge } from '../../shared/themes/iconStyle';
 
+import IconClose from '../../static/icons/Variety=close, Status=L.svg';
+
 import styled from 'styled-components';
 
 export const ModalBasic = ({ children, setter }) => {
@@ -27,7 +29,9 @@ export const ModalDelete = ({ children, setter, leave, recommend }) => {
       <StModalWindowWide>
         <StModalTextWide>
           <div>
-            <StCancelIcon onClick={setter}></StCancelIcon>
+            <StCancelIcon onClick={setter}>
+              <img src={IconClose} alt="IconClose" />
+            </StCancelIcon>
           </div>
           <div>고민을 해결에 도움을 준 사람을 추천해주세요</div>
           <div>*현재 채팅방에 남아 있는 사람입니다.</div>
@@ -87,7 +91,7 @@ const StModalWindow = styled.div`
 `;
 
 const StModalWindowWide = styled(StModalWindow)`
-  width: 32.9rem;
+  width: 33rem;
 `;
 
 const StModalText = styled.div`
@@ -97,7 +101,9 @@ const StModalText = styled.div`
   justify-content: center;
   gap: 0.5rem;
 
-  height: 10.2rem;
+  padding: 1rem 0;
+
+  min-height: 10.2rem;
 
   span {
     text-align: center;
@@ -113,6 +119,7 @@ const StModalText = styled.div`
 
   span:nth-child(3) {
     ${fontMedium}
+    color: ${({ theme }) => theme.sub2};
   }
 `;
 
@@ -124,7 +131,7 @@ const StModalTextWide = styled(StModalText)`
     justify-content: flex-end;
 
     width: 100%;
-    height: 3.2rem;
+    height: 2.5rem;
   }
 
   & > div:nth-child(2) {
@@ -135,12 +142,12 @@ const StModalTextWide = styled(StModalText)`
   & > div:nth-child(3) {
     ${fontSmall};
     line-height: 1.3rem;
+    color: ${({ theme }) => theme.sub2};
   }
 `;
 
 const StCancelIcon = styled.div`
   ${IconLarge};
-  background-color: green;
 `;
 
 const StModalButton = styled.div`

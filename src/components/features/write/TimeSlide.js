@@ -45,7 +45,7 @@ const StTimeSlide = styled.div`
   }
 
   div:nth-child(1) {
-    color: #fff;
+    color: ${({ theme }) => theme.white};
     ${fontBold}
   }
 
@@ -53,7 +53,7 @@ const StTimeSlide = styled.div`
     ${(props) =>
       props.selectTime != 1 &&
       css`
-        color: #fff;
+        color: ${({ theme }) => theme.white};
         ${fontBold}
       `}
   }
@@ -63,7 +63,7 @@ const StTimeSlide = styled.div`
       props.selectTime != 1 &&
       props.selectTime != 4 &&
       css`
-        color: #fff;
+        color: ${({ theme }) => theme.white};
         ${fontBold}
       `}
   }
@@ -74,7 +74,7 @@ const StTimeSlide = styled.div`
       props.selectTime != 4 &&
       props.selectTime != 8 &&
       css`
-        color: #fff;
+        color: ${({ theme }) => theme.white};
         ${fontBold}
       `}
   }
@@ -86,7 +86,7 @@ const StTimeSlide = styled.div`
       props.selectTime != 8 &&
       props.selectTime != 12 &&
       css`
-        color: #fff;
+        color: ${({ theme }) => theme.white};
         ${fontBold}
       `}
   }
@@ -113,7 +113,7 @@ const StInnerTime = styled.span`
     }
   }};
   height: 4rem;
-  background-color: #454545;
+  background-color: ${({ theme }) => theme.sub1};
 
   transition-duration: 0.3s;
   border-radius: 2rem;

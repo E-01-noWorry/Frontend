@@ -115,7 +115,7 @@ const StInfoWrap = styled.div`
   flex-direction: column;
   align-items: center;
 
-  margin-top: 8rem;
+  margin-top: 6.4rem;
 `;
 
 const StNickname = styled.div`
@@ -123,17 +123,19 @@ const StNickname = styled.div`
 
   ${fontMedium}
   line-height: 2.1rem;
+  color: ${({ theme }) => theme.sub2};
 `;
 
 const StCategory = styled.div`
   padding: 0 0.4rem;
   margin-top: 2rem;
-  background-color: #d8d8d8;
+  background-color: ${({ theme }) => theme.main2};
 
   border-radius: calc(2.1rem / 2);
 
   ${fontMedium};
   line-height: 2.1rem;
+  color: ${({ theme }) => theme.white};
 `;
 
 const StTitle = styled.div`
@@ -156,7 +158,7 @@ const StDeadLine = styled.div`
   ${fontMedium};
 
   span:nth-child(2) {
-    color: #ff6363;
+    color: ${({ theme }) => theme.warning};
   }
 `;
 

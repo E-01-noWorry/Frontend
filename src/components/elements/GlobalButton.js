@@ -18,12 +18,10 @@ const StGlobalButton = styled.div`
 
   width: 100%;
   height: ${(props) => props.h || '5.6rem'};
-  background-color: ${(props) => props.bgc || '#000'};
+  background-color: ${(props) => props.bgc || props.theme.main2};
 
   border-radius: ${(props) => props.borderR || '2rem'};
-  box-shadow: ${(props) =>
-    props.noneShadow ? null : '0px 4px 10px rgba(0, 0, 0, 0.15)'};
 
   ${(props) => (props.fw === 'bold' ? fontBold : fontExtraBold)}
-  color: ${(props) => props.color || '#fff'};
+  color: ${(props) => props.font || props.theme.white};
 `;

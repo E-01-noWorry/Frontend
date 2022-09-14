@@ -178,8 +178,8 @@ const WriteSelect = () => {
             {numArr.length < 4 && (
               <GlobalButton
                 onClick={optionAddHandler}
-                bgc={'#fff'}
-                color={'#000'}
+                bgc={({ theme }) => theme.white}
+                font={({ theme }) => theme.black}
                 fw={'bold'}
               >
                 <StPlusIcon>
@@ -221,7 +221,7 @@ const StContainer = styled.div`
   gap: 3.2rem;
 
   width: 100%;
-  margin-top: 8.1rem;
+  margin-top: 6.4rem;
   margin-bottom: 1.6rem;
 `;
 
@@ -246,7 +246,7 @@ const StInnerText = styled.div`
   height: 100%;
   min-height: 12.1rem;
   padding: 1.6rem;
-  background-color: #ededed;
+  background-color: ${({ theme }) => theme.white};
 
   textarea {
     width: 100%;
@@ -268,6 +268,7 @@ const StInnerText = styled.div`
 
     ${fontSmall};
     line-height: 2rem;
+    color: ${({ theme }) => theme.sub1};
   }
 `;
 
@@ -276,7 +277,7 @@ const StInnerCategory = styled.div`
   align-items: flex-start;
 
   height: 100%;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.white};
 
   div {
     display: flex;
@@ -289,7 +290,7 @@ const StInnerCategory = styled.div`
     input {
       width: 2.2rem;
       height: 2.2rem;
-      accent-color: #000;
+      accent-color: ${({ theme }) => theme.black};
     }
 
     label {

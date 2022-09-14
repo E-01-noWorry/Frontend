@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Router from './router/router';
 import { ThemeProvider } from 'styled-components';
-import { darkTheme, defaultTheme } from './shared/themes/Theme';
+import theme from './shared/themes/Theme';
 import GlobalStyles from './shared/themes/GlobalStyles';
 
 const App = () => {
@@ -13,7 +13,7 @@ const App = () => {
   }
 
   return (
-    <ThemeProvider theme={isDarkMode ? darkTheme : defaultTheme}>
+    <ThemeProvider theme={isDarkMode ? theme.darkTheme : theme.defaultTheme}>
       <GlobalStyles />
       <Router />
     </ThemeProvider>
