@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ import BodyPadding from '../components/common/BodyPadding';
 import Vote from '../components/features/vote/Vote';
 import Comment from '../components/features/comment/comment';
 import ProfileImg from '../components/elements/ProfileImg';
+import { ModalDelete } from '../components/common/Modal';
 
 import { remainedTime } from '../shared/timeCalculation';
 
@@ -36,6 +37,8 @@ const Detail = () => {
   const { selectKey } = useParams();
   const userKey = localStorage.getItem('userKey');
 
+  const [deleteModal, setDeleteModal] = useState(false);
+
   useEffect(() => {
     dispatch(__getDetailSelect(selectKey));
 
@@ -56,12 +59,16 @@ const Detail = () => {
 
   return (
     <>
+      {deleteModal && (
+        <ModalDelete setter={() => setDeleteModal(false)} del={deleteHandler} />
+      )}
+
       <Header>
         <StHeaderIcon onClick={() => navigate(-1)}>
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         {parseInt(userKey) === content?.userKey && (
-          <StHeaderIcon onClick={deleteHandler}>
+          <StHeaderIcon onClick={() => setDeleteModal(true)}>
             <img src={IconDelete} alt="IconDelete" />
           </StHeaderIcon>
         )}

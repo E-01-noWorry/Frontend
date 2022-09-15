@@ -9,7 +9,11 @@ import BodyPadding from '../components/common/BodyPadding';
 import FooterInput from '../components/common/FooterInput';
 import Header from '../components/common/Header';
 import ChatBox from '../components/features/chat/ChatBox';
-import { ModalBasic, ModalDelete, ModalExit } from '../components/common/Modal';
+import {
+  ModalBasic,
+  ModalRecommend,
+  ModalExit,
+} from '../components/common/Modal';
 
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
 import { fontBold, fontLarge, fontMedium } from '../shared/themes/textStyle';
@@ -163,7 +167,7 @@ const ChatRoom = () => {
       )}
 
       {modalDelete && (
-        <ModalDelete
+        <ModalRecommend
           leave={leaveRoomHandler}
           setter={deleteModalCloseHandler}
           recommend={recommendHandler}
@@ -183,7 +187,7 @@ const ChatRoom = () => {
               </StUserInfo>
             ))}
           </StUserInfoWrap>
-        </ModalDelete>
+        </ModalRecommend>
       )}
 
       {hostByeModal && (
@@ -299,7 +303,7 @@ const StUserInfoWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 2rem;
   row-gap: 1.5rem;
 

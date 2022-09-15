@@ -1,39 +1,90 @@
 import React from 'react';
 
 import { fontBold, fontMedium, fontSmall } from '../../shared/themes/textStyle';
-import { IconLarge } from '../../shared/themes/iconStyle';
-
-import IconClose from '../../static/icons/Variety=close, Status=L.svg';
 
 import styled from 'styled-components';
 
 export const ModalBasic = ({ children, setter }) => {
   return (
-    <StModalBg>
+    <>
       <StModalWindow>
         <StModalText>
-          <span></span>
           <span>{children}</span>
         </StModalText>
         <StModalButton>
           <div onClick={setter}>확인</div>
         </StModalButton>
       </StModalWindow>
-    </StModalBg>
+      <StModalBg />
+    </>
   );
 };
 
-export const ModalDelete = ({ children, setter, leave, recommend }) => {
+export const ModalExit = ({ leave, setter }) => {
   return (
-    <StModalBg>
+    <>
+      <StModalWindow>
+        <StModalTitle>채팅방 나가기</StModalTitle>
+        <StModalText>
+          <span>나가기를 하면 작성자의 추천을 받을 수 없어요.</span>
+          <span>(추천을 받으면 등급이 올라가요!)</span>
+        </StModalText>
+        <StModalButton>
+          <div onClick={leave}>나가기</div>
+          <div onClick={setter}>취소</div>
+        </StModalButton>
+      </StModalWindow>
+      <StModalBg />
+    </>
+  );
+};
+
+export const ModalDelete = ({ setter, del }) => {
+  return (
+    <>
+      <StModalWindow>
+        <StModalText>
+          <span>정말 투표를 삭제할까요?</span>
+        </StModalText>
+        <StModalButton>
+          <div onClick={del}>삭제</div>
+          <div onClick={setter}>취소</div>
+        </StModalButton>
+      </StModalWindow>
+      <StModalBg />
+    </>
+  );
+};
+
+export const ModalWrite = ({ setter, write }) => {
+  return (
+    <>
+      <StModalWindow>
+        <StModalTitle>고민투표 만들기</StModalTitle>
+        <StModalText>
+          <span>
+            투표는 <span style={{ fontWeight: '700' }}>1시간 당 1회</span>만
+            작성할 수 있습니다.
+            <br />
+            투표를 작성하시겠습니까?
+          </span>
+        </StModalText>
+        <StModalButton>
+          <div onClick={write}>투표 작성</div>
+          <div onClick={setter}>취소</div>
+        </StModalButton>
+      </StModalWindow>
+      <StModalBg />
+    </>
+  );
+};
+
+export const ModalRecommend = ({ children, setter, leave, recommend }) => {
+  return (
+    <>
       <StModalWindowWide>
+        <StModalTitle>고민해결에 도움 된 사람을 추천해주세요</StModalTitle>
         <StModalTextWide>
-          <div>
-            <StCancelIcon onClick={setter}>
-              <img src={IconClose} alt="IconClose" />
-            </StCancelIcon>
-          </div>
-          <div>고민을 해결에 도움을 준 사람을 추천해주세요</div>
           <div>*현재 채팅방에 남아 있는 사람입니다.</div>
           {children}
         </StModalTextWide>
@@ -42,25 +93,8 @@ export const ModalDelete = ({ children, setter, leave, recommend }) => {
           <div onClick={leave}>채팅방 삭제</div>
         </StModalButton>
       </StModalWindowWide>
-    </StModalBg>
-  );
-};
-
-export const ModalExit = ({ leave, setter }) => {
-  return (
-    <StModalBg>
-      <StModalWindow>
-        <StModalText>
-          <span>채팅방 나가기</span>
-          <span>나가기를 하면 작성자의 추천을 받을 수 없어요.</span>
-          <span>(추천을 받으면 등급을 올릴 수 있어요!)</span>
-        </StModalText>
-        <StModalButton>
-          <div onClick={setter}>취소</div>
-          <div onClick={leave}>나가기</div>
-        </StModalButton>
-      </StModalWindow>
-    </StModalBg>
+      <StModalBg onClick={setter} />
+    </>
   );
 };
 
@@ -75,23 +109,45 @@ const StModalBg = styled.div`
 
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.65);
 
   z-index: 99;
 `;
 
 const StModalWindow = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
   width: 29rem;
-  padding: 0 1rem;
   background-color: #fff;
 
   border-radius: 2rem;
 
   line-height: 2.1rem;
+
+  z-index: 999;
 `;
 
 const StModalWindowWide = styled(StModalWindow)`
   width: 33rem;
+`;
+
+const StModalTitle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 5.6rem;
+  background-color: ${({ theme }) => theme.main2};
+
+  border-radius: 2rem 2rem 0 0;
+
+  ${fontBold};
+  color: ${({ theme }) => theme.white};
 `;
 
 const StModalText = styled.div`
@@ -101,53 +157,32 @@ const StModalText = styled.div`
   justify-content: center;
   gap: 0.5rem;
 
-  padding: 1rem 0;
+  padding: 1rem;
 
-  min-height: 10.2rem;
+  min-height: 7.2rem;
 
   span {
     text-align: center;
   }
 
   span:nth-child(1) {
-    ${fontBold}
-  }
-
-  span:nth-child(2) {
     ${fontMedium}
   }
 
-  span:nth-child(3) {
+  span:nth-child(2) {
     ${fontMedium}
     color: ${({ theme }) => theme.sub2};
   }
 `;
 
 const StModalTextWide = styled(StModalText)`
-  min-height: 15.6rem;
+  min-height: 11.8rem;
 
   & > div:nth-child(1) {
-    display: flex;
-    justify-content: flex-end;
-
-    width: 100%;
-    height: 2.5rem;
-  }
-
-  & > div:nth-child(2) {
-    ${fontBold};
-    line-height: 2.4rem;
-  }
-
-  & > div:nth-child(3) {
     ${fontSmall};
     line-height: 1.3rem;
     color: ${({ theme }) => theme.sub2};
   }
-`;
-
-const StCancelIcon = styled.div`
-  ${IconLarge};
 `;
 
 const StModalButton = styled.div`
@@ -155,7 +190,6 @@ const StModalButton = styled.div`
   align-items: center;
 
   height: 5.6rem;
-  margin: 0 -1rem;
 
   border-top: 0.1rem solid #e7e7e7;
 
