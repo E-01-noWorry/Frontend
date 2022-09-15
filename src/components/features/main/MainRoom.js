@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import instance from '../../../app/module/instance';
@@ -30,18 +30,18 @@ const MainRoom = () => {
   const [page, setPage] = useState(1);
   const [ref, setRef] = useState(null);
 
-  const getAllRoom = async () => {
+  const getAllRoom = useCallback(async () => {
     try {
       const { data } = await instance.get(`/room?page=${page}`);
       setRooms((prev) => [...prev, ...data.result]);
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
-  };
+  }, [page]);
 
   useEffect(() => {
     getAllRoom();
-  }, [page]);
+  }, [getAllRoom]);
 
   //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다.
   const onIntersect = ([entry], observer) => {
@@ -90,7 +90,6 @@ const MainRoom = () => {
     searchRef.current.value = '';
     setRooms([]);
     setPage(1);
-    getAllRoom();
   };
 
   return (
@@ -105,7 +104,7 @@ const MainRoom = () => {
             ref={searchRef}
           />
           <div onClick={searchHandler}>
-            <img src={IconSearch} />
+            <img src={IconSearch} alt="IconSearch" />
           </div>
         </form>
         <StCancel onClick={searchCancelHandler}>취소</StCancel>
@@ -131,7 +130,7 @@ const MainRoom = () => {
               <StContentFooter>
                 <StInnerCurrent>
                   <StPeopleIcon>
-                    <img src={IconPerson} />
+                    <img src={IconPerson} alt="IconPerson" />
                   </StPeopleIcon>
                   <span>
                     {room.currentPeople}/{room.max}

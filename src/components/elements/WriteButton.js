@@ -7,7 +7,7 @@ import styled from 'styled-components';
 const WriteButton = ({ onClick }) => {
   return (
     <StWriteButton onClick={onClick}>
-      <img src={IconEdit} />
+      <img src={IconEdit} alt="IconEdit" />
     </StWriteButton>
   );
 };

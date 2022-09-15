@@ -54,12 +54,12 @@ const SelectContentBox = ({ contents, setRef }) => {
             <StInnerTime>
               {content.completion ? (
                 <StIcon>
-                  <img src={IconTimeOver} />
+                  <img src={IconTimeOver} alt="IconTimeOver" />
                 </StIcon>
               ) : (
                 <>
                   <StIcon>
-                    <img src={IconTimer} />
+                    <img src={IconTimer} alt="IconTimer" />
                   </StIcon>
                   <span>{remainedTime(content.deadLine)}</span>
                 </>
@@ -68,7 +68,7 @@ const SelectContentBox = ({ contents, setRef }) => {
             </StInnerTime>
             <StInnerCurrent>
               <StIcon>
-                <img src={IconPeople} />
+                <img src={IconPeople} alt="IconPeople" />
               </StIcon>
               <span>{content.total || 0}</span>
             </StInnerCurrent>

@@ -21,9 +21,9 @@ const Footer = ({ state }) => {
       <StIconWrap onClick={() => navigate('/main', { state: 'select' })}>
         <StIcon>
           {state === 'select' ? (
-            <img src={IconVoteTab} />
+            <img src={IconVoteTab} alt="IconVoteTab" />
           ) : (
-            <img src={IconVoteUntab} />
+            <img src={IconVoteUntab} alt="IconVoteUntab" />
           )}
         </StIcon>
         <StText>고민투표</StText>
@@ -32,9 +32,9 @@ const Footer = ({ state }) => {
       <StIconWrap onClick={() => navigate('/main', { state: 'room' })}>
         <StIcon>
           {state === 'room' ? (
-            <img src={IconChatTab} />
+            <img src={IconChatTab} alt="IconChatTab" />
           ) : (
-            <img src={IconChatUntab} />
+            <img src={IconChatUntab} alt="IconChatUntab" />
           )}
         </StIcon>
         <StText>고민상담</StText>
@@ -48,9 +48,9 @@ const Footer = ({ state }) => {
       <StIconWrap onClick={() => navigate('/mypage', { state: 'mypage' })}>
         <StIcon>
           {state === 'mypage' ? (
-            <img src={IconProfileTab} />
+            <img src={IconProfileTab} alt="IconProfileTab" />
           ) : (
-            <img src={IconProfileUntab} />
+            <img src={IconProfileUntab} alt="IconProfileUntab" />
           )}
         </StIcon>
         <StText>마이페이지</StText>
