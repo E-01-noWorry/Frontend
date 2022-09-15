@@ -13,6 +13,7 @@ import IconNext from '../static/icons/Variety=next, Status=untab.svg';
 import Logo from '../static/images/Logo.svg';
 
 import styled from 'styled-components';
+import Loading from './Loading';
 
 const Welcome = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Welcome = () => {
   }, [navigate]);
 
   if (isLogin()) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   return (

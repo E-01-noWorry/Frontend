@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+
 import { kakaoLoginThunk } from '../app/module/kakaoSlice';
+
+import Loading from './Loading';
 
 const KakaoRedirect = () => {
   const dispatch = useDispatch();
@@ -12,7 +15,7 @@ const KakaoRedirect = () => {
     dispatch(kakaoLoginThunk(code));
   }, [dispatch]);
 
-  return <p>잠시만 기다려 주세요! 로그인 중입니다.</p>;
+  return <Loading />;
 };
 
 export default KakaoRedirect;
