@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import instance from '../app/module/instance';
 
 const GoogleRedirect = () => {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const code = searchParams.get('code');
@@ -17,11 +16,11 @@ const GoogleRedirect = () => {
       localStorage.setItem('nickname', data.user.nickname);
       localStorage.setItem('userKey', data.user.userKey);
 
-      navigate('/main', { state: 'select' });
+      window.location.assign('/main');
     } catch (error) {
       console.log(error);
     }
-  }, [code, navigate]);
+  }, [code]);
 
   useEffect(() => {
     googleLogin();
