@@ -92,6 +92,10 @@ const MainRoom = () => {
     setPage(1);
   };
 
+  if (rooms.length === 0) {
+    return <StNoneContents>상담방이 없습니다.</StNoneContents>;
+  }
+
   return (
     <>
       {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
@@ -150,6 +154,14 @@ const MainRoom = () => {
 };
 
 export default MainRoom;
+
+const StNoneContents = styled.div`
+  width: 100%;
+  margin-top: 15.4rem;
+
+  ${fontMedium}
+  text-align: center;
+`;
 
 const StSearchWrap = styled.div`
   position: fixed;
