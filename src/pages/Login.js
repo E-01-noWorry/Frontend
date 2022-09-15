@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import LoginSignUpInput from '../components/elements/LoginSignUpInput';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { loginThunk } from '../app/module/loginSlice';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import KakaoLogin from '../components/features/KakaoLogin';
-import GoogleLogin from '../components/features/GoogleLogin';
-import { fontSmall } from '../shared/themes/textStyle';
+
+import LoginSignUpInput from '../components/elements/LoginSignUpInput';
 import Header from '../components/common/Header';
 import BodyPadding from '../components/common/BodyPadding';
-import { fontLarge } from '../shared/themes/textStyle';
 import GlobalButton from '../components/elements/GlobalButton';
-import { IconLarge } from '../shared/themes/iconStyle';
+
+import { fontSmall, fontLarge } from '../shared/themes/textStyle';
+import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
 
 import IconBack from '../static/icons/Variety=back, Status=untab.svg';
+import IconNext from '../static/icons/Variety=next, Status=untab.svg';
+
+import styled from 'styled-components';
+import SocialLoginButton from '../components/elements/SocialLoginButton';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -47,49 +48,47 @@ const Login = () => {
       </Header>
 
       <BodyPadding>
-        <LoginContainer>
-          <LoginSignUpInput
-            onChange={onChangeHandler}
-            name="userId"
-            type="text"
-            placeholder="아이디를 입력해주세요"
-          />
-          <LoginSignUpInput
-            onChange={onChangeHandler}
-            name="password"
-            type="password"
-            placeholder="패스워드를 입력해주세요"
-          />
-          {loginState?.error?.errMsg ? (
-            <LoginErrorMsg>*아이디와 비밀번호를 확인해주세요</LoginErrorMsg>
-          ) : null}
-          <GlobalButton
-            onClick={() => {
-              onClickLogin();
-            }}
-          >
-            로그인
-          </GlobalButton>
-          <ToastContainer />
-          <KakaoLogin />
-          <GoogleLogin />
+        <StLoginWrap>
+          <StInputWrap>
+            <LoginSignUpInput
+              onChange={onChangeHandler}
+              name="userId"
+              type="text"
+              placeholder="아이디를 입력해주세요"
+            />
+            <LoginSignUpInput
+              onChange={onChangeHandler}
+              name="password"
+              type="password"
+              placeholder="패스워드를 입력해주세요"
+            />
+            {loginState?.error?.errMsg ? (
+              <LoginErrorMsg>*아이디와 비밀번호를 확인해주세요</LoginErrorMsg>
+            ) : null}
+          </StInputWrap>
 
-          <LetterContainer>
-            <Black>계정을 잊으셨나요? </Black>
-            <Blue>ID찾기 </Blue>
-            <Black>또는 </Black>
-            <Blue>비밀번호 찾기</Blue>
-          </LetterContainer>
+          <StButtonWrap>
+            <GlobalButton
+              onClick={() => {
+                onClickLogin();
+              }}
+            >
+              로그인
+            </GlobalButton>
 
-          <LetterContainer2>
-            <LightBold>아직 회원이 아닌가요?</LightBold>
-            <Link to="/signup">
-              <SignUp>
-                <LinkTag>회원가입 &#62;</LinkTag>
-              </SignUp>
-            </Link>
-          </LetterContainer2>
-        </LoginContainer>
+            <SocialLoginButton />
+          </StButtonWrap>
+
+          <StNaviLogin>
+            <div>아직 회원이 아닌가요?</div>
+            <div onClick={() => navigate('/signUp')}>
+              회원가입
+              <StIcon>
+                <img src={IconNext} alt="IconNext" />
+              </StIcon>
+            </div>
+          </StNaviLogin>
+        </StLoginWrap>
       </BodyPadding>
     </div>
   );
@@ -105,34 +104,29 @@ const StHeaderTitle = styled.div`
   ${fontLarge};
 `;
 
-// const HeaderContainer = styled.div`
-//   width: 100%;
-// `;
+const StLoginWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3.4rem;
 
-// const Aarow = styled.span`
-//   color: #000;
-//   font-size: 3rem;
-//   position: relative;
-// `;
-
-// const LoginHeader = styled.p`
-//   text-align: center;
-//   display: inline;
-//   width: 100%;
-//   position: absolute;
-//   right: 0px;
-//   top: 2.2rem;
-//   ${fontLarge}
-//   z-index: -1;
-// `;
-
-const LoginContainer = styled.div`
-  margin-top: 8.8rem;
+  margin-top: 8.4rem;
 `;
 
-const LetterContainer = styled.p`
-  text-align: center;
-  margin-top: 3.5rem;
+const StInputWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+
+  width: 100%;
+`;
+
+const StButtonWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+
+  width: 100%;
 `;
 
 const LoginErrorMsg = styled.p`
@@ -140,34 +134,32 @@ const LoginErrorMsg = styled.p`
   ${fontSmall}
 `;
 
-const Black = styled.span`
-  color: #000;
-  font-size: 1.2rem;
-`;
-const Blue = styled.span`
-  color: #00c2ff;
-  font-size: 1.2rem;
-`;
-
-const LetterContainer2 = styled.p`
-  position: fixed;
+const StNaviLogin = styled.div`
+  position: absolute;
   bottom: 3.2rem;
-  text-align: center;
-  width: 100%;
-  padding-right: 40px;
+
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  div:nth-child(1) {
+    ${fontSmall}
+    color: ${({ theme }) => theme.sub2};
+  }
+
+  div:nth-child(2) {
+    display: flex;
+    align-items: center;
+
+    ${fontSmall}
+  }
 `;
 
-const LightBold = styled.span`
-  font-weight: 400;
-  color: #767676;
-  ${fontSmall}
-  margin-right: 1.5rem;
-`;
+const StIcon = styled.div`
+  ${IconSmall}
 
-const SignUp = styled.span`
-  ${fontSmall}
-`;
-
-const LinkTag = styled.span`
-  color: #000;
+  img {
+    width: 2rem;
+    height: 2rem;
+  }
 `;

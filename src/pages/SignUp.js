@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import LoginSignUpInput from '../components/elements/LoginSignUpInput';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { signUpThunk } from '../app/module/signUpSlice';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import BodyPadding from '../components/common/BodyPadding';
+
+import { signUpThunk } from '../app/module/signUpSlice';
+
 import Header from '../components/common/Header';
-import { fontLarge, fontSmall } from '../shared/themes/textStyle';
+import BodyPadding from '../components/common/BodyPadding';
+import LoginSignUpInput from '../components/elements/LoginSignUpInput';
 import GlobalButton from '../components/elements/GlobalButton';
+
+import { fontBold, fontLarge, fontSmall } from '../shared/themes/textStyle';
 import { IconLarge } from '../shared/themes/iconStyle';
 
 import IconBack from '../static/icons/Variety=back, Status=untab.svg';
+
+import styled from 'styled-components';
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -21,14 +22,14 @@ const SignUp = () => {
   const signUpState = useSelector((state) => state.signUp);
 
   //회원가입 오류시 오류메시지 alert
-  useEffect(() => {
-    if (signUpState.error?.errMsg) {
-      toast.error(`${signUpState.error?.errMsg}`, {
-        position: toast.POSITION.BOTTOM_LEFT,
-        autoClose: 2000,
-      });
-    }
-  }, [signUpState.error]);
+  // useEffect(() => {
+  //   if (signUpState.error?.errMsg) {
+  //     toast.error(`${signUpState.error?.errMsg}`, {
+  //       position: toast.POSITION.BOTTOM_LEFT,
+  //       autoClose: 2000,
+  //     });
+  //   }
+  // }, [signUpState.error]);
 
   const [signUpInfo, setSignUpInfo] = useState({
     userId: '',
@@ -100,126 +101,125 @@ const SignUp = () => {
       </Header>
 
       <BodyPadding>
-        {/* <Header>
-          <HeaderContainer>
-            <Link to="/login">
-              <Aarow>&#8592;</Aarow>
-            </Link>
-            <SignUpHeader>회원가입</SignUpHeader>
-          </HeaderContainer>
-        </Header> */}
         <SignUpContainer>
-          아이디
-          <LoginSignUpInput
-            signUpInfo
-            userIdRegEx
-            name="userId"
-            onFocus={onFocusUserIdValid}
-            onBlur={onBlurUserIdValid}
-            onChange={onChangeHandler}
-            placeholder="아이디 입력"
-            type="text"
-          />
-          {userIdValid === true &&
-          signUpInfo.userId.match(userIdRegEx) === null ? (
-            <Incorrect>
-              *영문과 숫자만 사용하여 6~12자의 아이디를 입력해주세요.
-            </Incorrect>
-          ) : userIdValid === true &&
-            signUpInfo.userId.match(userIdRegEx) !== null ? (
-            <Correct>*사용가능한 아이디 입니다</Correct>
-          ) : userIdValid === false &&
+          <div>
+            <StInnerTitle>아이디</StInnerTitle>
+            <LoginSignUpInput
+              signUpInfo
+              userIdRegEx
+              name="userId"
+              onFocus={onFocusUserIdValid}
+              onBlur={onBlurUserIdValid}
+              onChange={onChangeHandler}
+              placeholder="아이디 입력"
+              type="text"
+            />
+            {userIdValid === true &&
             signUpInfo.userId.match(userIdRegEx) === null ? (
-            <Incorrect>
-              *영문과 숫자만 사용하여 6~12자의 아이디를 입력해주세요.
-            </Incorrect>
-          ) : userIdValid === false &&
-            signUpInfo.userId.match(userIdRegEx) !== null ? (
-            <Correct>*사용가능한 아이디 입니다</Correct>
-          ) : null}
-          비밀번호
-          <LoginSignUpInput
-            name="password"
-            onFocus={onFocusPasswordValid}
-            onBlur={onBlurPasswordValid}
-            onChange={onChangeHandler}
-            placeholder="영문,숫자로만 6자리 이상"
-            type="password"
-          />
-          {passwordValid === true && signUpInfo.password.length < 6 ? (
-            <Incorrect>*6자리 이상 입력해주세요</Incorrect>
-          ) : passwordValid === true &&
-            signUpInfo.password.match(passwordRegEx) !== null ? (
-            <Correct>*사용가능한 비밀번호 입니다</Correct>
-          ) : passwordValid === false && signUpInfo.password.length < 6 ? (
-            <Incorrect>*6자리 이상 입력해주세요</Incorrect>
-          ) : passwordValid === false &&
-            signUpInfo.password.match(passwordRegEx) !== null ? (
-            <Correct>*사용가능한 비밀번호 입니다</Correct>
-          ) : passwordValid === true &&
-            signUpInfo.password.match(passwordRegEx) === null &&
-            signUpInfo.password.length < 20 ? (
-            <Incorrect>*영문, 숫자로만 입력하세요</Incorrect>
-          ) : passwordValid === false &&
-            signUpInfo.password.match(passwordRegEx) === null &&
-            signUpInfo.password.length < 20 ? (
-            <Incorrect>*영문, 숫자로만 입력하세요</Incorrect>
-          ) : passwordValid === true &&
-            signUpInfo.password.match(passwordRegEx) === null &&
-            signUpInfo.password.length > 20 ? (
-            <Incorrect>*비밀번호는 최대 20자입니다</Incorrect>
-          ) : passwordValid === false &&
-            signUpInfo.password.match(passwordRegEx) === null &&
-            signUpInfo.password.length > 20 ? (
-            <Incorrect>*비밀번호는 최대 20자입니다</Incorrect>
-          ) : null}
-          <LoginSignUpInput
-            name="confirm"
-            onFocus={onFocusPasswordCheckValid}
-            onBlur={onBlurPasswordCheckValid}
-            onChange={onChangeHandler}
-            placeholder="비밀번호 재입력"
-            type="password"
-          />
-          {passwordCheckValid === true &&
-          signUpInfo.password !== signUpInfo.confirm ? (
-            <Incorrect>*비밀번호가 일치하지 않습니다</Incorrect>
-          ) : passwordCheckValid === true &&
-            signUpInfo.password === signUpInfo.confirm ? (
-            <Correct>*비밀번호와 일치합니다</Correct>
-          ) : passwordCheckValid === false &&
+              <Incorrect>
+                *영문과 숫자만 사용하여 6~12자의 아이디를 입력해주세요.
+              </Incorrect>
+            ) : userIdValid === true &&
+              signUpInfo.userId.match(userIdRegEx) !== null ? (
+              <Correct>*사용가능한 아이디 입니다</Correct>
+            ) : userIdValid === false &&
+              signUpInfo.userId.match(userIdRegEx) === null ? (
+              <Incorrect>
+                *영문과 숫자만 사용하여 6~12자의 아이디를 입력해주세요.
+              </Incorrect>
+            ) : userIdValid === false &&
+              signUpInfo.userId.match(userIdRegEx) !== null ? (
+              <Correct>*사용가능한 아이디 입니다</Correct>
+            ) : null}
+          </div>
+          <div>
+            <StInnerTitle>비밀번호</StInnerTitle>
+            <LoginSignUpInput
+              name="password"
+              onFocus={onFocusPasswordValid}
+              onBlur={onBlurPasswordValid}
+              onChange={onChangeHandler}
+              placeholder="영문,숫자로만 6자리 이상"
+              type="password"
+            />
+            {passwordValid === true && signUpInfo.password.length < 6 ? (
+              <Incorrect>*6자리 이상 입력해주세요</Incorrect>
+            ) : passwordValid === true &&
+              signUpInfo.password.match(passwordRegEx) !== null ? (
+              <Correct>*사용가능한 비밀번호 입니다</Correct>
+            ) : passwordValid === false && signUpInfo.password.length < 6 ? (
+              <Incorrect>*6자리 이상 입력해주세요</Incorrect>
+            ) : passwordValid === false &&
+              signUpInfo.password.match(passwordRegEx) !== null ? (
+              <Correct>*사용가능한 비밀번호 입니다</Correct>
+            ) : passwordValid === true &&
+              signUpInfo.password.match(passwordRegEx) === null &&
+              signUpInfo.password.length < 20 ? (
+              <Incorrect>*영문, 숫자로만 입력하세요</Incorrect>
+            ) : passwordValid === false &&
+              signUpInfo.password.match(passwordRegEx) === null &&
+              signUpInfo.password.length < 20 ? (
+              <Incorrect>*영문, 숫자로만 입력하세요</Incorrect>
+            ) : passwordValid === true &&
+              signUpInfo.password.match(passwordRegEx) === null &&
+              signUpInfo.password.length > 20 ? (
+              <Incorrect>*비밀번호는 최대 20자입니다</Incorrect>
+            ) : passwordValid === false &&
+              signUpInfo.password.match(passwordRegEx) === null &&
+              signUpInfo.password.length > 20 ? (
+              <Incorrect>*비밀번호는 최대 20자입니다</Incorrect>
+            ) : null}
+            <LoginSignUpInput
+              name="confirm"
+              onFocus={onFocusPasswordCheckValid}
+              onBlur={onBlurPasswordCheckValid}
+              onChange={onChangeHandler}
+              placeholder="비밀번호 재입력"
+              type="password"
+              style={{ marginTop: '1.6rem' }}
+            />
+            {passwordCheckValid === true &&
             signUpInfo.password !== signUpInfo.confirm ? (
-            <Incorrect>
-              *비밀번호가 일치하지 않습니다. 다시 입력해주세요
-            </Incorrect>
-          ) : passwordCheckValid === false &&
-            signUpInfo.password === signUpInfo.confirm ? (
-            <Correct>*비밀번호와 일치합니다</Correct>
-          ) : null}
-          닉네임
-          <LoginSignUpInput
-            name="nickname"
-            onFocus={onFocusNicknameValid}
-            onBlur={onBlurNicknameValid}
-            onChange={onChangeHandler}
-            placeholder="최소 2자 입력"
-            type="text"
-          />
-          {nicknameValid === true &&
-          signUpInfo.nickname.match(nicknameRegEx) === null ? (
-            <Incorrect>*한글, 영문, 숫자로만 2~10자로 입력해주세요</Incorrect>
-          ) : nicknameValid === true &&
-            signUpInfo.nickname.match(nicknameRegEx) !== null ? (
-            <Correct>*익명으로 안심하고 고민을 이야기할 수 있어요.</Correct>
-          ) : nicknameValid === false &&
+              <Incorrect>*비밀번호가 일치하지 않습니다</Incorrect>
+            ) : passwordCheckValid === true &&
+              signUpInfo.password === signUpInfo.confirm ? (
+              <Correct>*비밀번호와 일치합니다</Correct>
+            ) : passwordCheckValid === false &&
+              signUpInfo.password !== signUpInfo.confirm ? (
+              <Incorrect>
+                *비밀번호가 일치하지 않습니다. 다시 입력해주세요
+              </Incorrect>
+            ) : passwordCheckValid === false &&
+              signUpInfo.password === signUpInfo.confirm ? (
+              <Correct>*비밀번호와 일치합니다</Correct>
+            ) : null}
+          </div>
+          <div>
+            <StInnerTitle>닉네임</StInnerTitle>
+            <LoginSignUpInput
+              name="nickname"
+              onFocus={onFocusNicknameValid}
+              onBlur={onBlurNicknameValid}
+              onChange={onChangeHandler}
+              placeholder="최소 2자 입력"
+              type="text"
+            />
+            {nicknameValid === true &&
             signUpInfo.nickname.match(nicknameRegEx) === null ? (
-            <Incorrect>*한글, 영문, 숫자로만 2~10자로 입력해주세요</Incorrect>
-          ) : nicknameValid === false &&
-            signUpInfo.nickname.match(nicknameRegEx) !== null ? (
-            <Correct>*익명으로 안심하고 고민을 이야기할 수 있어요.</Correct>
-          ) : null}
+              <Incorrect>*한글, 영문, 숫자로만 2~10자로 입력해주세요</Incorrect>
+            ) : nicknameValid === true &&
+              signUpInfo.nickname.match(nicknameRegEx) !== null ? (
+              <Correct>*익명으로 안심하고 고민을 이야기할 수 있어요.</Correct>
+            ) : nicknameValid === false &&
+              signUpInfo.nickname.match(nicknameRegEx) === null ? (
+              <Incorrect>*한글, 영문, 숫자로만 2~10자로 입력해주세요</Incorrect>
+            ) : nicknameValid === false &&
+              signUpInfo.nickname.match(nicknameRegEx) !== null ? (
+              <Correct>*익명으로 안심하고 고민을 이야기할 수 있어요.</Correct>
+            ) : null}
+          </div>
+
           <GlobalButton onClick={onClickSignUp}>가입하기</GlobalButton>
-          <ToastContainer />
         </SignUpContainer>
       </BodyPadding>
     </div>
@@ -236,37 +236,31 @@ const StHeaderTitle = styled.div`
   ${fontLarge};
 `;
 
-// const HeaderContainer = styled.div`
-//   width: 100%;
-// `;
-
-// const Aarow = styled.span`
-//   color: #000;
-//   font-size: 3rem;
-//   position: relative;
-// `;
-// const SignUpHeader = styled.p`
-//   text-align: center;
-//   display: inline;
-//   width: 100%;
-//   position: absolute;
-//   right: 0px;
-//   top: 2.2rem;
-//   ${fontLarge}
-//   z-index: -1;
-// `;
-
 const SignUpContainer = styled.div`
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
   margin-top: 6.4rem;
 `;
 
-const Incorrect = styled.p`
-  color: #ff7878;
-  ${fontSmall}
+const StInnerTitle = styled.div`
   margin-bottom: 1.6rem;
+
+  ${fontBold};
+  line-height: 2.4rem;
 `;
+
 const Correct = styled.p`
-  color: #5f5f5f;
+  margin: 0.8rem 0 0 1.2rem;
+
   ${fontSmall}
-  margin-bottom: 1.6rem;
+  line-height: 2rem;
+  color: ${({ theme }) => theme.sub2};
+`;
+
+const Incorrect = styled(Correct)`
+  color: ${({ theme }) => theme.warning};
 `;
