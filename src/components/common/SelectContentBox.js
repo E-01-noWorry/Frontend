@@ -17,7 +17,7 @@ const SelectContentBox = ({ contents, setRef }) => {
   const navigate = useNavigate();
 
   if (contents.length === 0) {
-    return <StNoneContents>게시글이 없습니다.</StNoneContents>;
+    return <StNoneContents>투표가 없습니다.</StNoneContents>;
   }
 
   return (

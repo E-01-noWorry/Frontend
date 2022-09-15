@@ -6,7 +6,7 @@ import MainRoom from '../components/features/main/MainRoom';
 import MainSelect from '../components/features/main/MainSelect';
 import WriteButton from '../components/elements/WriteButton';
 import Footer from '../components/common/Footer';
-import { ModalBasic } from '../components/common/Modal';
+import { ModalBasic, ModalWrite } from '../components/common/Modal';
 
 import { IconLarge } from '../shared/themes/iconStyle';
 
@@ -20,9 +20,12 @@ const Main = () => {
   const { state } = useLocation();
 
   const [modal, setModal] = useState('');
+  const [writeModal, setWriteModal] = useState(false);
 
   const writeButtonHandler = () => {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('token') && state === 'select') {
+      setWriteModal(true);
+    } else if (localStorage.getItem('token') && state === 'room') {
       navigate('/write', { state });
     } else {
       setModal('로그인 후 사용 가능합니다.');
@@ -31,6 +34,13 @@ const Main = () => {
 
   return (
     <>
+      {writeModal && (
+        <ModalWrite
+          setter={() => setWriteModal(false)}
+          write={() => navigate('/write', { state })}
+        />
+      )}
+
       {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
 
       <Header>
@@ -44,7 +54,7 @@ const Main = () => {
 
       {state === 'room' ? <MainRoom /> : <MainSelect />}
 
-      <WriteButton onClick={writeButtonHandler} />
+      <WriteButton onClick={writeButtonHandler} state={state} />
 
       <Footer state={state} />
     </>

@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 
 import instance from '../app/module/instance';
 
+import Loading from './Loading';
+
 const GoogleRedirect = () => {
   const [searchParams] = useSearchParams();
 
@@ -16,7 +18,7 @@ const GoogleRedirect = () => {
       localStorage.setItem('nickname', data.user.nickname);
       localStorage.setItem('userKey', data.user.userKey);
 
-      window.location.assign('/main');
+      window.location.assign('/');
     } catch (error) {
       console.log(error);
     }
@@ -26,7 +28,7 @@ const GoogleRedirect = () => {
     googleLogin();
   }, [googleLogin]);
 
-  return <div>로그인 페이지</div>;
+  return <Loading />;
 };
 
 export default GoogleRedirect;

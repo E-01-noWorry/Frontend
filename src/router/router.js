@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Loading from '../pages/Loading';
 
 const Welcome = lazy(() => import('../pages/Welcome'));
 const Main = lazy(() => import('../pages/Main'));
@@ -24,7 +25,7 @@ const ChatRoom = lazy(() => import('../pages/ChatRoom'));
 const Router = () => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/main" element={<Main />} />

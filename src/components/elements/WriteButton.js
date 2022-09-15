@@ -1,13 +1,18 @@
 import React from 'react';
 
 import IconEdit from '../../static/icons/Variety=edit, Status=untab.svg';
+import IconPlus from '../../static/icons/Variety=plus, Status=untab, Size=XL.svg';
 
 import styled from 'styled-components';
 
-const WriteButton = ({ onClick }) => {
+const WriteButton = ({ onClick, state }) => {
   return (
     <StWriteButton onClick={onClick}>
-      <img src={IconEdit} alt="IconEdit" />
+      {state === 'select' ? (
+        <img src={IconEdit} alt="IconEdit" />
+      ) : (
+        <img src={IconPlus} alt="IconPlus" />
+      )}
     </StWriteButton>
   );
 };
@@ -28,9 +33,4 @@ const StWriteButton = styled.div`
   background-color: ${({ theme }) => theme.main2};
 
   border-radius: 50%;
-
-  img {
-    width: 3.8rem;
-    height: 3.8rem;
-  }
 `;

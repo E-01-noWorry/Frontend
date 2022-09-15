@@ -64,7 +64,7 @@ const WriteSelect = () => {
     const imageArr = Object.values(images).filter((image) => image !== '');
 
     if (imageArr.length !== 0 && optionArr.length !== imageArr.length) {
-      setModal('사진 업로드 시 모든 선택지에 사진을 올려주세요.');
+      setModal('사진과 선택지의 개수가 다릅니다.');
     } else {
       let formData = new FormData();
 
