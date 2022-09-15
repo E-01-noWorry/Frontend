@@ -6,12 +6,12 @@ import MainRoom from '../components/features/main/MainRoom';
 import MainSelect from '../components/features/main/MainSelect';
 import WriteButton from '../components/elements/WriteButton';
 import Footer from '../components/common/Footer';
+import { ModalBasic } from '../components/common/Modal';
 
 import { IconLarge } from '../shared/themes/iconStyle';
 
-import { ModalBasic } from '../components/common/Modal';
-
 import IconArm from '../static/icons/Variety=arm, Status=untab.svg';
+import Logo from '../static/images/Logo.svg';
 
 import styled from 'styled-components';
 
@@ -34,7 +34,9 @@ const Main = () => {
       {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
 
       <Header>
-        <StLogo>로고</StLogo>
+        <StLogo>
+          <img src={Logo} alt="Logo" />
+        </StLogo>
         <StIcon>
           <img src={IconArm} alt="IconArm" />
         </StIcon>
@@ -53,12 +55,13 @@ export default Main;
 
 const StLogo = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
 
-  width: 9.1rem;
   height: 3.6rem;
-  background-color: green;
+
+  img {
+    height: 100%;
+  }
 `;
 
 const StIcon = styled.div`

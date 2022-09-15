@@ -10,6 +10,7 @@ import { fontSmall } from '../shared/themes/textStyle';
 import { IconSmall } from '../shared/themes/iconStyle';
 
 import IconNext from '../static/icons/Variety=next, Status=untab.svg';
+import Logo from '../static/images/Logo.svg';
 
 import styled from 'styled-components';
 
@@ -29,7 +30,9 @@ const Welcome = () => {
   return (
     <BodyPadding>
       <StWelcomeWrap>
-        <StLogo>LOGO</StLogo>
+        <StLogo>
+          <img src={Logo} alt="Logo" />
+        </StLogo>
 
         <StButtonWrap>
           <GlobalButton onClick={() => navigate('/login')}>
@@ -41,7 +44,7 @@ const Welcome = () => {
             font={({ theme }) => theme.main2}
             onClick={() => navigate('/main', { state: 'select' })}
           >
-            고민 둘러보기
+            서비스 둘러보기
           </GlobalButton>
         </StButtonWrap>
 
@@ -75,11 +78,6 @@ const StLogo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  width: 22.6rem;
-  height: 12.2rem;
-
-  background-color: green;
 `;
 
 const StButtonWrap = styled.div`
