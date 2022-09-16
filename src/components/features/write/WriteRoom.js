@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import instance from '../../../app/module/instance';
@@ -33,6 +33,10 @@ const WriteRoom = () => {
   const [countPeople, setCountPeople] = useState(1);
 
   const [modal, setModal] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const keywordHandler = (event) => {
     event.preventDefault();

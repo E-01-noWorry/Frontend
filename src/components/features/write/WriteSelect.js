@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
@@ -39,6 +39,10 @@ const WriteSelect = () => {
   const [options, setOptions] = useState({ 1: '', 2: '' });
   const [images, setImages] = useState({ 1: '', 2: '' });
   const [time, setTime] = useState(1);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   //선택지 핸들러
   const optionChangeHandler = (event) => {
