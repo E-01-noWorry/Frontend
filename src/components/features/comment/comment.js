@@ -121,19 +121,23 @@ const WriteBox = styled.div`
   background: #f5f5f5;
 `;
 
-const Write = styled.input`
+const Write = styled.textarea`
   width: 100%;
-  padding: 1.75rem 19.1rem 1.75rem 2rem;
+  padding: 1.75rem 10rem 1.75rem 2rem;
   border-radius: 20px;
   border: 0 solid black;
+  resize: none;
 `;
 
 const CommentsDetail = styled.div`
   border-top: 1px solid #d9d9d9;
-  height: 11.9rem;
+  height: 100%;
   box-sizing: border-box;
-  padding: 0.5rem 0.5rem 2.4rem 0.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   overflow: hidden;
+
+  align-items: center;
+  display: flex;
 `;
 
 const SubmitButton = styled.button`
