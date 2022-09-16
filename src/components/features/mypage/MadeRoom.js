@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IconSmall } from '../../../shared/themes/iconStyle';
-import { borderBoxDefault } from '../../../shared/themes/boxStyle';
-import { useInView } from 'react-intersection-observer';
+
+import instance from '../../../app/module/instance';
+
+import Header from '../../common/Header';
+import BodyPadding from '../../common/BodyPadding';
+
 import {
   fontBold,
   fontMedium,
   fontSmall,
   fontLarge,
 } from '../../../shared/themes/textStyle';
-import Header from '../../common/Header';
-import instance from '../../../app/module/instance';
-import styled from 'styled-components';
-import BodyPadding from '../../common/BodyPadding';
+import { borderBoxDefault } from '../../../shared/themes/boxStyle';
+import { IconLarge, IconSmall } from '../../../shared/themes/iconStyle';
+
+import { useInView } from 'react-intersection-observer';
+
+import IconPerson from '../../../static/icons/Variety=person, Status=untab.svg';
+import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
+
+import styled, { css } from 'styled-components';
 
 const MadeRoom = () => {
   const navigate = useNavigate();
@@ -44,50 +52,58 @@ const MadeRoom = () => {
     getMadeRoom();
   }, [page]);
 
+  const joinRoomHandler = async (roomKey) => {
+    try {
+      await instance.post(`/room/${roomKey}`);
+      navigate(`/chatroom/${roomKey}`);
+    } catch (error) {
+      console.log(error.response.data.errMsg);
+    }
+  };
+
   return (
     <div>
-      <Header>
-        <HeaderContainer>
-          <Aarow onClick={() => navigate('/mypage')}>&#8592;</Aarow>
+      <StHeader length={madeRoom.length}>
+        <StHeaderIcon onClick={() => navigate('/mypage', { state: 'mypage' })}>
+          <img src={IconBack} alt="IconBack" />
+        </StHeaderIcon>
+        <StHeaderTitle>내가 만든 고민 상담방</StHeaderTitle>
+        <StHeaderIcon />
+      </StHeader>
 
-          <LoginHeader>내가 만든 고민 상담방</LoginHeader>
-        </HeaderContainer>
-      </Header>
       {madeRoom.length === 0 ? (
-        <p style={{ fontSize: '100px' }}>상담방이 없습니다.</p>
+        <StNoneContents>상담방이 없습니다.</StNoneContents>
       ) : (
         <BodyPadding>
-          <StMainWrap>
-            <StContentBoxWrap>
-              {madeRoom?.map((room) => (
-                <StContentBox
-                  key={room.roomKey}
-                  onClick={() => navigate(`/chatroom/${room.roomKey}`)}
-                >
-                  <StInnerTitle>{room.title}</StInnerTitle>
+          <StContentBoxWrap>
+            {madeRoom?.map((room, idx) => (
+              <StContentBox
+                key={room.roomKey}
+                onClick={() => joinRoomHandler(room.roomKey)}
+                //마지막 게시글에 ref를 달아줍니다
+                ref={idx === madeRoom.length - 1 ? ref : null}
+              >
+                <StInnerTitle>{room.title}</StInnerTitle>
 
-                  <StInnerKeywordWrap>
-                    {room.hashTag?.map((item) => (
-                      <StInnerKeyword key={item}>#{item} </StInnerKeyword>
-                    ))}
-                  </StInnerKeywordWrap>
+                <StInnerKeywordWrap>
+                  {room.hashTag?.map((item) => (
+                    <StInnerKeyword key={item}>#{item} </StInnerKeyword>
+                  ))}
+                </StInnerKeywordWrap>
 
-                  <StContentFooter>
-                    <StInnerCurrent>
-                      <StPeopleIcon></StPeopleIcon>
-                      <span>
-                        {room.currentPeople}/{room.max}명
-                      </span>
-                    </StInnerCurrent>
-
-                    <StInnerNickname>
-                      작성자 <span ref={ref}>{room.host}</span>
-                    </StInnerNickname>
-                  </StContentFooter>
-                </StContentBox>
-              ))}
-            </StContentBoxWrap>
-          </StMainWrap>
+                <StContentFooter>
+                  <StInnerCurrent>
+                    <StPeopleIcon>
+                      <img src={IconPerson} alt="IconPerson" />
+                    </StPeopleIcon>
+                    <span>
+                      {room.currentPeople}/{room.max}
+                    </span>
+                  </StInnerCurrent>
+                </StContentFooter>
+              </StContentBox>
+            ))}
+          </StContentBoxWrap>
         </BodyPadding>
       )}
     </div>
@@ -96,36 +112,37 @@ const MadeRoom = () => {
 
 export default MadeRoom;
 
-const HeaderContainer = styled.div`
+const StHeader = styled(Header)`
+  ${(props) =>
+    !props.length &&
+    css`
+      border-bottom: 1px solid ${({ theme }) => theme.sub4};
+    `}
+`;
+
+const StNoneContents = styled.div`
   width: 100%;
-`;
+  margin-top: 10.4rem;
 
-const Aarow = styled.div`
-  color: #000;
-  font-size: 3rem;
-  position: relative;
-`;
-
-const LoginHeader = styled.p`
+  ${fontMedium}
   text-align: center;
-  display: inline;
-  width: 100%;
-  position: absolute;
-  right: 0px;
-  top: 2.2rem;
-  ${fontLarge}
-  z-index: -1;
 `;
 
-const StMainWrap = styled.div`
-  margin-top: 8.5rem;
-  margin-bottom: 8.4rem;
+const StHeaderIcon = styled.div`
+  ${IconLarge};
+`;
+
+const StHeaderTitle = styled.div`
+  ${fontLarge};
 `;
 
 const StContentBoxWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
+
+  margin-top: 7.4rem;
+  margin-bottom: 9.6rem;
 `;
 
 const StContentBox = styled.div`
@@ -134,12 +151,7 @@ const StContentBox = styled.div`
 
   height: 100%;
   padding: 1.6rem;
-  background-color: #fff;
-
-  &:hover,
-  &:active {
-    background-color: #d4d4d4;
-  }
+  background-color: ${({ theme }) => theme.white};
 `;
 
 const StInnerTitle = styled.div`
@@ -165,24 +177,16 @@ const StContentFooter = styled.div`
   margin-top: 3.2rem;
 `;
 
-const StInnerNickname = styled.div`
-  ${fontSmall};
-  line-height: 2rem;
-
-  span {
-    ${fontBold};
-  }
-`;
-
 const StInnerKeyword = styled.span`
   height: 100%;
   padding: 0 0.5rem;
-  background-color: #ececec;
+  background-color: ${({ theme }) => theme.sub4};
 
   border-radius: 1rem;
 
   ${fontSmall}
   line-height: 2rem;
+  color: ${({ theme }) => theme.sub2};
 `;
 
 const StInnerCurrent = styled.div`
@@ -191,9 +195,9 @@ const StInnerCurrent = styled.div`
 
   ${fontMedium};
   line-height: 2.1rem;
+  color: ${({ theme }) => theme.main2};
 `;
 
 const StPeopleIcon = styled.div`
   ${IconSmall};
-  background-color: green;
 `;
