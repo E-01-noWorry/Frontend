@@ -40,6 +40,7 @@ const Detail = () => {
   const [deleteModal, setDeleteModal] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(__getDetailSelect(selectKey));
 
     return () => {
