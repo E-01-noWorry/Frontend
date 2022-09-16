@@ -8,6 +8,15 @@ import { fontExtraBold, fontBold } from '../shared/themes/textStyle';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { editNickNameThunk, getMyPointThunk } from '../app/module/myPageSlice';
 import { css } from 'styled-components';
+import { IconLarge, IconMedium } from '../shared/themes/iconStyle';
+import { ModalBasic } from '../components/common/Modal';
+
+import IconEdit from '../static/icons/Variety=edit, Status=untab.svg';
+import IconNext from '../static/icons/Variety=next, Status=untab.svg';
+import IconVoteTab from '../static/icons/Variety=vote, Status=tab.svg';
+import IconChatting from '../static/icons/Variety=chating, Status=untab.svg';
+import ProfileImg from '../components/elements/ProfileImg';
+
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -15,6 +24,8 @@ const MyPage = () => {
   const userNickname = useSelector((state) => state.myPageSlice.data);
   const userPoint = useSelector((state) => state.myPageSlice.point);
   const [tierInfo, setTierInfo] = useState(false);
+
+  const [modal, setModal] = useState('');
 
   const onClickTireInfo = () => {
     setTierInfo((status) => !status);
@@ -81,6 +92,7 @@ const MyPage = () => {
   const [editNickname, setEditNickname] = useState('');
   const [editMode, setEditMode] = useState(false);
   const userKey = localStorage.getItem('userKey');
+
   const onClickEditNickName = () => {
     setEditMode((status) => !status);
     if (editMode === true) {
@@ -95,41 +107,57 @@ const MyPage = () => {
 
   return (
     <div style={{ paddingBottom: '7rem' }}>
+      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+
       {loggined !== null ? (
         <>
           <MyPageHeadContainer>
-            <ProfileImgLarge />
-            <Badge userPoint={userPoint}>
-              {userPoint <= 10
-                ? 'White'
-                : userPoint > 10 && userPoint <= 25
-                ? 'Yellow'
-                : userPoint > 25 && userPoint <= 50
-                ? 'Green'
-                : userPoint > 50 && userPoint <= 100
-                ? 'Blue'
-                : userPoint > 100
-                ? 'Purple'
-                : null}
-            </Badge>
-            <Nickname>
-              {editMode ? (
-                <EditNicknameInput
-                  name="nickname"
-                  onChange={onChangeEditNickName}
-                  type="text"
-                />
-              ) : (
-                <>
-                  {userNickname && localStorage.getItem('nickname')}
-                  <span style={{ fontWeight: '400px' }}>님</span>
-                </>
-              )}
-            </Nickname>
-            <EditNickname onClick={onClickEditNickName}>
-              {editMode ? '수정완료' : '변경'}
-            </EditNickname>
+            <StProfileImgLarge />
+            <div>
+              <div>
+                <Badge userPoint={userPoint}>
+                  {userPoint <= 10
+                    ? 'White'
+                    : userPoint > 10 && userPoint <= 25
+                    ? 'Yellow'
+                    : userPoint > 25 && userPoint <= 50
+                    ? 'Green'
+                    : userPoint > 50 && userPoint <= 100
+                    ? 'Blue'
+                    : userPoint > 100
+                    ? 'Purple'
+                    : null}
+                </Badge>
+              </div>
+              <StNicknameWrap>
+                <Nickname>
+                  {editMode ? (
+                    <EditNicknameInput
+                      name="nickname"
+                      onChange={onChangeEditNickName}
+                      type="text"
+                    />
+                  ) : (
+                    <>
+                      {userNickname && localStorage.getItem('nickname')}
+                      <span style={{ fontWeight: '400' }}>님</span>
+                    </>
+                  )}
+                </Nickname>
+                <EditNickname onClick={onClickEditNickName}>
+                  {editMode ? (
+                    <span>변경</span>
+                  ) : (
+                    <>
+                      <img width="20" src={IconEdit} alt="IconEdit" />
+                      <span>변경</span>
+                    </>
+                  )}
+                </EditNickname>
+              </StNicknameWrap>
+            </div>
           </MyPageHeadContainer>
+
           <ScoreContainer>
             <MyScore>
               <ScoreInfo1>
@@ -149,13 +177,13 @@ const MyPage = () => {
                 </ScoreDetail>
               </ScoreInfo1>
               <ScoreInfo2>
-                모은점수{' '}
+                모은점수
                 <ScoreDetail>
                   {userPoint === null ? '0' : userPoint}
                 </ScoreDetail>
               </ScoreInfo2>
               <ScoreInfo3>
-                다음등급{' '}
+                다음등급 까지
                 <ScoreDetail>
                   {userPoint <= 10
                     ? `${11 - userPoint}점 남음`
@@ -221,32 +249,59 @@ const MyPage = () => {
             </TierInfoContainer>
           ) : null}
           <BodyPadding>
-            <VoteLetter>고민투표</VoteLetter>
-            <VoteContainer>
-              <PostVoted>
-                <Contents onClick={() => navigate('/postvoted')}>
-                  내가 등록한 고민 투표
-                </Contents>
-              </PostVoted>
-              <Voted>
-                <Contents onClick={() => navigate('/voted')}>
-                  내가 투표한 고민 투표
-                </Contents>
-              </Voted>
-            </VoteContainer>
-            <VoteLetter>고민상담</VoteLetter>
-            <VoteContainer>
-              <MadeRoom>
-                <Contents onClick={() => navigate('/maderoom')}>
-                  내가 만든 고민 상담방
-                </Contents>
-              </MadeRoom>
-              <OperatingRoom>
-                <Contents onClick={() => navigate('/operatingroom')}>
-                  대화중인 고민 상담방
-                </Contents>
-              </OperatingRoom>
-            </VoteContainer>
+            <StTitle>고민투표</StTitle>
+            <StBox>
+              <StInnerNavi onClick={() => navigate('/postvoted')}>
+                <StInnerTitle>
+                  <div>
+                    <img src={IconEdit} alt="IconEdit" />
+                  </div>
+                  <div>내가 등록한 고민 투표</div>
+                </StInnerTitle>
+                <StInnerArrow>
+                  <img src={IconNext} alt="IconNext" />
+                </StInnerArrow>
+              </StInnerNavi>
+
+              <StInnerNavi onClick={() => navigate('/voted')}>
+                <StInnerTitle>
+                  <div>
+                    <img src={IconVoteTab} alt="IconVoteTab" />
+                  </div>
+                  <div>내가 투표한 고민 투표</div>
+                </StInnerTitle>
+                <StInnerArrow>
+                  <img src={IconNext} alt="IconNext" />
+                </StInnerArrow>
+              </StInnerNavi>
+            </StBox>
+
+            <StTitle>고민상담</StTitle>
+            <StBox>
+              <StInnerNavi onClick={() => navigate('/maderoom')}>
+                <StInnerTitle>
+                  <div>
+                    <img src={IconEdit} alt="IconEdit" />
+                  </div>
+                  <div>내가 만든 고민 상담방</div>
+                </StInnerTitle>
+                <StInnerArrow>
+                  <img src={IconNext} alt="IconNext" />
+                </StInnerArrow>
+              </StInnerNavi>
+
+              <StInnerNavi onClick={() => navigate('/operatingroom')}>
+                <StInnerTitle>
+                  <div>
+                    <img src={IconChatting} alt="IconChatting" />
+                  </div>
+                  <div>대화중인 고민 상담방</div>
+                </StInnerTitle>
+                <StInnerArrow>
+                  <img src={IconNext} alt="IconNext" />
+                </StInnerArrow>
+              </StInnerNavi>
+            </StBox>
           </BodyPadding>
         </>
       ) : (
@@ -255,39 +310,76 @@ const MyPage = () => {
             로그인하고 곰곰의 <br />
             다양한 서비스를 경험해보세요.
           </MyPageHeadContainer>
-          <Buttons>
-            <LoginButton onClick={() => navigate('/login')}>로그인</LoginButton>
-            <SignUpButton onClick={() => navigate('/signup')}>
+          <ButtonWrap>
+            <StUserButton onClick={() => navigate('/login')}>
+              로그인
+            </StUserButton>
+            <StUserButton onClick={() => navigate('/signup')}>
               회원가입
-            </SignUpButton>
-          </Buttons>
+            </StUserButton>
+          </ButtonWrap>
           <BodyPadding>
-            <VoteLetter>고민투표</VoteLetter>
-            <VoteContainer>
-              <PostVoted>
-                <Contents onClick={() => window.alert('로그인후이용해주세요')}>
-                  내가 등록한 고민 투표
-                </Contents>
-              </PostVoted>
-              <Voted>
-                <Contents onClick={() => window.alert('로그인후이용해주세요')}>
-                  내가 투표한 고민 투표
-                </Contents>
-              </Voted>
-            </VoteContainer>
-            <VoteLetter>고민상담</VoteLetter>
-            <VoteContainer>
-              <MadeRoom>
-                <Contents onClick={() => window.alert('로그인후이용해주세요')}>
-                  내가 만든 고민 상담방
-                </Contents>
-              </MadeRoom>
-              <OperatingRoom>
-                <Contents onClick={() => window.alert('로그인후이용해주세요')}>
-                  대화중인 고민 상담방
-                </Contents>
-              </OperatingRoom>
-            </VoteContainer>
+            <StTitle>고민투표</StTitle>
+            <StBox>
+              <StInnerNavi
+                onClick={() => setModal('로그인 후 사용 가능합니다.')}
+              >
+                <StInnerTitle>
+                  <div>
+                    <img src={IconEdit} alt="IconEdit" />
+                  </div>
+                  <div>내가 등록한 고민 투표</div>
+                </StInnerTitle>
+                <StInnerArrow>
+                  <img src={IconNext} alt="IconNext" />
+                </StInnerArrow>
+              </StInnerNavi>
+
+              <StInnerNavi
+                onClick={() => setModal('로그인 후 사용 가능합니다.')}
+              >
+                <StInnerTitle>
+                  <div>
+                    <img src={IconVoteTab} alt="IconVoteTab" />
+                  </div>
+                  <div>내가 투표한 고민 투표</div>
+                </StInnerTitle>
+                <StInnerArrow>
+                  <img src={IconNext} alt="IconNext" />
+                </StInnerArrow>
+              </StInnerNavi>
+            </StBox>
+
+            <StTitle>고민상담</StTitle>
+            <StBox>
+              <StInnerNavi
+                onClick={() => setModal('로그인 후 사용 가능합니다.')}
+              >
+                <StInnerTitle>
+                  <div>
+                    <img src={IconEdit} alt="IconEdit" />
+                  </div>
+                  <div>내가 만든 고민 상담방</div>
+                </StInnerTitle>
+                <StInnerArrow>
+                  <img src={IconNext} alt="IconNext" />
+                </StInnerArrow>
+              </StInnerNavi>
+
+              <StInnerNavi
+                onClick={() => setModal('로그인 후 사용 가능합니다.')}
+              >
+                <StInnerTitle>
+                  <div>
+                    <img src={IconChatting} alt="IconChatting" />
+                  </div>
+                  <div>대화중인 고민 상담방</div>
+                </StInnerTitle>
+                <StInnerArrow>
+                  <img src={IconNext} alt="IconNext" />
+                </StInnerArrow>
+              </StInnerNavi>
+            </StBox>
           </BodyPadding>
         </>
       )}
@@ -302,116 +394,112 @@ const MyPage = () => {
 
 export default MyPage;
 
+const StTitle = styled.div`
+  margin-bottom: 1.6rem;
+
+  ${fontBold};
+  line-height: 2.4rem;
+  color: ${({ theme }) => theme.sub2};
+`;
+
+const StBox = styled.div`
+  height: 10.4rem;
+  background-color: ${({ theme }) => theme.white};
+  margin-bottom: 3.2rem;
+
+  border-radius: 2rem;
+`;
+
+const StInnerNavi = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  height: 50%;
+  padding-left: 1.6rem;
+  padding-right: 0.8rem;
+`;
+
+const StInnerTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  height: 100%;
+
+  & > div:nth-child(1) {
+    ${IconLarge}
+  }
+`;
+
+const StInnerArrow = styled.div`
+  ${IconMedium};
+`;
+
 const MyPageHeadContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.8rem;
+
   width: 100%;
   height: 11.3rem;
-  padding: 2.65rem 2rem;
+  padding: 0 2rem;
+  background-color: ${({ theme }) => theme.white};
+
   ${fontLarge}
   ${fontExtraBold}
-  background-color: #FFFFFF;
+  line-height: 3rem;
 `;
 
-const ProfileImgLarge = styled.div`
+const StProfileImgLarge = styled(ProfileImg)`
   width: 6.5rem;
   height: 6.5rem;
-  background: #d9d9d9;
-  border-radius: 999px;
-  display: inline-block;
-  margin-right: 1rem;
 `;
 
-const Buttons = styled.div`
+const ButtonWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+
   width: 100%;
   height: 6.8rem;
-  background-color: #ffffff;
+  padding: 0 2rem;
+  margin-bottom: 3.2rem;
+  background-color: ${({ theme }) => theme.white};
+
   border-radius: 0 0 2rem 2rem;
+`;
+
+const StUserButton = styled.div`
+  display: flex;
   justify-content: center;
-  display: flex;
-  padding: 0 1.95rem;
-  margin-bottom: 3.2rem;
-`;
-
-const LoginButton = styled.button`
-  width: 43.733%;
-  margin-right: 0.4rem;
-  height: 4.4rem;
-  border-radius: 20px;
-  background: #c5c5c5;
-  border: none;
-  ${fontSmall}
-`;
-
-const SignUpButton = styled.button`
-  width: 43.733%;
-  margin-left: 0.4rem;
-  height: 4.4rem;
-  border-radius: 20px;
-  background: #c5c5c5;
-  border: none;
-  ${fontSmall}
-`;
-
-const VoteLetter = styled.p`
-  color: #6c6c6c;
-  ${fontBold}
-  margin-bottom: 1.6rem;
-`;
-
-const VoteContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0px;
-  width: 100%;
-  height: 10.4rem;
-  margin-bottom: 3.2rem;
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 0.4rem 1rem 0 #cccccc;
-`;
-
-const Contents = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
   align-items: center;
-  padding: 0 0.7rem 0 2.2rem;
-  cursor: pointer;
+
+  width: 100%;
+  height: 4.4rem;
+  background-color: ${({ theme }) => theme.main2};
+
+  border-radius: 2rem;
+
+  ${fontExtraBold}
+  ${fontMedium}
+  color: ${({ theme }) => theme.white};
 `;
 
-const PostVoted = styled.div`
-  margin: 1.4rem 0;
-  width: 100%;
-  height: 50vh;
-`;
-const Voted = styled.div`
-  margin: 1.4rem 0;
-  width: 100%;
-  height: 50vh;
-`;
-const MadeRoom = styled.div`
-  margin: 1.4rem 0;
-  width: 100%;
-  height: 50vh;
-`;
-const OperatingRoom = styled.div`
-  margin: 1.4rem 0;
-  width: 100%;
-  height: 50vh;
-`;
-
-const Badge = styled.p`
-  display: inline;
-  margin-right: 65%;
-  position: absolute;
-  top: 3.3rem;
-  left: 9.4rem;
+const Badge = styled.div`
   width: 5rem;
-  height: 2rem;
-  padding: 0.3rem 0.6rem 0 0.6rem;
+  padding: 0 0.6rem;
+
   border-radius: 99rem;
-  align-items: center;
-  color: #fff;
+
+  ${fontBold}
+  ${fontSmall}
+  color: ${({ theme }) => theme.white};
+  line-height: 2rem;
+  text-align: center;
+
   ${(props) =>
     props.userPoint <= 10
       ? css`
@@ -434,34 +522,38 @@ const Badge = styled.p`
           background-color: #a57aff;
         `
       : null}
-  ${fontBold}
-  ${fontSmall}
-  text-align: center;
 `;
 
-const Nickname = styled.p`
-  display: inline;
+const StNicknameWrap = styled.div`
+  display: flex;
+  align-items: center;
+
+  gap: 0.8rem;
+`;
+
+const Nickname = styled.div`
+  height: 3rem;
+
   ${fontLarge}
-  position: relative;
-  bottom: 1.5rem;
-  margin-right: 0.6rem;
 `;
 
 const EditNickname = styled.button`
-  border: none;
-  position: relative;
-  bottom: 2rem;
-  border-radius: 99rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   width: 6.8rem;
-  padding: 0.8rem;
   height: 3.6rem;
+  padding: 0.8rem 1rem 0.8rem 0.8rem;
+
+  border: none;
+  border-radius: 99rem;
 `;
 
 const EditNicknameInput = styled.input`
   border: none;
-  border-bottom: 1px solid black;
-  position: relative;
-  width: 50%;
+  border-bottom: 1px solid ${({ theme }) => theme.sub4};
+  min-width: 18.5rem;
 
   &:focus {
     outline: none;
@@ -470,11 +562,11 @@ const EditNicknameInput = styled.input`
 
 const ScoreContainer = styled.div`
   padding: 0 2rem;
-  background: #ffffff;
+  background: ${({ theme }) => theme.white};
 `;
 
 const MyScore = styled.div`
-  border: 1px solid #e6e6e6;
+  border: 1px solid ${({ theme }) => theme.sub4};
   border-radius: 2rem;
   width: 100%;
   height: 6.7rem;
@@ -487,30 +579,42 @@ const MyScore = styled.div`
 const ScoreInfo1 = styled.div`
   display: flex;
   flex-direction: column;
-  width: 30%;
   align-items: center;
+
+  width: 30%;
+
+  ${fontMedium}
   ${fontBold}
 `;
+
 const ScoreInfo2 = styled.div`
   display: flex;
   flex-direction: column;
-  width: 30%;
   align-items: center;
+
+  width: 30%;
+
+  border-left: 1px solid ${({ theme }) => theme.sub4};
+  border-right: 1px solid ${({ theme }) => theme.sub4};
+
+  ${fontMedium}
   ${fontBold}
-  border-left: 1px solid #e6e6e6;
-  border-right: 1px solid #e6e6e6;
 `;
 
 const ScoreInfo3 = styled.div`
   display: flex;
   flex-direction: column;
-  width: 40%;
   align-items: center;
+
+  width: 40%;
+
+  ${fontMedium}
   ${fontBold}
 `;
+
 const ScoreDetail = styled.p`
   font-weight: 400;
-  color: #595959;
+  color: ${({ theme }) => theme.main2};
   margin-top: 1.1rem;
 `;
 
@@ -528,7 +632,6 @@ const TierInfo = styled.div`
   margin-bottom: 2.4rem;
   background: #ffffff;
   border-radius: 0px 0px 20px 20px;
-  box-shadow: 0 0.4rem 0.4rem #cccccc;
 `;
 
 const TierLetter = styled.p`
@@ -542,7 +645,6 @@ const TierLetter = styled.p`
   background-color: #fff;
   margin-bottom: 2.4rem;
   border-radius: 0px 0px 20px 20px;
-  box-shadow: 0 0.4rem 0.4rem 0 #cccccc;
 `;
 
 const Tiers = styled.div`
@@ -597,8 +699,11 @@ const TierInfoLetter = styled.p`
 `;
 
 const Logout = styled.div`
+  cursor: pointer;
+
+  margin-top: -1.5rem;
+
   text-align: center;
   ${fontSmall}
   color:#767676;
-  cursor: pointer;
 `;

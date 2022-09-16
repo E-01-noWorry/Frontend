@@ -1,23 +1,31 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useInView } from 'react-intersection-observer';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+
+import BodyPadding from '../../common/BodyPadding';
+import Header from '../../common/Header';
+import instance from '../../../app/module/instance';
+
+import { useInView } from 'react-intersection-observer';
+
+import { remainedTime } from '../../../shared/timeCalculation';
+
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
-import { IconSmall } from '../../../shared/themes/iconStyle';
+import { IconLarge, IconSmall } from '../../../shared/themes/iconStyle';
 import {
   fontBold,
   fontMedium,
   fontSmall,
   fontLarge,
 } from '../../../shared/themes/textStyle';
-import { remainedTime } from '../../../shared/timeCalculation';
-import BodyPadding from '../../common/BodyPadding';
-import Header from '../../common/Header';
-import instance from '../../../app/module/instance';
+
+import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
+import IconPeople from '../../../static/icons/Variety=people, Status=untab.svg';
+import IconTimer from '../../../static/icons/Variety=timer, Status=untab.svg';
+import IconTimeOver from '../../../static/icons/Variety=timeover, Status=untab.svg';
+
+import styled, { css } from 'styled-components';
 
 const Voted = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [postVoted, setPostVoted] = useState([]);
@@ -49,15 +57,16 @@ const Voted = () => {
 
   return (
     <>
-      <Header>
-        <HeaderContainer>
-          <Aarow onClick={() => navigate('/mypage')}>&#8592;</Aarow>
+      <StHeader length={postVoted.length}>
+        <StHeaderIcon onClick={() => navigate('/mypage', { state: 'mypage' })}>
+          <img src={IconBack} alt="IconBack" />
+        </StHeaderIcon>
+        <StHeaderTitle>내가 투표한 고민 투표</StHeaderTitle>
+        <StHeaderIcon />
+      </StHeader>
 
-          <LoginHeader>내가 투표한 고민 투표</LoginHeader>
-        </HeaderContainer>
-      </Header>
       {postVoted.length === 0 ? (
-        <p style={{ fontSize: '100px' }}>투표가 없습니다.</p>
+        <StNoneContents>투표가 없습니다.</StNoneContents>
       ) : (
         <BodyPadding>
           <StContentBoxWrap>
@@ -65,28 +74,52 @@ const Voted = () => {
               <StContentBox
                 key={content.selectKey}
                 onClick={() => navigate(`/detail/${content.selectKey}`)}
-                //마지막 게시글에 ref를 달아준다
+                //마지막 게시글에 ref를 달아줍니다
+                ref={idx === postVoted.length - 1 ? ref : null}
+                completion={content.completion}
               >
                 <StContentHeader>
-                  <StInnerCategory>{content.category}</StInnerCategory>
+                  <StInnerCategory completion={content.completion}>
+                    {content.category}
+                  </StInnerCategory>
                   <StInnerNickname>
                     작성자 <span>{content.nickname}</span>
                   </StInnerNickname>
                 </StContentHeader>
 
-                <StInnerTitle>{content.title}</StInnerTitle>
+                <StInnerTitle completion={content.completion}>
+                  {content.title}
+                </StInnerTitle>
 
-                <StInnerOption>{content.options?.join(' vs ')}</StInnerOption>
+                <StInnerOption completion={content.completion}>
+                  {/* 선택지 내용이 길면 26글자에서 잘라줍니다 */}
+                  {content.options?.join(' vs ').length > 26
+                    ? content.options?.join(' vs ').slice(0, 26) + '...'
+                    : content.options?.join(' vs ')}
+                </StInnerOption>
 
                 <StContentFooter>
+                  <StInnerTime>
+                    {content.completion ? (
+                      <StIcon>
+                        <img src={IconTimeOver} alt="IconTimeOver" />
+                      </StIcon>
+                    ) : (
+                      <>
+                        <StIcon>
+                          <img src={IconTimer} alt="IconTimer" />
+                        </StIcon>
+                        <span>{remainedTime(content.deadLine)}</span>
+                      </>
+                    )}
+                    <span>{content.completion ? '투표마감' : '남음'}</span>
+                  </StInnerTime>
                   <StInnerCurrent>
-                    <StIcon></StIcon>
+                    <StIcon>
+                      <img src={IconPeople} alt="IconPeople" />
+                    </StIcon>
                     <span>{content.total || 0}</span>
                   </StInnerCurrent>
-                  <StInnerTime>
-                    <span>{content.completion ? '투표마감' : '남은시간'}</span>
-                    <span ref={ref}>{remainedTime(content.deadLine)}</span>
-                  </StInnerTime>
                 </StContentFooter>
               </StContentBox>
             ))}
@@ -98,111 +131,114 @@ const Voted = () => {
 };
 export default Voted;
 
-const HeaderContainer = styled.div`
+const StHeader = styled(Header)`
+  ${(props) =>
+    !props.length &&
+    css`
+      border-bottom: 1px solid ${({ theme }) => theme.sub4};
+    `}
+`;
+
+const StNoneContents = styled.div`
   width: 100%;
-`;
+  margin-top: 10.4rem;
 
-const Aarow = styled.div`
-  color: #000;
-  font-size: 3rem;
-  position: relative;
-`;
-
-const LoginHeader = styled.p`
+  ${fontMedium}
   text-align: center;
-  display: inline;
-  width: 100%;
-  position: absolute;
-  right: 0px;
-  top: 2.2rem;
-  ${fontLarge}
-  z-index: -1;
+`;
+
+const StHeaderIcon = styled.div`
+  ${IconLarge};
+`;
+
+const StHeaderTitle = styled.div`
+  ${fontLarge};
 `;
 
 const StContentBoxWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
+
+  margin-top: 7.4rem;
+  margin-bottom: 9.6rem;
 `;
 
 const StContentBox = styled.div`
+  position: relative;
+
   ${borderBoxDefault};
   align-items: flex-start;
+  justify-content: flex-start;
 
-  height: 100%;
+  height: 16rem;
   padding: 1.6rem;
-  background-color: #fff;
-
-  &:hover,
-  &:active {
-    background-color: #d4d4d4;
-  }
+  background-color: ${(props) =>
+    props.completion ? props.theme.sub4 : props.theme.white};
 `;
 
 const StContentHeader = styled.div`
+  position: absolute;
+  top: 1.6rem;
+
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 0.4rem;
 
   width: 100%;
 `;
 
-const StContentFooter = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  width: 100%;
-  margin-top: 3.2rem;
-`;
-
 const StInnerCategory = styled.div`
-  height: 2rem;
-  padding: 0 0.5rem;
-  background-color: #ececec;
+  padding: 0 0.6rem;
+  background-color: ${(props) =>
+    props.completion ? props.theme.main4 : props.theme.main2};
 
   border-radius: 1rem;
 
   ${fontSmall}
-  line-height: 1.95rem;
-`;
-
-const StInnerCurrent = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-
-  ${fontSmall}
   line-height: 2rem;
-`;
-
-const StIcon = styled.div`
-  ${IconSmall};
-  background-color: green;
-`;
-
-const StInnerTitle = styled.div`
-  margin-top: 1rem;
-
-  ${fontBold};
-  line-height: 2.1rem;
-`;
-
-const StInnerOption = styled.div`
-  margin-top: 0.6rem;
-
-  ${fontMedium}
-  line-height: 1.8rem;
+  color: ${({ theme }) => theme.white};
 `;
 
 const StInnerNickname = styled.div`
   ${fontSmall};
   line-height: 2rem;
+  color: ${({ theme }) => theme.sub2};
 
   span {
     ${fontBold};
   }
+`;
+
+const StInnerTitle = styled.div`
+  margin-top: 2.6rem;
+
+  ${fontBold};
+  line-height: 2.1rem;
+  color: ${(props) =>
+    props.completion ? props.theme.sub2 : props.theme.black};
+`;
+
+const StInnerOption = styled.div`
+  margin-top: 0.4rem;
+
+  ${fontMedium}
+  line-height: 1.8rem;
+  color: ${({ theme }) => theme.sub2};
+`;
+
+const StContentFooter = styled.div`
+  position: absolute;
+  bottom: 1.6rem;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+`;
+
+const StIcon = styled.div`
+  ${IconSmall};
 `;
 
 const StInnerTime = styled.div`
@@ -211,4 +247,18 @@ const StInnerTime = styled.div`
   gap: 0.4rem;
 
   ${fontSmall};
+  color: ${({ theme }) => theme.sub2};
+`;
+
+const StInnerCurrent = styled.div`
+  position: absolute;
+  right: 3.6rem;
+
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  ${fontSmall}
+  line-height: 2rem;
+  color: ${({ theme }) => theme.sub1};
 `;
