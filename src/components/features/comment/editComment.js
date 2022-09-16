@@ -13,6 +13,8 @@ import {
 } from '../../../shared/themes/textStyle';
 import BodyPadding from '../../common/BodyPadding';
 import ProfileImg from '../../elements/ProfileImg';
+import Recomment from './recomment';
+import { writeRecommentThunk } from '../../../app/module/commentSlice';
 
 const EditComment = (props) => {
   const dispatch = useDispatch();
@@ -57,6 +59,30 @@ const EditComment = (props) => {
   const weeks = days / 7;
   const months = days / 30;
 
+  //대댓글
+  const [replyMode, setReplyMode] = useState(false);
+  const [reply, setReply] = useState('');
+
+  const onClickCancelReply = () => {
+    setReplyMode((status) => !status);
+  };
+
+  const onClickReplyButton = () => {
+    setReplyMode((status) => !status);
+    if (reply !== '') {
+      dispatch(
+        writeRecommentThunk({
+          ...reply,
+          commentKey: props.allComments.commentKey,
+        }),
+      );
+    }
+  };
+
+  const onChangeReply = (event) => {
+    setReply({ comment: event.target.value });
+  };
+
   return (
     <BodyPadding>
       {edit ? (
@@ -65,8 +91,8 @@ const EditComment = (props) => {
             <EditNickname>{props.allComments.nickname}</EditNickname>
             <EditInput
               type="text"
-              name="comment"
               onChange={onChange}
+              name="comment"
               placeholder="입력해주세요."
               value={editComment.comment}
             />
@@ -132,18 +158,27 @@ const EditComment = (props) => {
             </Buttons>
           </DefaultBox>
           <CommentBox>
-            {props.allComments.comment}
-            <Recomment>답글 달기</Recomment>
+            {props.allComments.comment} <br />
+            {replyMode ? (
+              <ReplyInput type="text" onChange={onChangeReply} />
+            ) : null}
+            <ReplyButton onClick={onClickCancelReply}>
+              {replyMode ? '작성 취소' : '답글 달기'}
+            </ReplyButton>
+            <CancelReply onClick={onClickReplyButton}>
+              {replyMode ? '작성 완료' : null}
+            </CancelReply>
           </CommentBox>
         </>
       )}
+      {props.allComments.recomment?.map((a) => (
+        <Recomment key={a.recommentKey} state={a} />
+      ))}
     </BodyPadding>
   );
 };
 
 export default EditComment;
-
-const Padding = styled.div``;
 
 const EditContainer = styled.div`
   margin: 1.8rem 0 0 5.6rem;
@@ -159,12 +194,16 @@ const DefaultBox = styled.div`
   margin-top: 1.8rem;
 `;
 
-const EditInput = styled.input`
+const EditInput = styled.textarea`
   padding: 0.5rem;
   width: 100%;
   margin-top: 1rem;
   border-radius: 20px;
-  border: 1px solid black;
+  border: none;
+  resize: none;
+  &:focus {
+    border: none;
+  }
 `;
 
 const EditNickname = styled.p`
@@ -178,6 +217,7 @@ const EditButtons = styled.div`
   position: relative;
   top: 1rem;
   left: 5rem;
+  margin-bottom: 3rem;
 `;
 
 const Nickname = styled.p`
@@ -191,8 +231,9 @@ const Nickname = styled.p`
 const MinutesBefore = styled.p`
   display: inline;
   margin-left: 1rem;
-  ${fontSmall}
-  color: #767676;
+  font-size: 1.2rem;
+  padding-top: 0.2rem;
+  color: #b9b5b1;
 `;
 
 const CommentBox = styled.div`
@@ -200,7 +241,7 @@ const CommentBox = styled.div`
   ${fontMedium}
   margin: 0 0 0 5rem;
   width: 27.9rem;
-  height: 4.2rem;
+  height: 100%;
   overflow: hidden;
   position: relative;
   bottom: 1.5rem;
@@ -223,8 +264,24 @@ const Names = styled.div`
   justify-content: center;
 `;
 
-const Recomment = styled.p`
-  margin-top: 0.8rem;
+const ReplyButton = styled.p`
+  color: tomato;
   ${fontSmall}
-  color: #FBA138
+  margin-top: 0.8rem;
+  margin-bottom: 1.6rem;
+`;
+
+const ReplyInput = styled.textarea`
+  margin-top: 0.8rem;
+  border: none;
+  border-radius: 2rem;
+  width: 100%;
+  height: 10vh;
+  padding: 0.8rem;
+  resize: none;
+`;
+
+const CancelReply = styled.p`
+  color: tomato;
+  ${fontSmall}
 `;

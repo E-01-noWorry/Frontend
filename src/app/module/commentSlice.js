@@ -59,6 +59,48 @@ export const editCommentThunk = createAsyncThunk(
   },
 );
 
+//대댓글
+export const writeRecommentThunk = createAsyncThunk(
+  'user/writeRecomment',
+  async (payload, thunkAPI) => {
+    try {
+      const data = await instance.post(`/recomment/${payload.commentKey}`, {
+        comment: payload.comment,
+      });
+
+      return thunkAPI.fulfillWithValue(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const deleteRecommentThunk = createAsyncThunk(
+  'user/deleteRecomment',
+  async (payload, thunkAPI) => {
+    try {
+      const data = await instance.delete(`/recomment/${payload.recommentKey}`);
+      return thunkAPI.fulfillWithValue(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const editRecommentThunk = createAsyncThunk(
+  'user/editRecomment',
+  async (payload, thunkAPI) => {
+    try {
+      const data = await instance.put(`/recomment/${payload.recommentKey}`, {
+        comment: payload.recomment,
+      });
+      return thunkAPI.fulfillWithValue(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  },
+);
+
 export const commentSlice = createSlice({
   name: 'Comment',
   initialState,
@@ -85,15 +127,75 @@ export const commentSlice = createSlice({
       console.log(action);
     },
     [editCommentThunk.fulfilled]: (state, action) => {
-      state.data = state.data.map((a) =>
-        a.commentKey === action.payload.data.result.commentKey
-          ? action.payload.data.result
-          : a,
+      const a = current(state).data.filter(
+        (a) => a.commentKey === action.payload.data.result.commentKey,
       );
+
+      const indexNum = current(state).data.indexOf(a[0]);
+
+      state.data = state.data.map((item, idx) =>
+        idx === indexNum
+          ? { ...item, comment: action.payload.data.result.comment }
+          : item,
+      );
+      console.log(action.payload.data);
+      console.log(current(state));
     },
     [editCommentThunk.rejected]: (state, action) => {
       console.log(action);
     },
+    [writeRecommentThunk.fulfilled]: (state, action) => {
+      state.data?.map((a) =>
+        a.commentKey === action.payload.data.result.commentKey
+          ? a.recomment?.push(action.payload.data.result)
+          : a,
+      );
+    },
+    [writeRecommentThunk.rejected]: (state, action) => {},
+    [deleteRecommentThunk.fulfilled]: (state, action) => {
+      const a = current(state).data.filter(
+        (a) => a.commentKey === action.payload.data.result.commentKey,
+      );
+
+      const indexNum = current(state).data.indexOf(a[0]);
+
+      state.data = state.data.map((item, idx) =>
+        idx === indexNum
+          ? {
+              ...a[0],
+              recomment: [
+                ...a[0].recomment?.filter(
+                  (a) =>
+                    a.recommentKey !== action.payload.data.result.recommentKey,
+                ),
+              ],
+            }
+          : item,
+      );
+    },
+    [deleteRecommentThunk.rejected]: (state, action) => {},
+
+    [editRecommentThunk.fulfilled]: (state, action) => {
+      const a = current(state).data.filter(
+        (a) => a.commentKey === action.payload.data.result.commentKey,
+      );
+
+      const indexNum = current(state).data.indexOf(a[0]);
+
+      state.data = state.data.map((item, idx) =>
+        idx === indexNum
+          ? {
+              ...a[0],
+              recomment: a[0].recomment.map((item) =>
+                item.recommentKey === action.payload.data.result.recommentKey
+                  ? action.payload.data.result
+                  : item,
+              ),
+            }
+          : item,
+      );
+    },
+    [editRecommentThunk.rejected]: (state, action) => {},
   },
 });
 
