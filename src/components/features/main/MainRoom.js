@@ -30,18 +30,18 @@ const MainRoom = () => {
   const [page, setPage] = useState(1);
   const [ref, setRef] = useState(null);
 
-  const getAllRoom = useCallback(async () => {
+  const getAllRoom = async () => {
     try {
       const { data } = await instance.get(`/room?page=${page}`);
       setRooms((prev) => [...prev, ...data.result]);
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
-  }, [page]);
+  };
 
   useEffect(() => {
     getAllRoom();
-  }, [getAllRoom]);
+  }, [page]);
 
   //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다.
   const onIntersect = ([entry], observer) => {
@@ -76,7 +76,7 @@ const MainRoom = () => {
     event.preventDefault();
     try {
       const { data } = await instance.get(
-        `/room/search?searchWord=${searchRef.current.value}&page=${page}`,
+        `/room/search?searchWord=${searchRef.current.value}`,
       );
       setRooms([...data.result]);
     } catch (error) {
@@ -88,8 +88,6 @@ const MainRoom = () => {
   //고민 채팅방 검색 취소버튼
   const searchCancelHandler = () => {
     searchRef.current.value = '';
-    setRooms([]);
-    setPage(1);
   };
 
   if (rooms.length === 0) {
