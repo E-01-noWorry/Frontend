@@ -6,18 +6,25 @@ import { GOOGLE_AUTH_URL } from '../../shared/Oauth';
 import { IconSmall } from '../../shared/themes/iconStyle';
 import { fontMedium } from '../../shared/themes/textStyle';
 
+import kakaoIcon from '../../static/images/kakao.svg';
+import googleIcon from '../../static/images/google.svg';
+
 import styled from 'styled-components';
 
 const SocialLoginButton = () => {
   return (
     <StButtonWrap>
       <StSocialLoginButton href={KAKAO_AUTH_URL} bgc={'#FEE500'}>
-        <StIcon></StIcon>
+        <StIcon>
+          <img src={kakaoIcon} alt="kakaoIcon" />
+        </StIcon>
         <div>카카오</div>
       </StSocialLoginButton>
 
       <StSocialLoginButton href={GOOGLE_AUTH_URL} bgc={'#FFFFFF'}>
-        <StIcon></StIcon>
+        <StIcon>
+          <img src={googleIcon} alt="googleIcon" />
+        </StIcon>
         <div>구글</div>
       </StSocialLoginButton>
     </StButtonWrap>
@@ -51,5 +58,4 @@ const StSocialLoginButton = styled.a`
 
 const StIcon = styled.div`
   ${IconSmall};
-  background-color: red;
 `;
