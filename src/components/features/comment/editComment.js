@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import {
   deleteCommentThunk,
   editCommentThunk,
@@ -160,7 +161,7 @@ const EditComment = (props) => {
           <CommentBox>
             {props.allComments.comment} <br />
             {replyMode ? (
-              <ReplyInput type="text" onChange={onChangeReply} />
+              <ReplyInput maxLength="50" type="text" onChange={onChangeReply} />
             ) : null}
             <ReplyButton onClick={onClickCancelReply}>
               {replyMode ? '작성 취소' : '답글 달기'}
@@ -250,14 +251,15 @@ const CommentBox = styled.div`
 
 const Button = styled.button`
   border: none;
-  background: #fff;
+  background: #f8f3eb;
   ${fontExtraBold}
   ${fontSmall}
 `;
 
 const Buttons = styled.div`
-  position: relative;
-  bottom: 1.4rem;
+  position: absolute;
+  right: 4%;
+  margin-bottom: 2.5rem;
 `;
 const Names = styled.div`
   display: flex;

@@ -6,7 +6,11 @@ import {
   deleteRecommentThunk,
   editRecommentThunk,
 } from '../../../app/module/commentSlice';
-import { fontMedium } from '../../../shared/themes/textStyle';
+import {
+  fontExtraBold,
+  fontMedium,
+  fontSmall,
+} from '../../../shared/themes/textStyle';
 
 const Recomment = (state) => {
   const dispatch = useDispatch();
@@ -46,7 +50,7 @@ const Recomment = (state) => {
   };
 
   //본인확인
-  const auth = state.state?.User?.nickname === localStorage.getItem.nickname;
+  const auth = state.state?.User?.nickname === localStorage.getItem('nickname');
 
   return (
     <div>
@@ -71,13 +75,26 @@ const Recomment = (state) => {
                 : null}
             </Ago>
             <Buttons>
-              {editMode ? null : <Delete onClick={onClickDelete}>삭제</Delete>}
-              {editMode ? null : <Edit onClick={onClickEditMode}>수정</Edit>}
+              {auth ? (
+                editMode ? null : (
+                  <Delete onClick={onClickDelete}>삭제</Delete>
+                )
+              ) : null}
+
+              {auth ? (
+                editMode ? null : (
+                  <Edit onClick={onClickEditMode}>수정</Edit>
+                )
+              ) : null}
             </Buttons>
           </MakeItRow>
           <Comment>
             {editMode ? (
-              <EditInput onChange={onChangeEdit} value={editComment} />
+              <EditInput
+                maxLength="50"
+                onChange={onChangeEdit}
+                value={editComment}
+              />
             ) : (
               state.state.comment
             )}
@@ -154,17 +171,26 @@ const Comment = styled.div`
 `;
 
 const Buttons = styled.div`
-  position: relative;
-  left: 20%;
+  position: absolute;
+  right: 6%;
 `;
 const Delete = styled.button`
   border: none;
+  background-color: #f8f3eb;
+  ${fontSmall}
+  ${fontExtraBold}
 `;
 const Edit = styled.button`
   border: none;
+  background-color: #f8f3eb;
+  ${fontSmall}
+  ${fontExtraBold}
 `;
 const EditButton = styled.button`
   border: none;
+  background-color: #f8f3eb;
+  ${fontSmall}
+  ${fontExtraBold}
 `;
 const MakeItRow2 = styled.div`
   display: flex;

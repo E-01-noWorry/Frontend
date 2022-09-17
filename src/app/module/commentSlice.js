@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import instance from './instance';
 import { current } from '@reduxjs/toolkit';
+import reset from 'styled-reset';
 
 const initialState = {
   data: [],
@@ -25,7 +26,10 @@ export const getCommentThunk = createAsyncThunk(
   'user/getComment',
   async (payload, thunkAPI) => {
     try {
-      const data = await instance.get(`/comment/${payload.selectKey}`);
+      const data = await instance.get(
+        `/comment/${payload.params.selectKey}?page=${payload.page}`,
+      );
+
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -107,13 +111,13 @@ export const commentSlice = createSlice({
   reducers: {},
   extraReducers: {
     [writeCommentThunk.fulfilled]: (state, action) => {
-      state.data.push(action.payload?.result);
+      state.data.push({ ...action.payload?.result, recomment: [] });
     },
     [writeCommentThunk.rejected]: (state, action) => {
       state.error = action.payload;
     },
     [getCommentThunk.fulfilled]: (state, action) => {
-      state.data = action.payload.data?.result;
+      state.data = state.data.concat(action.payload.data.result);
     },
     [getCommentThunk.rejected]: (state, action) => {
       console.log(action);

@@ -115,7 +115,6 @@ const StSelectResult = styled.div`
   height: 15rem;
   padding: 2.65rem 1.6rem;
   background-color: ${({ theme }) => theme.main2};
-
   color: ${({ theme }) => theme.white};
 
   //투표 결과 퍼센트
