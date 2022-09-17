@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { current } from '@reduxjs/toolkit';
+
 import instance from './instance';
 
 const initialState = {

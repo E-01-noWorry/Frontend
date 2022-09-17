@@ -1,4 +1,6 @@
 import React, { useEffect, useSelector, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -17,10 +19,6 @@ const Comment = (props) => {
   const [writeComment, setWriteComment] = useState({
     comment: '',
   });
-
-  useEffect(() => {
-    dispatch(getCommentThunk(params));
-  }, [dispatch]);
 
   //유저정보
   const user = props.user.login;
@@ -44,6 +42,21 @@ const Comment = (props) => {
       comment: '',
     });
   };
+  //무한스크롤
+
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [ref, inView] = useInView();
+  useEffect(() => {
+    // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니면서 빈배열이 아닌경우
+    if (inView && !loading) {
+      setPage((prevState) => prevState + 1);
+    }
+  }, [inView, loading]);
+
+  useEffect(() => {
+    dispatch(getCommentThunk({ params, page: page }));
+  }, [page]);
 
   return (
     <Container>
@@ -67,9 +80,10 @@ const Comment = (props) => {
           <div>
             {allComments?.map((a) => (
               <CommentsDetail key={a?.commentKey}>
-                <EditComment allComments={a} user={user} />
+                <EditComment params={params} allComments={a} user={user} />
               </CommentsDetail>
             ))}
+            <div ref={ref}></div>
           </div>
           <WriteBox>
             <Write
