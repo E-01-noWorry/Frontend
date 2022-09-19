@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import instance from '../../../app/module/instance';
+import instance from '../../app/module/instance';
 
-import Header from '../../common/Header';
-import BodyPadding from '../../common/BodyPadding';
+import Header from '../../components/common/Header';
+import BodyPadding from '../../components/common/BodyPadding';
 
 import {
   fontBold,
   fontMedium,
   fontSmall,
   fontLarge,
-} from '../../../shared/themes/textStyle';
-import { borderBoxDefault } from '../../../shared/themes/boxStyle';
-import { IconLarge, IconSmall } from '../../../shared/themes/iconStyle';
+} from '../../shared/themes/textStyle';
+import { borderBoxDefault } from '../../shared/themes/boxStyle';
+import { IconLarge, IconSmall } from '../../shared/themes/iconStyle';
 
 import { useInView } from 'react-intersection-observer';
 
-import IconPerson from '../../../static/icons/Variety=person, Status=untab.svg';
-import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
+import IconPerson from '../../static/icons/Variety=person, Status=untab.svg';
+import IconBack from '../../static/icons/Variety=back, Status=untab.svg';
 
 import styled, { css } from 'styled-components';
 
-const MadeRoom = () => {
+const OperatingRoom = () => {
   const navigate = useNavigate();
 
   const [madeRoom, setMadeRoom] = useState([]);
@@ -40,8 +40,7 @@ const MadeRoom = () => {
   // 데이터 불러오기
   const getMadeRoom = async () => {
     try {
-      const data = await instance.get(`my/room?page=${page}`);
-
+      const data = await instance.get(`my/enter?page=${page}`);
       setMadeRoom((prev) => [...prev, ...data.data.result]);
     } catch (error) {
       console.log(error);
@@ -67,7 +66,7 @@ const MadeRoom = () => {
         <StHeaderIcon onClick={() => navigate('/mypage', { state: 'mypage' })}>
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
-        <StHeaderTitle>내가 만든 고민 상담방</StHeaderTitle>
+        <StHeaderTitle>대화중인 고민 상담방</StHeaderTitle>
         <StHeaderIcon />
       </StHeader>
 
@@ -100,6 +99,10 @@ const MadeRoom = () => {
                       {room.currentPeople}/{room.max}
                     </span>
                   </StInnerCurrent>
+
+                  <StInnerNickname>
+                    작성자 <span>{room.host}</span>
+                  </StInnerNickname>
                 </StContentFooter>
               </StContentBox>
             ))}
@@ -110,7 +113,7 @@ const MadeRoom = () => {
   );
 };
 
-export default MadeRoom;
+export default OperatingRoom;
 
 const StHeader = styled(Header)`
   ${(props) =>
@@ -175,6 +178,16 @@ const StContentFooter = styled.div`
 
   width: 100%;
   margin-top: 3.2rem;
+`;
+
+const StInnerNickname = styled.div`
+  ${fontSmall};
+  line-height: 2rem;
+  color: ${({ theme }) => theme.sub2};
+
+  span {
+    ${fontBold};
+  }
 `;
 
 const StInnerKeyword = styled.span`

@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import BodyPadding from '../../common/BodyPadding';
-import Header from '../../common/Header';
-import instance from '../../../app/module/instance';
+import BodyPadding from '../../components/common/BodyPadding';
+import Header from '../../components/common/Header';
+import instance from '../../app/module/instance';
 
 import { useInView } from 'react-intersection-observer';
 
-import { remainedTime } from '../../../shared/timeCalculation';
+import { remainedTime } from '../../shared/timeCalculation';
 
-import { borderBoxDefault } from '../../../shared/themes/boxStyle';
-import { IconLarge, IconSmall } from '../../../shared/themes/iconStyle';
+import { borderBoxDefault } from '../../shared/themes/boxStyle';
+import { IconLarge, IconSmall } from '../../shared/themes/iconStyle';
 import {
   fontBold,
   fontMedium,
   fontSmall,
   fontLarge,
-} from '../../../shared/themes/textStyle';
+} from '../../shared/themes/textStyle';
 
-import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
-import IconPeople from '../../../static/icons/Variety=people, Status=untab.svg';
-import IconTimer from '../../../static/icons/Variety=timer, Status=untab.svg';
-import IconTimeOver from '../../../static/icons/Variety=timeover, Status=untab.svg';
+import IconBack from '../../static/icons/Variety=back, Status=untab.svg';
+import IconPeople from '../../static/icons/Variety=people, Status=untab.svg';
+import IconTimer from '../../static/icons/Variety=timer, Status=untab.svg';
+import IconTimeOver from '../../static/icons/Variety=timeover, Status=untab.svg';
 
 import styled, { css } from 'styled-components';
 

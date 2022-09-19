@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import BodyPadding from '../components/common/BodyPadding';
-import Footer from '../components/common/Footer';
-import { fontLarge, fontSmall, fontMedium } from '../shared/themes/textStyle';
-import { fontExtraBold, fontBold } from '../shared/themes/textStyle';
+import BodyPadding from '../../components/common/BodyPadding';
+import Footer from '../../components/common/Footer';
+import {
+  fontLarge,
+  fontSmall,
+  fontMedium,
+} from '../../shared/themes/textStyle';
+import { fontExtraBold, fontBold } from '../../shared/themes/textStyle';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { editNickNameThunk, getMyPointThunk } from '../app/module/myPageSlice';
+import {
+  editNickNameThunk,
+  getMyPointThunk,
+} from '../../app/module/myPageSlice';
 import { css } from 'styled-components';
-import { IconLarge, IconMedium } from '../shared/themes/iconStyle';
-import { ModalBasic } from '../components/common/Modal';
-
-import IconEdit from '../static/icons/Variety=edit, Status=untab.svg';
-import IconNext from '../static/icons/Variety=next, Status=untab.svg';
-import IconVoteTab from '../static/icons/Variety=vote, Status=tab.svg';
-import IconChatting from '../static/icons/Variety=chating, Status=untab.svg';
-import ProfileImg from '../components/elements/ProfileImg';
+import { IconLarge, IconMedium } from '../../shared/themes/iconStyle';
+import { ModalBasic } from '../../components/common/Modal';
+import IconEdit from '../../static/icons/Variety=edit, Status=untab.svg';
+import IconNext from '../../static/icons/Variety=next, Status=untab.svg';
+import IconVoteTab from '../../static/icons/Variety=vote, Status=tab.svg';
+import IconChatting from '../../static/icons/Variety=chating, Status=untab.svg';
+import ProfileImg from '../../components/elements/ProfileImg';
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -38,45 +44,12 @@ const MyPage = () => {
   }, [dispatch]);
 
   //티어별 상세정보
-  const [white, setWhite] = useState(false);
-  const [yellow, setYellow] = useState(false);
-  const [green, setGreen] = useState(false);
-  const [blue, setBlue] = useState(false);
-  const [purple, setPurple] = useState(false);
+  const [tiers, setTiers] = useState({
+    tiers: '',
+  });
 
-  const onFocusWhite = () => {
-    setWhite((status) => !status);
-  };
-  const onBlurWhite = () => {
-    setWhite((status) => !status);
-  };
-
-  const onFocusYellow = () => {
-    setYellow((status) => !status);
-  };
-  const onBlurYellow = () => {
-    setYellow((status) => !status);
-  };
-
-  const onFocusGreen = () => {
-    setGreen((status) => !status);
-  };
-  const onBlurGreen = () => {
-    setGreen((status) => !status);
-  };
-
-  const onFocusBlue = () => {
-    setBlue((status) => !status);
-  };
-  const onBlurBlue = () => {
-    setBlue((status) => !status);
-  };
-
-  const onFocusPurple = () => {
-    setPurple((status) => !status);
-  };
-  const onBlurPurple = () => {
-    setPurple((status) => !status);
+  const onClickTiers = (event) => {
+    setTiers({ tiers: event.target.id });
   };
 
   //로그인 여부
@@ -101,7 +74,7 @@ const MyPage = () => {
   };
 
   const onChangeEditNickName = (event) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target.id;
     setEditNickname({ [name]: value });
   };
 
@@ -207,43 +180,59 @@ const MyPage = () => {
             <TierInfoContainer>
               <TierInfo>
                 <Tiers>
-                  <TierButton
-                    autoFocus
-                    onFocus={onFocusWhite}
-                    onBlur={onBlurWhite}
+                  <TierButtonWhite
+                    onClick={onClickTiers}
+                    tiers={tiers}
+                    id="white"
                   >
                     White
-                  </TierButton>
-                  <TierButton onFocus={onFocusYellow} onBlur={onBlurYellow}>
+                  </TierButtonWhite>
+                  <TierButtonYellow
+                    onClick={onClickTiers}
+                    tiers={tiers}
+                    id="yellow"
+                  >
                     Yellow
-                  </TierButton>
-                  <TierButton onFocus={onFocusGreen} onBlur={onBlurGreen}>
+                  </TierButtonYellow>
+                  <TierButtonGreen
+                    onClick={onClickTiers}
+                    tiers={tiers}
+                    id="green"
+                  >
                     Green
-                  </TierButton>
-                  <TierButton onFocus={onFocusBlue} onBlur={onBlurBlue}>
+                  </TierButtonGreen>
+                  <TierButtonBlue
+                    onClick={onClickTiers}
+                    tiers={tiers}
+                    id="blue"
+                  >
                     Blue
-                  </TierButton>
-                  <TierButton onFocus={onFocusPurple} onBlur={onBlurPurple}>
+                  </TierButtonBlue>
+                  <TierButtonPurple
+                    onClick={onClickTiers}
+                    tiers={tiers}
+                    id="purple"
+                  >
                     Purple
-                  </TierButton>
+                  </TierButtonPurple>
                 </Tiers>
               </TierInfo>
 
               <TierInfoLetter>
-                {white
-                  ? '최다 득표 투표 항목과 본인 투표 일치가 0~100회 일때'
+                {tiers.tiers === 'white'
+                  ? '고민 서비스 참여를 통해 0~10점을 획득했을 때'
                   : null}
-                {yellow
-                  ? '최다 득표 투표 항목과 본인 투표 일치가 101~200회 일때'
+                {tiers.tiers === 'yellow'
+                  ? '고민 서비스 참여를 통해 11~25점을 획득했을 때'
                   : null}
-                {green
-                  ? '최다 득표 투표 항목과 본인 투표 일치가 201~300회 일때'
+                {tiers.tiers === 'green'
+                  ? '고민 서비스 참여를 통해 26~50점을 획득했을 때'
                   : null}
-                {blue
-                  ? '최다 득표 투표 항목과 본인 투표 일치가 301~400회 일때'
+                {tiers.tiers === 'blue'
+                  ? '고민 서비스 참여를 통해 51~100점을 획득했을 때'
                   : null}
-                {purple
-                  ? '최다 득표 투표 항목과 본인 투표 일치가 401~500회 일때'
+                {tiers.tiers === 'purple'
+                  ? '고민 서비스 참여를 통해 101점 이상을 획득했을 때'
                   : null}
               </TierInfoLetter>
             </TierInfoContainer>
@@ -655,7 +644,7 @@ const Tiers = styled.div`
   justify-content: space-around;
 `;
 
-const TierButton = styled.button`
+const TierButtonWhite = styled.button`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -666,26 +655,95 @@ const TierButton = styled.button`
   font-size: 1.4rem;
   padding: 0 0.6rem;
   border-radius: 99rem;
-  &:nth-child(1):focus {
-    background-color: black;
-    color: #fff;
-  }
-  &:nth-child(2):focus {
-    background-color: #ffd232;
-    color: #fff;
-  }
-  &:nth-child(3):focus {
-    background-color: green;
-    color: #fff;
-  }
-  &:nth-child(4):focus {
-    background-color: #7aa7ff;
-    color: #fff;
-  }
-  &:nth-child(5):focus {
-    background-color: purple;
-    color: #fff;
-  }
+
+  ${(props) =>
+    props.tiers.tiers === 'white'
+      ? css`
+          background-color: #eaeaea;
+          color: #fff;
+        `
+      : null}
+`;
+const TierButtonYellow = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: #fff;
+  color: #999999;
+  font-size: 1.4rem;
+  padding: 0 0.6rem;
+  border-radius: 99rem;
+
+  ${(props) =>
+    props.tiers.tiers === 'yellow'
+      ? css`
+          background-color: #fdd74f;
+          color: #fff;
+        `
+      : null}
+`;
+const TierButtonGreen = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: #fff;
+  color: #999999;
+  font-size: 1.4rem;
+  padding: 0 0.6rem;
+  border-radius: 99rem;
+
+  ${(props) =>
+    props.tiers.tiers === 'green'
+      ? css`
+          background-color: #91dc6e;
+          color: #fff;
+        `
+      : null}
+`;
+const TierButtonBlue = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: #fff;
+  color: #999999;
+  font-size: 1.4rem;
+  padding: 0 0.6rem;
+  border-radius: 99rem;
+
+  ${(props) =>
+    props.tiers.tiers === 'blue'
+      ? css`
+          background-color: #70a0ff;
+          color: #fff;
+        `
+      : null}
+`;
+const TierButtonPurple = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: #fff;
+  color: #999999;
+  font-size: 1.4rem;
+  padding: 0 0.6rem;
+  border-radius: 99rem;
+
+  ${(props) =>
+    props.tiers.tiers === 'purple'
+      ? css`
+          background-color: #a57aff;
+
+          color: #fff;
+        `
+      : null}
 `;
 
 const TierInfoLetter = styled.p`
