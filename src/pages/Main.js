@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+
+import instance from '../app/module/instance';
 
 import Header from '../components/common/Header';
 import MainRoom from '../components/features/main/MainRoom';
@@ -18,9 +20,25 @@ import styled from 'styled-components';
 const Main = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const deviceToken = sessionStorage.getItem('deviceToken');
+  const userKey = localStorage.getItem('userKey');
 
   const [modal, setModal] = useState('');
   const [writeModal, setWriteModal] = useState(false);
+
+  const postDeviceToken = useCallback(async () => {
+    if (userKey && deviceToken) {
+      try {
+        instance.post('/token', { deviceToken });
+      } catch (error) {
+        console.log(error.response.data.errMsg);
+      }
+    }
+  }, [deviceToken]);
+
+  useEffect(() => {
+    postDeviceToken();
+  }, [postDeviceToken]);
 
   const writeButtonHandler = () => {
     if (localStorage.getItem('token') && state === 'select') {
