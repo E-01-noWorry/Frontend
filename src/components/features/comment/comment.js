@@ -9,7 +9,6 @@ import {
   getCommentThunk,
 } from '../../../app/module/commentSlice';
 import EditComment from './editComment';
-import 'react-toastify/dist/ReactToastify.css';
 
 const Comment = (props) => {
   const dispatch = useDispatch();
