@@ -15,12 +15,6 @@ export const remainedTime = (value) => {
   if (weeks < 5) return `${Math.floor(weeks)}주`;
 };
 
-export const addNineTime = (value) => {
-  const date = new Date(value);
-
-  return date.setHours(date.getHours() + 9);
-};
-
 export const nowTime = (value) => {
   const date = new Date(value);
 

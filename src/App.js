@@ -6,6 +6,22 @@ import GlobalStyles from './shared/themes/GlobalStyles';
 import { firebaseApp } from './firebase';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
+if (Notification.permission !== 'granted') {
+  try {
+    Notification.requestPermission().then((permission) => {
+      if (permission !== 'granted') return;
+    });
+  } catch (error) {
+    if (error instanceof TypeError) {
+      Notification.requestPermission().then((permission) => {
+        if (permission !== 'granted') return;
+      });
+    } else {
+      console.log(error);
+    }
+  }
+}
+
 const firebaseMessaging = getMessaging(firebaseApp);
 getToken(firebaseMessaging, { vapidKey: process.env.REACT_APP_FCM_VAPID_KEY })
   .then((deviceToken) => {
