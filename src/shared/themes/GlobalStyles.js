@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
+import '../../static/fonts/fonts.css';
 
 const GlobalStyles = createGlobalStyle`
   ${reset}
@@ -10,18 +11,24 @@ const GlobalStyles = createGlobalStyle`
 
   * {
     box-sizing: border-box;
+
     font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
   }
 
   body {
+    box-sizing: border-box;
+    
     font-size: 1.6rem;
-    font-weight: 400;
     font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
 
     letter-spacing: -0.05rem;
     color: ${({ theme }) => theme.black};
 
     background-color: ${({ theme }) => theme.bg};
+
+    cursor: default;
   }
 
   a {
