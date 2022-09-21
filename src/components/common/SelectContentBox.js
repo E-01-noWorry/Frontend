@@ -44,10 +44,7 @@ const SelectContentBox = ({ contents, setRef }) => {
           </StInnerTitle>
 
           <StInnerOption completion={content.completion}>
-            {/* 선택지 내용이 길면 26글자에서 잘라줍니다 */}
-            {content.options?.join(' vs ').length > 26
-              ? content.options?.join(' vs ').slice(0, 26) + '...'
-              : content.options?.join(' vs ')}
+            {content.options?.join(' vs ')}
           </StInnerOption>
 
           <StContentFooter>
@@ -83,7 +80,7 @@ export default SelectContentBox;
 
 const StNoneContents = styled.div`
   width: 100%;
-  margin-top: 15.4rem;
+  margin-top: 16.9rem;
 
   ${fontMedium}
   text-align: center;
@@ -105,7 +102,7 @@ const StContentBox = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
 
-  height: 16rem;
+  height: 13.9rem;
   padding: 1.6rem;
   background-color: ${(props) =>
     props.completion ? props.theme.sub4 : props.theme.white};
@@ -145,20 +142,30 @@ const StInnerNickname = styled.div`
 `;
 
 const StInnerTitle = styled.div`
+  width: 100%;
   margin-top: 2.6rem;
 
   ${fontBold};
   line-height: 2.1rem;
   color: ${(props) =>
     props.completion ? props.theme.sub2 : props.theme.black};
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const StInnerOption = styled.div`
+  width: 100%;
   margin-top: 0.4rem;
 
   ${fontMedium}
   line-height: 1.8rem;
   color: ${({ theme }) => theme.sub2};
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const StContentFooter = styled.div`

@@ -128,6 +128,7 @@ const ChatRoom = () => {
       await instance.delete(`/room/${roomKey}`);
 
       navigate('/main', { state: 'room' });
+      document.body.style.overflow = 'unset';
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
@@ -135,6 +136,7 @@ const ChatRoom = () => {
 
   const deleteModalOpenHandler = () => {
     setModalDelete(true);
+    document.body.style.overflow = 'hidden';
     const param = { roomKey: parseInt(roomKey), userKey: parseInt(userKey) };
     socket.current.emit('showUsers', param);
 
@@ -145,6 +147,7 @@ const ChatRoom = () => {
 
   const deleteModalCloseHandler = () => {
     setModalDelete(false);
+    document.body.style.overflow = 'unset';
     setIsSelect(0);
   };
 
@@ -162,7 +165,10 @@ const ChatRoom = () => {
       {modalExit && (
         <ModalExit
           leave={leaveRoomHandler}
-          setter={() => setModalExit(false)}
+          setter={() => {
+            setModalExit(false);
+            document.body.style.overflow = 'unset';
+          }}
         />
       )}
 
@@ -211,7 +217,12 @@ const ChatRoom = () => {
             <img src={IconDelete} alt="IconDelete" />
           </StHeaderIcon>
         ) : (
-          <StHeaderIcon onClick={() => setModalExit(true)}>
+          <StHeaderIcon
+            onClick={() => {
+              setModalExit(true);
+              document.body.style.overflow = 'hidden';
+            }}
+          >
             <img src={IconLogout} alt="IconLogout" />
           </StHeaderIcon>
         )}
@@ -305,10 +316,12 @@ const StUserInfoWrap = styled.div`
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  row-gap: 1.5rem;
+  row-gap: 1.2rem;
 
-  margin-top: 0.7rem;
   width: 28rem;
+  min-height: 5.6rem;
+  margin-top: 0.7rem;
+  margin-bottom: 0.5rem;
 
   span {
     color: ${({ theme }) => theme.sub2};

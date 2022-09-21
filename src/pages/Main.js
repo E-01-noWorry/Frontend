@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+
+import instance from '../app/module/instance';
 
 import Header from '../components/common/Header';
 import MainRoom from '../components/features/main/MainRoom';
@@ -18,17 +20,35 @@ import styled from 'styled-components';
 const Main = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const deviceToken = sessionStorage.getItem('deviceToken');
+  const userKey = localStorage.getItem('userKey');
 
   const [modal, setModal] = useState('');
   const [writeModal, setWriteModal] = useState(false);
 
+  const postDeviceToken = useCallback(async () => {
+    if (userKey && deviceToken) {
+      try {
+        instance.post('/token', { deviceToken });
+      } catch (error) {
+        console.log(error.response.data.errMsg);
+      }
+    }
+  }, [deviceToken]);
+
+  useEffect(() => {
+    postDeviceToken();
+  }, [postDeviceToken]);
+
   const writeButtonHandler = () => {
     if (localStorage.getItem('token') && state === 'select') {
       setWriteModal(true);
+      document.body.style.overflow = 'hidden';
     } else if (localStorage.getItem('token') && state === 'room') {
       navigate('/write', { state });
     } else {
       setModal('로그인 후 사용 가능합니다.');
+      document.body.style.overflow = 'hidden';
     }
   };
 
@@ -36,15 +56,30 @@ const Main = () => {
     <>
       {writeModal && (
         <ModalWrite
-          setter={() => setWriteModal(false)}
-          write={() => navigate('/write', { state })}
+          setter={() => {
+            setWriteModal(false);
+            document.body.style.overflow = 'unset';
+          }}
+          write={() => {
+            navigate('/write', { state });
+            document.body.style.overflow = 'unset';
+          }}
         />
       )}
 
-      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+      {modal && (
+        <ModalBasic
+          setter={() => {
+            setModal('');
+            document.body.style.overflow = 'unset';
+          }}
+        >
+          {modal}
+        </ModalBasic>
+      )}
 
       <Header>
-        <StLogo>
+        <StLogo onClick={() => window.location.reload()}>
           <img src={Logo} alt="Logo" />
         </StLogo>
         <StIcon>

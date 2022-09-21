@@ -2,8 +2,9 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Loading from '../pages/Loading';
 
-const Welcome = lazy(() => import('../pages/Welcome'));
+const Start = lazy(() => import('../pages/Start'));
 const Main = lazy(() => import('../pages/Main'));
+const OnBoarding = lazy(() => import('../pages/OnBoarding'));
 
 const SignUp = lazy(() => import('../pages/SignUp'));
 const Login = lazy(() => import('../pages/Login'));
@@ -25,8 +26,9 @@ const Router = () => {
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
         <Routes>
-          <Route path="/" element={<Welcome />} />
+          <Route path="/" element={<Start />} />
           <Route path="/main" element={<Main />} />
+          <Route path="/welcome" element={<OnBoarding />} />
 
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />

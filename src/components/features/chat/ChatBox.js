@@ -49,12 +49,13 @@ const ChatBox = ({ chatState, userKey }) => {
               <>
                 <ProfileImg className="img" />
 
-                <div className="middle">
+                <div>
                   <div className="nickname">{chat.User?.nickname}</div>
-                  <div className="chat">{chat.chat}</div>
+                  <div className="middle">
+                    <div className="chat">{chat.chat}</div>
+                    <span className="time">{nowTime(chat.createdAt)}</span>
+                  </div>
                 </div>
-
-                <span className="time">{nowTime(chat.createdAt)}</span>
               </>
             )}
           </div>
@@ -109,16 +110,16 @@ const StChat = styled.div`
       margin-left: 0.8rem;
     }
 
+    .nickname {
+      text-align: end;
+      ${fontSmall};
+      line-height: 2rem;
+      color: ${({ theme }) => theme.sub2};
+    }
+
     .middle {
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-
-      .nickname {
-        ${fontSmall};
-        line-height: 2rem;
-        color: ${({ theme }) => theme.sub2};
-      }
+      flex-direction: row-reverse;
     }
 
     .sametime {
@@ -141,7 +142,7 @@ const StChat = styled.div`
     }
 
     .time {
-      margin-right: 1.6rem;
+      margin-right: 1rem;
       margin-top: auto;
 
       ${fontExtraSmall};
@@ -162,16 +163,14 @@ const StChat = styled.div`
       margin-right: 0.8rem;
     }
 
+    .nickname {
+      ${fontSmall};
+      line-height: 2rem;
+      color: ${({ theme }) => theme.sub2};
+    }
+
     .middle {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-
-      .nickname {
-        ${fontSmall};
-        line-height: 2rem;
-        color: ${({ theme }) => theme.sub2};
-      }
     }
 
     .sametime {
@@ -193,7 +192,7 @@ const StChat = styled.div`
     }
 
     .time {
-      margin-left: 1.6rem;
+      margin-left: 1rem;
       margin-top: auto;
 
       ${fontExtraSmall};
