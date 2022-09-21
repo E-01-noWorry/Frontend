@@ -1,6 +1,6 @@
 import React, { useEffect, useSelector, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-
+import sendIcon from '../../../static/icons/Variety=send, Status=untab.svg';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -9,7 +9,6 @@ import {
   getCommentThunk,
 } from '../../../app/module/commentSlice';
 import EditComment from './editComment';
-import 'react-toastify/dist/ReactToastify.css';
 
 const Comment = (props) => {
   const dispatch = useDispatch();
@@ -44,19 +43,11 @@ const Comment = (props) => {
   };
   //무한스크롤
 
-  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [ref, inView] = useInView();
-  useEffect(() => {
-    // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니면서 빈배열이 아닌경우
-    if (inView && !loading) {
-      setPage((prevState) => prevState + 1);
-    }
-  }, [inView, loading]);
 
   useEffect(() => {
-    dispatch(getCommentThunk({ params, page: page }));
-  }, [page]);
+    dispatch(getCommentThunk({ params }));
+  }, [dispatch]);
 
   return (
     <Container>
@@ -72,7 +63,7 @@ const Comment = (props) => {
               maxLength="50"
               value={writeComment.comment}
             />
-            <SubmitButton onClick={onClickSubmit}>제출</SubmitButton>
+            <SubmitButton onClick={onClickSubmit}>{sendIcon}</SubmitButton>
           </WriteBox>
         </>
       ) : (
@@ -83,7 +74,6 @@ const Comment = (props) => {
                 <EditComment params={params} allComments={a} user={user} />
               </CommentsDetail>
             ))}
-            <div ref={ref}></div>
           </div>
           <WriteBox>
             <Write
@@ -94,7 +84,9 @@ const Comment = (props) => {
               maxLength="50"
               value={writeComment.comment}
             />
-            <SubmitButton onClick={onClickSubmit}>제출</SubmitButton>
+            <SubmitButton onClick={onClickSubmit}>
+              <img src={sendIcon}></img>
+            </SubmitButton>
           </WriteBox>
         </CommentContainer>
       )}
@@ -135,7 +127,7 @@ const WriteBox = styled.div`
   background: #f5f5f5;
 `;
 
-const Write = styled.textarea`
+const Write = styled.input`
   width: 100%;
   padding: 1.75rem 10rem 1.75rem 2rem;
   border-radius: 20px;
@@ -154,8 +146,8 @@ const CommentsDetail = styled.div`
   display: flex;
 `;
 
-const SubmitButton = styled.button`
+const SubmitButton = styled.div`
   position: fixed;
-  bottom: 2.7rem;
+  bottom: 2rem;
   right: 3.2rem;
 `;

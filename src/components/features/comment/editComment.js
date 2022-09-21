@@ -159,16 +159,18 @@ const EditComment = (props) => {
             </Buttons>
           </DefaultBox>
           <CommentBox>
-            {props.allComments.comment} <br />
+            <span>{props.allComments.comment}</span>
             {replyMode ? (
               <ReplyInput maxLength="50" type="text" onChange={onChangeReply} />
             ) : null}
-            <ReplyButton onClick={onClickCancelReply}>
-              {replyMode ? '작성 취소' : '답글 달기'}
-            </ReplyButton>
-            <CancelReply onClick={onClickReplyButton}>
-              {replyMode ? '작성 완료' : null}
-            </CancelReply>
+            <MakeItRow>
+              <ReplyButton onClick={onClickCancelReply}>
+                {replyMode ? '작성 취소' : '답글 달기'}
+              </ReplyButton>
+              <CancelReply onClick={onClickReplyButton}>
+                {replyMode ? '작성 완료' : null}
+              </CancelReply>
+            </MakeItRow>
           </CommentBox>
         </>
       )}
@@ -196,8 +198,9 @@ const DefaultBox = styled.div`
 `;
 
 const EditInput = styled.textarea`
-  padding: 0.5rem;
-  width: 100%;
+  padding: 0.5rem 0 0.5rem 1rem;
+  width: 45rem;
+  height: 4vh;
   margin-top: 1rem;
   border-radius: 20px;
   border: none;
@@ -243,10 +246,10 @@ const CommentBox = styled.div`
   margin: 0 0 0 5rem;
   width: 27.9rem;
   height: 100%;
-  overflow: hidden;
   position: relative;
   bottom: 1.5rem;
   left: 0.6rem;
+  word-break: break-all;
 `;
 
 const Button = styled.button`
@@ -267,23 +270,31 @@ const Names = styled.div`
 `;
 
 const ReplyButton = styled.p`
-  color: tomato;
+  color: #ff9b25;
   ${fontSmall}
   margin-top: 0.8rem;
   margin-bottom: 1.6rem;
 `;
 
-const ReplyInput = styled.textarea`
+const MakeItRow = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const ReplyInput = styled.input`
   margin-top: 0.8rem;
   border: none;
   border-radius: 2rem;
-  width: 100%;
-  height: 10vh;
-  padding: 0.8rem;
+  width: 45rem;
+  height: 4vh;
+  padding: 0.5rem 0 0.5rem 1rem;
   resize: none;
 `;
 
 const CancelReply = styled.p`
-  color: tomato;
+  color: #ff9b25;
   ${fontSmall}
+  margin-top: 0.8rem;
+  margin-bottom: 1.6rem;
+  margin-left: 1rem;
 `;

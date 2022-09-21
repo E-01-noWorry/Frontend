@@ -23,10 +23,20 @@ jobs:
       REACT_APP_REDIRECT_URI: ${{ secrets.REACT_APP_REDIRECT_URI }}
       REACT_APP_GOOGLE_ID: ${{ secrets.REACT_APP_GOOGLE_ID }}
       REACT_APP_GOOGLE_CALLBACK_URL: ${{ secrets.REACT_APP_GOOGLE_CALLBACK_URL }}
+      REACT_APP_FCM_VAPID_KEY: ${{ secrets.REACT_APP_FCM_VAPID_KEY }}
 
     steps:
-      - name: Checkout source code.
+      - name: Checkout source code
         uses: actions/checkout@v2
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
 
       - name: Install Dependencies
         run: npm install
@@ -45,4 +55,4 @@ jobs:
         run: aws s3 sync ./build s3://${{ secrets.DEV_AWS_S3_BUCKET }} --delete
 
       - name: Invalidate CloudFront Cache
-        run: aws cloudfront create-invalidation --distribution-id ${{secrets.DEV_AWS_DISTRIBUTION_ID}} --paths "/index.html"
+        run: aws cloudfront create-invalidation --distribution-id ${{secrets.DEV_AWS_DISTRIBUTION_ID}} --paths "/*"

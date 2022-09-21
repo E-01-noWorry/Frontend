@@ -1,4 +1,5 @@
 import { css } from 'styled-components';
+import '../../static/fonts/fonts.css';
 
 //폰트 사이즈
 export const fontExtra = css`
@@ -23,9 +24,11 @@ export const fontExtraSmall = css`
 
 //폰트 두께
 export const fontExtraBold = css`
+  font-family: 'Noto Sans KR';
   font-weight: 700;
 `;
 
 export const fontBold = css`
+  font-family: 'Noto Sans KR';
   font-weight: 500;
 `;

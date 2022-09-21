@@ -26,9 +26,7 @@ export const getCommentThunk = createAsyncThunk(
   'user/getComment',
   async (payload, thunkAPI) => {
     try {
-      const data = await instance.get(
-        `/comment/${payload.params.selectKey}?page=${payload.page}`,
-      );
+      const data = await instance.get(`/comment/${payload.params.selectKey}`);
 
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
@@ -117,7 +115,7 @@ export const commentSlice = createSlice({
       state.error = action.payload;
     },
     [getCommentThunk.fulfilled]: (state, action) => {
-      state.data = state.data.concat(action.payload.data.result);
+      state.data = action.payload.data.result;
     },
     [getCommentThunk.rejected]: (state, action) => {
       console.log(action);
