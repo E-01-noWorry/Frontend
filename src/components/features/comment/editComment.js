@@ -114,7 +114,7 @@ const EditComment = (props) => {
         <>
           <DefaultBox>
             <Names>
-              <ProfileImg />
+              <ProfileImg point={props.allComments.ponit} />
               <Nickname>{props.allComments.nickname}</Nickname>
               <MinutesBefore>
                 {seconds < 60

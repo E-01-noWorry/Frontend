@@ -21,10 +21,10 @@ import {
 } from '../shared/themes/textStyle';
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
 
-import IconBack from '../static/icons/Variety=back, Status=untab.svg';
-import IconDelete from '../static/icons/Variety=delete, Status=untab.svg';
-import IconTimer from '../static/icons/Variety=timer, Status=untab.svg';
-import IconTimeOver from '../static/icons/Variety=timeover, Status=untab.svg';
+import IconBack from '../static/icons/Variety=back, Status=untab, Size=L.svg';
+import IconDelete from '../static/icons/Variety=delete, Status=untab, Size=L.svg';
+import IconTimeWarning from '../static/icons/Variety=Time warning, Status=untab, Size=S.svg';
+import IconTimeOver from '../static/icons/Variety=Timeover, Status=Untab, Size=S.svg';
 
 import styled from 'styled-components';
 
@@ -52,7 +52,7 @@ const Detail = () => {
   const deleteHandler = async () => {
     try {
       await instance.delete(`/select/${selectKey}`);
-      navigate('/main', { state: 'select' });
+      navigate(-1, { state: 'select' });
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
@@ -77,7 +77,7 @@ const Detail = () => {
 
       <BodyPadding>
         <StInfoWrap>
-          <ProfileImg />
+          <ProfileImg point={content.point} />
 
           <StNickname>{content.nickname}</StNickname>
 
@@ -91,14 +91,16 @@ const Detail = () => {
                 <StIcon>
                   <img src={IconTimeOver} alt="IconTimeOver" />
                 </StIcon>
-                <span>투표마감</span>
+                <span className="timeover">투표마감</span>
               </>
             ) : (
               <>
                 <StIcon>
-                  <img src={IconTimer} alt="IconTimer" />
+                  <img src={IconTimeWarning} alt="IconTimeWarning" />
                 </StIcon>
-                <span>{remainedTime(content.deadLine)}</span>
+                <span className="deadline">
+                  {remainedTime(content.deadLine)}
+                </span>
               </>
             )}
           </StDeadLine>
@@ -165,8 +167,12 @@ const StDeadLine = styled.div`
 
   ${fontMedium};
 
-  span:nth-child(2) {
+  .deadline {
     color: ${({ theme }) => theme.warning};
+  }
+
+  .timeover {
+    color: ${({ theme }) => theme.sub2};
   }
 `;
 

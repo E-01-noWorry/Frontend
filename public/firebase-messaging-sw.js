@@ -6,7 +6,7 @@ importScripts(
   'https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js',
 );
 
-self.addEventListener('notificationclick', function (event) {
+self.addEventListener('notificationclick', (event) => {
   console.log('On notification click: ', event.notification.tag);
 
   // This looks to see if the current is already open and
@@ -16,7 +16,7 @@ self.addEventListener('notificationclick', function (event) {
       .matchAll({
         type: 'window',
       })
-      .then(function (clientList) {
+      .then((clientList) => {
         for (var i = 0; i < clientList.length; i++) {
           var client = clientList[i];
           if (client.url == '/' && 'focus' in client) return client.focus();
