@@ -18,11 +18,11 @@ import {
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
 import { fontBold, fontLarge, fontMedium } from '../shared/themes/textStyle';
 
-import IconBack from '../static/icons/Variety=back, Status=untab.svg';
-import IconLogout from '../static/icons/Variety=logout, Status=untab.svg';
-import IconDelete from '../static/icons/Variety=delete, Status=untab.svg';
-import IconAnnounce from '../static/icons/Variety=announce, Status=untab.svg';
-import IconSend from '../static/icons/Variety=send, Status=untab.svg';
+import IconBack from '../static/icons/Variety=back, Status=untab, Size=L.svg';
+import IconLogout from '../static/icons/Variety=logout, Status=untab, Size=L.svg';
+import IconDelete from '../static/icons/Variety=delete, Status=untab, Size=L.svg';
+import IconAnnounce from '../static/icons/Variety=announce, Status=untab, Size=M.svg';
+import IconSend from '../static/icons/Variety=send, Status=untab, Size=L.svg';
 
 import styled from 'styled-components';
 
@@ -127,7 +127,7 @@ const ChatRoom = () => {
 
       await instance.delete(`/room/${roomKey}`);
 
-      navigate('/main', { state: 'room' });
+      navigate(-1, { state: 'room' });
       document.body.style.overflow = 'unset';
     } catch (error) {
       console.log(error.response.data.errMsg);
@@ -181,7 +181,7 @@ const ChatRoom = () => {
           <StUserInfoWrap number={isSelect}>
             {nowUsers.slice(1).map((user, idx) => (
               <StUserInfo key={user.userKey} htmlFor={user.userKey}>
-                <ProfileImg />
+                <ProfileImg point={user.point} />
                 <input
                   type="radio"
                   hidden
@@ -197,13 +197,13 @@ const ChatRoom = () => {
       )}
 
       {hostByeModal && (
-        <ModalBasic setter={() => navigate('/main', { state: 'room' })}>
+        <ModalBasic setter={() => navigate(-1, { state: 'room' })}>
           {hostByeModal}
         </ModalBasic>
       )}
 
       <Header>
-        <StHeaderIcon onClick={() => navigate('/main', { state: 'room' })}>
+        <StHeaderIcon onClick={() => navigate(-1, { state: 'room' })}>
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
 
@@ -329,6 +329,10 @@ const StUserInfoWrap = styled.div`
   }
 
   label:nth-child(${(props) => props.number}) {
+    div {
+      border: 0.15rem solid ${({ theme }) => theme.main2};
+    }
+
     span {
       color: ${({ theme }) => theme.main2};
     }

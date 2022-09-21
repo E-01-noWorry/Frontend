@@ -17,8 +17,8 @@ import { IconLarge, IconSmall } from '../../shared/themes/iconStyle';
 
 import { useInView } from 'react-intersection-observer';
 
-import IconPerson from '../../static/icons/Variety=person, Status=untab.svg';
-import IconBack from '../../static/icons/Variety=back, Status=untab.svg';
+import IconPerson from '../../static/icons/Variety=person, Status=untab, Size=S.svg';
+import IconBack from '../../static/icons/Variety=back, Status=untab, Size=L.svg';
 
 import styled, { css } from 'styled-components';
 
@@ -79,10 +79,14 @@ const OperatingRoom = () => {
               <StContentBox
                 key={room.roomKey}
                 onClick={() => joinRoomHandler(room.roomKey)}
+                cur={room.currentPeople}
+                max={room.max}
                 //마지막 게시글에 ref를 달아줍니다
                 ref={idx === madeRoom.length - 1 ? ref : null}
               >
-                <StInnerTitle>{room.title}</StInnerTitle>
+                <StInnerTitle cur={room.currentPeople} max={room.max}>
+                  {room.title}
+                </StInnerTitle>
 
                 <StInnerKeywordWrap>
                   {room.hashTag?.map((item) => (
@@ -96,7 +100,7 @@ const OperatingRoom = () => {
                       <img src={IconPerson} alt="IconPerson" />
                     </StPeopleIcon>
                     <span>
-                      {room.currentPeople}/{room.max}
+                      {room.currentPeople}/{room.max} 명
                     </span>
                   </StInnerCurrent>
 
@@ -144,50 +148,38 @@ const StContentBoxWrap = styled.div`
   flex-direction: column;
   gap: 2.4rem;
 
-  margin-top: 7.4rem;
-  margin-bottom: 9.6rem;
+  margin-top: 6.4rem;
+  margin-bottom: 2rem;
 `;
 
 const StContentBox = styled.div`
+  position: relative;
   ${borderBoxDefault};
-  align-items: flex-start;
 
-  height: 100%;
+  height: 11.4rem;
   padding: 1.6rem;
-  background-color: ${({ theme }) => theme.white};
+  background-color: ${(props) =>
+    props.cur === props.max ? props.theme.sub4 : props.theme.white};
 `;
 
 const StInnerTitle = styled.div`
-  margin-top: 1rem;
+  position: absolute;
+  top: 1.6rem;
+  left: 1.6rem;
 
   ${fontBold};
   line-height: 2.1rem;
+  color: ${(props) =>
+    props.cur === props.max ? props.theme.sub2 : props.theme.black};
 `;
 
 const StInnerKeywordWrap = styled.div`
+  position: absolute;
+  top: 4.1rem;
+  left: 1.6rem;
+
   display: flex;
   gap: 0.6rem;
-
-  margin-top: 0.8rem;
-`;
-
-const StContentFooter = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  width: 100%;
-  margin-top: 3.2rem;
-`;
-
-const StInnerNickname = styled.div`
-  ${fontSmall};
-  line-height: 2rem;
-  color: ${({ theme }) => theme.sub2};
-
-  span {
-    ${fontBold};
-  }
 `;
 
 const StInnerKeyword = styled.span`
@@ -202,13 +194,38 @@ const StInnerKeyword = styled.span`
   color: ${({ theme }) => theme.sub2};
 `;
 
+const StContentFooter = styled.div`
+  position: absolute;
+  bottom: 0;
+
+  width: 100%;
+`;
+
+const StInnerNickname = styled.div`
+  position: absolute;
+  bottom: 1.6rem;
+  right: 1.6rem;
+
+  ${fontSmall};
+  line-height: 2rem;
+  color: ${({ theme }) => theme.sub2};
+
+  span {
+    ${fontBold};
+  }
+`;
+
 const StInnerCurrent = styled.div`
+  position: absolute;
+  bottom: 1.6rem;
+  left: 1.6rem;
+
   display: flex;
   gap: 0.25rem;
 
   ${fontMedium};
   line-height: 2.1rem;
-  color: ${({ theme }) => theme.main2};
+  color: ${({ theme }) => theme.sub2};
 `;
 
 const StPeopleIcon = styled.div`

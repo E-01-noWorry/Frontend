@@ -16,7 +16,7 @@ import {
   fontSmall,
 } from '../../../shared/themes/textStyle';
 
-import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
+import IconBack from '../../../static/icons/Variety=back, Status=untab, Size=L.svg';
 import IconErase from '../../../static/icons/Variety=erase, Status=untab, Size=S.svg';
 import IconPlus from '../../../static/icons/Variety=plus, Status=untab, Size=XL.svg';
 import IconMinus from '../../../static/icons/Variety=minus, Status=untab, Size=XL.svg';

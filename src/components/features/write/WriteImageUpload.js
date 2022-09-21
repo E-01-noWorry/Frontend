@@ -7,8 +7,8 @@ import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconMedium, IconSmall } from '../../../shared/themes/iconStyle';
 import { fontBold, fontSmall } from '../../../shared/themes/textStyle';
 
-import IconImage from '../../../static/icons/Variety=image, Status=untab.svg';
-import IconImageDelete from '../../../static/icons/Variety=image delete, Status=L.svg';
+import IconImage from '../../../static/icons/Variety=image, Status=untab, Size=S.svg';
+import IconImageDelete from '../../../static/icons/Variety=image delete, Status=Untab, Size=L.svg';
 
 import styled from 'styled-components';
 

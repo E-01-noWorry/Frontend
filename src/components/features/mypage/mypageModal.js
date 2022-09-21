@@ -1,22 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
+import { IconLarge } from '../../../shared/themes/iconStyle';
 import {
   fontBold,
   fontLarge,
   fontMedium,
 } from '../../../shared/themes/textStyle';
-import Close from '../../../static/icons/Variety=close, Status=L.svg';
+import IconClose from '../../../static/icons/Variety=close, Status=untab, Size=L.svg';
 import BodyPadding from '../../common/BodyPadding';
+import Header from '../../common/Header';
 
 const MypageModal = (props) => {
   return (
     <Modal>
       <Header>
-        <p>등급 선정기준 및 혜택</p>
-        <img src={Close} onClick={props.onClickModal}></img>
+        <StHeaderIcon></StHeaderIcon>
+        <StHeaderTitle>등급 선정기준 및 혜택</StHeaderTitle>
+        <StHeaderIcon onClick={props.onClickModal}>
+          <img src={IconClose} alt="IconClose" />
+        </StHeaderIcon>
       </Header>
-      <Line />
+
       <Section1>
+        <Line />
         <BodyPadding>
           <Main1>점수 획득 방법</Main1>
           <Sub1>&#8226; 고민투표</Sub1>
@@ -28,6 +34,7 @@ const MypageModal = (props) => {
         </BodyPadding>
         <Line2 />
       </Section1>
+
       <Section2>
         <BodyPadding>
           <Main2>등급별 혜택</Main2>
@@ -51,18 +58,12 @@ export default MypageModal;
 
 const Modal = styled.div``;
 
-const Header = styled.div`
-  display: flex;
-  justify-content: center;
+const StHeaderIcon = styled.div`
+  ${IconLarge};
+`;
 
-  > p {
-    margin-top: 0.7rem;
-    ${fontLarge}
-  }
-  > img {
-    position: absolute;
-    right: 2.7rem;
-  }
+const StHeaderTitle = styled.div`
+  ${fontLarge};
 `;
 
 const Line = styled.hr`
@@ -72,6 +73,7 @@ const Line = styled.hr`
 `;
 
 const Section1 = styled.div`
+  margin-top: 6.4rem;
   line-height: 150%;
 `;
 const Main1 = styled.div`

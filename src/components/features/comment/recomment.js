@@ -11,6 +11,7 @@ import {
   fontMedium,
   fontSmall,
 } from '../../../shared/themes/textStyle';
+import ProfileImg from '../../elements/ProfileImg';
 
 const Recomment = (state) => {
   const dispatch = useDispatch();
@@ -57,7 +58,7 @@ const Recomment = (state) => {
       <RecommentContainer>
         <RecommentBox>
           <MakeItRow>
-            <Profile></Profile>
+            <StProfileImgSmall point={state.state.User.point} />
             <Nickname>{state.state?.User?.nickname}</Nickname>
             <Ago>
               {seconds < 60
@@ -119,6 +120,11 @@ const Recomment = (state) => {
 };
 
 export default Recomment;
+
+const StProfileImgSmall = styled(ProfileImg)`
+  width: 3rem;
+  height: 3rem;
+`;
 
 const RecommentContainer = styled.div`
   padding: 0 0 2.4rem 7.6rem;

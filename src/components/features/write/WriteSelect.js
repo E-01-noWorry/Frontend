@@ -21,8 +21,8 @@ import {
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconLarge, IconMedium } from '../../../shared/themes/iconStyle';
 
-import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
-import IconAdd from '../../../static/icons/Variety=add, Status=untab.svg';
+import IconBack from '../../../static/icons/Variety=back, Status=untab, Size=L.svg';
+import IconAdd from '../../../static/icons/Variety=add, Status=untab, Size=L.svg';
 
 import styled from 'styled-components';
 
