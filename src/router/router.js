@@ -11,13 +11,11 @@ const Login = lazy(() => import('../pages/Login'));
 const KakaoRedirect = lazy(() => import('../pages/KakaoRedirect'));
 const GoogleRedirect = lazy(() => import('../pages/GoogleRedirect'));
 
-const MyPage = lazy(() => import('../pages/MyPage'));
-const PostVoted = lazy(() => import('../components/features/mypage/postVoted'));
-const Voted = lazy(() => import('../components/features/mypage/Voted'));
-const MadeRoom = lazy(() => import('../components/features/mypage/MadeRoom'));
-const OperatingRoom = lazy(() =>
-  import('../components/features/mypage/OperatingRoom'),
-);
+const MyPage = lazy(() => import('../pages/mypage/MyPage'));
+const PostVoted = lazy(() => import('../pages/mypage/PostVoted'));
+const Voted = lazy(() => import('../pages/mypage/Voted'));
+const MadeRoom = lazy(() => import('../pages/mypage/MadeRoom'));
+const OperatingRoom = lazy(() => import('../pages/mypage/OperatingRoom'));
 
 const Write = lazy(() => import('../pages/Write'));
 const Detail = lazy(() => import('../pages/Detail'));
