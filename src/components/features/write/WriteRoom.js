@@ -29,10 +29,12 @@ const WriteRoom = () => {
 
   const [title, setTitle] = useState('');
   const [keyword, setKeyword] = useState('');
+  const [roomkey, setRoomkey] = useState(0);
   const [keywordArr, setKeywordArr] = useState([]);
   const [countPeople, setCountPeople] = useState(1);
 
   const [modal, setModal] = useState(false);
+  const [uploadModal, setUploadModal] = useState('');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -42,7 +44,8 @@ const WriteRoom = () => {
     event.preventDefault();
 
     if (keywordArr.includes(keyword)) {
-      setModal('중복된 해시태그가 있습니다.');
+      setModal('중복된 해시태그가 존재합니다.');
+      document.body.style.overflow = 'hidden';
     } else {
       setKeywordArr((prev) => [...prev, keyword.replace(' ', '')]);
     }
@@ -75,7 +78,9 @@ const WriteRoom = () => {
 
     try {
       const { data } = await instance.post('/room', payload);
-      navigate(`/chatroom/${data.result.roomKey}`);
+      setRoomkey(data.result.roomKey);
+      setUploadModal('고민 상담방 등록 완료!');
+      document.body.style.overflow = 'hidden';
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
@@ -83,7 +88,27 @@ const WriteRoom = () => {
 
   return (
     <>
-      {modal && <ModalBasic setter={() => setModal(false)}>{modal}</ModalBasic>}
+      {uploadModal && (
+        <ModalBasic
+          setter={() => {
+            navigate(`/chatroom/${roomkey}`);
+            document.body.style.overflow = 'unset';
+          }}
+        >
+          {uploadModal}
+        </ModalBasic>
+      )}
+
+      {modal && (
+        <ModalBasic
+          setter={() => {
+            setModal(false);
+            document.body.style.overflow = 'unset';
+          }}
+        >
+          {modal}
+        </ModalBasic>
+      )}
 
       <Header>
         <StHeaderIcon onClick={() => navigate('/main', { state: 'room' })}>
@@ -102,7 +127,7 @@ const WriteRoom = () => {
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
                 maxLength={20}
-                placeholder="고민 상담방 이름을 작성해주세요"
+                placeholder="고민 상담방 이름을 작성해주세요."
                 style={{ height: '8.9rem' }}
               />
               <span>{title.length}/20자</span>
@@ -131,7 +156,7 @@ const WriteRoom = () => {
                     maxLength={7}
                     placeholder={
                       keywordArr.length === 0
-                        ? '해시태그를 작성하여 고민을 소개해보세요(7자 이내)'
+                        ? '태그 작성 후, 엔터를 눌러 등록해주세요.(7자 이내)'
                         : '해시태그 추가'
                     }
                   />

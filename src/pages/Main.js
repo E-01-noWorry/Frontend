@@ -43,10 +43,12 @@ const Main = () => {
   const writeButtonHandler = () => {
     if (localStorage.getItem('token') && state === 'select') {
       setWriteModal(true);
+      document.body.style.overflow = 'hidden';
     } else if (localStorage.getItem('token') && state === 'room') {
       navigate('/write', { state });
     } else {
       setModal('로그인 후 사용 가능합니다.');
+      document.body.style.overflow = 'hidden';
     }
   };
 
@@ -54,15 +56,30 @@ const Main = () => {
     <>
       {writeModal && (
         <ModalWrite
-          setter={() => setWriteModal(false)}
-          write={() => navigate('/write', { state })}
+          setter={() => {
+            setWriteModal(false);
+            document.body.style.overflow = 'unset';
+          }}
+          write={() => {
+            navigate('/write', { state });
+            document.body.style.overflow = 'unset';
+          }}
         />
       )}
 
-      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+      {modal && (
+        <ModalBasic
+          setter={() => {
+            setModal('');
+            document.body.style.overflow = 'unset';
+          }}
+        >
+          {modal}
+        </ModalBasic>
+      )}
 
       <Header>
-        <StLogo>
+        <StLogo onClick={() => window.location.reload()}>
           <img src={Logo} alt="Logo" />
         </StLogo>
         <StIcon>

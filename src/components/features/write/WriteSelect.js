@@ -69,6 +69,7 @@ const WriteSelect = () => {
 
     if (imageArr.length !== 0 && optionArr.length !== imageArr.length) {
       setModal('사진과 선택지의 개수가 다릅니다.');
+      document.body.style.overflow = 'hidden';
     } else {
       let formData = new FormData();
 
@@ -93,8 +94,10 @@ const WriteSelect = () => {
           data: formData,
         });
         setUploadModal('게시글 등록 완료!');
+        document.body.style.overflow = 'hidden';
       } catch (error) {
         setModal(error.response.data.errMsg);
+        document.body.style.overflow = 'hidden';
       }
     }
   };
@@ -102,12 +105,26 @@ const WriteSelect = () => {
   return (
     <>
       {uploadModal && (
-        <ModalBasic setter={() => navigate('/main', { state: 'select' })}>
+        <ModalBasic
+          setter={() => {
+            navigate('/main', { state: 'select' });
+            document.body.style.overflow = 'unset';
+          }}
+        >
           {uploadModal}
         </ModalBasic>
       )}
 
-      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+      {modal && (
+        <ModalBasic
+          setter={() => {
+            setModal('');
+            document.body.style.overflow = 'unset';
+          }}
+        >
+          {modal}
+        </ModalBasic>
+      )}
 
       <Header>
         <StHeaderIcon onClick={() => navigate('/main', { state: 'select' })}>
@@ -126,7 +143,7 @@ const WriteSelect = () => {
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
                 maxLength={40}
-                placeholder="고민을 작성해주세요"
+                placeholder="고민을 작성해주세요."
                 style={{ height: '8.9rem' }}
               />
               <span>{title.length}/40자</span>
@@ -168,7 +185,7 @@ const WriteSelect = () => {
                       value={options[num]}
                       onChange={optionChangeHandler}
                       maxLength={15}
-                      placeholder="선택지를 작성해주세요"
+                      placeholder="선택지를 작성해주세요."
                     />
                     <span>{options[num]?.length || '0'}/15자</span>
                     <WriteImageUpload setImages={setImages} num={num} />

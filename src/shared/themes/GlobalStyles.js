@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { fontMedium } from './textStyle';
 import reset from 'styled-reset';
 import '../../static/fonts/fonts.css';
 
@@ -33,6 +34,11 @@ const GlobalStyles = createGlobalStyle`
 
   a {
     text-decoration: none;
+  }
+
+  ::placeholder {
+    ${fontMedium};
+    color: ${({ theme }) => theme.sub2};
   }
 `;
 

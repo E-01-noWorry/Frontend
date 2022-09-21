@@ -103,10 +103,6 @@ const StModalBg = styled.div`
   top: 0;
   left: 0;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.65);
@@ -163,6 +159,7 @@ const StModalText = styled.div`
 
   span {
     text-align: center;
+    line-height: 2.5rem;
   }
 
   span:nth-child(1) {
@@ -176,11 +173,9 @@ const StModalText = styled.div`
 `;
 
 const StModalTextWide = styled(StModalText)`
-  min-height: 11.8rem;
-
   & > div:nth-child(1) {
-    ${fontSmall};
-    line-height: 1.3rem;
+    ${fontMedium};
+    line-height: 1.8rem;
     color: ${({ theme }) => theme.sub2};
   }
 `;
