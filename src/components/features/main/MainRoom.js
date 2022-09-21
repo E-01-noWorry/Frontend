@@ -175,6 +175,8 @@ const StSearchWrap = styled.div`
   padding: 0 2rem;
   background-color: ${({ theme }) => theme.bg};
 
+  z-index: 9;
+
   form {
     position: relative;
     width: 100%;
@@ -218,45 +220,30 @@ const StContentBoxWrap = styled.div`
 `;
 
 const StContentBox = styled.div`
+  position: relative;
   ${borderBoxDefault};
-  align-items: flex-start;
 
-  height: 100%;
+  height: 11.4rem;
   padding: 1.6rem;
   background-color: ${({ theme }) => theme.white};
 `;
 
 const StInnerTitle = styled.div`
-  margin-top: 1rem;
+  position: absolute;
+  top: 1.6rem;
+  left: 1.6rem;
 
   ${fontBold};
   line-height: 2.1rem;
 `;
 
 const StInnerKeywordWrap = styled.div`
+  position: absolute;
+  top: 4.1rem;
+  left: 1.6rem;
+
   display: flex;
   gap: 0.6rem;
-
-  margin-top: 0.8rem;
-`;
-
-const StContentFooter = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  width: 100%;
-  margin-top: 3.2rem;
-`;
-
-const StInnerNickname = styled.div`
-  ${fontSmall};
-  line-height: 2rem;
-  color: ${({ theme }) => theme.sub2};
-
-  span {
-    ${fontBold};
-  }
 `;
 
 const StInnerKeyword = styled.span`
@@ -271,7 +258,32 @@ const StInnerKeyword = styled.span`
   color: ${({ theme }) => theme.sub2};
 `;
 
+const StContentFooter = styled.div`
+  position: absolute;
+  bottom: 0;
+
+  width: 100%;
+`;
+
+const StInnerNickname = styled.div`
+  position: absolute;
+  bottom: 1.6rem;
+  right: 1.6rem;
+
+  ${fontSmall};
+  line-height: 2rem;
+  color: ${({ theme }) => theme.sub2};
+
+  span {
+    ${fontBold};
+  }
+`;
+
 const StInnerCurrent = styled.div`
+  position: absolute;
+  bottom: 1.6rem;
+  left: 1.6rem;
+
   display: flex;
   gap: 0.25rem;
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import GlobalButton from '../components/elements/GlobalButton';
@@ -16,6 +16,15 @@ const OnBoarding = () => {
   const navigate = useNavigate();
 
   const [pagination, setPagination] = useState(1);
+  const vh = window.innerHeight * 0.01;
+
+  const screenSize = useCallback(() => {
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }, [vh]);
+
+  useEffect(() => {
+    screenSize();
+  }, [screenSize]);
 
   return (
     <StContensWrap>
@@ -80,7 +89,7 @@ const StContensWrap = styled.div`
   position: relative;
 
   width: 100%;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 `;
 
 const StNavi = styled.div`
@@ -157,7 +166,6 @@ const StButtonWrap = styled.div`
       }
 
       div:nth-child(2) {
-        background-color: ${({ theme }) => theme.sub4};
         color: ${({ theme }) => theme.inactive};
       }
     `}

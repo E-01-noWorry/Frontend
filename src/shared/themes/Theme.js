@@ -18,7 +18,7 @@ const defaultTheme = {
   sub5: '#E8E1D8', //figma Warm Grey
 
   warning: '#EA4713',
-  inactive: '#F4A459',
+  inactive: '#F5AE6C',
 };
 
 const Theme = {
