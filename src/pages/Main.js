@@ -20,6 +20,7 @@ import styled from 'styled-components';
 const Main = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+
   const deviceToken = sessionStorage.getItem('deviceToken');
   const userKey = localStorage.getItem('userKey');
 
@@ -41,10 +42,10 @@ const Main = () => {
   }, [postDeviceToken]);
 
   const writeButtonHandler = () => {
-    if (localStorage.getItem('token') && state === 'select') {
+    if (localStorage.getItem('token') && state.now === 'select') {
       setWriteModal(true);
       document.body.style.overflow = 'hidden';
-    } else if (localStorage.getItem('token') && state === 'room') {
+    } else if (localStorage.getItem('token') && state.now === 'room') {
       navigate('/write', { state });
     } else {
       setModal('로그인 후 사용 가능합니다.');
@@ -61,7 +62,7 @@ const Main = () => {
             document.body.style.overflow = 'unset';
           }}
           write={() => {
-            navigate('/write', { state });
+            navigate('/write', { state: { now: state.now } });
             document.body.style.overflow = 'unset';
           }}
         />
@@ -87,7 +88,7 @@ const Main = () => {
         </StIcon>
       </Header>
 
-      {state === 'room' ? <MainRoom /> : <MainSelect />}
+      {state.now === 'room' ? <MainRoom /> : <MainSelect />}
 
       <WriteButton onClick={writeButtonHandler} />
 

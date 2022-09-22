@@ -7,7 +7,7 @@ import WriteSelect from '../components/features/write/WriteSelect';
 const Write = () => {
   const { state } = useLocation();
 
-  return <>{state === 'select' ? <WriteSelect /> : <WriteRoom />}</>;
+  return <>{state.now === 'select' ? <WriteSelect /> : <WriteRoom />}</>;
 };
 
 export default Write;

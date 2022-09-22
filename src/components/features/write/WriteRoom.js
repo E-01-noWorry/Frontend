@@ -91,7 +91,7 @@ const WriteRoom = () => {
       {uploadModal && (
         <ModalBasic
           setter={() => {
-            navigate(`/chatroom/${roomkey}`);
+            navigate(`/chatroom/${roomkey}`, { state: { now: 'room' } });
             document.body.style.overflow = 'unset';
           }}
         >
@@ -111,7 +111,9 @@ const WriteRoom = () => {
       )}
 
       <Header>
-        <StHeaderIcon onClick={() => navigate('/main', { state: 'room' })}>
+        <StHeaderIcon
+          onClick={() => navigate('/main', { state: { now: 'room' } })}
+        >
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         <StHeaderTitle>채팅방 만들기</StHeaderTitle>

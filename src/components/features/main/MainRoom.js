@@ -65,7 +65,7 @@ const MainRoom = () => {
   const joinRoomHandler = async (roomKey) => {
     try {
       await instance.post(`/room/${roomKey}`);
-      navigate(`/chatroom/${roomKey}`);
+      navigate(`/chatroom/${roomKey}`, { state: { now: 'room' } });
     } catch (error) {
       setModal(error.response.data.errMsg);
     }

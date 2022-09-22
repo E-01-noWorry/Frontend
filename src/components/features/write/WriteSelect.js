@@ -107,7 +107,7 @@ const WriteSelect = () => {
       {uploadModal && (
         <ModalBasic
           setter={() => {
-            navigate('/main', { state: 'select' });
+            navigate('/main', { state: { now: 'select' } });
             document.body.style.overflow = 'unset';
           }}
         >
@@ -127,7 +127,9 @@ const WriteSelect = () => {
       )}
 
       <Header>
-        <StHeaderIcon onClick={() => navigate('/main', { state: 'select' })}>
+        <StHeaderIcon
+          onClick={() => navigate('/main', { state: { now: 'select' } })}
+        >
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         <StHeaderTitle>투표 만들기</StHeaderTitle>

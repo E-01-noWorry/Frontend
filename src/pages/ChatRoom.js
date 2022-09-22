@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import instance from '../app/module/instance';
 import { io } from 'socket.io-client';
@@ -28,6 +28,7 @@ import styled from 'styled-components';
 
 const ChatRoom = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const { roomKey } = useParams();
   const userKey = localStorage.getItem('userKey');
@@ -73,7 +74,7 @@ const ChatRoom = () => {
         {
           chat: data.message,
           userKey: data.userKey,
-          User: { nickname: data.nickname },
+          User: { nickname: data.nickname, point: data.point },
           createdAt: data.time,
         },
       ]);
@@ -127,7 +128,11 @@ const ChatRoom = () => {
 
       await instance.delete(`/room/${roomKey}`);
 
-      navigate(-1, { state: 'room' });
+      if (state?.now === 'room') {
+        navigate('/main', { state: { now: 'room' } });
+      } else {
+        navigate(-1);
+      }
       document.body.style.overflow = 'unset';
     } catch (error) {
       console.log(error.response.data.errMsg);
@@ -197,13 +202,23 @@ const ChatRoom = () => {
       )}
 
       {hostByeModal && (
-        <ModalBasic setter={() => navigate(-1, { state: 'room' })}>
+        <ModalBasic
+          setter={() => navigate('/main', { state: { now: 'room' } })}
+        >
           {hostByeModal}
         </ModalBasic>
       )}
 
       <Header>
-        <StHeaderIcon onClick={() => navigate(-1, { state: 'room' })}>
+        <StHeaderIcon
+          onClick={() => {
+            state?.now === 'room'
+              ? navigate('/main', {
+                  state: { now: 'room' },
+                })
+              : navigate(-1);
+          }}
+        >
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
 

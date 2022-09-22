@@ -27,7 +27,7 @@ const Start = () => {
     } else {
       setTimeout(() => {
         if (isLogin()) {
-          navigate('/main', { state: 'select' });
+          navigate('/main', { state: { now: 'select' } });
         } else navigate('/welcome');
       }, 1000);
     }
@@ -39,7 +39,7 @@ const Start = () => {
         <ModalBasic setter={() => setModal(false)}>
           <span>
             아쉽게도 인앱브라우저는 지원이 안됩니다. <br />
-            Safari로 접속해주세요! <br />
+            Safari 또는 Chrome으로 접속해주세요! <br />
           </span>
         </ModalBasic>
       )}

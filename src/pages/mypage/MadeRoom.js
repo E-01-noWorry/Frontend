@@ -64,7 +64,9 @@ const MadeRoom = () => {
   return (
     <div>
       <StHeader length={madeRoom.length}>
-        <StHeaderIcon onClick={() => navigate('/mypage', { state: 'mypage' })}>
+        <StHeaderIcon
+          onClick={() => navigate('/mypage', { state: { now: 'mypage' } })}
+        >
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         <StHeaderTitle>내가 만든 고민 상담방</StHeaderTitle>
