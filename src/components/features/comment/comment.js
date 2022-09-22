@@ -96,7 +96,7 @@ const Comment = (props) => {
 export default Comment;
 
 const Container = styled.div`
-  padding-bottom: 10rem;
+  padding-bottom: 2.4rem;
 `;
 
 const NoComments = styled.p`
@@ -118,13 +118,14 @@ const WriteBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 8px 8px 8px 8px;
+  padding: 0.8rem 0.8rem 0.8rem 0.8rem;
+
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 7.2rem;
+  height: 8.8rem;
 
-  background: #f5f5f5;
+  background-color: ${({ theme }) => theme.bg};
 `;
 
 const Write = styled.input`
@@ -148,6 +149,6 @@ const CommentsDetail = styled.div`
 
 const SubmitButton = styled.div`
   position: fixed;
-  bottom: 2rem;
+  bottom: 3.6rem;
   right: 3.2rem;
 `;
