@@ -14,8 +14,9 @@ import {
   fontSmall,
 } from '../../../shared/themes/textStyle';
 
-import IconPerson from '../../../static/icons/Variety=person, Status=untab.svg';
-import IconSearch from '../../../static/icons/Variety=search, Status=untab.svg';
+import IconPerson from '../../../static/icons/Variety=person, Status=untab, Size=S.svg';
+import IconSearch from '../../../static/icons/Variety=search, Status=untab, Size=M.svg';
+import IconAnnounce from '../../../static/icons/Variety=announce, Status=untab, Size=M.svg';
 
 import styled from 'styled-components';
 
@@ -24,6 +25,7 @@ const MainRoom = () => {
 
   const [modal, setModal] = useState('');
   const [rooms, setRooms] = useState([]);
+  const [search, setSearch] = useState(false);
   const searchRef = useRef();
 
   //무한 스크롤을 관리하는 State
@@ -40,6 +42,7 @@ const MainRoom = () => {
   };
 
   useEffect(() => {
+    if (search) return;
     getAllRoom();
   }, [page]);
 
@@ -65,7 +68,7 @@ const MainRoom = () => {
   const joinRoomHandler = async (roomKey) => {
     try {
       await instance.post(`/room/${roomKey}`);
-      navigate(`/chatroom/${roomKey}`);
+      navigate(`/chatroom/${roomKey}`, { state: { now: 'room' } });
     } catch (error) {
       setModal(error.response.data.errMsg);
     }
@@ -78,6 +81,7 @@ const MainRoom = () => {
       const { data } = await instance.get(
         `/room/search?searchWord=${searchRef.current.value}`,
       );
+      setSearch(true);
       setRooms([...data.result]);
     } catch (error) {
       setModal(error.response.data.errMsg);
@@ -88,17 +92,18 @@ const MainRoom = () => {
   //고민 채팅방 검색 취소버튼
   const searchCancelHandler = () => {
     searchRef.current.value = '';
+    if (search) {
+      setRooms([]);
+      setPage(1);
+      setSearch(false);
+    }
   };
-
-  if (rooms.length === 0) {
-    return <StNoneContents>상담방이 없습니다.</StNoneContents>;
-  }
 
   return (
     <>
       {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
 
-      <StSearchWrap>
+      <StSearchWrap length={rooms.length}>
         <form onSubmit={searchHandler}>
           <input
             maxLength={10}
@@ -113,15 +118,23 @@ const MainRoom = () => {
       </StSearchWrap>
 
       <BodyPadding>
+        {rooms.length === 0 && (
+          <StNoneContents>상담방이 없습니다.</StNoneContents>
+        )}
         <StContentBoxWrap>
           {rooms?.map((room, idx) => (
             <StContentBox
               key={room.roomKey}
               onClick={() => joinRoomHandler(room.roomKey)}
+              cur={room.currentPeople}
+              max={room.max}
               //마지막 게시글에 ref를 달아줍니다
               ref={idx === rooms.length - 1 ? setRef : null}
             >
-              <StInnerTitle>{room.title}</StInnerTitle>
+              <StInnerTitle cur={room.currentPeople} max={room.max}>
+                <img src={IconAnnounce} alt="IconAnnounce" />
+                <span>{room.title}</span>
+              </StInnerTitle>
 
               <StInnerKeywordWrap>
                 {room.hashTag?.map((item) => (
@@ -135,7 +148,7 @@ const MainRoom = () => {
                     <img src={IconPerson} alt="IconPerson" />
                   </StPeopleIcon>
                   <span>
-                    {room.currentPeople}/{room.max}
+                    {room.currentPeople}/{room.max} 명
                   </span>
                 </StInnerCurrent>
 
@@ -155,7 +168,7 @@ export default MainRoom;
 
 const StNoneContents = styled.div`
   width: 100%;
-  margin-top: 15.4rem;
+  margin-top: 16.9rem;
 
   ${fontMedium}
   text-align: center;
@@ -174,6 +187,9 @@ const StSearchWrap = styled.div`
   height: 6.4rem;
   padding: 0 2rem;
   background-color: ${({ theme }) => theme.bg};
+
+  border-bottom: ${(props) =>
+    props.length ? null : `1px solid ${props.theme.sub4}`};
 
   z-index: 9;
 
@@ -225,7 +241,8 @@ const StContentBox = styled.div`
 
   height: 11.4rem;
   padding: 1.6rem;
-  background-color: ${({ theme }) => theme.white};
+  background-color: ${(props) =>
+    props.cur === props.max ? props.theme.sub4 : props.theme.white};
 `;
 
 const StInnerTitle = styled.div`
@@ -233,8 +250,19 @@ const StInnerTitle = styled.div`
   top: 1.6rem;
   left: 1.6rem;
 
-  ${fontBold};
-  line-height: 2.1rem;
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 2rem;
+  }
+
+  span {
+    ${fontBold};
+    line-height: 2.1rem;
+    color: ${(props) =>
+      props.cur === props.max ? props.theme.sub2 : props.theme.black};
+  }
 `;
 
 const StInnerKeywordWrap = styled.div`
@@ -289,7 +317,7 @@ const StInnerCurrent = styled.div`
 
   ${fontMedium};
   line-height: 2.1rem;
-  color: ${({ theme }) => theme.main2};
+  color: ${({ theme }) => theme.sub2};
 `;
 
 const StPeopleIcon = styled.div`

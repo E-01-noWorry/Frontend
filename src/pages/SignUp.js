@@ -12,7 +12,7 @@ import GlobalButton from '../components/elements/GlobalButton';
 import { fontBold, fontLarge, fontSmall } from '../shared/themes/textStyle';
 import { IconLarge } from '../shared/themes/iconStyle';
 
-import IconBack from '../static/icons/Variety=back, Status=untab.svg';
+import IconBack from '../static/icons/Variety=back, Status=untab, Size=L.svg';
 
 import styled from 'styled-components';
 
@@ -20,16 +20,6 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const signUpState = useSelector((state) => state.signUp);
-
-  //회원가입 오류시 오류메시지 alert
-  // useEffect(() => {
-  //   if (signUpState.error?.errMsg) {
-  //     toast.error(`${signUpState.error?.errMsg}`, {
-  //       position: toast.POSITION.BOTTOM_LEFT,
-  //       autoClose: 2000,
-  //     });
-  //   }
-  // }, [signUpState.error]);
 
   const [signUpInfo, setSignUpInfo] = useState({
     userId: '',

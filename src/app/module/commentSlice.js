@@ -130,7 +130,7 @@ export const commentSlice = createSlice({
     },
     [editCommentThunk.fulfilled]: (state, action) => {
       const a = current(state).data.filter(
-        (a) => a.commentKey === action.payload.data.result.commentKey,
+        (a) => a.commentKey === parseInt(action.payload.data.result.commentKey),
       );
 
       const indexNum = current(state).data.indexOf(a[0]);
@@ -140,15 +140,13 @@ export const commentSlice = createSlice({
           ? { ...item, comment: action.payload.data.result.comment }
           : item,
       );
-      console.log(action.payload.data);
-      console.log(current(state));
     },
     [editCommentThunk.rejected]: (state, action) => {
       console.log(action);
     },
     [writeRecommentThunk.fulfilled]: (state, action) => {
       state.data?.map((a) =>
-        a.commentKey === action.payload.data.result.commentKey
+        a.commentKey === parseInt(action.payload.data.result.commentKey)
           ? a.recomment?.push(action.payload.data.result)
           : a,
       );
@@ -156,7 +154,7 @@ export const commentSlice = createSlice({
     [writeRecommentThunk.rejected]: (state, action) => {},
     [deleteRecommentThunk.fulfilled]: (state, action) => {
       const a = current(state).data.filter(
-        (a) => a.commentKey === action.payload.data.result.commentKey,
+        (a) => a.commentKey === parseInt(action.payload.data.result.commentKey),
       );
 
       const indexNum = current(state).data.indexOf(a[0]);
@@ -168,7 +166,8 @@ export const commentSlice = createSlice({
               recomment: [
                 ...a[0].recomment?.filter(
                   (a) =>
-                    a.recommentKey !== action.payload.data.result.recommentKey,
+                    a.recommentKey !==
+                    parseInt(action.payload.data.result.recommentKey),
                 ),
               ],
             }
@@ -179,7 +178,7 @@ export const commentSlice = createSlice({
 
     [editRecommentThunk.fulfilled]: (state, action) => {
       const a = current(state).data.filter(
-        (a) => a.commentKey === action.payload.data.result.commentKey,
+        (a) => a.commentKey === parseInt(action.payload.data.result.commentKey),
       );
 
       const indexNum = current(state).data.indexOf(a[0]);
@@ -189,7 +188,8 @@ export const commentSlice = createSlice({
           ? {
               ...a[0],
               recomment: a[0].recomment.map((item) =>
-                item.recommentKey === action.payload.data.result.recommentKey
+                item.recommentKey ===
+                parseInt(action.payload.data.result.recommentKey)
                   ? action.payload.data.result
                   : item,
               ),

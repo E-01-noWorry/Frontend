@@ -1,3 +1,3 @@
 export const isLogin = () => {
-  return localStorage.getItem('token');
+  return localStorage.getItem('userKey');
 };

@@ -1,6 +1,5 @@
 import React, { useEffect, useSelector, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
-import sendIcon from '../../../static/icons/Variety=send, Status=untab.svg';
+import IconSend from '../../../static/icons/Variety=send, Status=untab, Size=L.svg';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -9,6 +8,7 @@ import {
   getCommentThunk,
 } from '../../../app/module/commentSlice';
 import EditComment from './editComment';
+import { fontMedium } from '../../../shared/themes/textStyle';
 
 const Comment = (props) => {
   const dispatch = useDispatch();
@@ -63,7 +63,9 @@ const Comment = (props) => {
               maxLength="50"
               value={writeComment.comment}
             />
-            <SubmitButton onClick={onClickSubmit}>{sendIcon}</SubmitButton>
+            <SubmitButton onClick={onClickSubmit}>
+              <img src={IconSend} alt="IconSend" />
+            </SubmitButton>
           </WriteBox>
         </>
       ) : (
@@ -85,7 +87,7 @@ const Comment = (props) => {
               value={writeComment.comment}
             />
             <SubmitButton onClick={onClickSubmit}>
-              <img src={sendIcon}></img>
+              <img src={IconSend} alt="IconSend" />
             </SubmitButton>
           </WriteBox>
         </CommentContainer>
@@ -106,6 +108,9 @@ const NoComments = styled.p`
   text-align: center;
   justify-content: center;
   align-items: center;
+
+  ${fontMedium}
+  text-align: center;
 `;
 
 const CommentContainer = styled.div`

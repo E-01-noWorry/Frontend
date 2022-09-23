@@ -16,7 +16,7 @@ import {
   fontSmall,
 } from '../../../shared/themes/textStyle';
 
-import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
+import IconBack from '../../../static/icons/Variety=back, Status=untab, Size=L.svg';
 import IconErase from '../../../static/icons/Variety=erase, Status=untab, Size=S.svg';
 import IconPlus from '../../../static/icons/Variety=plus, Status=untab, Size=XL.svg';
 import IconMinus from '../../../static/icons/Variety=minus, Status=untab, Size=XL.svg';
@@ -91,7 +91,7 @@ const WriteRoom = () => {
       {uploadModal && (
         <ModalBasic
           setter={() => {
-            navigate(`/chatroom/${roomkey}`);
+            navigate(`/chatroom/${roomkey}`, { state: { now: 'room' } });
             document.body.style.overflow = 'unset';
           }}
         >
@@ -111,7 +111,9 @@ const WriteRoom = () => {
       )}
 
       <Header>
-        <StHeaderIcon onClick={() => navigate('/main', { state: 'room' })}>
+        <StHeaderIcon
+          onClick={() => navigate('/main', { state: { now: 'room' } })}
+        >
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         <StHeaderTitle>채팅방 만들기</StHeaderTitle>

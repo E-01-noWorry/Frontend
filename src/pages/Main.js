@@ -12,7 +12,7 @@ import { ModalBasic, ModalWrite } from '../components/common/Modal';
 
 import { IconLarge } from '../shared/themes/iconStyle';
 
-import IconArm from '../static/icons/Variety=arm, Status=untab.svg';
+import IconSurvey from '../static/icons/Variety=Survey, Status=untab, Size=L.svg';
 import Logo from '../static/images/Logo.svg';
 
 import styled from 'styled-components';
@@ -20,12 +20,14 @@ import styled from 'styled-components';
 const Main = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+
   const deviceToken = sessionStorage.getItem('deviceToken');
   const userKey = localStorage.getItem('userKey');
 
   const [modal, setModal] = useState('');
   const [writeModal, setWriteModal] = useState(false);
 
+  //로그인을 한 유저가 알림 허용까지 했다면 deviceToken을 서버에 보냅니다
   const postDeviceToken = useCallback(async () => {
     if (userKey && deviceToken) {
       try {
@@ -41,10 +43,10 @@ const Main = () => {
   }, [postDeviceToken]);
 
   const writeButtonHandler = () => {
-    if (localStorage.getItem('token') && state === 'select') {
+    if (localStorage.getItem('accessToken') && state.now === 'select') {
       setWriteModal(true);
       document.body.style.overflow = 'hidden';
-    } else if (localStorage.getItem('token') && state === 'room') {
+    } else if (localStorage.getItem('accessToken') && state.now === 'room') {
       navigate('/write', { state });
     } else {
       setModal('로그인 후 사용 가능합니다.');
@@ -61,7 +63,7 @@ const Main = () => {
             document.body.style.overflow = 'unset';
           }}
           write={() => {
-            navigate('/write', { state });
+            navigate('/write', { state: { now: state.now } });
             document.body.style.overflow = 'unset';
           }}
         />
@@ -83,13 +85,13 @@ const Main = () => {
           <img src={Logo} alt="Logo" />
         </StLogo>
         <StIcon>
-          <img src={IconArm} alt="IconArm" />
+          <img src={IconSurvey} alt="IconSurvey" />
         </StIcon>
       </Header>
 
-      {state === 'room' ? <MainRoom /> : <MainSelect />}
+      {state.now === 'room' ? <MainRoom /> : <MainSelect />}
 
-      <WriteButton onClick={writeButtonHandler} state={state} />
+      <WriteButton onClick={writeButtonHandler} />
 
       <Footer state={state} />
     </>

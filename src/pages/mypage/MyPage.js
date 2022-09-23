@@ -17,12 +17,14 @@ import {
 import { css } from 'styled-components';
 import { IconLarge, IconMedium } from '../../shared/themes/iconStyle';
 import { ModalBasic } from '../../components/common/Modal';
-import IconEdit from '../../static/icons/Variety=edit, Status=untab.svg';
-import IconNext from '../../static/icons/Variety=next, Status=untab.svg';
-import IconVoteTab from '../../static/icons/Variety=vote, Status=tab.svg';
-import IconChatting from '../../static/icons/Variety=chating, Status=untab.svg';
 import ProfileImg from '../../components/elements/ProfileImg';
 import MypageModal from '../../components/features/mypage/mypageModal';
+
+import IconEdit from '../../static/icons/Variety=edit, Status=untab, Size=L.svg';
+import IconNext from '../../static/icons/Variety=next, Status=untab, Size=M.svg';
+import IconVoteTab from '../../static/icons/Variety=vote, Status=tab, Size=L.svg';
+import IconChatting from '../../static/icons/Variety=chating, Status=untab, Size=L.svg';
+import IconInformation from '../../static/icons/Variety=Information, Status=untab, Size=S.svg';
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -49,7 +51,7 @@ const MyPage = () => {
   };
 
   //로그인 여부
-  const loggined = localStorage.getItem('token');
+  const loggined = localStorage.getItem('accessToken');
 
   //로그아웃
   const onClickLogOut = () => {
@@ -99,7 +101,7 @@ const MyPage = () => {
           ) : (
             <>
               <MyPageHeadContainer>
-                <StProfileImgLarge />
+                <StProfileImgLarge point={userPoint} />
                 <div>
                   <div>
                     <Badge userPoint={userPoint}>
@@ -167,7 +169,7 @@ const MyPage = () => {
                   <ScoreInfo2>
                     모은점수
                     <ScoreDetail>
-                      {userPoint === null ? '0' : userPoint}
+                      {userPoint === null ? '0' : userPoint}점
                     </ScoreDetail>
                   </ScoreInfo2>
                   <ScoreInfo3>
@@ -189,6 +191,7 @@ const MyPage = () => {
 
               <TierLetter>
                 <span onClick={onClickModal}>등급 별 달성 조건</span>
+                <img src={IconInformation} alt="IconInformation" />
               </TierLetter>
 
               <TierInfoContainer>
@@ -644,16 +647,21 @@ const TierInfo = styled.div`
 
 const TierLetter = styled.p`
   display: flex;
-  width: 100%;
   align-items: center;
-  ${fontSmall}
+  gap: 0.4rem;
+
+  width: 100%;
   padding: 1.6rem 0;
-  background-color: #fff;
   margin-bottom: 2.4rem;
-  border-radius: 0px 0px 20px 20px;
+  background-color: #fff;
+
+  ${fontSmall}
+
   > span {
     margin-left: 2rem;
+
     font-size: 1.6rem;
+    line-height: 2rem;
     ${fontBold}
   }
 `;

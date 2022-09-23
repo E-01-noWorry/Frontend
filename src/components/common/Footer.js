@@ -1,61 +1,84 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { ModalBasic } from './Modal';
 
 import { IconLarge } from '../../shared/themes/iconStyle';
 import { fontExtraSmall } from '../../shared/themes/textStyle';
 
-import IconVoteTab from '../../static/icons/Variety=vote, Status=tab.svg';
-import IconVoteUntab from '../../static/icons/Variety=vote, Status=untab.svg';
-import IconChatTab from '../../static/icons/Variety=chat, Status=tab.svg';
-import IconChatUntab from '../../static/icons/Variety=chat, Status=untab.svg';
-import IconProfileTab from '../../static/icons/Variety=profile, Status=tab.svg';
-import IconProfileUntab from '../../static/icons/Variety=profile, Status=untab.svg';
+import IconVoteTab from '../../static/icons/Variety=vote, Status=tab, Size=L.svg';
+import IconVoteUntab from '../../static/icons/Variety=vote, Status=untab, Size=L.svg';
+import IconChatTab from '../../static/icons/Variety=_chat, Status=tab, Size=L.svg';
+import IconChatUntab from '../../static/icons/Variety=chat, Status=untab, Size=L.svg';
+import IconProfileTab from '../../static/icons/Variety=profile, Status=tab, Size=L.svg';
+import IconProfileUntab from '../../static/icons/Variety=profile, Status=untab, Size=L.svg';
+import IconGomTab from '../../static/icons/Variety=Gom, Status=tab, Size=L.svg';
+import IconGomUntab from '../../static/icons/Variety=Gom, Status=untab, Size=L.svg';
 
 import styled from 'styled-components';
 
 const Footer = ({ state }) => {
   const navigate = useNavigate();
 
+  const [modal, setModal] = useState(false);
+
   return (
-    <StFooter state={state}>
-      <StIconWrap onClick={() => navigate('/main', { state: 'select' })}>
-        <StIcon>
-          {state === 'select' ? (
-            <img src={IconVoteTab} alt="IconVoteTab" />
-          ) : (
-            <img src={IconVoteUntab} alt="IconVoteUntab" />
-          )}
-        </StIcon>
-        <StText>고민투표</StText>
-      </StIconWrap>
+    <>
+      {modal && <ModalBasic setter={() => setModal(false)}>{modal}</ModalBasic>}
 
-      <StIconWrap onClick={() => navigate('/main', { state: 'room' })}>
-        <StIcon>
-          {state === 'room' ? (
-            <img src={IconChatTab} alt="IconChatTab" />
-          ) : (
-            <img src={IconChatUntab} alt="IconChatUntab" />
-          )}
-        </StIcon>
-        <StText>고민상담</StText>
-      </StIconWrap>
+      <StFooter state={state}>
+        <StIconWrap
+          onClick={() => navigate('/main', { state: { now: 'select' } })}
+        >
+          <StIcon>
+            {state.now === 'select' ? (
+              <img src={IconVoteTab} alt="IconVoteTab" />
+            ) : (
+              <img src={IconVoteUntab} alt="IconVoteUntab" />
+            )}
+          </StIcon>
+          <StText>고민투표</StText>
+        </StIconWrap>
 
-      <StIconWrap>
-        <StIcon></StIcon>
-        <StText>곰곰해답</StText>
-      </StIconWrap>
+        <StIconWrap
+          onClick={() => navigate('/main', { state: { now: 'room' } })}
+        >
+          <StIcon>
+            {state.now === 'room' ? (
+              <img src={IconChatTab} alt="IconChatTab" />
+            ) : (
+              <img src={IconChatUntab} alt="IconChatUntab" />
+            )}
+          </StIcon>
+          <StText>고민상담</StText>
+        </StIconWrap>
 
-      <StIconWrap onClick={() => navigate('/mypage', { state: 'mypage' })}>
-        <StIcon>
-          {state === 'mypage' ? (
-            <img src={IconProfileTab} alt="IconProfileTab" />
-          ) : (
-            <img src={IconProfileUntab} alt="IconProfileUntab" />
-          )}
-        </StIcon>
-        <StText>마이페이지</StText>
-      </StIconWrap>
-    </StFooter>
+        {/* <StIconWrap onClick={() => navigate('/answer', { state: { now: 'answer' } })}> */}
+        <StIconWrap onClick={() => setModal('앗! 아직 개발중이에요.')}>
+          <StIcon>
+            {state.now === 'answer' ? (
+              <img src={IconGomTab} alt="IconGomTab" />
+            ) : (
+              <img src={IconGomUntab} alt="IconGomUntab" />
+            )}
+          </StIcon>
+          <StText>곰곰해답</StText>
+        </StIconWrap>
+
+        <StIconWrap
+          onClick={() => navigate('/mypage', { state: { now: 'mypage' } })}
+        >
+          <StIcon>
+            {state.now === 'mypage' ? (
+              <img src={IconProfileTab} alt="IconProfileTab" />
+            ) : (
+              <img src={IconProfileUntab} alt="IconProfileUntab" />
+            )}
+          </StIcon>
+          <StText>마이페이지</StText>
+        </StIconWrap>
+      </StFooter>
+    </>
   );
 };
 
@@ -79,14 +102,16 @@ const StFooter = styled.div`
 
   &
     > div:nth-child(${(props) =>
-        props.state === 'select'
+        props.state.now === 'select'
           ? 1
-          : props.state === 'room'
+          : props.state.now === 'room'
           ? 2
-          : props.state === 'mypage'
+          : props.state.now === 'answer'
+          ? 3
+          : props.state.now === 'mypage'
           ? 4
           : null}) {
-    color: ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.main2};
   }
 `;
 
@@ -95,7 +120,7 @@ const StIconWrap = styled.div`
   flex-direction: column;
   align-items: center;
 
-  color: ${({ theme }) => theme.sub1};
+  color: ${({ theme }) => theme.sub2};
 `;
 
 const StIcon = styled.div`

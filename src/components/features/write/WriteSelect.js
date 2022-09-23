@@ -21,8 +21,8 @@ import {
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconLarge, IconMedium } from '../../../shared/themes/iconStyle';
 
-import IconBack from '../../../static/icons/Variety=back, Status=untab.svg';
-import IconAdd from '../../../static/icons/Variety=add, Status=untab.svg';
+import IconBack from '../../../static/icons/Variety=back, Status=untab, Size=L.svg';
+import IconAdd from '../../../static/icons/Variety=add, Status=untab, Size=L.svg';
 
 import styled from 'styled-components';
 
@@ -71,12 +71,13 @@ const WriteSelect = () => {
       setModal('사진과 선택지의 개수가 다릅니다.');
       document.body.style.overflow = 'hidden';
     } else {
-      let formData = new FormData();
+      const formData = new FormData();
 
       formData.append('title', title);
       formData.append('category', category);
       formData.append('options', optionArr);
       formData.append('time', time);
+
       if (imageArr[0]) {
         for (let i = 0; i < imageArr.length; i++) {
           formData.append('image', imageArr[i]);
@@ -89,7 +90,8 @@ const WriteSelect = () => {
           url: `${process.env.REACT_APP_API}/select`,
           headers: {
             'Content-Type': 'multipart/form-data',
-            authorization: `Bearer ${localStorage.getItem('token')}`,
+            accessToken: `Bearer ${localStorage.getItem('accessToken')}`,
+            refreshToken: `Bearer ${localStorage.getItem('refreshToken')}`,
           },
           data: formData,
         });
@@ -107,7 +109,7 @@ const WriteSelect = () => {
       {uploadModal && (
         <ModalBasic
           setter={() => {
-            navigate('/main', { state: 'select' });
+            navigate('/main', { state: { now: 'select' } });
             document.body.style.overflow = 'unset';
           }}
         >
@@ -127,7 +129,9 @@ const WriteSelect = () => {
       )}
 
       <Header>
-        <StHeaderIcon onClick={() => navigate('/main', { state: 'select' })}>
+        <StHeaderIcon
+          onClick={() => navigate('/main', { state: { now: 'select' } })}
+        >
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         <StHeaderTitle>투표 만들기</StHeaderTitle>

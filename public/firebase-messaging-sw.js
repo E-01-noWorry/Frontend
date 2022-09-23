@@ -6,8 +6,8 @@ importScripts(
   'https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js',
 );
 
-self.addEventListener('notificationclick', function (event) {
-  console.log('On notification click: ', event.notification.tag);
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
 
   // This looks to see if the current is already open and
   // focuses if it is
@@ -16,7 +16,7 @@ self.addEventListener('notificationclick', function (event) {
       .matchAll({
         type: 'window',
       })
-      .then(function (clientList) {
+      .then((clientList) => {
         for (var i = 0; i < clientList.length; i++) {
           var client = clientList[i];
           if (client.url == '/' && 'focus' in client) return client.focus();
@@ -25,8 +25,6 @@ self.addEventListener('notificationclick', function (event) {
           return self.clients.openWindow('https://www.gomgom.site');
       }),
   );
-
-  event.notification.close();
 });
 
 // Initialize the Firebase app in the service worker by passing in

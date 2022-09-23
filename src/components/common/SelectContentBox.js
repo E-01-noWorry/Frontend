@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { remainedTime } from '../../shared/timeCalculation';
 
@@ -7,14 +7,15 @@ import { borderBoxDefault } from '../../shared/themes/boxStyle';
 import { IconSmall } from '../../shared/themes/iconStyle';
 import { fontBold, fontMedium, fontSmall } from '../../shared/themes/textStyle';
 
-import IconPeople from '../../static/icons/Variety=people, Status=untab.svg';
-import IconTimer from '../../static/icons/Variety=timer, Status=untab.svg';
-import IconTimeOver from '../../static/icons/Variety=timeover, Status=untab.svg';
+import IconPeople from '../../static/icons/Variety=people, Status=untab, Size=S.svg';
+import IconLeftTime from '../../static/icons/Variety=Left Time, Status=untab, Size=S.svg';
+import IconTimeOver from '../../static/icons/Variety=Timeover, Status=Untab, Size=S.svg';
 
 import styled from 'styled-components';
 
-const SelectContentBox = ({ contents, setRef }) => {
+const SelectContentBox = ({ contents, setRef, filter }) => {
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   if (contents.length === 0) {
     return <StNoneContents>투표가 없습니다.</StNoneContents>;
@@ -25,7 +26,11 @@ const SelectContentBox = ({ contents, setRef }) => {
       {contents?.map((content, idx) => (
         <StContentBox
           key={content.selectKey}
-          onClick={() => navigate(`/detail/${content.selectKey}`)}
+          onClick={() =>
+            navigate(`/detail/${content.selectKey}`, {
+              state: { now: state.now, filter },
+            })
+          }
           //마지막 게시글에 ref를 달아줍니다
           ref={idx === contents.length - 1 ? setRef : null}
           completion={content.completion}
@@ -56,7 +61,7 @@ const SelectContentBox = ({ contents, setRef }) => {
               ) : (
                 <>
                   <StIcon>
-                    <img src={IconTimer} alt="IconTimer" />
+                    <img src={IconLeftTime} alt="IconLeftTime" />
                   </StIcon>
                   <span>{remainedTime(content.deadLine)}</span>
                 </>
@@ -201,5 +206,5 @@ const StInnerCurrent = styled.div`
 
   ${fontSmall}
   line-height: 2rem;
-  color: ${({ theme }) => theme.sub1};
+  color: ${({ theme }) => theme.sub2};
 `;

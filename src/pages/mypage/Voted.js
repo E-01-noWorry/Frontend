@@ -18,10 +18,10 @@ import {
   fontLarge,
 } from '../../shared/themes/textStyle';
 
-import IconBack from '../../static/icons/Variety=back, Status=untab.svg';
-import IconPeople from '../../static/icons/Variety=people, Status=untab.svg';
-import IconTimer from '../../static/icons/Variety=timer, Status=untab.svg';
-import IconTimeOver from '../../static/icons/Variety=timeover, Status=untab.svg';
+import IconBack from '../../static/icons/Variety=back, Status=untab, Size=L.svg';
+import IconPeople from '../../static/icons/Variety=people, Status=untab, Size=S.svg';
+import IconLeftTime from '../../static/icons/Variety=Left Time, Status=untab, Size=S.svg';
+import IconTimeOver from '../../static/icons/Variety=Timeover, Status=Untab, Size=S.svg';
 
 import styled, { css } from 'styled-components';
 
@@ -58,7 +58,9 @@ const Voted = () => {
   return (
     <>
       <StHeader length={postVoted.length}>
-        <StHeaderIcon onClick={() => navigate('/mypage', { state: 'mypage' })}>
+        <StHeaderIcon
+          onClick={() => navigate('/mypage', { state: { now: 'mypage' } })}
+        >
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         <StHeaderTitle>내가 투표한 고민 투표</StHeaderTitle>
@@ -92,10 +94,7 @@ const Voted = () => {
                 </StInnerTitle>
 
                 <StInnerOption completion={content.completion}>
-                  {/* 선택지 내용이 길면 26글자에서 잘라줍니다 */}
-                  {content.options?.join(' vs ').length > 26
-                    ? content.options?.join(' vs ').slice(0, 26) + '...'
-                    : content.options?.join(' vs ')}
+                  {content.options?.join(' vs ')}
                 </StInnerOption>
 
                 <StContentFooter>
@@ -107,7 +106,7 @@ const Voted = () => {
                     ) : (
                       <>
                         <StIcon>
-                          <img src={IconTimer} alt="IconTimer" />
+                          <img src={IconLeftTime} alt="IconLeftTime" />
                         </StIcon>
                         <span>{remainedTime(content.deadLine)}</span>
                       </>
@@ -160,8 +159,8 @@ const StContentBoxWrap = styled.div`
   flex-direction: column;
   gap: 2.4rem;
 
-  margin-top: 7.4rem;
-  margin-bottom: 9.6rem;
+  margin-top: 6.4rem;
+  margin-bottom: 2rem;
 `;
 
 const StContentBox = styled.div`
@@ -171,7 +170,7 @@ const StContentBox = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
 
-  height: 16rem;
+  height: 13.9rem;
   padding: 1.6rem;
   background-color: ${(props) =>
     props.completion ? props.theme.sub4 : props.theme.white};
@@ -211,20 +210,30 @@ const StInnerNickname = styled.div`
 `;
 
 const StInnerTitle = styled.div`
+  width: 100%;
   margin-top: 2.6rem;
 
   ${fontBold};
   line-height: 2.1rem;
   color: ${(props) =>
     props.completion ? props.theme.sub2 : props.theme.black};
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const StInnerOption = styled.div`
+  width: 100%;
   margin-top: 0.4rem;
 
   ${fontMedium}
   line-height: 1.8rem;
   color: ${({ theme }) => theme.sub2};
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const StContentFooter = styled.div`
@@ -260,5 +269,5 @@ const StInnerCurrent = styled.div`
 
   ${fontSmall}
   line-height: 2rem;
-  color: ${({ theme }) => theme.sub1};
+  color: ${({ theme }) => theme.sub2};
 `;
