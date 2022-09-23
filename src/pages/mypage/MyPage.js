@@ -61,19 +61,22 @@ const MyPage = () => {
   };
 
   //닉네임변경
-  const [editNickname, setEditNickname] = useState('');
+  const [editNickname, setEditNickname] = useState({
+    nickname: '',
+  });
   const [editMode, setEditMode] = useState(false);
   const userKey = localStorage.getItem('userKey');
 
   const onClickEditNickName = () => {
     setEditMode((status) => !status);
+    setEditNickname({ nickname: localStorage.getItem('nickname') });
     if (editMode === true) {
       dispatch(editNickNameThunk({ ...editNickname, userKey: userKey }));
     }
   };
 
   const onChangeEditNickName = (event) => {
-    const { name, value } = event.target.id;
+    const { name, value } = event.target;
     setEditNickname({ [name]: value });
   };
 
@@ -123,6 +126,7 @@ const MyPage = () => {
                           name="nickname"
                           onChange={onChangeEditNickName}
                           type="text"
+                          value={editNickname.nickname}
                         />
                       ) : (
                         <>
@@ -389,7 +393,7 @@ const MyPage = () => {
           </BodyPadding>
         </>
       )}
-      {loggined !== null ? (
+      {loggined !== null && modalMode === false ? (
         <Logout onClick={onClickLogOut}>로그아웃</Logout>
       ) : null}
       <Footer state={state} />
