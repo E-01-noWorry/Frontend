@@ -30,7 +30,6 @@ const MyPage = () => {
   const { state } = useLocation();
   const userNickname = useSelector((state) => state.myPageSlice.data);
   const userPoint = useSelector((state) => state.myPageSlice.point);
-
   const [modal, setModal] = useState('');
 
   //나의 포인트 조회
