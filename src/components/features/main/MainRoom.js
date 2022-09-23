@@ -24,6 +24,7 @@ const MainRoom = () => {
 
   const [modal, setModal] = useState('');
   const [rooms, setRooms] = useState([]);
+  const [search, setSearch] = useState(false);
   const searchRef = useRef();
 
   //무한 스크롤을 관리하는 State
@@ -40,6 +41,7 @@ const MainRoom = () => {
   };
 
   useEffect(() => {
+    if (search) return;
     getAllRoom();
   }, [page]);
 
@@ -78,6 +80,7 @@ const MainRoom = () => {
       const { data } = await instance.get(
         `/room/search?searchWord=${searchRef.current.value}`,
       );
+      setSearch(true);
       setRooms([...data.result]);
     } catch (error) {
       setModal(error.response.data.errMsg);
@@ -88,17 +91,18 @@ const MainRoom = () => {
   //고민 채팅방 검색 취소버튼
   const searchCancelHandler = () => {
     searchRef.current.value = '';
+    if (search) {
+      setRooms([]);
+      setPage(1);
+      setSearch(false);
+    }
   };
-
-  if (rooms.length === 0) {
-    return <StNoneContents>상담방이 없습니다.</StNoneContents>;
-  }
 
   return (
     <>
       {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
 
-      <StSearchWrap>
+      <StSearchWrap length={rooms.length}>
         <form onSubmit={searchHandler}>
           <input
             maxLength={10}
@@ -113,6 +117,9 @@ const MainRoom = () => {
       </StSearchWrap>
 
       <BodyPadding>
+        {rooms.length === 0 && (
+          <StNoneContents>상담방이 없습니다.</StNoneContents>
+        )}
         <StContentBoxWrap>
           {rooms?.map((room, idx) => (
             <StContentBox
@@ -159,7 +166,7 @@ export default MainRoom;
 
 const StNoneContents = styled.div`
   width: 100%;
-  margin-top: 15.4rem;
+  margin-top: 16.9rem;
 
   ${fontMedium}
   text-align: center;
@@ -178,6 +185,9 @@ const StSearchWrap = styled.div`
   height: 6.4rem;
   padding: 0 2rem;
   background-color: ${({ theme }) => theme.bg};
+
+  border-bottom: ${(props) =>
+    props.length ? null : `1px solid ${props.theme.sub4}`};
 
   z-index: 9;
 
