@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 
-import { loginThunk } from '../app/module/loginSlice';
+import instance from '../app/module/instance';
 
 import LoginSignUpInput from '../components/elements/LoginSignUpInput';
 import Header from '../components/common/Header';
 import BodyPadding from '../components/common/BodyPadding';
 import GlobalButton from '../components/elements/GlobalButton';
+import SocialLoginButton from '../components/elements/SocialLoginButton';
 
 import { fontSmall, fontLarge } from '../shared/themes/textStyle';
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
@@ -16,13 +16,11 @@ import IconBack from '../static/icons/Variety=back, Status=untab, Size=L.svg';
 import IconJoin from '../static/icons/Variety=Join membership, Status=untab, Size=S.svg';
 
 import styled from 'styled-components';
-import SocialLoginButton from '../components/elements/SocialLoginButton';
 
 const Login = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const loginState = useSelector((state) => state.login);
 
+  const [error, setError] = useState();
   const [login, setLogin] = useState({
     userId: '',
     password: '',
@@ -33,8 +31,19 @@ const Login = () => {
     setLogin({ ...login, [name]: value });
   };
 
-  const onClickLogin = () => {
-    dispatch(loginThunk(login));
+  const onClickLogin = async () => {
+    try {
+      const data = await instance.post('/user/login', login);
+
+      localStorage.setItem('accessToken', data.data.accessToken);
+      localStorage.setItem('refreshToken', data.data.refreshToken);
+      localStorage.setItem('nickname', data.data.nickname);
+      localStorage.setItem('userKey', data.data.userKey);
+
+      window.location.replace('/');
+    } catch (error) {
+      setError(error.response.data);
+    }
   };
 
   return (
@@ -62,7 +71,7 @@ const Login = () => {
               type="password"
               placeholder="패스워드를 입력해주세요"
             />
-            {loginState?.error?.errMsg ? (
+            {error ? (
               <LoginErrorMsg>*아이디와 비밀번호를 확인해주세요</LoginErrorMsg>
             ) : null}
           </StInputWrap>

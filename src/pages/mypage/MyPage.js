@@ -52,7 +52,7 @@ const MyPage = () => {
   };
 
   //로그인 여부
-  const loggined = localStorage.getItem('token');
+  const loggined = localStorage.getItem('accessToken');
 
   //로그아웃
   const onClickLogOut = () => {
