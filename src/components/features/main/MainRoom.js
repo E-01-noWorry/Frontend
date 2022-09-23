@@ -16,6 +16,7 @@ import {
 
 import IconPerson from '../../../static/icons/Variety=person, Status=untab, Size=S.svg';
 import IconSearch from '../../../static/icons/Variety=search, Status=untab, Size=M.svg';
+import IconAnnounce from '../../../static/icons/Variety=announce, Status=untab, Size=M.svg';
 
 import styled from 'styled-components';
 
@@ -131,7 +132,8 @@ const MainRoom = () => {
               ref={idx === rooms.length - 1 ? setRef : null}
             >
               <StInnerTitle cur={room.currentPeople} max={room.max}>
-                {room.title}
+                <img src={IconAnnounce} alt="IconAnnounce" />
+                <span>{room.title}</span>
               </StInnerTitle>
 
               <StInnerKeywordWrap>
@@ -248,10 +250,19 @@ const StInnerTitle = styled.div`
   top: 1.6rem;
   left: 1.6rem;
 
-  ${fontBold};
-  line-height: 2.1rem;
-  color: ${(props) =>
-    props.cur === props.max ? props.theme.sub2 : props.theme.black};
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 2rem;
+  }
+
+  span {
+    ${fontBold};
+    line-height: 2.1rem;
+    color: ${(props) =>
+      props.cur === props.max ? props.theme.sub2 : props.theme.black};
+  }
 `;
 
 const StInnerKeywordWrap = styled.div`

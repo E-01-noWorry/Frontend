@@ -73,7 +73,7 @@ const OnBoarding = () => {
           bgc={({ theme }) => theme.white}
           font={({ theme }) => theme.main2}
           onClick={() =>
-            pagination === 3 && navigate('/main', { state: 'select' })
+            pagination === 3 && navigate('/main', { state: { now: 'select' } })
           }
         >
           서비스 둘러보기

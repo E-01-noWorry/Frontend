@@ -6,9 +6,10 @@ import styled from 'styled-components';
 
 const Loading = () => {
   return (
-    <StLogo>
-      <img src={Logo} alt="Logo" />
-    </StLogo>
+    <></>
+    // <StLogo>
+    //   <img src={Logo} alt="Logo" />
+    // </StLogo>
   );
 };
 
