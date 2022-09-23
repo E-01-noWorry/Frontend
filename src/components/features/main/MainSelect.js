@@ -10,7 +10,7 @@ import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/Array';
 import { fontMedium } from '../../../shared/themes/textStyle';
 import { IconSmall } from '../../../shared/themes/iconStyle';
 
-import IconNext from '../../../static/icons/Variety=next, Status=untab.svg';
+import IconDropdown from '../../../static/icons/Variety=Dropdown, Status=untab, Size=S.svg';
 
 import styled from 'styled-components';
 
@@ -108,7 +108,7 @@ const MainSelect = () => {
         <StFilter onClick={filterOpenHandler}>
           <span>{filter}</span>
           <StArrowIcon>
-            <img src={IconNext} alt="IconNext" />
+            <img src={IconDropdown} alt="IconDropdown" />
           </StArrowIcon>
           <StFilterModal setter={filterModal}>
             {FILTER_ARR.map((item) => (
@@ -122,7 +122,7 @@ const MainSelect = () => {
         <StFilter onClick={categoryOpenHandler}>
           <span>{category}</span>
           <StArrowIcon>
-            <img src={IconNext} alt="IconNext" />
+            <img src={IconDropdown} alt="IconDropdown" />
           </StArrowIcon>
           <StCategoryModal setter={categoryModal}>
             {CATEGORY_ARR.map((item) => (
@@ -208,7 +208,5 @@ const StArrowIcon = styled.div`
   img {
     width: 2rem;
     height: 2rem;
-
-    transform: rotate(90deg);
   }
 `;

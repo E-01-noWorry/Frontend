@@ -12,7 +12,7 @@ import { ModalBasic, ModalWrite } from '../components/common/Modal';
 
 import { IconLarge } from '../shared/themes/iconStyle';
 
-import IconArm from '../static/icons/Variety=arm, Status=untab.svg';
+import IconSurvey from '../static/icons/Variety=Survey, Status=untab, Size=L.svg';
 import Logo from '../static/images/Logo.svg';
 
 import styled from 'styled-components';
@@ -83,13 +83,13 @@ const Main = () => {
           <img src={Logo} alt="Logo" />
         </StLogo>
         <StIcon>
-          <img src={IconArm} alt="IconArm" />
+          <img src={IconSurvey} alt="IconSurvey" />
         </StIcon>
       </Header>
 
       {state === 'room' ? <MainRoom /> : <MainSelect />}
 
-      <WriteButton onClick={writeButtonHandler} state={state} />
+      <WriteButton onClick={writeButtonHandler} />
 
       <Footer state={state} />
     </>

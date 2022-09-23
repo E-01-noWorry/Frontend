@@ -41,10 +41,6 @@ const Start = () => {
             아쉽게도 인앱브라우저는 지원이 안됩니다. <br />
             Safari로 접속해주세요! <br />
           </span>
-          <span>
-            1. 하단에 공유하기 버튼 클릭 <br />
-            2. Safari로 열기 클릭
-          </span>
         </ModalBasic>
       )}
 

@@ -12,8 +12,8 @@ import GlobalButton from '../components/elements/GlobalButton';
 import { fontSmall, fontLarge } from '../shared/themes/textStyle';
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
 
-import IconBack from '../static/icons/Variety=back, Status=untab.svg';
-import IconNext from '../static/icons/Variety=next, Status=untab.svg';
+import IconBack from '../static/icons/Variety=back, Status=untab, Size=L.svg';
+import IconJoin from '../static/icons/Variety=Join membership, Status=untab, Size=S.svg';
 
 import styled from 'styled-components';
 import SocialLoginButton from '../components/elements/SocialLoginButton';
@@ -41,7 +41,7 @@ const Login = () => {
     <div>
       <Header>
         <StHeaderIcon onClick={() => navigate(-1)}>
-          <img src={IconBack} />
+          <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         <StHeaderTitle>로그인</StHeaderTitle>
         <StHeaderIcon></StHeaderIcon>
@@ -84,7 +84,7 @@ const Login = () => {
             <div onClick={() => navigate('/signUp')}>
               회원가입
               <StIcon>
-                <img src={IconNext} alt="IconNext" />
+                <img src={IconJoin} alt="IconJoin" />
               </StIcon>
             </div>
           </StNaviLogin>

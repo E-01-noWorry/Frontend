@@ -12,7 +12,7 @@ import GlobalButton from '../components/elements/GlobalButton';
 import { fontBold, fontLarge, fontSmall } from '../shared/themes/textStyle';
 import { IconLarge } from '../shared/themes/iconStyle';
 
-import IconBack from '../static/icons/Variety=back, Status=untab.svg';
+import IconBack from '../static/icons/Variety=back, Status=untab, Size=L.svg';
 
 import styled from 'styled-components';
 

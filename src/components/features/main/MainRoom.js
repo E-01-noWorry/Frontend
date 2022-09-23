@@ -14,8 +14,8 @@ import {
   fontSmall,
 } from '../../../shared/themes/textStyle';
 
-import IconPerson from '../../../static/icons/Variety=person, Status=untab.svg';
-import IconSearch from '../../../static/icons/Variety=search, Status=untab.svg';
+import IconPerson from '../../../static/icons/Variety=person, Status=untab, Size=S.svg';
+import IconSearch from '../../../static/icons/Variety=search, Status=untab, Size=M.svg';
 
 import styled from 'styled-components';
 
@@ -118,10 +118,14 @@ const MainRoom = () => {
             <StContentBox
               key={room.roomKey}
               onClick={() => joinRoomHandler(room.roomKey)}
+              cur={room.currentPeople}
+              max={room.max}
               //마지막 게시글에 ref를 달아줍니다
               ref={idx === rooms.length - 1 ? setRef : null}
             >
-              <StInnerTitle>{room.title}</StInnerTitle>
+              <StInnerTitle cur={room.currentPeople} max={room.max}>
+                {room.title}
+              </StInnerTitle>
 
               <StInnerKeywordWrap>
                 {room.hashTag?.map((item) => (
@@ -135,7 +139,7 @@ const MainRoom = () => {
                     <img src={IconPerson} alt="IconPerson" />
                   </StPeopleIcon>
                   <span>
-                    {room.currentPeople}/{room.max}
+                    {room.currentPeople}/{room.max} 명
                   </span>
                 </StInnerCurrent>
 
@@ -225,7 +229,8 @@ const StContentBox = styled.div`
 
   height: 11.4rem;
   padding: 1.6rem;
-  background-color: ${({ theme }) => theme.white};
+  background-color: ${(props) =>
+    props.cur === props.max ? props.theme.sub4 : props.theme.white};
 `;
 
 const StInnerTitle = styled.div`
@@ -235,6 +240,8 @@ const StInnerTitle = styled.div`
 
   ${fontBold};
   line-height: 2.1rem;
+  color: ${(props) =>
+    props.cur === props.max ? props.theme.sub2 : props.theme.black};
 `;
 
 const StInnerKeywordWrap = styled.div`
@@ -289,7 +296,7 @@ const StInnerCurrent = styled.div`
 
   ${fontMedium};
   line-height: 2.1rem;
-  color: ${({ theme }) => theme.main2};
+  color: ${({ theme }) => theme.sub2};
 `;
 
 const StPeopleIcon = styled.div`
