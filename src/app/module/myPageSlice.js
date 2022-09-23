@@ -45,7 +45,7 @@ export const myPageSlice = createSlice({
     },
     [editNickNameThunk.rejected]: (state, action) => {},
     [getMyPointThunk.fulfilled]: (state, action) => {
-      state.point = action.payload.result.point;
+      state.point = action.payload.result?.point;
     },
     [getMyPointThunk.rejected]: (state, action) => {},
   },

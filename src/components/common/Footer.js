@@ -106,6 +106,8 @@ const StFooter = styled.div`
           ? 1
           : props.state.now === 'room'
           ? 2
+          : props.state.now === 'answer'
+          ? 3
           : props.state.now === 'mypage'
           ? 4
           : null}) {

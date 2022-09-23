@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fontBold, fontMedium, fontSmall } from '../../shared/themes/textStyle';
+import { fontBold, fontMedium } from '../../shared/themes/textStyle';
 
 import styled from 'styled-components';
 
@@ -15,7 +15,7 @@ export const ModalBasic = ({ children, setter }) => {
           <div onClick={setter}>확인</div>
         </StModalButton>
       </StModalWindow>
-      <StModalBg />
+      <StModalBg onClick={setter} />
     </>
   );
 };
@@ -34,7 +34,7 @@ export const ModalExit = ({ leave, setter }) => {
           <div onClick={setter}>취소</div>
         </StModalButton>
       </StModalWindow>
-      <StModalBg />
+      <StModalBg onClick={setter} />
     </>
   );
 };
@@ -51,7 +51,7 @@ export const ModalDelete = ({ setter, del }) => {
           <div onClick={setter}>취소</div>
         </StModalButton>
       </StModalWindow>
-      <StModalBg />
+      <StModalBg onClick={setter} />
     </>
   );
 };
@@ -74,7 +74,7 @@ export const ModalWrite = ({ setter, write }) => {
           <div onClick={setter}>취소</div>
         </StModalButton>
       </StModalWindow>
-      <StModalBg />
+      <StModalBg onClick={setter} />
     </>
   );
 };
@@ -153,9 +153,8 @@ const StModalText = styled.div`
   justify-content: center;
   gap: 0.5rem;
 
-  padding: 1rem;
-
   min-height: 7.2rem;
+  padding: 1rem;
 
   span {
     text-align: center;
