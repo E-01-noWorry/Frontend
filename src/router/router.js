@@ -1,16 +1,17 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Loading from '../pages/Loading';
 
+const Loading = lazy(() => import('../pages/Loading'));
 const Start = lazy(() => import('../pages/Start'));
-const Main = lazy(() => import('../pages/Main'));
-const Answer = lazy(() => import('../pages/Answer'));
 const OnBoarding = lazy(() => import('../pages/OnBoarding'));
 
 const SignUp = lazy(() => import('../pages/SignUp'));
 const Login = lazy(() => import('../pages/Login'));
 const KakaoRedirect = lazy(() => import('../pages/KakaoRedirect'));
 const GoogleRedirect = lazy(() => import('../pages/GoogleRedirect'));
+
+const Main = lazy(() => import('../pages/Main'));
+const Answer = lazy(() => import('../pages/Answer'));
 
 const MyPage = lazy(() => import('../pages/mypage/MyPage'));
 const PostVoted = lazy(() => import('../pages/mypage/PostVoted'));
@@ -28,8 +29,6 @@ const Router = () => {
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/" element={<Start />} />
-          <Route path="/main" element={<Main />} />
-          <Route path="/answer" element={<Answer />} />
           <Route path="/welcome" element={<OnBoarding />} />
 
           <Route path="/signup" element={<SignUp />} />
@@ -39,6 +38,9 @@ const Router = () => {
             path="/api/auth/google/callback"
             element={<GoogleRedirect />}
           />
+
+          <Route path="/main" element={<Main />} />
+          <Route path="/answer" element={<Answer />} />
 
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/postvoted" element={<PostVoted />} />

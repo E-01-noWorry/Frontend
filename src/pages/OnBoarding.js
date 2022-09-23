@@ -16,8 +16,8 @@ const OnBoarding = () => {
   const navigate = useNavigate();
 
   const [pagination, setPagination] = useState(1);
-  const vh = window.innerHeight * 0.01;
 
+  const vh = window.innerHeight * 0.01;
   const screenSize = useCallback(() => {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }, [vh]);
@@ -157,6 +157,7 @@ const StButtonWrap = styled.div`
 
   z-index: 9;
 
+  // 마지막 페이지가 아닐때 버튼 비활성화
   ${(props) =>
     props.pagination !== 3 &&
     css`
