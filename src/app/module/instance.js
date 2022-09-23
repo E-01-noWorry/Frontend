@@ -1,11 +1,13 @@
 import axios from 'axios';
 
-const accessToken = localStorage.getItem('token');
+const accessToken = localStorage.getItem('accessToken');
+const refreshToken = localStorage.getItem('refreshToken');
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API,
   headers: {
-    authorization: `Bearer ${accessToken}`,
+    accessToken: `Bearer ${accessToken}`,
+    refreshToken: `Bearer ${refreshToken}`,
   },
 });
 

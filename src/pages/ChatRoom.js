@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import instance from '../app/module/instance';
-import { io } from 'socket.io-client';
 
 import ProfileImg from '../components/elements/ProfileImg';
 import BodyPadding from '../components/common/BodyPadding';
@@ -26,8 +25,11 @@ import IconSend from '../static/icons/Variety=send, Status=untab, Size=L.svg';
 
 import styled from 'styled-components';
 
+import { io } from 'socket.io-client';
+
 const ChatRoom = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const { roomKey } = useParams();
   const userKey = localStorage.getItem('userKey');
@@ -40,8 +42,8 @@ const ChatRoom = () => {
   const [modalDelete, setModalDelete] = useState(false);
 
   const [isSelect, setIsSelect] = useState(0);
-  const [chatState, setChatState] = useState([]);
   const [roomInfo, setRoomInfo] = useState({});
+  const [chatState, setChatState] = useState([]);
   const [nowUsers, setNowUsers] = useState([]);
 
   const getAllchat = useCallback(async () => {
@@ -73,7 +75,7 @@ const ChatRoom = () => {
         {
           chat: data.message,
           userKey: data.userKey,
-          User: { nickname: data.nickname },
+          User: { nickname: data.nickname, point: data.point },
           createdAt: data.time,
         },
       ]);
@@ -107,6 +109,7 @@ const ChatRoom = () => {
     });
   }, [chatState]);
 
+  //채팅을 보냅니다
   const sendMessageHandler = (event) => {
     event.preventDefault();
     if (sendMessage.current.value.trim()) {
@@ -120,6 +123,7 @@ const ChatRoom = () => {
     }
   };
 
+  //나가기 혹은 삭제 버튼을 눌렀을때 동작합니다
   const leaveRoomHandler = async () => {
     try {
       const param = { roomKey: parseInt(roomKey), userKey: parseInt(userKey) };
@@ -127,13 +131,18 @@ const ChatRoom = () => {
 
       await instance.delete(`/room/${roomKey}`);
 
-      navigate(-1, { state: 'room' });
+      if (state?.now === 'room') {
+        navigate('/main', { state: { now: 'room' } });
+      } else {
+        navigate(-1);
+      }
       document.body.style.overflow = 'unset';
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
   };
 
+  //호스트가 삭제 버튼을 눌렀을때 현재 채팅방에 남아있는 유저를 불러옵니다
   const deleteModalOpenHandler = () => {
     setModalDelete(true);
     document.body.style.overflow = 'hidden';
@@ -145,12 +154,14 @@ const ChatRoom = () => {
     });
   };
 
+  //호스트가 삭제 버튼을 누른 후 뜬 모달을 껐을때 작동합니다
   const deleteModalCloseHandler = () => {
     setModalDelete(false);
     document.body.style.overflow = 'unset';
     setIsSelect(0);
   };
 
+  //호스트가 삭제 버튼을 누른 후 뜬 모달에서 유저를 추천할때 동작합니다
   const recommendHandler = () => {
     const param = {
       roomKey: parseInt(roomKey),
@@ -197,13 +208,23 @@ const ChatRoom = () => {
       )}
 
       {hostByeModal && (
-        <ModalBasic setter={() => navigate(-1, { state: 'room' })}>
+        <ModalBasic
+          setter={() => navigate('/main', { state: { now: 'room' } })}
+        >
           {hostByeModal}
         </ModalBasic>
       )}
 
       <Header>
-        <StHeaderIcon onClick={() => navigate(-1, { state: 'room' })}>
+        <StHeaderIcon
+          onClick={() => {
+            state?.now === 'room'
+              ? navigate('/main', {
+                  state: { now: 'room' },
+                })
+              : navigate(-1);
+          }}
+        >
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
 
@@ -328,6 +349,7 @@ const StUserInfoWrap = styled.div`
     margin-top: 0.2rem;
   }
 
+  //선택된 유저는 프로필에 메인컬러 보더가 생기고 닉네임이 메인 컬러로 변합니다
   label:nth-child(${(props) => props.number}) {
     div {
       border: 0.15rem solid ${({ theme }) => theme.main2};

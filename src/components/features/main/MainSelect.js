@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import instance from '../../../app/module/instance';
 
@@ -15,10 +16,12 @@ import IconDropdown from '../../../static/icons/Variety=Dropdown, Status=untab, 
 import styled from 'styled-components';
 
 const MainSelect = () => {
+  const { state } = useLocation();
+
   const [contents, setContents] = useState([]);
 
   //필터와 카테고리를 관리하는 State
-  const [filter, setFilter] = useState('기본순');
+  const [filter, setFilter] = useState(state.filter || '기본순');
   const [category, setCategory] = useState('카테고리');
 
   const [filterModal, setFilterModal] = useState(false);
@@ -135,7 +138,7 @@ const MainSelect = () => {
       </StFilterDiv>
 
       <BodyPadding>
-        <SelectContentBox contents={contents} setRef={setRef} />
+        <SelectContentBox contents={contents} setRef={setRef} filter={filter} />
       </BodyPadding>
     </>
   );

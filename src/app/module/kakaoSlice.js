@@ -15,10 +15,12 @@ export const kakaoLoginThunk = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const data = await instance.get(`/auth/kakao/callback?code=${payload}`);
-      console.log(data);
-      localStorage.setItem('token', data.data.user.token);
+
+      localStorage.setItem('accessToken', data.data.user.accessToken);
+      localStorage.setItem('refreshToken', data.data.user.refreshToken);
       localStorage.setItem('nickname', data.data.user.nickname);
       localStorage.setItem('userKey', data.data.user.userKey);
+
       window.location.replace('/');
       return thunkAPI.fulfillWithValue(data.response);
     } catch (error) {

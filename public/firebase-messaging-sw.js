@@ -7,7 +7,7 @@ importScripts(
 );
 
 self.addEventListener('notificationclick', (event) => {
-  console.log('On notification click: ', event.notification.tag);
+  event.notification.close();
 
   // This looks to see if the current is already open and
   // focuses if it is
@@ -25,8 +25,6 @@ self.addEventListener('notificationclick', (event) => {
           return self.clients.openWindow('https://www.gomgom.site');
       }),
   );
-
-  event.notification.close();
 });
 
 // Initialize the Firebase app in the service worker by passing in

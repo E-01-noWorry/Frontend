@@ -21,16 +21,6 @@ const SignUp = () => {
   const navigate = useNavigate();
   const signUpState = useSelector((state) => state.signUp);
 
-  //회원가입 오류시 오류메시지 alert
-  // useEffect(() => {
-  //   if (signUpState.error?.errMsg) {
-  //     toast.error(`${signUpState.error?.errMsg}`, {
-  //       position: toast.POSITION.BOTTOM_LEFT,
-  //       autoClose: 2000,
-  //     });
-  //   }
-  // }, [signUpState.error]);
-
   const [signUpInfo, setSignUpInfo] = useState({
     userId: '',
     password: '',

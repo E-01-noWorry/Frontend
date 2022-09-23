@@ -8,6 +8,7 @@ import {
   getCommentThunk,
 } from '../../../app/module/commentSlice';
 import EditComment from './editComment';
+import { fontMedium } from '../../../shared/themes/textStyle';
 
 const Comment = (props) => {
   const dispatch = useDispatch();
@@ -107,6 +108,9 @@ const NoComments = styled.p`
   text-align: center;
   justify-content: center;
   align-items: center;
+
+  ${fontMedium}
+  text-align: center;
 `;
 
 const CommentContainer = styled.div`

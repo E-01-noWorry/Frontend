@@ -14,11 +14,12 @@ const GoogleRedirect = () => {
     try {
       const { data } = await instance.get(`/auth/google/callback?code=${code}`);
 
-      localStorage.setItem('token', data.user.token);
+      localStorage.setItem('accessToken', data.user.accessToken);
+      localStorage.setItem('refreshToken', data.user.refreshToken);
       localStorage.setItem('nickname', data.user.nickname);
       localStorage.setItem('userKey', data.user.userKey);
 
-      window.location.assign('/');
+      window.location.replace('/');
     } catch (error) {
       console.log(error);
     }

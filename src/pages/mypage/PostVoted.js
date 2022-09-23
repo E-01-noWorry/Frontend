@@ -59,7 +59,9 @@ const PostVoted = () => {
   return (
     <>
       <StHeader length={postVoted.length}>
-        <StHeaderIcon onClick={() => navigate('/mypage', { state: 'mypage' })}>
+        <StHeaderIcon
+          onClick={() => navigate('/mypage', { state: { now: 'mypage' } })}
+        >
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         <StHeaderTitle>내가 등록한 고민 투표</StHeaderTitle>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import ProfileImg from '../../elements/ProfileImg';
 
@@ -10,38 +10,42 @@ import {
   fontSmall,
 } from '../../../shared/themes/textStyle';
 
+import IconDropdown from '../../../static/icons/Variety=Dropdown, Status=untab, Size=S.svg';
+
 import styled from 'styled-components';
 
 import _ from 'lodash';
 
 const ChatBox = ({ chatState, userKey }) => {
   const scrollRef = useRef();
-  const boxRef = useRef();
   const [scrollState, setScrollState] = useState(true);
 
-  const scrollEvent = _.debounce(() => {
-    console.log('scroll');
-    const scrollTop = boxRef.current.scrollTop;
-    const clientHeight = boxRef.current.clientHeight;
-    const scrollHeight = boxRef.current.scrollHeight;
+  const scrollEvent = _.debounce((event) => {
+    const totalHeight = document.body.scrollHeight;
+    const scrollHeight = window.innerHeight;
+    const myHeight = event.srcElement.scrollingElement.scrollTop;
 
-    setScrollState(
-      scrollTop + clientHeight >= scrollHeight - 100 ? true : false,
-    );
-  }, 100);
+    setScrollState(totalHeight <= scrollHeight + myHeight);
+  }, 200);
 
   useEffect(() => {
-    if (scrollState) {
-      scrollRef.current.scrollIntoView();
-    }
+    window.addEventListener('scroll', scrollEvent);
+  }, []);
+
+  useEffect(() => {
+    if (!scrollState) return;
+    scrollRef.current.scrollIntoView();
   }, [chatState]);
 
-  useEffect(() => {
-    boxRef.current.addEventListener('scroll', scrollEvent);
-  });
-
   return (
-    <StChatWrap ref={boxRef}>
+    <StChatWrap>
+      {!scrollState && (
+        <StNewMessage onClick={() => scrollRef.current.scrollIntoView()}>
+          <span>최근 메세지 보기</span>
+          <img src={IconDropdown} alt="IconDropdown" />
+        </StNewMessage>
+      )}
+
       {chatState.map((chat, idx) => (
         <StChat key={idx}>
           {/* userKey로 시스템메세지, 내 메세지, 상대의 메세지를 판단합니다 */}
@@ -61,17 +65,18 @@ const ChatBox = ({ chatState, userKey }) => {
             ) : chatState[idx]?.userKey === chatState[idx - 1]?.userKey &&
               nowTime(chatState[idx].createdAt) ===
                 nowTime(chatState[idx - 1].createdAt) ? (
-              <>
-                <div className="sametime">
-                  <div className="chat">{chat.chat}</div>
-                </div>
-              </>
+              <div className="sametime">
+                <div className="chat">{chat.chat}</div>
+              </div>
             ) : (
               <>
                 <ProfileImg className="img" point={chat.User?.point} />
-
                 <div>
-                  <div className="nickname">{chat.User?.nickname}</div>
+                  <div className="nickname">
+                    {chat.userKey === parseInt(userKey)
+                      ? ''
+                      : chat.User?.nickname}
+                  </div>
                   <div className="middle">
                     <div className="chat">{chat.chat}</div>
                     <span className="time">{nowTime(chat.createdAt)}</span>
@@ -96,6 +101,29 @@ const StChatWrap = styled.div`
   padding-bottom: 8rem;
 `;
 
+const StNewMessage = styled.div`
+  position: fixed;
+  left: 50%;
+  bottom: 10rem;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+
+  height: 2.6rem;
+  padding: 0.3rem 0.6rem 0.3rem 1rem;
+  background-color: ${({ theme }) => theme.white};
+
+  border-radius: 1.3rem;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
+
+  span {
+    ${fontSmall};
+    line-height: 2rem;
+    color: ${({ theme }) => theme.sub2};
+  }
+`;
+
 const StChat = styled.div`
   display: flex;
 
@@ -105,11 +133,11 @@ const StChat = styled.div`
   //시스템 메세지 CSS
   .system {
     display: inline-block;
-    background-color: ${({ theme }) => theme.sub3};
 
     height: 2.6rem;
     padding: 3px 6px;
     margin: 1.2rem auto;
+    background-color: ${({ theme }) => theme.sub3};
 
     border-radius: 1.3rem;
 
@@ -134,6 +162,7 @@ const StChat = styled.div`
     }
 
     .nickname {
+      height: 2rem;
       text-align: end;
       ${fontSmall};
       line-height: 2rem;

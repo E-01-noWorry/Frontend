@@ -27,9 +27,11 @@ const Footer = ({ state }) => {
       {modal && <ModalBasic setter={() => setModal(false)}>{modal}</ModalBasic>}
 
       <StFooter state={state}>
-        <StIconWrap onClick={() => navigate('/main', { state: 'select' })}>
+        <StIconWrap
+          onClick={() => navigate('/main', { state: { now: 'select' } })}
+        >
           <StIcon>
-            {state === 'select' ? (
+            {state.now === 'select' ? (
               <img src={IconVoteTab} alt="IconVoteTab" />
             ) : (
               <img src={IconVoteUntab} alt="IconVoteUntab" />
@@ -38,9 +40,11 @@ const Footer = ({ state }) => {
           <StText>고민투표</StText>
         </StIconWrap>
 
-        <StIconWrap onClick={() => navigate('/main', { state: 'room' })}>
+        <StIconWrap
+          onClick={() => navigate('/main', { state: { now: 'room' } })}
+        >
           <StIcon>
-            {state === 'room' ? (
+            {state.now === 'room' ? (
               <img src={IconChatTab} alt="IconChatTab" />
             ) : (
               <img src={IconChatUntab} alt="IconChatUntab" />
@@ -49,10 +53,10 @@ const Footer = ({ state }) => {
           <StText>고민상담</StText>
         </StIconWrap>
 
-        {/* <StIconWrap onClick={() => navigate('/answer', { state: 'answer' })}> */}
+        {/* <StIconWrap onClick={() => navigate('/answer', { state: { now: 'answer' } })}> */}
         <StIconWrap onClick={() => setModal('앗! 아직 개발중이에요.')}>
           <StIcon>
-            {state === 'answer' ? (
+            {state.now === 'answer' ? (
               <img src={IconGomTab} alt="IconGomTab" />
             ) : (
               <img src={IconGomUntab} alt="IconGomUntab" />
@@ -61,9 +65,11 @@ const Footer = ({ state }) => {
           <StText>곰곰해답</StText>
         </StIconWrap>
 
-        <StIconWrap onClick={() => navigate('/mypage', { state: 'mypage' })}>
+        <StIconWrap
+          onClick={() => navigate('/mypage', { state: { now: 'mypage' } })}
+        >
           <StIcon>
-            {state === 'mypage' ? (
+            {state.now === 'mypage' ? (
               <img src={IconProfileTab} alt="IconProfileTab" />
             ) : (
               <img src={IconProfileUntab} alt="IconProfileUntab" />
@@ -96,11 +102,13 @@ const StFooter = styled.div`
 
   &
     > div:nth-child(${(props) =>
-        props.state === 'select'
+        props.state.now === 'select'
           ? 1
-          : props.state === 'room'
+          : props.state.now === 'room'
           ? 2
-          : props.state === 'mypage'
+          : props.state.now === 'answer'
+          ? 3
+          : props.state.now === 'mypage'
           ? 4
           : null}) {
     color: ${({ theme }) => theme.main2};

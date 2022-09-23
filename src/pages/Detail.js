@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import instance from '../app/module/instance';
 import { cleanUp, __getDetailSelect } from '../app/module/selectSlice';
@@ -31,6 +31,8 @@ import styled from 'styled-components';
 const Detail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { state } = useLocation();
+
   const content = useSelector((state) => state.select.select);
   const user = useSelector((state) => state);
 
@@ -52,7 +54,11 @@ const Detail = () => {
   const deleteHandler = async () => {
     try {
       await instance.delete(`/select/${selectKey}`);
-      navigate(-1, { state: 'select' });
+      if (state?.now === 'select') {
+        navigate('/main', { state: { now: 'select' } });
+      } else {
+        navigate(-1);
+      }
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
@@ -65,7 +71,15 @@ const Detail = () => {
       )}
 
       <Header>
-        <StHeaderIcon onClick={() => navigate(-1)}>
+        <StHeaderIcon
+          onClick={() => {
+            state?.now === 'select'
+              ? navigate('/main', {
+                  state: { now: 'select', filter: state.filter },
+                })
+              : navigate(-1);
+          }}
+        >
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         {parseInt(userKey) === content?.userKey && (
