@@ -17,6 +17,7 @@ import {
 import IconPerson from '../../../static/icons/Variety=person, Status=untab, Size=S.svg';
 import IconSearch from '../../../static/icons/Variety=search, Status=untab, Size=M.svg';
 import IconAnnounce from '../../../static/icons/Variety=announce, Status=untab, Size=M.svg';
+import IconAnnounced from '../../../static/icons/Variety=announced, Status=untab, Size=M.svg';
 
 import styled from 'styled-components';
 
@@ -132,13 +133,23 @@ const MainRoom = () => {
               ref={idx === rooms.length - 1 ? setRef : null}
             >
               <StInnerTitle cur={room.currentPeople} max={room.max}>
-                <img src={IconAnnounce} alt="IconAnnounce" />
+                {room.currentPeople === room.max ? (
+                  <img src={IconAnnounced} alt="IconAnnounced" />
+                ) : (
+                  <img src={IconAnnounce} alt="IconAnnounce" />
+                )}
                 <span>{room.title}</span>
               </StInnerTitle>
 
               <StInnerKeywordWrap>
                 {room.hashTag?.map((item) => (
-                  <StInnerKeyword key={item}>#{item} </StInnerKeyword>
+                  <StInnerKeyword
+                    key={item}
+                    cur={room.currentPeople}
+                    max={room.max}
+                  >
+                    #{item}{' '}
+                  </StInnerKeyword>
                 ))}
               </StInnerKeywordWrap>
 
@@ -277,7 +288,8 @@ const StInnerKeywordWrap = styled.div`
 const StInnerKeyword = styled.span`
   height: 100%;
   padding: 0 0.5rem;
-  background-color: ${({ theme }) => theme.sub4};
+  background-color: ${(props) =>
+    props.cur === props.max ? '#D8D0C5' : props.theme.sub4};
 
   border-radius: 1rem;
 
