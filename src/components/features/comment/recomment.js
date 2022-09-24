@@ -127,7 +127,7 @@ const StProfileImgSmall = styled(ProfileImg)`
 `;
 
 const RecommentContainer = styled.div`
-  padding: 0 0 2.4rem 7.6rem;
+  padding: 0 0 2.4rem 5.6rem;
 `;
 
 const RecommentBox = styled.div`
@@ -161,12 +161,13 @@ const Ago = styled.div`
   padding-top: 0.6rem;
 `;
 
-const EditInput = styled.textarea`
+const EditInput = styled.input`
   padding: 0.8rem;
   border: none;
   resize: none;
   border-radius: 2rem;
-  width: 100%;
+  height: 4vh;
+  width: 130%;
 `;
 
 const Comment = styled.div`
@@ -178,22 +179,25 @@ const Comment = styled.div`
 
 const Buttons = styled.div`
   position: absolute;
-  right: 6%;
+  right: 2rem;
 `;
 const Delete = styled.button`
   border: none;
+  color: #000;
   background-color: #f8f3eb;
   ${fontSmall}
   ${fontExtraBold}
 `;
 const Edit = styled.button`
   border: none;
+  color: #000;
   background-color: #f8f3eb;
   ${fontSmall}
   ${fontExtraBold}
 `;
 const EditButton = styled.button`
   border: none;
+  color: #000;
   background-color: #f8f3eb;
   ${fontSmall}
   ${fontExtraBold}
