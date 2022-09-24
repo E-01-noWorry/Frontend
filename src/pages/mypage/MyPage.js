@@ -32,7 +32,6 @@ const MyPage = () => {
   const { state } = useLocation();
   const userNickname = useSelector((state) => state.myPageSlice.data);
   const userPoint = useSelector((state) => state.myPageSlice.point);
-
   const [modal, setModal] = useState('');
 
   //나의 포인트 조회
@@ -137,12 +136,14 @@ const MyPage = () => {
                     </Nickname>
                     <EditNickname onClick={onClickEditNickName}>
                       {editMode ? (
-                        <span>변경</span>
+                        <EditButton>
+                          <span>변경</span>
+                        </EditButton>
                       ) : (
-                        <>
+                        <EditButton>
                           <img width="20" src={IconEdit} alt="IconEdit" />
                           <span>변경</span>
-                        </>
+                        </EditButton>
                       )}
                     </EditNickname>
                   </StNicknameWrap>
@@ -237,21 +238,25 @@ const MyPage = () => {
                 </TierInfo>
 
                 <TierInfoLetter>
-                  {tiers.tiers === 'white'
-                    ? '고민 서비스 참여를 통해 0~10점을 획득했을 때'
-                    : null}
-                  {tiers.tiers === 'yellow'
-                    ? '고민 서비스 참여를 통해 11~25점을 획득했을 때'
-                    : null}
-                  {tiers.tiers === 'green'
-                    ? '고민 서비스 참여를 통해 26~50점을 획득했을 때'
-                    : null}
-                  {tiers.tiers === 'blue'
-                    ? '고민 서비스 참여를 통해 51~100점을 획득했을 때'
-                    : null}
-                  {tiers.tiers === 'purple'
-                    ? '고민 서비스 참여를 통해 101점 이상을 획득했을 때'
-                    : null}
+                  {tiers.tiers === 'white' ? (
+                    <Line>'고민 서비스 참여를 통해 0~10점을 획득했을 때'</Line>
+                  ) : null}
+                  {tiers.tiers === 'yellow' ? (
+                    <Line>'고민 서비스 참여를 통해 11~25점을 획득했을 때'</Line>
+                  ) : null}
+                  {tiers.tiers === 'green' ? (
+                    <Line>'고민 서비스 참여를 통해 26~50점을 획득했을 때'</Line>
+                  ) : null}
+                  {tiers.tiers === 'blue' ? (
+                    <Line>
+                      '고민 서비스 참여를 통해 51~100점을 획득했을 때'
+                    </Line>
+                  ) : null}
+                  {tiers.tiers === 'purple' ? (
+                    <Line>
+                      '고민 서비스 참여를 통해 101점 이상을 획득했을 때'
+                    </Line>
+                  ) : null}
                 </TierInfoLetter>
               </TierInfoContainer>
 
@@ -409,7 +414,7 @@ const Modal = styled.div`
 
 const StTitle = styled.div`
   margin-bottom: 1.6rem;
-
+  margin-top: -2rem;
   ${fontBold};
   line-height: 2.4rem;
   color: ${({ theme }) => theme.sub2};
@@ -549,12 +554,12 @@ const Nickname = styled.div`
   ${fontLarge}
 `;
 
-const EditNickname = styled.button`
+const EditNickname = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
 
-  width: 6.8rem;
+  width: 10rem;
   height: 3.6rem;
   padding: 0.8rem 1rem 0.8rem 0.8rem;
 
@@ -570,6 +575,18 @@ const EditNicknameInput = styled.input`
   &:focus {
     outline: none;
   }
+`;
+
+const EditButton = styled.div`
+  display: flex;
+  width: 6.8rem;
+  height: 3.6rem;
+  padding: 0.8rem;
+  border-radius: 99rem;
+  background-color: #e2ddd6;
+  font-size: 1.4rem;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ScoreContainer = styled.div`
@@ -784,7 +801,12 @@ const TierInfoLetter = styled.p`
   padding-bottom: 2rem;
   padding-right: 1rem;
   padding-left: 1rem;
-  border-bottom: 1px solid #e6e6e6;
+`;
+
+const Line = styled.p`
+  border-bottom: 1px solid #e2ddd6;
+  padding-bottom: 2.4rem;
+  margin: 0 -2rem;
 `;
 
 const Logout = styled.div`

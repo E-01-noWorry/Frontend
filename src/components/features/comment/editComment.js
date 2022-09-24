@@ -89,15 +89,18 @@ const EditComment = (props) => {
       {edit ? (
         <>
           <EditContainer>
+            <ProfileImg point={props.allComments.point} />
             <EditNickname>{props.allComments.nickname}</EditNickname>
-            <EditInput
-              type="text"
-              onChange={onChange}
-              name="comment"
-              placeholder="입력해주세요."
-              value={editComment.comment}
-            />
           </EditContainer>
+
+          <EditInput
+            type="text"
+            onChange={onChange}
+            name="comment"
+            placeholder="입력해주세요."
+            value={editComment.comment}
+          />
+
           <EditButtons>
             <Button onClick={onClickEditMode}>취소</Button>
             <Button
@@ -184,9 +187,10 @@ const EditComment = (props) => {
 export default EditComment;
 
 const EditContainer = styled.div`
-  margin: 1.8rem 0 0 5.6rem;
+  margin: 1.8rem 0 -1.5rem 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  width: 100%;
 `;
 
 const DefaultBox = styled.div`
@@ -197,11 +201,12 @@ const DefaultBox = styled.div`
   margin-top: 1.8rem;
 `;
 
-const EditInput = styled.textarea`
-  padding: 0.5rem 0 0.5rem 1rem;
-  width: 45rem;
+const EditInput = styled.input`
+  padding: 0.8rem 0 0.8rem 1rem;
+  width: 130%;
   height: 4vh;
-  margin-top: 1rem;
+  margin-bottom: -0.5rem;
+  margin-left: 5.5rem;
   border-radius: 20px;
   border: none;
   resize: none;
@@ -215,6 +220,7 @@ const EditNickname = styled.p`
   ${fontMedium}
   ${fontBold}
 letter-spacing: -0.5px;
+  margin-left: 1.6rem;
 `;
 
 const EditButtons = styled.div`
@@ -257,11 +263,12 @@ const Button = styled.button`
   background: #f8f3eb;
   ${fontExtraBold}
   ${fontSmall}
+  color:#000;
 `;
 
 const Buttons = styled.div`
   position: absolute;
-  right: 4%;
+  right: 2rem;
   margin-bottom: 2.5rem;
 `;
 const Names = styled.div`
@@ -285,10 +292,9 @@ const ReplyInput = styled.input`
   margin-top: 0.8rem;
   border: none;
   border-radius: 2rem;
-  width: 45rem;
+  width: 100%;
   height: 4vh;
-  padding: 0.5rem 0 0.5rem 1rem;
-  resize: none;
+  padding: 0.5rem 0 0 1rem;
 `;
 
 const CancelReply = styled.p`

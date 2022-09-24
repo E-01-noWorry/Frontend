@@ -9,6 +9,7 @@ import {
 } from '../../../app/module/commentSlice';
 import EditComment from './editComment';
 import { fontMedium } from '../../../shared/themes/textStyle';
+import { css } from 'styled-components';
 
 const Comment = (props) => {
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const Comment = (props) => {
   }, [dispatch]);
 
   return (
-    <Container>
+    <Container allComments={allComments}>
       {allComments.length === 0 ? (
         <>
           <NoComments>댓글이 없습니다.</NoComments>
@@ -99,6 +100,12 @@ export default Comment;
 
 const Container = styled.div`
   padding-bottom: 2.4rem;
+  ${(props) =>
+    props.allComments.length === 0
+      ? css`
+          padding-bottom: 7rem;
+        `
+      : null}
 `;
 
 const NoComments = styled.p`
@@ -147,7 +154,6 @@ const CommentsDetail = styled.div`
   box-sizing: border-box;
   padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   overflow: hidden;
-
   align-items: center;
   display: flex;
 `;
