@@ -1,6 +1,6 @@
 import instance from '../app/module/instance';
 
-export const refreshToken = async () => {
+export const refreshTokenAPI = async () => {
   try {
     const data = await instance.get('/user/me');
 

@@ -1,14 +1,42 @@
 import axios from 'axios';
 
-const accessToken = localStorage.getItem('accessToken');
-const refreshToken = localStorage.getItem('refreshToken');
-
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API,
   headers: {
-    accessToken: `Bearer ${accessToken}`,
-    refreshToken: `Bearer ${refreshToken}`,
+    accessToken: `Bearer ${localStorage.getItem('accessToken')}`,
+    refreshToken: `Bearer ${localStorage.getItem('refreshToken')}`,
   },
 });
+
+instance.interceptors.request.use((config) => {
+  config.headers.accessToken = `Bearer ${localStorage.getItem('accessToken')}`;
+  config.headers.refreshToken = `Bearer ${localStorage.getItem(
+    'refreshToken',
+  )}`;
+
+  return config;
+});
+
+instance.interceptors.response.use(
+  (config) => {
+    if (config.status === 201 && config.data.msg.includes('재발급')) {
+      return axios({
+        ...config.config,
+        headers: {
+          accessToken: `Bearer ${config.data.accessToken}`,
+          refreshToken: `Bearer ${config.data.refreshToken}`,
+        },
+      }).then(() => {
+        localStorage.setItem('accessToken', config.data.accessToken);
+        localStorage.setItem('refreshToken', config.data.refreshToken);
+      });
+    } else {
+      return config;
+    }
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
 export default instance;
