@@ -203,7 +203,7 @@ const DefaultBox = styled.div`
 
 const EditInput = styled.input`
   padding: 0.8rem 0 0.8rem 1rem;
-  width: 130%;
+  width: 84%;
   height: 4vh;
   margin-bottom: -0.5rem;
   margin-left: 5.5rem;

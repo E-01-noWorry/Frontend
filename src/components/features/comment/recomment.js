@@ -128,23 +128,20 @@ const StProfileImgSmall = styled(ProfileImg)`
 
 const RecommentContainer = styled.div`
   padding: 0 0 2.4rem 5.6rem;
+
+  width: 100%;
 `;
 
 const RecommentBox = styled.div`
   display: flex;
   flex-direction: column;
+
+  width: 100%;
 `;
 
 const MakeItRow = styled.div`
   display: flex;
   flex-direction: row;
-`;
-
-const Profile = styled.div`
-  width: 3rem;
-  height: 3rem;
-  border-radius: 99rem;
-  background-color: #d9d9d9;
 `;
 
 const Nickname = styled.div`
@@ -167,7 +164,7 @@ const EditInput = styled.input`
   resize: none;
   border-radius: 2rem;
   height: 4vh;
-  width: 130%;
+  width: 100%;
 `;
 
 const Comment = styled.div`
@@ -175,6 +172,7 @@ const Comment = styled.div`
   margin-bottom: 0.4rem;
   margin-left: 4.6rem;
   ${fontMedium}
+  width: 22.3rem;
 `;
 
 const Buttons = styled.div`
