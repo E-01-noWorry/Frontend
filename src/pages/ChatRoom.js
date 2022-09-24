@@ -131,7 +131,7 @@ const ChatRoom = () => {
 
       await instance.delete(`/room/${roomKey}`);
 
-      if (state?.now === 'room') {
+      if (state?.now === 'room' || state?.now === false) {
         navigate('/main', { state: { now: 'room' } });
       } else {
         navigate(-1);
@@ -218,7 +218,7 @@ const ChatRoom = () => {
       <Header>
         <StHeaderIcon
           onClick={() => {
-            state?.now === 'room' || state?.now === null
+            state?.now === 'room' || state?.now === false
               ? navigate('/main', {
                   state: { now: 'room' },
                 })
