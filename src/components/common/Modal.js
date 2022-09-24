@@ -63,7 +63,7 @@ export const ModalWrite = ({ setter, write }) => {
         <StModalTitle>고민투표 만들기</StModalTitle>
         <StModalText>
           <span>
-            투표는 <span style={{ fontWeight: '700' }}>1시간 당 1회</span>만
+            투표는 <span style={{ fontWeight: '700' }}>5분 당 1회</span>만
             작성할 수 있습니다.
             <br />
             투표를 작성하시겠습니까?

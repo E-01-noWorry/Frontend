@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
+import instance from '../../../app/module/instance';
 
 import { ModalBasic } from '../../common/Modal';
 import GlobalButton from '../../elements/GlobalButton';
@@ -85,15 +85,8 @@ const WriteSelect = () => {
       }
 
       try {
-        await axios({
-          method: 'POST',
-          url: `${process.env.REACT_APP_API}/select`,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            accessToken: `Bearer ${localStorage.getItem('accessToken')}`,
-            refreshToken: `Bearer ${localStorage.getItem('refreshToken')}`,
-          },
-          data: formData,
+        await instance.post('/select', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
         setUploadModal('게시글 등록 완료!');
         document.body.style.overflow = 'hidden';

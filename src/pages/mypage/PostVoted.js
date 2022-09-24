@@ -76,7 +76,11 @@ const PostVoted = () => {
             {postVoted?.map((content, idx) => (
               <StContentBox
                 key={content.selectKey}
-                onClick={() => navigate(`/detail/${content.selectKey}`)}
+                onClick={() =>
+                  navigate(`/detail/${content.selectKey}`, {
+                    state: { now: 'mypage' },
+                  })
+                }
                 //마지막 게시글에 ref를 달아줍니다
                 ref={idx === postVoted.length - 1 ? ref : null}
                 completion={content.completion}

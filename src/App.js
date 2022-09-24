@@ -5,7 +5,7 @@ import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
 import { firebaseApp } from './shared/firebase';
 import { detectIphone } from './shared/DeviceDetector';
-import { refreshToken } from './shared/refreshToken';
+import { refreshTokenAPI } from './shared/refreshToken';
 import { isLogin } from './shared/isLogin';
 
 import theme from './shared/themes/Theme';
@@ -41,11 +41,11 @@ if (process.env.NODE_ENV === 'production') {
 const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  //로그인이 true면 refreshToken 요청을 보냅니다
+  // 로그인이 true면 refreshToken 요청을 보냅니다
   useEffect(() => {
     if (!isLogin()) return;
 
-    refreshToken();
+    refreshTokenAPI();
   }, []);
 
   return (
