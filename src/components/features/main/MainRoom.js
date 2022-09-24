@@ -263,6 +263,7 @@ const StInnerTitle = styled.div`
 
   display: flex;
   align-items: center;
+  gap: 0.2rem;
 
   img {
     width: 2rem;
