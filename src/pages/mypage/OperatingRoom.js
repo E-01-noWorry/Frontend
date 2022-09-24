@@ -54,7 +54,7 @@ const OperatingRoom = () => {
   const joinRoomHandler = async (roomKey) => {
     try {
       await instance.post(`/room/${roomKey}`);
-      navigate(`/chatroom/${roomKey}`);
+      navigate(`/chatroom/${roomKey}`, { state: { now: 'mypage' } });
     } catch (error) {
       console.log(error.response.data.errMsg);
     }

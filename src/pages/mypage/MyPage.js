@@ -37,6 +37,7 @@ const MyPage = () => {
 
   //나의 포인트 조회
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (localStorage.getItem('userKey')) {
       dispatch(getMyPointThunk());
     }

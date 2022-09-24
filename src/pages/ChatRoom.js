@@ -218,7 +218,7 @@ const ChatRoom = () => {
       <Header>
         <StHeaderIcon
           onClick={() => {
-            state?.now === 'room'
+            state?.now === 'room' || state?.now === null
               ? navigate('/main', {
                   state: { now: 'room' },
                 })
