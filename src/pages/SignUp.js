@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
-import { signUpThunk } from '../app/module/signUpSlice';
 
 import Header from '../components/common/Header';
 import BodyPadding from '../components/common/BodyPadding';
@@ -15,12 +12,13 @@ import { IconLarge } from '../shared/themes/iconStyle';
 import IconBack from '../static/icons/Variety=back, Status=untab, Size=L.svg';
 
 import styled from 'styled-components';
+import instance from '../app/module/instance';
+import { ModalBasic } from '../components/common/Modal';
 
 const SignUp = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const signUpState = useSelector((state) => state.signUp);
 
+  const [modal, setModal] = useState('');
   const [signUpInfo, setSignUpInfo] = useState({
     userId: '',
     password: '',
@@ -33,14 +31,14 @@ const SignUp = () => {
     setSignUpInfo({ ...signUpInfo, [name]: value });
   };
 
-  const onClickSignUp = () => {
-    dispatch(signUpThunk(signUpInfo));
+  const onClickSignUp = async () => {
+    try {
+      await instance.post('/user/signup', signUpInfo);
+      setModal('회원가입을 완료했습니다.');
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  //회원가입 완료시 로그인으로 이동
-  if (signUpState.error?.msg !== undefined) {
-    navigate('/login');
-  }
 
   //유효성 검사
   const userIdRegEx = /^[A-Za-z0-9]{6,20}$/;
@@ -82,6 +80,10 @@ const SignUp = () => {
 
   return (
     <div>
+      {modal && (
+        <ModalBasic setter={() => navigate('/login')}>{modal}</ModalBasic>
+      )}
+
       <Header>
         <StHeaderIcon onClick={() => navigate(-1)}>
           <img src={IconBack} />

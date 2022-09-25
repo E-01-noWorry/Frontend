@@ -215,7 +215,7 @@ const StGomGom = styled.div`
 
 const StTitle = styled.h1`
   position: absolute;
-  top: 8.8rem;
+  top: 8rem;
   left: 4rem;
 
   ${fontExtra};
@@ -224,7 +224,7 @@ const StTitle = styled.h1`
 
 const StBody = styled.span`
   position: absolute;
-  top: 15.2rem;
+  top: 14rem;
   left: 4rem;
 
   line-height: 2.4rem;

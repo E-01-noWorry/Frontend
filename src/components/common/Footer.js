@@ -53,8 +53,9 @@ const Footer = ({ state }) => {
           <StText>고민상담</StText>
         </StIconWrap>
 
-        {/* <StIconWrap onClick={() => navigate('/answer', { state: { now: 'answer' } })}> */}
-        <StIconWrap onClick={() => setModal('앗! 아직 개발중이에요.')}>
+        <StIconWrap
+          onClick={() => navigate('/answer', { state: { now: 'answer' } })}
+        >
           <StIcon>
             {state.now === 'answer' ? (
               <img src={IconGomTab} alt="IconGomTab" />
@@ -96,9 +97,12 @@ const StFooter = styled.div`
   width: 100%;
   height: 7.2rem;
   padding: 0.5rem 2.5rem 1.7rem 2.5rem;
-  background-color: ${({ theme }) => theme.bg};
+  background-color: ${(props) =>
+    props.state.now === 'answer' ? 'transparent' : props.theme.bg};
+  box-sizing: border-box;
 
-  border-top: 1px solid ${({ theme }) => theme.sub4};
+  border-top: ${(props) =>
+    props.state.now === 'answer' ? 'none' : `1px solid ${props.theme.sub4}`};
 
   &
     > div:nth-child(${(props) =>

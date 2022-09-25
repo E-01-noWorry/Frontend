@@ -19,6 +19,8 @@ import { useInView } from 'react-intersection-observer';
 
 import IconPerson from '../../static/icons/Variety=person, Status=untab, Size=S.svg';
 import IconBack from '../../static/icons/Variety=back, Status=untab, Size=L.svg';
+import IconAnnounce from '../../static/icons/Variety=announce, Status=untab, Size=M.svg';
+import IconAnnounced from '../../static/icons/Variety=announced, Status=untab, Size=M.svg';
 
 import styled, { css } from 'styled-components';
 
@@ -88,12 +90,23 @@ const MadeRoom = () => {
                 ref={idx === madeRoom.length - 1 ? ref : null}
               >
                 <StInnerTitle cur={room.currentPeople} max={room.max}>
-                  {room.title}
+                  {room.currentPeople === room.max ? (
+                    <img src={IconAnnounced} alt="IconAnnounced" />
+                  ) : (
+                    <img src={IconAnnounce} alt="IconAnnounce" />
+                  )}
+                  <span>{room.title}</span>
                 </StInnerTitle>
 
                 <StInnerKeywordWrap>
                   {room.hashTag?.map((item) => (
-                    <StInnerKeyword key={item}>#{item} </StInnerKeyword>
+                    <StInnerKeyword
+                      key={item}
+                      cur={room.currentPeople}
+                      max={room.max}
+                    >
+                      #{item}{' '}
+                    </StInnerKeyword>
                   ))}
                 </StInnerKeywordWrap>
 
@@ -166,10 +179,20 @@ const StInnerTitle = styled.div`
   top: 1.6rem;
   left: 1.6rem;
 
-  ${fontBold};
-  line-height: 2.1rem;
-  color: ${(props) =>
-    props.cur === props.max ? props.theme.sub2 : props.theme.black};
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+
+  img {
+    width: 2rem;
+  }
+
+  span {
+    ${fontBold};
+    line-height: 2.1rem;
+    color: ${(props) =>
+      props.cur === props.max ? props.theme.sub2 : props.theme.black};
+  }
 `;
 
 const StInnerKeywordWrap = styled.div`
@@ -184,7 +207,8 @@ const StInnerKeywordWrap = styled.div`
 const StInnerKeyword = styled.span`
   height: 100%;
   padding: 0 0.5rem;
-  background-color: ${({ theme }) => theme.sub4};
+  background-color: ${(props) =>
+    props.cur === props.max ? '#D8D0C5' : props.theme.sub4};
 
   border-radius: 1rem;
 
