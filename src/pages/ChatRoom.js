@@ -188,6 +188,7 @@ const ChatRoom = () => {
           leave={leaveRoomHandler}
           setter={deleteModalCloseHandler}
           recommend={recommendHandler}
+          user={nowUsers.length}
         >
           <StUserInfoWrap number={isSelect}>
             {nowUsers.slice(1).map((user, idx) => (
