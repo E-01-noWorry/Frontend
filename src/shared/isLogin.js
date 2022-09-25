@@ -1,3 +1,3 @@
 export const isLogin = () => {
-  return localStorage.getItem('userKey');
+  return localStorage.getItem('refreshToken');
 };

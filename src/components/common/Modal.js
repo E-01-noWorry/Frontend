@@ -20,6 +20,14 @@ export const ModalBasic = ({ children, setter }) => {
   );
 };
 
+export const ModalInfo = () => {
+  return (
+    <StModalBg>
+      <StInfoText>고민을 떠올리고 하단 버튼을 눌러주세요</StInfoText>
+    </StModalBg>
+  );
+};
+
 export const ModalExit = ({ leave, setter }) => {
   return (
     <>
@@ -63,7 +71,7 @@ export const ModalWrite = ({ setter, write }) => {
         <StModalTitle>고민투표 만들기</StModalTitle>
         <StModalText>
           <span>
-            투표는 <span style={{ fontWeight: '700' }}>1시간 당 1회</span>만
+            투표는 <span style={{ fontWeight: '700' }}>5분 당 1회</span>만
             작성할 수 있습니다.
             <br />
             투표를 작성하시겠습니까?
@@ -79,14 +87,26 @@ export const ModalWrite = ({ setter, write }) => {
   );
 };
 
-export const ModalRecommend = ({ children, setter, leave, recommend }) => {
+export const ModalRecommend = ({
+  children,
+  setter,
+  leave,
+  recommend,
+  user,
+}) => {
   return (
     <>
       <StModalWindowWide>
         <StModalTitle>고민해결에 도움 된 사람을 추천해주세요</StModalTitle>
         <StModalTextWide>
-          <div>*현재 채팅방에 남아 있는 사람입니다.</div>
-          {children}
+          {user === 1 ? (
+            <div>남아있는 인원이 없어요.</div>
+          ) : (
+            <>
+              <div>*현재 채팅방에 남아 있는 사람입니다.</div>
+              {children}
+            </>
+          )}
         </StModalTextWide>
         <StModalButton>
           <div onClick={recommend}>추천하기</div>
@@ -103,11 +123,20 @@ const StModalBg = styled.div`
   top: 0;
   left: 0;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.65);
 
   z-index: 99;
+`;
+
+const StInfoText = styled.div`
+  ${fontBold};
+  color: ${({ theme }) => theme.main2};
 `;
 
 const StModalWindow = styled.div`

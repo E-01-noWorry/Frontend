@@ -6,6 +6,7 @@ import { ModalBasic } from '../components/common/Modal';
 
 import { isLogin } from '../shared/isLogin';
 import { detectInAppBrowser, detectIphone } from '../shared/DeviceDetector';
+import { fontExtraBold, fontMedium } from '../shared/themes/textStyle';
 
 import Logo from '../static/images/Logo.svg';
 
@@ -53,6 +54,7 @@ const Start = () => {
       <BodyPadding>
         <StLogo>
           <img src={Logo} alt="Logo" />
+          <span>같이 고민해요, 곰곰</span>
         </StLogo>
       </BodyPadding>
     </>
@@ -66,5 +68,17 @@ const StLogo = styled.div`
   top: 50%;
   left: 50%;
 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+
   transform: translate(-50%, -50%);
+
+  span {
+    ${fontMedium};
+    ${fontExtraBold};
+    color: ${({ theme }) => theme.main2};
+  }
 `;

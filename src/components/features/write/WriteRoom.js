@@ -82,7 +82,7 @@ const WriteRoom = () => {
       setUploadModal('고민 상담방 등록 완료!');
       document.body.style.overflow = 'hidden';
     } catch (error) {
-      console.log(error.response.data.errMsg);
+      setModal(error.response.data.errMsg);
     }
   };
 

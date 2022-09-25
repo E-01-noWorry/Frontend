@@ -25,7 +25,7 @@ const ChatBox = ({ chatState, userKey }) => {
     const scrollHeight = window.innerHeight;
     const myHeight = event.srcElement.scrollingElement.scrollTop;
 
-    setScrollState(totalHeight <= scrollHeight + myHeight);
+    setScrollState(totalHeight <= scrollHeight + myHeight + 100);
   }, 200);
 
   useEffect(() => {

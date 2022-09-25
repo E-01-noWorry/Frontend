@@ -131,7 +131,7 @@ const ChatRoom = () => {
 
       await instance.delete(`/room/${roomKey}`);
 
-      if (state?.now === 'room') {
+      if (state?.now === 'room' || state?.now === false) {
         navigate('/main', { state: { now: 'room' } });
       } else {
         navigate(-1);
@@ -188,6 +188,7 @@ const ChatRoom = () => {
           leave={leaveRoomHandler}
           setter={deleteModalCloseHandler}
           recommend={recommendHandler}
+          user={nowUsers.length}
         >
           <StUserInfoWrap number={isSelect}>
             {nowUsers.slice(1).map((user, idx) => (
@@ -218,7 +219,7 @@ const ChatRoom = () => {
       <Header>
         <StHeaderIcon
           onClick={() => {
-            state?.now === 'room'
+            state?.now === 'room' || state?.now === false
               ? navigate('/main', {
                   state: { now: 'room' },
                 })

@@ -54,7 +54,7 @@ const Detail = () => {
   const deleteHandler = async () => {
     try {
       await instance.delete(`/select/${selectKey}`);
-      if (state?.now === 'select') {
+      if (state?.now === 'select' || state?.now === false) {
         navigate('/main', { state: { now: 'select' } });
       } else {
         navigate(-1);
@@ -73,7 +73,7 @@ const Detail = () => {
       <Header>
         <StHeaderIcon
           onClick={() => {
-            state?.now === 'select'
+            state?.now === 'select' || state?.now === false
               ? navigate('/main', {
                   state: { now: 'select', filter: state.filter },
                 })

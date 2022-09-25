@@ -84,9 +84,14 @@ const Main = () => {
         <StLogo onClick={() => window.location.reload()}>
           <img src={Logo} alt="Logo" />
         </StLogo>
-        <StIcon>
-          <img src={IconSurvey} alt="IconSurvey" />
-        </StIcon>
+        <a
+          target="_blank"
+          href="https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform"
+        >
+          <StIcon>
+            <img src={IconSurvey} alt="IconSurvey" />
+          </StIcon>
+        </a>
       </Header>
 
       {state.now === 'room' ? <MainRoom /> : <MainSelect />}
