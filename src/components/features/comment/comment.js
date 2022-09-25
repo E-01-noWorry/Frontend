@@ -32,19 +32,33 @@ const Comment = (props) => {
   };
 
   const onClickSubmit = () => {
-    dispatch(
-      writeCommentThunk({
-        ...writeComment,
-        selectKey: params.selectKey,
-      }),
-    );
+    if (writeComment.comment.length >= 5) {
+      dispatch(
+        writeCommentThunk({
+          ...writeComment,
+          selectKey: params.selectKey,
+        }),
+      );
+    } else if (
+      writeComment.comment.length > 0 &&
+      writeComment.comment.length < 5 &&
+      localStorage.getItem('accessToken') !== null
+    ) {
+      console.log('최소 5글자 입력하세요');
+    }
     setWriteComment({
       comment: '',
     });
+    if (localStorage.getItem('accessToken') === null) {
+      console.log('로그인후이용하셈');
+    }
+    if (
+      writeComment.comment === '' &&
+      localStorage.getItem('accessToken') !== null
+    ) {
+      console.log('내용을 입력해주셈');
+    }
   };
-  //무한스크롤
-
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     dispatch(getCommentThunk({ params }));

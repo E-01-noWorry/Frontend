@@ -70,13 +70,25 @@ const EditComment = (props) => {
 
   const onClickReplyButton = () => {
     setReplyMode((status) => !status);
-    if (reply !== '') {
+    if (reply.comment?.length >= 5) {
       dispatch(
         writeRecommentThunk({
           ...reply,
           commentKey: props.allComments.commentKey,
         }),
       );
+    } else if (
+      reply.comment?.length > 0 &&
+      reply.comment?.length < 5 &&
+      localStorage.getItem('accessToken') !== null
+    ) {
+      console.log('5글자 이상 입력하세요');
+    }
+    if (localStorage.getItem('accessToken') === null) {
+      console.log('로그인후이용하셈');
+    }
+    if (reply === '' && localStorage.getItem('accessToken') !== null) {
+      console.log('내용을 입력해주셈');
     }
   };
 
@@ -294,7 +306,7 @@ const ReplyInput = styled.input`
   border-radius: 2rem;
   width: 100%;
   height: 4vh;
-  padding: 0.5rem 0 0 1rem;
+  padding: 0.5rem 0 0.5rem 1rem;
 `;
 
 const CancelReply = styled.p`

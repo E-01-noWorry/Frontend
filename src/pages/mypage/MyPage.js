@@ -70,6 +70,12 @@ const MyPage = () => {
     setEditMode((status) => !status);
     setEditNickname({ nickname: localStorage.getItem('nickname') });
     if (editMode === true) {
+      if (
+        editNickname.nickname === '' ||
+        editNickname.nickname === localStorage.getItem('nickname')
+      ) {
+        window.alert('닉네임을 변경해주세요');
+      }
       dispatch(editNickNameThunk({ ...editNickname, userKey: userKey }));
     }
   };
