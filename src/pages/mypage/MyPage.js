@@ -152,7 +152,7 @@ const MyPage = () => {
                           </EditButton>
                         ) : (
                           <EditButton>
-                            <img width="20" src={IconEdit} alt="IconEdit" />
+                            <img width="20" src={IconChange} alt="IconChange" />
                             <span>변경</span>
                           </EditButton>
                         )}
@@ -397,8 +397,9 @@ const MyPage = () => {
                     <img src={IconNext} alt="IconNext" />
                   </StInnerArrow>
                 </StInnerNavi>
-
-                <StInnerNavi onClick={() => setModal('로그인 후 사용.')}>
+                <StInnerNavi
+                  onClick={() => setModal('로그인 후 사용해주세요.')}
+                >
                   <StInnerTitle>
                     <div>
                       <img src={IconChatting} alt="IconChatting" />
@@ -487,10 +488,8 @@ const MyPageHeadContainer = styled.div`
 `;
 
 const StProfileImgLarge = styled(ProfileImg)`
-  /* width: 6.5rem;
-  height: 6.5rem; */
-  width: 65px;
-  height: 65px;
+  width: 6.5rem;
+  height: 6.5rem;
 `;
 
 const ButtonWrap = styled.div`
@@ -588,6 +587,7 @@ const EditNickname = styled.div`
 const EditNicknameInput = styled.input`
   border: none;
   border-bottom: 1px solid ${({ theme }) => theme.sub4};
+  background-color: transparent;
   min-width: 18.5rem;
 
   &:focus {

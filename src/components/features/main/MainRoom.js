@@ -119,10 +119,10 @@ const MainRoom = () => {
       </StSearchWrap>
 
       <BodyPadding>
-        {rooms.length === 0 && (
-          <StNoneContents>상담방이 없습니다.</StNoneContents>
-        )}
         <StContentBoxWrap>
+          {rooms.length === 0 && (
+            <StNoneContents>상담방이 없습니다.</StNoneContents>
+          )}
           {rooms?.map((room, idx) => (
             <StContentBox
               key={room.roomKey}
@@ -179,7 +179,7 @@ export default MainRoom;
 
 const StNoneContents = styled.div`
   width: 100%;
-  margin-top: 16.9rem;
+  margin-top: 4.1rem;
 
   ${fontMedium}
   text-align: center;
