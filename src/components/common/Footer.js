@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ModalBasic } from './Modal';
 
 import { IconLarge } from '../../shared/themes/iconStyle';
-import { fontExtraSmall } from '../../shared/themes/textStyle';
+import { fontBold, fontExtraSmall } from '../../shared/themes/textStyle';
 
 import IconVoteTab from '../../static/icons/Variety=vote, Status=tab, Size=L.svg';
 import IconVoteUntab from '../../static/icons/Variety=vote, Status=untab, Size=L.svg';
@@ -132,6 +132,7 @@ const StIcon = styled.div`
 `;
 
 const StText = styled.div`
+  ${fontBold};
   ${fontExtraSmall};
   line-height: 1.8rem;
 `;

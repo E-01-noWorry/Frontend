@@ -20,6 +20,7 @@ import { ModalBasic } from '../../components/common/Modal';
 import ProfileImg from '../../components/elements/ProfileImg';
 import MypageModal from '../../components/features/mypage/mypageModal';
 
+import IconChange from '../../static/icons/Variety=Change, Status=untab, Size=S.svg';
 import IconEdit from '../../static/icons/Variety=edit, Status=untab, Size=L.svg';
 import IconNext from '../../static/icons/Variety=next, Status=untab, Size=M.svg';
 import IconVoteTab from '../../static/icons/Variety=vote, Status=tab, Size=L.svg';
@@ -157,6 +158,7 @@ const MyPage = () => {
                       </EditNickname>
                     </StNicknameWrap>
                   </div>
+
                 </MyPageHeadContainer>
 
                 <ScoreContainer>
@@ -352,7 +354,7 @@ const MyPage = () => {
               <StTitle>고민투표</StTitle>
               <StBox>
                 <StInnerNavi
-                  onClick={() => setModal('로그인 후 사용 가능합니다.')}
+                  onClick={() => setModal('로그인 후 사용해주세요.')}
                 >
                   <StInnerTitle>
                     <div>
@@ -366,7 +368,7 @@ const MyPage = () => {
                 </StInnerNavi>
 
                 <StInnerNavi
-                  onClick={() => setModal('로그인 후 사용 가능합니다.')}
+                  onClick={() => setModal('로그인 후 사용해주세요.')}
                 >
                   <StInnerTitle>
                     <div>
@@ -383,7 +385,7 @@ const MyPage = () => {
               <StTitle>고민상담</StTitle>
               <StBox>
                 <StInnerNavi
-                  onClick={() => setModal('로그인 후 사용 가능합니다.')}
+                  onClick={() => setModal('로그인 후 사용해주세요.')}
                 >
                   <StInnerTitle>
                     <div>
@@ -397,7 +399,7 @@ const MyPage = () => {
                 </StInnerNavi>
 
                 <StInnerNavi
-                  onClick={() => setModal('로그인 후 사용 가능합니다.')}
+                  onClick={() => setModal('로그인 후 사용.')}
                 >
                   <StInnerTitle>
                     <div>
@@ -418,7 +420,7 @@ const MyPage = () => {
         ) : null}
         <Footer state={state} />
       </div>
-    </>
+    </>        
   );
 };
 
@@ -487,8 +489,10 @@ const MyPageHeadContainer = styled.div`
 `;
 
 const StProfileImgLarge = styled(ProfileImg)`
-  width: 6.5rem;
-  height: 6.5rem;
+  /* width: 6.5rem;
+  height: 6.5rem; */
+  width: 65px;
+  height: 65px;
 `;
 
 const ButtonWrap = styled.div`
