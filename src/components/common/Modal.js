@@ -119,6 +119,12 @@ export const ModalRecommend = ({
 };
 
 const StModalBg = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
   position: fixed;
   top: 0;
   left: 0;

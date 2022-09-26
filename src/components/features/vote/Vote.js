@@ -47,52 +47,63 @@ const Vote = ({ content, selectKey }) => {
     <>
       {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
 
-      {msg.includes('조회 성공') || content.completion ? (
-        //자기 자신의 게시물을 봤을때, 투표를 했을때, 마감 기한이 끝난 게시물을 누구나 확인할때
-        <StVoteResultBox>
-          {content.options?.map((option, idx) => (
-            <StSelectResult bgImage={content.image[idx]} key={idx}>
-              <div>{voteResult?.[idx + 1] || 0}%</div>
-              <div>{option}</div>
-            </StSelectResult>
-          ))}
-        </StVoteResultBox>
-      ) : (
-        //타인이 쓴 글에 아직 투표하지 않았을때, 비로그인 상태이고 마감기한이 끝나지 않았을때
-        <StVoteBox isSelect={isSelect} image={content.image}>
-          {content.options?.map((option, idx) => (
-            <StSelectItem
-              bgImage={content.image[idx]}
-              key={idx}
-              onClick={() => setIsSelect(idx + 1)}
-            >
-              <input
-                type="radio"
-                hidden
-                id={option}
-                checked={isSelect === idx + 1}
-                onChange={() => setIsSelect(idx + 1)}
-              />
-              <label htmlFor={option}>{option}</label>
-              <GlobalButton
-                onClick={voteHandler}
-                h={'4.8rem'}
-                bgc={({ theme }) => theme.white}
-                font={({ theme }) => theme.black}
-                borderR={'1.5rem'}
-                fw={'bold'}
+      <StVoteWrap>
+        {msg.includes('조회 성공') || content.completion ? (
+          //자기 자신의 게시물을 봤을때, 투표를 했을때, 마감 기한이 끝난 게시물을 누구나 확인할때
+          <StVoteResultBox>
+            {content.options?.map((option, idx) => (
+              <StSelectResult bgImage={content.image[idx]} key={idx}>
+                <div>{voteResult?.[idx + 1] || 0}%</div>
+                <div>{option}</div>
+              </StSelectResult>
+            ))}
+          </StVoteResultBox>
+        ) : (
+          //타인이 쓴 글에 아직 투표하지 않았을때, 비로그인 상태이고 마감기한이 끝나지 않았을때
+          <StVoteBox isSelect={isSelect} image={content.image}>
+            {content.options?.map((option, idx) => (
+              <StSelectItem
+                bgImage={content.image[idx]}
+                key={idx}
+                onClick={() => setIsSelect(idx + 1)}
               >
-                클릭 후 투표
-              </GlobalButton>
-            </StSelectItem>
-          ))}
-        </StVoteBox>
-      )}
+                <input
+                  type="radio"
+                  hidden
+                  id={option}
+                  checked={isSelect === idx + 1}
+                  onChange={() => setIsSelect(idx + 1)}
+                />
+                <label htmlFor={option}>{option}</label>
+                <GlobalButton
+                  onClick={voteHandler}
+                  h={'4.8rem'}
+                  bgc={({ theme }) => theme.white}
+                  font={({ theme }) => theme.black}
+                  borderR={'1.5rem'}
+                  fw={'bold'}
+                >
+                  클릭 후 투표
+                </GlobalButton>
+              </StSelectItem>
+            ))}
+          </StVoteBox>
+        )}
+      </StVoteWrap>
     </>
   );
 };
 
 export default Vote;
+
+const StVoteWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    padding: 0 2rem;
+  }
+
+  width: 100%;
+  background-color: ${({ theme }) => theme.bg};
+`;
 
 const StVoteResultBox = styled.div`
   display: flex;
@@ -154,7 +165,6 @@ const StVoteBox = styled.div`
   gap: 2rem;
 
   width: 100%;
-  height: 100%;
   padding: 2rem;
   margin: 2.4rem 0 4.8rem 0;
   background-color: ${({ theme }) => theme.sub5};

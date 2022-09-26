@@ -32,19 +32,6 @@ const OnBoarding = () => {
   const prevNavi = useRef(null);
   const nextNavi = useRef(null);
 
-  const [vh, setVh] = useState(window.innerHeight * 0.01);
-  const screenSize = useCallback(() => {
-    setVh(window.innerHeight * 0.01);
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }, [vh]);
-
-  useEffect(() => {
-    screenSize();
-    window.addEventListener('resize', screenSize);
-
-    return () => window.removeEventListener('resize', screenSize);
-  }, [screenSize]);
-
   return (
     <StContensWrap>
       {pagination < 4 && (
@@ -169,7 +156,12 @@ const StNext = styled.div`
 `;
 
 const StContensWrap = styled.div`
-  position: relative;
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
 
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);

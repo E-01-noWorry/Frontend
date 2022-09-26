@@ -95,10 +95,20 @@ const ChatBox = ({ chatState, userKey }) => {
 export default ChatBox;
 
 const StChatWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    padding: 11rem 2rem 8rem 2rem;
+    min-height: calc(100%);
+  }
+
   width: 100%;
-  height: 100%;
   padding-top: 11rem;
   padding-bottom: 8rem;
+  background-color: ${({ theme }) => theme.bg};
 `;
 
 const StNewMessage = styled.div`

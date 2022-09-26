@@ -19,6 +19,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const [modal, setModal] = useState('');
+  const [successModal, setSuccessModal] = useState('');
   const [signUpInfo, setSignUpInfo] = useState({
     userId: '',
     password: '',
@@ -34,9 +35,9 @@ const SignUp = () => {
   const onClickSignUp = async () => {
     try {
       await instance.post('/user/signup', signUpInfo);
-      setModal('회원가입을 완료했습니다.');
+      setSuccessModal('회원가입을 완료했습니다.');
     } catch (error) {
-      console.log(error);
+      setModal(error.response.data.errMsg);
     }
   };
 
@@ -80,9 +81,13 @@ const SignUp = () => {
 
   return (
     <div>
-      {modal && (
-        <ModalBasic setter={() => navigate('/login')}>{modal}</ModalBasic>
+      {successModal && (
+        <ModalBasic setter={() => navigate('/login')}>
+          {successModal}
+        </ModalBasic>
       )}
+
+      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
 
       <Header>
         <StHeaderIcon onClick={() => navigate(-1)}>
@@ -229,13 +234,23 @@ const StHeaderTitle = styled.div`
 `;
 
 const SignUpContainer = styled.div`
-  position: relative;
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    margin-top: 6.4rem;
+    padding: 0 2rem;
+    min-height: calc(100% - 6.4rem);
+  }
 
   display: flex;
   flex-direction: column;
   gap: 2rem;
 
   margin-top: 6.4rem;
+  background-color: ${({ theme }) => theme.bg};
 `;
 
 const StInnerTitle = styled.div`

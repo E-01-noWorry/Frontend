@@ -75,56 +75,55 @@ const MadeRoom = () => {
         <StHeaderIcon />
       </StHeader>
 
-      {madeRoom.length === 0 ? (
-        <StNoneContents>상담방이 없습니다.</StNoneContents>
-      ) : (
-        <BodyPadding>
-          <StContentBoxWrap>
-            {madeRoom?.map((room, idx) => (
-              <StContentBox
-                key={room.roomKey}
-                onClick={() => joinRoomHandler(room.roomKey)}
-                cur={room.currentPeople}
-                max={room.max}
-                //마지막 게시글에 ref를 달아줍니다
-                ref={idx === madeRoom.length - 1 ? ref : null}
-              >
-                <StInnerTitle cur={room.currentPeople} max={room.max}>
-                  {room.currentPeople === room.max ? (
-                    <img src={IconAnnounced} alt="IconAnnounced" />
-                  ) : (
-                    <img src={IconAnnounce} alt="IconAnnounce" />
-                  )}
-                  <span>{room.title}</span>
-                </StInnerTitle>
+      <BodyPadding>
+        <StContentBoxWrap>
+          {madeRoom.length === 0 && (
+            <StNoneContents>상담방이 없습니다.</StNoneContents>
+          )}
+          {madeRoom?.map((room, idx) => (
+            <StContentBox
+              key={room.roomKey}
+              onClick={() => joinRoomHandler(room.roomKey)}
+              cur={room.currentPeople}
+              max={room.max}
+              //마지막 게시글에 ref를 달아줍니다
+              ref={idx === madeRoom.length - 1 ? ref : null}
+            >
+              <StInnerTitle cur={room.currentPeople} max={room.max}>
+                {room.currentPeople === room.max ? (
+                  <img src={IconAnnounced} alt="IconAnnounced" />
+                ) : (
+                  <img src={IconAnnounce} alt="IconAnnounce" />
+                )}
+                <span>{room.title}</span>
+              </StInnerTitle>
 
-                <StInnerKeywordWrap>
-                  {room.hashTag?.map((item) => (
-                    <StInnerKeyword
-                      key={item}
-                      cur={room.currentPeople}
-                      max={room.max}
-                    >
-                      #{item}{' '}
-                    </StInnerKeyword>
-                  ))}
-                </StInnerKeywordWrap>
+              <StInnerKeywordWrap>
+                {room.hashTag?.map((item) => (
+                  <StInnerKeyword
+                    key={item}
+                    cur={room.currentPeople}
+                    max={room.max}
+                  >
+                    #{item}{' '}
+                  </StInnerKeyword>
+                ))}
+              </StInnerKeywordWrap>
 
-                <StContentFooter>
-                  <StInnerCurrent>
-                    <StPeopleIcon>
-                      <img src={IconPerson} alt="IconPerson" />
-                    </StPeopleIcon>
-                    <span>
-                      {room.currentPeople}/{room.max} 명
-                    </span>
-                  </StInnerCurrent>
-                </StContentFooter>
-              </StContentBox>
-            ))}
-          </StContentBoxWrap>
-        </BodyPadding>
-      )}
+              <StContentFooter>
+                <StInnerCurrent>
+                  <StPeopleIcon>
+                    <img src={IconPerson} alt="IconPerson" />
+                  </StPeopleIcon>
+                  <span>
+                    {room.currentPeople}/{room.max} 명
+                  </span>
+                </StInnerCurrent>
+              </StContentFooter>
+            </StContentBox>
+          ))}
+        </StContentBoxWrap>
+      </BodyPadding>
     </div>
   );
 };
@@ -141,7 +140,7 @@ const StHeader = styled(Header)`
 
 const StNoneContents = styled.div`
   width: 100%;
-  margin-top: 10.4rem;
+  margin-top: 4rem;
 
   ${fontMedium}
   text-align: center;
@@ -156,6 +155,18 @@ const StHeaderTitle = styled.div`
 `;
 
 const StContentBoxWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    margin-top: 6.4rem;
+    padding: 0 2rem 2rem 2rem;
+    min-height: calc(100% - 6.4rem);
+    background-color: ${({ theme }) => theme.bg};
+  }
+
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
