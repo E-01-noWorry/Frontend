@@ -114,12 +114,24 @@ const StHeaderTitle = styled.div`
 `;
 
 const StLoginWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    margin-top: 6.4rem;
+    padding: 2rem 2rem 0 2rem;
+    min-height: calc(100% - 6.4rem);
+  }
+
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 3.4rem;
 
   margin-top: 8.4rem;
+  background-color: ${({ theme }) => theme.bg};
 `;
 
 const StInputWrap = styled.div`

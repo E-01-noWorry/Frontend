@@ -7,6 +7,12 @@ const Header = ({ children, ...rest }) => {
 export default Header;
 
 const StHeader = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
   position: fixed;
   top: 0;
   left: 0;

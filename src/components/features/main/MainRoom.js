@@ -186,6 +186,12 @@ const StNoneContents = styled.div`
 `;
 
 const StSearchWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
   position: fixed;
   top: 6.4rem;
 
@@ -238,12 +244,24 @@ const StCancel = styled.div`
 `;
 
 const StContentBoxWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    margin-top: 12.8rem;
+    padding: 1.2rem 2rem 9.6rem 2rem;
+    min-height: calc(100% - 14rem);
+  }
+
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
 
   margin-top: 14rem;
   margin-bottom: 9.6rem;
+  background-color: ${({ theme }) => theme.bg};
 `;
 
 const StContentBox = styled.div`

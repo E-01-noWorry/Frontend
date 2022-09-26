@@ -24,19 +24,6 @@ const Answer = () => {
   const [gomgomThink, setGomgomThink] = useState(false);
   const [gomgomAnswer, setGomgomAnswer] = useState('');
 
-  const [vh, setVh] = useState(window.innerHeight * 0.01);
-  const screenSize = useCallback(() => {
-    setVh(window.innerHeight * 0.01);
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }, [vh]);
-
-  useEffect(() => {
-    screenSize();
-    window.addEventListener('resize', screenSize);
-
-    return () => window.removeEventListener('resize', screenSize);
-  }, [screenSize]);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setIntoText(false);
@@ -91,7 +78,7 @@ const Answer = () => {
           )}
 
           {gomgomThink ? (
-            <StThinking>곰곰히 생각하는 중...</StThinking>
+            <StThinking>곰곰이 생각하는 중...</StThinking>
           ) : gomgomAnswer ? (
             <StThinking>{gomgomAnswer}</StThinking>
           ) : null}
@@ -102,8 +89,8 @@ const Answer = () => {
         >
           {gomgomAnswer ? '곰곰의 해답 다시 듣기' : '곰곰의 해답 듣기'}
         </StGlobalButton>
-        <Footer state={state} />
       </StAnswerWrap>
+      <Footer state={state} />
     </>
   );
 };
@@ -131,6 +118,12 @@ const StThinking = styled.div`
 `;
 
 const StAnswerWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
   position: relative;
 
   width: 100%;

@@ -303,6 +303,12 @@ const StHeaderInfo = styled.div`
 `;
 
 const StHeaderTitle = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
   position: fixed;
   top: 6.4rem;
   left: 0;
@@ -317,6 +323,8 @@ const StHeaderTitle = styled.div`
   padding: 0 5rem;
   background-color: ${({ theme }) => theme.bg};
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
+
+  z-index: 8;
 
   span {
     ${fontMedium}

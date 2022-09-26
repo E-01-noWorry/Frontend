@@ -12,6 +12,7 @@ import theme from './shared/themes/Theme';
 import GlobalStyles from './shared/themes/GlobalStyles';
 
 import { ThemeProvider } from 'styled-components';
+import { useCallback } from 'react';
 
 //아이폰이 아닐때만 작동합니다
 if (!detectIphone(window.navigator.userAgent)) {
@@ -47,6 +48,19 @@ const App = () => {
 
     refreshTokenAPI();
   }, []);
+
+  const [vh, setVh] = useState(window.innerHeight * 0.01);
+  const screenSize = useCallback(() => {
+    setVh(window.innerHeight * 0.01);
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }, [vh]);
+
+  useEffect(() => {
+    screenSize();
+    window.addEventListener('resize', screenSize);
+
+    return () => window.removeEventListener('resize', screenSize);
+  }, [screenSize]);
 
   return (
     <ThemeProvider theme={isDarkMode ? theme.darkTheme : theme.defaultTheme}>

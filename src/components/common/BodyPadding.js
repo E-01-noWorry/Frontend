@@ -8,4 +8,5 @@ export default BodyPadding;
 
 const StBodyPadding = styled.div`
   padding: 0 2rem;
+  background-color: ${({ theme }) => theme.bg};
 `;

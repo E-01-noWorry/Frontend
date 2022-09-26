@@ -67,68 +67,67 @@ const Voted = () => {
         <StHeaderIcon />
       </StHeader>
 
-      {postVoted.length === 0 ? (
-        <StNoneContents>투표가 없습니다.</StNoneContents>
-      ) : (
-        <BodyPadding>
-          <StContentBoxWrap>
-            {postVoted?.map((content, idx) => (
-              <StContentBox
-                key={content.selectKey}
-                onClick={() =>
-                  navigate(`/detail/${content.selectKey}`, {
-                    state: { now: 'mypage' },
-                  })
-                }
-                //마지막 게시글에 ref를 달아줍니다
-                ref={idx === postVoted.length - 1 ? ref : null}
-                completion={content.completion}
-              >
-                <StContentHeader>
-                  <StInnerCategory completion={content.completion}>
-                    {content.category}
-                  </StInnerCategory>
-                  <StInnerNickname>
-                    작성자 <span>{content.nickname}</span>
-                  </StInnerNickname>
-                </StContentHeader>
+      <BodyPadding>
+        <StContentBoxWrap>
+          {postVoted.length === 0 && (
+            <StNoneContents>투표가 없습니다.</StNoneContents>
+          )}
+          {postVoted?.map((content, idx) => (
+            <StContentBox
+              key={content.selectKey}
+              onClick={() =>
+                navigate(`/detail/${content.selectKey}`, {
+                  state: { now: 'mypage' },
+                })
+              }
+              //마지막 게시글에 ref를 달아줍니다
+              ref={idx === postVoted.length - 1 ? ref : null}
+              completion={content.completion}
+            >
+              <StContentHeader>
+                <StInnerCategory completion={content.completion}>
+                  {content.category}
+                </StInnerCategory>
+                <StInnerNickname>
+                  작성자 <span>{content.nickname}</span>
+                </StInnerNickname>
+              </StContentHeader>
 
-                <StInnerTitle completion={content.completion}>
-                  {content.title}
-                </StInnerTitle>
+              <StInnerTitle completion={content.completion}>
+                {content.title}
+              </StInnerTitle>
 
-                <StInnerOption completion={content.completion}>
-                  {content.options?.join(' vs ')}
-                </StInnerOption>
+              <StInnerOption completion={content.completion}>
+                {content.options?.join(' vs ')}
+              </StInnerOption>
 
-                <StContentFooter>
-                  <StInnerTime>
-                    {content.completion ? (
-                      <StIcon>
-                        <img src={IconTimeOver} alt="IconTimeOver" />
-                      </StIcon>
-                    ) : (
-                      <>
-                        <StIcon>
-                          <img src={IconLeftTime} alt="IconLeftTime" />
-                        </StIcon>
-                        <span>{remainedTime(content.deadLine)}</span>
-                      </>
-                    )}
-                    <span>{content.completion ? '투표마감' : '남음'}</span>
-                  </StInnerTime>
-                  <StInnerCurrent>
+              <StContentFooter>
+                <StInnerTime>
+                  {content.completion ? (
                     <StIcon>
-                      <img src={IconPeople} alt="IconPeople" />
+                      <img src={IconTimeOver} alt="IconTimeOver" />
                     </StIcon>
-                    <span>{content.total || 0}</span>
-                  </StInnerCurrent>
-                </StContentFooter>
-              </StContentBox>
-            ))}
-          </StContentBoxWrap>
-        </BodyPadding>
-      )}
+                  ) : (
+                    <>
+                      <StIcon>
+                        <img src={IconLeftTime} alt="IconLeftTime" />
+                      </StIcon>
+                      <span>{remainedTime(content.deadLine)}</span>
+                    </>
+                  )}
+                  <span>{content.completion ? '투표마감' : '남음'}</span>
+                </StInnerTime>
+                <StInnerCurrent>
+                  <StIcon>
+                    <img src={IconPeople} alt="IconPeople" />
+                  </StIcon>
+                  <span>{content.total || 0}</span>
+                </StInnerCurrent>
+              </StContentFooter>
+            </StContentBox>
+          ))}
+        </StContentBoxWrap>
+      </BodyPadding>
     </>
   );
 };
@@ -144,7 +143,7 @@ const StHeader = styled(Header)`
 
 const StNoneContents = styled.div`
   width: 100%;
-  margin-top: 10.4rem;
+  margin-top: 4rem;
 
   ${fontMedium}
   text-align: center;
@@ -159,12 +158,24 @@ const StHeaderTitle = styled.div`
 `;
 
 const StContentBoxWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    margin-top: 6.4rem;
+    padding: 0 2rem 2rem 2rem;
+    min-height: calc(100% - 6.4rem);
+  }
+
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
 
   margin-top: 6.4rem;
   margin-bottom: 2rem;
+  background-color: ${({ theme }) => theme.bg};
 `;
 
 const StContentBox = styled.div`

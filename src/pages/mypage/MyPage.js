@@ -35,7 +35,7 @@ const MyPage = () => {
   const userPoint = useSelector((state) => state.myPageSlice.point.point);
 
   const [modal, setModal] = useState('');
-  console.log(userNickname);
+
   //나의 포인트 조회
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -103,7 +103,6 @@ const MyPage = () => {
 
         {loggined !== null ? (
           //로그인시
-
           <>
             {modalMode ? (
               <Modal>
@@ -247,90 +246,94 @@ const MyPage = () => {
                       </TierButtonPurple>
                     </Tiers>
                   </TierInfo>
-
-                  <TierInfoLetter>
-                    {tiers.tiers === 'white' ? (
-                      <Line>
-                        '고민 서비스 참여를 통해 0~10점을 획득했을 때'
-                      </Line>
-                    ) : null}
-                    {tiers.tiers === 'yellow' ? (
-                      <Line>
-                        '고민 서비스 참여를 통해 11~25점을 획득했을 때'
-                      </Line>
-                    ) : null}
-                    {tiers.tiers === 'green' ? (
-                      <Line>
-                        '고민 서비스 참여를 통해 26~50점을 획득했을 때'
-                      </Line>
-                    ) : null}
-                    {tiers.tiers === 'blue' ? (
-                      <Line>
-                        '고민 서비스 참여를 통해 51~100점을 획득했을 때'
-                      </Line>
-                    ) : null}
-                    {tiers.tiers === 'purple' ? (
-                      <Line>
-                        '고민 서비스 참여를 통해 101점 이상을 획득했을 때'
-                      </Line>
-                    ) : null}
-                  </TierInfoLetter>
                 </TierInfoContainer>
 
                 <BodyPadding>
-                  <StTitle>고민투표</StTitle>
-                  <StBox>
-                    <StInnerNavi onClick={() => navigate('/postvoted')}>
-                      <StInnerTitle>
-                        <div>
-                          <img src={IconEdit} alt="IconEdit" />
-                        </div>
-                        <div>내가 등록한 고민 투표</div>
-                      </StInnerTitle>
-                      <StInnerArrow>
-                        <img src={IconNext} alt="IconNext" />
-                      </StInnerArrow>
-                    </StInnerNavi>
+                  <StMypageWrap login={loggined}>
+                    <TierInfoLetter>
+                      {tiers.tiers === 'white' ? (
+                        <Line>
+                          '고민 서비스 참여를 통해 0~10점을 획득했을 때'
+                        </Line>
+                      ) : null}
+                      {tiers.tiers === 'yellow' ? (
+                        <Line>
+                          '고민 서비스 참여를 통해 11~25점을 획득했을 때'
+                        </Line>
+                      ) : null}
+                      {tiers.tiers === 'green' ? (
+                        <Line>
+                          '고민 서비스 참여를 통해 26~50점을 획득했을 때'
+                        </Line>
+                      ) : null}
+                      {tiers.tiers === 'blue' ? (
+                        <Line>
+                          '고민 서비스 참여를 통해 51~100점을 획득했을 때'
+                        </Line>
+                      ) : null}
+                      {tiers.tiers === 'purple' ? (
+                        <Line>
+                          '고민 서비스 참여를 통해 101점 이상을 획득했을 때'
+                        </Line>
+                      ) : null}
+                    </TierInfoLetter>
+                    <StTitle>고민투표</StTitle>
+                    <StBox>
+                      <StInnerNavi onClick={() => navigate('/postvoted')}>
+                        <StInnerTitle>
+                          <div>
+                            <img src={IconEdit} alt="IconEdit" />
+                          </div>
+                          <div>내가 등록한 고민 투표</div>
+                        </StInnerTitle>
+                        <StInnerArrow>
+                          <img src={IconNext} alt="IconNext" />
+                        </StInnerArrow>
+                      </StInnerNavi>
 
-                    <StInnerNavi onClick={() => navigate('/voted')}>
-                      <StInnerTitle>
-                        <div>
-                          <img src={IconVoteTab} alt="IconVoteTab" />
-                        </div>
-                        <div>내가 투표한 고민 투표</div>
-                      </StInnerTitle>
-                      <StInnerArrow>
-                        <img src={IconNext} alt="IconNext" />
-                      </StInnerArrow>
-                    </StInnerNavi>
-                  </StBox>
+                      <StInnerNavi onClick={() => navigate('/voted')}>
+                        <StInnerTitle>
+                          <div>
+                            <img src={IconVoteTab} alt="IconVoteTab" />
+                          </div>
+                          <div>내가 투표한 고민 투표</div>
+                        </StInnerTitle>
+                        <StInnerArrow>
+                          <img src={IconNext} alt="IconNext" />
+                        </StInnerArrow>
+                      </StInnerNavi>
+                    </StBox>
 
-                  <StTitle>고민상담</StTitle>
-                  <StBox>
-                    <StInnerNavi onClick={() => navigate('/maderoom')}>
-                      <StInnerTitle>
-                        <div>
-                          <img src={IconEdit} alt="IconEdit" />
-                        </div>
-                        <div>내가 만든 고민 상담방</div>
-                      </StInnerTitle>
-                      <StInnerArrow>
-                        <img src={IconNext} alt="IconNext" />
-                      </StInnerArrow>
-                    </StInnerNavi>
+                    <StTitle>고민상담</StTitle>
+                    <StBox>
+                      <StInnerNavi onClick={() => navigate('/maderoom')}>
+                        <StInnerTitle>
+                          <div>
+                            <img src={IconEdit} alt="IconEdit" />
+                          </div>
+                          <div>내가 만든 고민 상담방</div>
+                        </StInnerTitle>
+                        <StInnerArrow>
+                          <img src={IconNext} alt="IconNext" />
+                        </StInnerArrow>
+                      </StInnerNavi>
 
-                    <StInnerNavi onClick={() => navigate('/operatingroom')}>
-                      <StInnerTitle>
-                        <div>
-                          <img src={IconChatting} alt="IconChatting" />
-                        </div>
-                        <div>대화중인 고민 상담방</div>
-                      </StInnerTitle>
-                      <StInnerArrow>
-                        <img src={IconNext} alt="IconNext" />
-                      </StInnerArrow>
-                    </StInnerNavi>
-                  </StBox>
+                      <StInnerNavi onClick={() => navigate('/operatingroom')}>
+                        <StInnerTitle>
+                          <div>
+                            <img src={IconChatting} alt="IconChatting" />
+                          </div>
+                          <div>대화중인 고민 상담방</div>
+                        </StInnerTitle>
+                        <StInnerArrow>
+                          <img src={IconNext} alt="IconNext" />
+                        </StInnerArrow>
+                      </StInnerNavi>
+                    </StBox>
+                    {loggined !== null && modalMode === false ? (
+                      <Logout onClick={onClickLogOut}>로그아웃</Logout>
+                    ) : null}
+                  </StMypageWrap>
                 </BodyPadding>
               </>
             )}
@@ -351,72 +354,71 @@ const MyPage = () => {
               </StUserButton>
             </ButtonWrap>
             <BodyPadding>
-              <StTitle>고민투표</StTitle>
-              <StBox>
-                <StInnerNavi
-                  onClick={() => setModal('로그인 후 사용해주세요.')}
-                >
-                  <StInnerTitle>
-                    <div>
-                      <img src={IconEdit} alt="IconEdit" />
-                    </div>
-                    <div>내가 등록한 고민 투표</div>
-                  </StInnerTitle>
-                  <StInnerArrow>
-                    <img src={IconNext} alt="IconNext" />
-                  </StInnerArrow>
-                </StInnerNavi>
+              <StMypageWrap login={loggined}>
+                <StTitle>고민투표</StTitle>
+                <StBox>
+                  <StInnerNavi
+                    onClick={() => setModal('로그인 후 사용해주세요.')}
+                  >
+                    <StInnerTitle>
+                      <div>
+                        <img src={IconEdit} alt="IconEdit" />
+                      </div>
+                      <div>내가 등록한 고민 투표</div>
+                    </StInnerTitle>
+                    <StInnerArrow>
+                      <img src={IconNext} alt="IconNext" />
+                    </StInnerArrow>
+                  </StInnerNavi>
 
-                <StInnerNavi
-                  onClick={() => setModal('로그인 후 사용해주세요.')}
-                >
-                  <StInnerTitle>
-                    <div>
-                      <img src={IconVoteTab} alt="IconVoteTab" />
-                    </div>
-                    <div>내가 투표한 고민 투표</div>
-                  </StInnerTitle>
-                  <StInnerArrow>
-                    <img src={IconNext} alt="IconNext" />
-                  </StInnerArrow>
-                </StInnerNavi>
-              </StBox>
+                  <StInnerNavi
+                    onClick={() => setModal('로그인 후 사용해주세요.')}
+                  >
+                    <StInnerTitle>
+                      <div>
+                        <img src={IconVoteTab} alt="IconVoteTab" />
+                      </div>
+                      <div>내가 투표한 고민 투표</div>
+                    </StInnerTitle>
+                    <StInnerArrow>
+                      <img src={IconNext} alt="IconNext" />
+                    </StInnerArrow>
+                  </StInnerNavi>
+                </StBox>
 
-              <StTitle>고민상담</StTitle>
-              <StBox>
-                <StInnerNavi
-                  onClick={() => setModal('로그인 후 사용해주세요.')}
-                >
-                  <StInnerTitle>
-                    <div>
-                      <img src={IconEdit} alt="IconEdit" />
-                    </div>
-                    <div>내가 만든 고민 상담방</div>
-                  </StInnerTitle>
-                  <StInnerArrow>
-                    <img src={IconNext} alt="IconNext" />
-                  </StInnerArrow>
-                </StInnerNavi>
-                <StInnerNavi
-                  onClick={() => setModal('로그인 후 사용해주세요.')}
-                >
-                  <StInnerTitle>
-                    <div>
-                      <img src={IconChatting} alt="IconChatting" />
-                    </div>
-                    <div>대화중인 고민 상담방</div>
-                  </StInnerTitle>
-                  <StInnerArrow>
-                    <img src={IconNext} alt="IconNext" />
-                  </StInnerArrow>
-                </StInnerNavi>
-              </StBox>
+                <StTitle>고민상담</StTitle>
+                <StBox>
+                  <StInnerNavi
+                    onClick={() => setModal('로그인 후 사용해주세요.')}
+                  >
+                    <StInnerTitle>
+                      <div>
+                        <img src={IconEdit} alt="IconEdit" />
+                      </div>
+                      <div>내가 만든 고민 상담방</div>
+                    </StInnerTitle>
+                    <StInnerArrow>
+                      <img src={IconNext} alt="IconNext" />
+                    </StInnerArrow>
+                  </StInnerNavi>
+                  <StInnerNavi
+                    onClick={() => setModal('로그인 후 사용해주세요.')}
+                  >
+                    <StInnerTitle>
+                      <div>
+                        <img src={IconChatting} alt="IconChatting" />
+                      </div>
+                      <div>대화중인 고민 상담방</div>
+                    </StInnerTitle>
+                    <StInnerArrow>
+                      <img src={IconNext} alt="IconNext" />
+                    </StInnerArrow>
+                  </StInnerNavi>
+                </StBox>
+              </StMypageWrap>
             </BodyPadding>
           </>
         )}
-        {loggined !== null && modalMode === false ? (
-          <Logout onClick={onClickLogOut}>로그아웃</Logout>
-        ) : null}
         <Footer state={state} />
       </div>
     </>
@@ -424,6 +426,23 @@ const MyPage = () => {
 };
 
 export default MyPage;
+
+const StMypageWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    padding: ${(props) =>
+      props.login ? '29rem 2rem 0 2rem' : '21.5rem 2rem 0 2rem'};
+    min-height: calc(100%);
+
+    z-index: -1;
+  }
+
+  background-color: ${({ theme }) => theme.bg};
+`;
 
 const Modal = styled.div`
   visibility: visible;
@@ -472,6 +491,13 @@ const StInnerArrow = styled.div`
 `;
 
 const MyPageHeadContainer = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -493,6 +519,15 @@ const StProfileImgLarge = styled(ProfileImg)`
 `;
 
 const ButtonWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    margin-top: 11.3rem;
+  }
+
   display: flex;
   justify-content: center;
   gap: 0.8rem;
@@ -608,6 +643,16 @@ const EditButton = styled.div`
 `;
 
 const ScoreContainer = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    margin-top: 11.3rem;
+  }
+
+  width: 100%;
   padding: 0 2rem;
   background: ${({ theme }) => theme.white};
 `;
@@ -666,22 +711,44 @@ const ScoreDetail = styled.p`
 `;
 
 const TierInfoContainer = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    margin-top: 23.2rem;
+  }
+
   margin-top: -4rem;
 `;
 
 const TierInfo = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    padding: 0 0 1.6rem 0;
+  }
+
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 1.4rem 0 1.6rem 0;
   width: 100%;
-  height: 5.5rem;
   margin-bottom: 2.4rem;
   background: #ffffff;
   border-radius: 0px 0px 20px 20px;
 `;
 
 const TierLetter = styled.p`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    margin-top: 18rem;
+    margin-bottom: 0;
+  }
+
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -705,7 +772,6 @@ const TierLetter = styled.p`
 const Tiers = styled.div`
   display: flex;
   width: 100%;
-  padding: 0 0.8rem;
 
   justify-content: space-around;
 `;
@@ -817,8 +883,6 @@ const TierInfoLetter = styled.p`
   text-align: center;
   ${fontMedium}
   padding-bottom: 2rem;
-  padding-right: 1rem;
-  padding-left: 1rem;
 `;
 
 const Line = styled.p`
@@ -828,6 +892,13 @@ const Line = styled.p`
 `;
 
 const Logout = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
   cursor: pointer;
 
   margin-top: -1.5rem;

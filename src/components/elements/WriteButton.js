@@ -15,16 +15,7 @@ const WriteButton = ({ onClick }) => {
 export default WriteButton;
 
 const StWriteButton = styled.div`
-  position: fixed;
-  bottom: 9rem;
-  right: 2.4rem;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
-  width: 6.4rem;
-  height: 6.4rem;
-
-  border-radius: 50%;
 `;

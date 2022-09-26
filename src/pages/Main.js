@@ -95,23 +95,25 @@ const Main = () => {
         <StLogo onClick={() => window.location.reload()}>
           <img src={Logo} alt="Logo" />
         </StLogo>
-        <a
-          target="_blank"
-          href="https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform"
-        >
-          <StIcon>
-            <span style={{ opacity: `${feedbackBadge === 'on' ? 1 : 0}` }}>
-              피드백 남기기
-              <img src={IconNext} alt="IconNext" />
-            </span>
+        <StIcon>
+          <span style={{ opacity: `${feedbackBadge === 'on' ? 1 : 0}` }}>
+            피드백 남기기
+            <img src={IconNext} alt="IconNext" />
+          </span>
+          <a
+            target="_blank"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform"
+          >
             <img src={IconSurvey} alt="IconSurvey" />
-          </StIcon>
-        </a>
+          </a>
+        </StIcon>
       </Header>
 
       {state?.now === 'room' ? <MainRoom /> : <MainSelect />}
 
-      <WriteButton onClick={writeButtonHandler} />
+      <StButtonWrap>
+        <WriteButton onClick={writeButtonHandler} />
+      </StButtonWrap>
 
       <Footer state={state} />
     </>
@@ -129,6 +131,24 @@ const StLogo = styled.div`
   img {
     width: 4.5rem;
   }
+`;
+
+const StButtonWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
+  position: fixed;
+  bottom: 7.2rem;
+
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 2rem;
+  padding-right: 2rem;
+
+  width: 100%;
 `;
 
 const StIcon = styled.div`

@@ -19,6 +19,16 @@ const defaultTheme = {
 
   warning: '#EA4713',
   inactive: '#F5AE6C',
+
+  device: {
+    PC: `screen and (min-width: 768px)`,
+  },
+
+  style: {
+    width: '45rem',
+    left: '50%',
+    transform: 'translateX(-50%)',
+  },
 };
 
 const Theme = {

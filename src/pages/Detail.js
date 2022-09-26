@@ -4,13 +4,14 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import instance from '../app/module/instance';
 import { cleanUp, __getDetailSelect } from '../app/module/selectSlice';
+import { writeCommentThunk } from '../app/module/commentSlice';
 
 import Header from '../components/common/Header';
 import BodyPadding from '../components/common/BodyPadding';
 import Vote from '../components/features/vote/Vote';
 import Comment from '../components/features/comment/comment';
 import ProfileImg from '../components/elements/ProfileImg';
-import { ModalDelete } from '../components/common/Modal';
+import { ModalBasic, ModalDelete } from '../components/common/Modal';
 
 import { remainedTime } from '../shared/timeCalculation';
 
@@ -25,6 +26,7 @@ import IconBack from '../static/icons/Variety=back, Status=untab, Size=L.svg';
 import IconDelete from '../static/icons/Variety=delete, Status=untab, Size=L.svg';
 import IconTimeWarning from '../static/icons/Variety=Time warning, Status=untab, Size=S.svg';
 import IconTimeOver from '../static/icons/Variety=Timeover, Status=Untab, Size=S.svg';
+import IconSend from '../static/icons/Variety=send, Status=untab, Size=L.svg';
 
 import styled from 'styled-components';
 
@@ -39,7 +41,45 @@ const Detail = () => {
   const { selectKey } = useParams();
   const userKey = localStorage.getItem('userKey');
 
+  const [modal, setModal] = useState('');
   const [deleteModal, setDeleteModal] = useState(false);
+  const [writeComment, setWriteComment] = useState({
+    comment: '',
+  });
+
+  const onChangeHandler = (event) => {
+    const { value, name } = event.target;
+    setWriteComment({ ...setWriteComment, [name]: value });
+  };
+
+  const onClickSubmit = () => {
+    if (writeComment.comment.length >= 2) {
+      dispatch(
+        writeCommentThunk({
+          ...writeComment,
+          selectKey,
+        }),
+      );
+    } else if (
+      writeComment.comment.length > 0 &&
+      writeComment.comment.length < 2 &&
+      localStorage.getItem('accessToken') !== null
+    ) {
+      setModal('최소 2글자 입력하세요.');
+    }
+    setWriteComment({
+      comment: '',
+    });
+    if (localStorage.getItem('accessToken') === null) {
+      setModal('로그인 후 이용해주세요.');
+    }
+    if (
+      writeComment.comment === '' &&
+      localStorage.getItem('accessToken') !== null
+    ) {
+      setModal('내용을 입력해주세요.');
+    }
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -69,6 +109,8 @@ const Detail = () => {
       {deleteModal && (
         <ModalDelete setter={() => setDeleteModal(false)} del={deleteHandler} />
       )}
+
+      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
 
       <Header>
         <StHeaderIcon
@@ -118,12 +160,26 @@ const Detail = () => {
               </>
             )}
           </StDeadLine>
-        </StInfoWrap>
 
-        <Vote content={content} selectKey={selectKey} />
+          <Vote content={content} selectKey={selectKey} />
+
+          <Comment content={content} user={user} />
+        </StInfoWrap>
       </BodyPadding>
 
-      <Comment content={content} user={user} />
+      <WriteBox>
+        <Write
+          type="text"
+          placeholder="더 좋은 의견을 남겨주세요."
+          name="comment"
+          onChange={onChangeHandler}
+          maxLength="50"
+          value={writeComment.comment}
+        />
+        <SubmitButton onClick={onClickSubmit}>
+          <img src={IconSend} alt="IconSend" />
+        </SubmitButton>
+      </WriteBox>
     </>
   );
 };
@@ -135,11 +191,21 @@ const StHeaderIcon = styled.div`
 `;
 
 const StInfoWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+    margin-top: 6.4rem;
+    min-height: calc(100% - 6.4rem);
+  }
+
   display: flex;
   flex-direction: column;
   align-items: center;
 
   margin-top: 6.4rem;
+  background-color: ${({ theme }) => theme.bg};
 `;
 
 const StNickname = styled.div`
@@ -192,4 +258,38 @@ const StDeadLine = styled.div`
 
 const StIcon = styled.div`
   ${IconSmall};
+`;
+
+const WriteBox = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.8rem 0.8rem 0.8rem 0.8rem;
+
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 8.8rem;
+
+  background-color: ${({ theme }) => theme.bg};
+`;
+
+const Write = styled.input`
+  width: 100%;
+  padding: 1.75rem 10rem 1.75rem 2rem;
+  border-radius: 20px;
+  border: 0 solid black;
+  resize: none;
+`;
+
+const SubmitButton = styled.div`
+  position: fixed;
+  bottom: 3.6rem;
+  right: 3.2rem;
 `;

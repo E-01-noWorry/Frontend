@@ -203,6 +203,15 @@ const StHeaderTitle = styled.div`
 `;
 
 const StContainer = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+    padding: 0 2rem;
+    min-height: calc(100% - 6.4rem);
+  }
+
   display: flex;
   flex-direction: column;
   gap: 3.2rem;
@@ -210,6 +219,7 @@ const StContainer = styled.div`
   width: 100%;
   margin-top: 6.4rem;
   margin-bottom: 1.6rem;
+  background-color: ${({ theme }) => theme.bg};
 `;
 
 const StContentBox = styled.div`

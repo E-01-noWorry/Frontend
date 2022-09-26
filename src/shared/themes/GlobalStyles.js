@@ -19,6 +19,10 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
+    @media ${({ theme }) => theme.device.PC} {
+      background-color: ${({ theme }) => theme.sub5};
+      /* background-color: #FFBC50; */
+    }
     box-sizing: border-box;
     
     font-size: 1.6rem;
