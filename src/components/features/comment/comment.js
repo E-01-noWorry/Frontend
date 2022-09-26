@@ -44,10 +44,10 @@ const Comment = (props) => {
       );
     } else if (
       writeComment.comment.length > 0 &&
-      writeComment.comment.length < 5 &&
+      writeComment.comment.length < 2 &&
       localStorage.getItem('accessToken') !== null
     ) {
-      setModal('최소 5글자 입력하세요.');
+      setModal('최소 2글자 입력하세요.');
     }
     setWriteComment({
       comment: '',

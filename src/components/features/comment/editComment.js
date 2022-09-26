@@ -87,10 +87,10 @@ const EditComment = (props) => {
       );
     } else if (
       reply.comment?.length > 0 &&
-      reply.comment?.length < 5 &&
+      reply.comment?.length < 2 &&
       localStorage.getItem('accessToken') !== null
     ) {
-      setModals('5글자 이상 입력하세요');
+      setModals('2글자 이상 입력하세요');
     }
     if (
       reply === '' ||
