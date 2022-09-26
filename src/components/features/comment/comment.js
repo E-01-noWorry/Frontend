@@ -10,8 +10,11 @@ import {
 import EditComment from './editComment';
 import { fontMedium } from '../../../shared/themes/textStyle';
 import { css } from 'styled-components';
+import { ModalBasic } from '../../common/Modal';
 
 const Comment = (props) => {
+  const [modal, setModal] = useState('');
+
   const dispatch = useDispatch();
 
   const params = useParams();
@@ -44,19 +47,19 @@ const Comment = (props) => {
       writeComment.comment.length < 5 &&
       localStorage.getItem('accessToken') !== null
     ) {
-      console.log('최소 5글자 입력하세요');
+      setModal('최소 5글자 입력하세요.');
     }
     setWriteComment({
       comment: '',
     });
     if (localStorage.getItem('accessToken') === null) {
-      console.log('로그인후이용하셈');
+      setModal('로그인 후 이용해주세요.');
     }
     if (
       writeComment.comment === '' &&
       localStorage.getItem('accessToken') !== null
     ) {
-      console.log('내용을 입력해주셈');
+      setModal('내용을 입력해주세요.');
     }
   };
 
@@ -65,49 +68,53 @@ const Comment = (props) => {
   }, [dispatch]);
 
   return (
-    <Container allComments={allComments}>
-      {allComments.length === 0 ? (
-        <>
-          <NoComments>댓글이 없습니다.</NoComments>
-          <WriteBox>
-            <Write
-              type="text"
-              placeholder="더 좋은 의견을 남겨주세요."
-              name="comment"
-              onChange={onChangeHandler}
-              maxLength="50"
-              value={writeComment.comment}
-            />
-            <SubmitButton onClick={onClickSubmit}>
-              <img src={IconSend} alt="IconSend" />
-            </SubmitButton>
-          </WriteBox>
-        </>
-      ) : (
-        <CommentContainer>
-          <div>
-            {allComments?.map((a) => (
-              <CommentsDetail key={a?.commentKey}>
-                <EditComment params={params} allComments={a} user={user} />
-              </CommentsDetail>
-            ))}
-          </div>
-          <WriteBox>
-            <Write
-              type="text"
-              placeholder="더 좋은 의견을 남겨주세요."
-              name="comment"
-              onChange={onChangeHandler}
-              maxLength="50"
-              value={writeComment.comment}
-            />
-            <SubmitButton onClick={onClickSubmit}>
-              <img src={IconSend} alt="IconSend" />
-            </SubmitButton>
-          </WriteBox>
-        </CommentContainer>
-      )}
-    </Container>
+    <>
+      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+
+      <Container allComments={allComments}>
+        {allComments.length === 0 ? (
+          <>
+            <NoComments>댓글이 없습니다.</NoComments>
+            <WriteBox>
+              <Write
+                type="text"
+                placeholder="더 좋은 의견을 남겨주세요."
+                name="comment"
+                onChange={onChangeHandler}
+                maxLength="50"
+                value={writeComment.comment}
+              />
+              <SubmitButton onClick={onClickSubmit}>
+                <img src={IconSend} alt="IconSend" />
+              </SubmitButton>
+            </WriteBox>
+          </>
+        ) : (
+          <CommentContainer>
+            <div>
+              {allComments?.map((a) => (
+                <CommentsDetail key={a?.commentKey}>
+                  <EditComment params={params} allComments={a} user={user} />
+                </CommentsDetail>
+              ))}
+            </div>
+            <WriteBox>
+              <Write
+                type="text"
+                placeholder="더 좋은 의견을 남겨주세요."
+                name="comment"
+                onChange={onChangeHandler}
+                maxLength="50"
+                value={writeComment.comment}
+              />
+              <SubmitButton onClick={onClickSubmit}>
+                <img src={IconSend} alt="IconSend" />
+              </SubmitButton>
+            </WriteBox>
+          </CommentContainer>
+        )}
+      </Container>
+    </>
   );
 };
 export default Comment;
