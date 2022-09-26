@@ -158,7 +158,6 @@ const MyPage = () => {
                       </EditNickname>
                     </StNicknameWrap>
                   </div>
-
                 </MyPageHeadContainer>
 
                 <ScoreContainer>
@@ -399,7 +398,7 @@ const MyPage = () => {
                 </StInnerNavi>
 
                 <StInnerNavi
-                  onClick={() => setModal('로그인 후 사용.')}
+                  onClick={() => setModal('로그인 후 사용해주세요.')}
                 >
                   <StInnerTitle>
                     <div>
@@ -420,7 +419,7 @@ const MyPage = () => {
         ) : null}
         <Footer state={state} />
       </div>
-    </>        
+    </>
   );
 };
 

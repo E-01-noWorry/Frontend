@@ -17,12 +17,11 @@ const SelectContentBox = ({ contents, setRef, filter }) => {
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  if (contents.length === 0) {
-    return <StNoneContents>투표가 없습니다.</StNoneContents>;
-  }
-
   return (
     <StContentBoxWrap>
+      {contents.length === 0 && (
+        <StNoneContents>투표가 없습니다.</StNoneContents>
+      )}
       {contents?.map((content, idx) => (
         <StContentBox
           key={content.selectKey}
@@ -85,7 +84,7 @@ export default SelectContentBox;
 
 const StNoneContents = styled.div`
   width: 100%;
-  margin-top: 16.9rem;
+  margin-top: 4.1rem;
 
   ${fontMedium}
   text-align: center;
