@@ -94,7 +94,7 @@ const Main = () => {
         </a>
       </Header>
 
-      {state.now === 'room' ? <MainRoom /> : <MainSelect />}
+      {state?.now === 'room' ? <MainRoom /> : <MainSelect />}
 
       <WriteButton onClick={writeButtonHandler} />
 
@@ -112,7 +112,7 @@ const StLogo = styled.div`
   height: 3.6rem;
 
   img {
-    height: 100%;
+    width: 4.5rem;
   }
 `;
 

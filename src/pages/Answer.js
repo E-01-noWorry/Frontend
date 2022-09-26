@@ -16,6 +16,7 @@ import ImageCharacter1 from '../static/images/Character1.svg';
 import ImageCharacter2 from '../static/images/Character2.svg';
 import IconSurvey from '../static/icons/Variety=Survey grey, Status=untab, Size=L.svg';
 import Logo from '../static/images/Logo.svg';
+import instance from '../app/module/instance';
 
 const Answer = () => {
   const { state } = useLocation();
@@ -23,13 +24,17 @@ const Answer = () => {
   const [gomgomThink, setGomgomThink] = useState(false);
   const [gomgomAnswer, setGomgomAnswer] = useState('');
 
-  const vh = window.innerHeight * 0.01;
+  const [vh, setVh] = useState(window.innerHeight * 0.01);
   const screenSize = useCallback(() => {
+    setVh(window.innerHeight * 0.01);
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }, [vh]);
 
   useEffect(() => {
     screenSize();
+    window.addEventListener('resize', screenSize);
+
+    return () => window.removeEventListener('resize', screenSize);
   }, [screenSize]);
 
   useEffect(() => {
@@ -40,33 +45,38 @@ const Answer = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const clickAnswerHandler = () => {
+  const clickAnswerHandler = async () => {
     setGomgomThink(true);
     setGomgomAnswer(false);
 
-    setTimeout(() => {
-      setGomgomAnswer('해답 나오는 부분');
-      setGomgomThink(false);
-    }, 2000);
+    try {
+      const { data } = await instance.get('/advice');
+      setTimeout(() => {
+        setGomgomAnswer(data.msg);
+        setGomgomThink(false);
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <>
       {infoText && <ModalInfo />}
+      <StHeader>
+        <StLogo onClick={() => window.location.reload()}>
+          <img src={Logo} alt="Logo" />
+        </StLogo>
+        <a
+          target="_blank"
+          href="https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform"
+        >
+          <StIcon>
+            <img src={IconSurvey} alt="IconSurvey" />
+          </StIcon>
+        </a>
+      </StHeader>
       <StAnswerWrap>
-        <StHeader>
-          <StLogo onClick={() => window.location.reload()}>
-            <img src={Logo} alt="Logo" />
-          </StLogo>
-          <a
-            target="_blank"
-            href="https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform"
-          >
-            <StIcon>
-              <img src={IconSurvey} alt="IconSurvey" />
-            </StIcon>
-          </a>
-        </StHeader>
         <StContentsWrap>
           {gomgomAnswer ? (
             <>
@@ -115,7 +125,7 @@ const StThinking = styled.div`
   background-color: #f8f3eb;
 
   ${fontBold};
-  text-align: center;
+  line-height: 2.4rem;
 
   z-index: 9;
 `;
@@ -146,7 +156,7 @@ const StLogo = styled.div`
   height: 3.6rem;
 
   img {
-    height: 100%;
+    width: 4.5rem;
   }
 `;
 

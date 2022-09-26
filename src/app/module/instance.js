@@ -35,6 +35,12 @@ instance.interceptors.response.use(
     }
   },
   (error) => {
+    if (
+      error.response.status === 401 &&
+      error.response.data.errMsg.includes('만료')
+    ) {
+      localStorage.clear();
+    }
     return Promise.reject(error);
   },
 );
