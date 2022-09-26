@@ -35,7 +35,7 @@ const Comment = (props) => {
   };
 
   const onClickSubmit = () => {
-    if (writeComment.comment.length >= 5) {
+    if (writeComment.comment.length >= 2) {
       dispatch(
         writeCommentThunk({
           ...writeComment,
