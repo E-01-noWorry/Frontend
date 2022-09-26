@@ -231,7 +231,7 @@ const DefaultBox = styled.div`
 const EditInput = styled.input`
   padding: 0.8rem 0 0.8rem 1rem;
   width: 84%;
-  height: 4vh;
+  height: 40px;
   margin-bottom: -0.5rem;
   margin-left: 5.5rem;
   border-radius: 20px;
@@ -320,7 +320,7 @@ const ReplyInput = styled.input`
   border: none;
   border-radius: 2rem;
   width: 100%;
-  height: 4vh;
+  height: 40px;
   padding: 0.5rem 0 0.5rem 1rem;
 `;
 
