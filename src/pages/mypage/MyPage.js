@@ -338,9 +338,7 @@ const MyPage = () => {
           <BodyPadding>
             <StTitle>고민투표</StTitle>
             <StBox>
-              <StInnerNavi
-                onClick={() => setModal('로그인 후 사용 가능합니다.')}
-              >
+              <StInnerNavi onClick={() => setModal('로그인 후 사용해주세요.')}>
                 <StInnerTitle>
                   <div>
                     <img src={IconEdit} alt="IconEdit" />
@@ -352,9 +350,7 @@ const MyPage = () => {
                 </StInnerArrow>
               </StInnerNavi>
 
-              <StInnerNavi
-                onClick={() => setModal('로그인 후 사용 가능합니다.')}
-              >
+              <StInnerNavi onClick={() => setModal('로그인 후 사용해주세요.')}>
                 <StInnerTitle>
                   <div>
                     <img src={IconVoteTab} alt="IconVoteTab" />
@@ -369,9 +365,7 @@ const MyPage = () => {
 
             <StTitle>고민상담</StTitle>
             <StBox>
-              <StInnerNavi
-                onClick={() => setModal('로그인 후 사용 가능합니다.')}
-              >
+              <StInnerNavi onClick={() => setModal('로그인 후 사용해주세요.')}>
                 <StInnerTitle>
                   <div>
                     <img src={IconEdit} alt="IconEdit" />
@@ -383,9 +377,7 @@ const MyPage = () => {
                 </StInnerArrow>
               </StInnerNavi>
 
-              <StInnerNavi
-                onClick={() => setModal('로그인 후 사용 가능합니다.')}
-              >
+              <StInnerNavi onClick={() => setModal('로그인 후 사용해주세요.')}>
                 <StInnerTitle>
                   <div>
                     <img src={IconChatting} alt="IconChatting" />
