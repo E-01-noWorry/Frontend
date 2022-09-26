@@ -31,10 +31,11 @@ const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { state } = useLocation();
-  const userNickname = useSelector((state) => state.myPageSlice.data);
-  const userPoint = useSelector((state) => state.myPageSlice.point);
-  const [modal, setModal] = useState('');
+  const userNickname = useSelector((state) => state.myPageSlice.data.nickname);
+  const userPoint = useSelector((state) => state.myPageSlice.point.point);
 
+  const [modal, setModal] = useState('');
+  console.log(userNickname);
   //나의 포인트 조회
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -139,7 +140,7 @@ const MyPage = () => {
                           />
                         ) : (
                           <>
-                            {userNickname && localStorage.getItem('nickname')}
+                            {userNickname || localStorage.getItem('nickname')}
                             <span style={{ fontWeight: '400' }}>님</span>
                           </>
                         )}
@@ -396,7 +397,6 @@ const MyPage = () => {
                     <img src={IconNext} alt="IconNext" />
                   </StInnerArrow>
                 </StInnerNavi>
-
                 <StInnerNavi
                   onClick={() => setModal('로그인 후 사용해주세요.')}
                 >
