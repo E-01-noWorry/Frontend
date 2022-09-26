@@ -78,7 +78,7 @@ const EditComment = (props) => {
 
   const onClickReplyButton = () => {
     setReplyMode((status) => !status);
-    if (reply.comment?.length >= 5) {
+    if (reply.comment?.length >= 2) {
       dispatch(
         writeRecommentThunk({
           ...reply,
