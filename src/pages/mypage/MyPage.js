@@ -20,6 +20,7 @@ import { ModalBasic } from '../../components/common/Modal';
 import ProfileImg from '../../components/elements/ProfileImg';
 import MypageModal from '../../components/features/mypage/mypageModal';
 
+import IconChange from '../../static/icons/Variety=Change, Status=untab, Size=S.svg';
 import IconEdit from '../../static/icons/Variety=edit, Status=untab, Size=L.svg';
 import IconNext from '../../static/icons/Variety=next, Status=untab, Size=M.svg';
 import IconVoteTab from '../../static/icons/Variety=vote, Status=tab, Size=L.svg';
@@ -142,7 +143,7 @@ const MyPage = () => {
                         </EditButton>
                       ) : (
                         <EditButton>
-                          <img width="20" src={IconEdit} alt="IconEdit" />
+                          <img width="20" src={IconChange} alt="IconChange" />
                           <span>변경</span>
                         </EditButton>
                       )}
@@ -472,8 +473,10 @@ const MyPageHeadContainer = styled.div`
 `;
 
 const StProfileImgLarge = styled(ProfileImg)`
-  width: 6.5rem;
-  height: 6.5rem;
+  /* width: 6.5rem;
+  height: 6.5rem; */
+  width: 65px;
+  height: 65px;
 `;
 
 const ButtonWrap = styled.div`
