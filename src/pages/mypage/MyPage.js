@@ -72,6 +72,13 @@ const MyPage = () => {
     setEditMode((status) => !status);
     setEditNickname({ nickname: localStorage.getItem('nickname') });
     if (editMode === true) {
+      if (
+        editNickname.nickname === '' ||
+        editNickname.nickname === localStorage.getItem('nickname')
+      ) {
+        setModal('닉네임을 변경해주세요.');
+        setEditMode(true);
+      }
       dispatch(editNickNameThunk({ ...editNickname, userKey: userKey }));
     }
   };
@@ -89,314 +96,331 @@ const MyPage = () => {
   };
 
   return (
-    <div style={{ paddingBottom: '9rem' }}>
-      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+    <>
+      <div style={{ paddingBottom: '9rem' }}>
+        {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
 
-      {loggined !== null ? (
-        //로그인시
+        {loggined !== null ? (
+          //로그인시
 
-        <>
-          {modalMode ? (
-            <Modal>
-              <MypageModal onClickModal={onClickModal} />
-            </Modal>
-          ) : (
-            <>
-              <MyPageHeadContainer>
-                <StProfileImgLarge point={userPoint} />
-                <div>
+          <>
+            {modalMode ? (
+              <Modal>
+                <MypageModal onClickModal={onClickModal} />
+              </Modal>
+            ) : (
+              <>
+                <MyPageHeadContainer>
+                  <StProfileImgLarge point={userPoint} />
                   <div>
-                    <Badge userPoint={userPoint}>
-                      {userPoint <= 10
-                        ? 'White'
-                        : userPoint > 10 && userPoint <= 25
-                        ? 'Yellow'
-                        : userPoint > 25 && userPoint <= 50
-                        ? 'Green'
-                        : userPoint > 50 && userPoint <= 100
-                        ? 'Blue'
-                        : userPoint > 100
-                        ? 'Purple'
-                        : null}
-                    </Badge>
+                    <div>
+                      <Badge userPoint={userPoint}>
+                        {userPoint <= 10
+                          ? 'White'
+                          : userPoint > 10 && userPoint <= 25
+                          ? 'Yellow'
+                          : userPoint > 25 && userPoint <= 50
+                          ? 'Green'
+                          : userPoint > 50 && userPoint <= 100
+                          ? 'Blue'
+                          : userPoint > 100
+                          ? 'Purple'
+                          : null}
+                      </Badge>
+                    </div>
+                    <StNicknameWrap>
+                      <Nickname>
+                        {editMode ? (
+                          <EditNicknameInput
+                            name="nickname"
+                            onChange={onChangeEditNickName}
+                            type="text"
+                            value={editNickname.nickname}
+                          />
+                        ) : (
+                          <>
+                            {userNickname && localStorage.getItem('nickname')}
+                            <span style={{ fontWeight: '400' }}>님</span>
+                          </>
+                        )}
+                      </Nickname>
+                      <EditNickname onClick={onClickEditNickName}>
+                        {editMode ? (
+                          <EditButton>
+                            <span>변경</span>
+                          </EditButton>
+                        ) : (
+                          <EditButton>
+                            <img width="20" src={IconEdit} alt="IconEdit" />
+                            <span>변경</span>
+                          </EditButton>
+                        )}
+                      </EditNickname>
+                    </StNicknameWrap>
                   </div>
-                  <StNicknameWrap>
-                    <Nickname>
-                      {editMode ? (
-                        <EditNicknameInput
-                          name="nickname"
-                          onChange={onChangeEditNickName}
-                          type="text"
-                          value={editNickname.nickname}
-                        />
-                      ) : (
-                        <>
-                          {userNickname && localStorage.getItem('nickname')}
-                          <span style={{ fontWeight: '400' }}>님</span>
-                        </>
-                      )}
-                    </Nickname>
-                    <EditNickname onClick={onClickEditNickName}>
-                      {editMode ? (
-                        <EditButton>
-                          <span>변경</span>
-                        </EditButton>
-                      ) : (
-                        <EditButton>
-                          <img width="20" src={IconChange} alt="IconChange" />
-                          <span>변경</span>
-                        </EditButton>
-                      )}
-                    </EditNickname>
-                  </StNicknameWrap>
-                </div>
-              </MyPageHeadContainer>
 
-              <ScoreContainer>
-                <MyScore>
-                  <ScoreInfo1>
-                    현재등급
-                    <ScoreDetail>
-                      {userPoint <= 10
-                        ? 'White'
-                        : userPoint > 10 && userPoint <= 25
-                        ? 'Yellow'
-                        : userPoint > 25 && userPoint <= 50
-                        ? 'Green'
-                        : userPoint > 50 && userPoint <= 100
-                        ? 'Blue'
-                        : userPoint > 100
-                        ? 'Purple'
-                        : null}
-                    </ScoreDetail>
-                  </ScoreInfo1>
-                  <ScoreInfo2>
-                    모은점수
-                    <ScoreDetail>
-                      {userPoint === null ? '0' : userPoint}점
-                    </ScoreDetail>
-                  </ScoreInfo2>
-                  <ScoreInfo3>
-                    다음등급 까지
-                    <ScoreDetail>
-                      {userPoint <= 10
-                        ? `${11 - userPoint}점 남음`
-                        : userPoint >= 10 && userPoint <= 25
-                        ? `${26 - userPoint}점 남음`
-                        : userPoint >= 25 && userPoint <= 50
-                        ? `${51 - userPoint}점 남음`
-                        : userPoint >= 51 && userPoint <= 100
-                        ? `${101 - userPoint}점 남음`
-                        : '-'}
-                    </ScoreDetail>
-                  </ScoreInfo3>
-                </MyScore>
-              </ScoreContainer>
+                </MyPageHeadContainer>
 
-              <TierLetter>
-                <span onClick={onClickModal}>등급 별 달성 조건</span>
-                <img src={IconInformation} alt="IconInformation" />
-              </TierLetter>
+                <ScoreContainer>
+                  <MyScore>
+                    <ScoreInfo1>
+                      현재등급
+                      <ScoreDetail>
+                        {userPoint <= 10
+                          ? 'White'
+                          : userPoint > 10 && userPoint <= 25
+                          ? 'Yellow'
+                          : userPoint > 25 && userPoint <= 50
+                          ? 'Green'
+                          : userPoint > 50 && userPoint <= 100
+                          ? 'Blue'
+                          : userPoint > 100
+                          ? 'Purple'
+                          : null}
+                      </ScoreDetail>
+                    </ScoreInfo1>
+                    <ScoreInfo2>
+                      모은점수
+                      <ScoreDetail>
+                        {userPoint === null ? '0' : userPoint}점
+                      </ScoreDetail>
+                    </ScoreInfo2>
+                    <ScoreInfo3>
+                      다음등급 까지
+                      <ScoreDetail>
+                        {userPoint <= 10
+                          ? `${11 - userPoint}점 남음`
+                          : userPoint >= 10 && userPoint <= 25
+                          ? `${26 - userPoint}점 남음`
+                          : userPoint >= 25 && userPoint <= 50
+                          ? `${51 - userPoint}점 남음`
+                          : userPoint >= 51 && userPoint <= 100
+                          ? `${101 - userPoint}점 남음`
+                          : '-'}
+                      </ScoreDetail>
+                    </ScoreInfo3>
+                  </MyScore>
+                </ScoreContainer>
 
-              <TierInfoContainer>
-                <TierInfo>
-                  <Tiers>
-                    <TierButtonWhite
-                      onClick={onClickTiers}
-                      tiers={tiers}
-                      id="white"
-                    >
-                      White
-                    </TierButtonWhite>
-                    <TierButtonYellow
-                      onClick={onClickTiers}
-                      tiers={tiers}
-                      id="yellow"
-                    >
-                      Yellow
-                    </TierButtonYellow>
-                    <TierButtonGreen
-                      onClick={onClickTiers}
-                      tiers={tiers}
-                      id="green"
-                    >
-                      Green
-                    </TierButtonGreen>
-                    <TierButtonBlue
-                      onClick={onClickTiers}
-                      tiers={tiers}
-                      id="blue"
-                    >
-                      Blue
-                    </TierButtonBlue>
-                    <TierButtonPurple
-                      onClick={onClickTiers}
-                      tiers={tiers}
-                      id="purple"
-                    >
-                      Purple
-                    </TierButtonPurple>
-                  </Tiers>
-                </TierInfo>
+                <TierLetter>
+                  <span onClick={onClickModal}>등급 별 달성 조건</span>
+                  <img src={IconInformation} alt="IconInformation" />
+                </TierLetter>
 
-                <TierInfoLetter>
-                  {tiers.tiers === 'white' ? (
-                    <Line>'고민 서비스 참여를 통해 0~10점을 획득했을 때'</Line>
-                  ) : null}
-                  {tiers.tiers === 'yellow' ? (
-                    <Line>'고민 서비스 참여를 통해 11~25점을 획득했을 때'</Line>
-                  ) : null}
-                  {tiers.tiers === 'green' ? (
-                    <Line>'고민 서비스 참여를 통해 26~50점을 획득했을 때'</Line>
-                  ) : null}
-                  {tiers.tiers === 'blue' ? (
-                    <Line>
-                      '고민 서비스 참여를 통해 51~100점을 획득했을 때'
-                    </Line>
-                  ) : null}
-                  {tiers.tiers === 'purple' ? (
-                    <Line>
-                      '고민 서비스 참여를 통해 101점 이상을 획득했을 때'
-                    </Line>
-                  ) : null}
-                </TierInfoLetter>
-              </TierInfoContainer>
+                <TierInfoContainer>
+                  <TierInfo>
+                    <Tiers>
+                      <TierButtonWhite
+                        onClick={onClickTiers}
+                        tiers={tiers}
+                        id="white"
+                      >
+                        White
+                      </TierButtonWhite>
+                      <TierButtonYellow
+                        onClick={onClickTiers}
+                        tiers={tiers}
+                        id="yellow"
+                      >
+                        Yellow
+                      </TierButtonYellow>
+                      <TierButtonGreen
+                        onClick={onClickTiers}
+                        tiers={tiers}
+                        id="green"
+                      >
+                        Green
+                      </TierButtonGreen>
+                      <TierButtonBlue
+                        onClick={onClickTiers}
+                        tiers={tiers}
+                        id="blue"
+                      >
+                        Blue
+                      </TierButtonBlue>
+                      <TierButtonPurple
+                        onClick={onClickTiers}
+                        tiers={tiers}
+                        id="purple"
+                      >
+                        Purple
+                      </TierButtonPurple>
+                    </Tiers>
+                  </TierInfo>
 
-              <BodyPadding>
-                <StTitle>고민투표</StTitle>
-                <StBox>
-                  <StInnerNavi onClick={() => navigate('/postvoted')}>
-                    <StInnerTitle>
-                      <div>
-                        <img src={IconEdit} alt="IconEdit" />
-                      </div>
-                      <div>내가 등록한 고민 투표</div>
-                    </StInnerTitle>
-                    <StInnerArrow>
-                      <img src={IconNext} alt="IconNext" />
-                    </StInnerArrow>
-                  </StInnerNavi>
+                  <TierInfoLetter>
+                    {tiers.tiers === 'white' ? (
+                      <Line>
+                        '고민 서비스 참여를 통해 0~10점을 획득했을 때'
+                      </Line>
+                    ) : null}
+                    {tiers.tiers === 'yellow' ? (
+                      <Line>
+                        '고민 서비스 참여를 통해 11~25점을 획득했을 때'
+                      </Line>
+                    ) : null}
+                    {tiers.tiers === 'green' ? (
+                      <Line>
+                        '고민 서비스 참여를 통해 26~50점을 획득했을 때'
+                      </Line>
+                    ) : null}
+                    {tiers.tiers === 'blue' ? (
+                      <Line>
+                        '고민 서비스 참여를 통해 51~100점을 획득했을 때'
+                      </Line>
+                    ) : null}
+                    {tiers.tiers === 'purple' ? (
+                      <Line>
+                        '고민 서비스 참여를 통해 101점 이상을 획득했을 때'
+                      </Line>
+                    ) : null}
+                  </TierInfoLetter>
+                </TierInfoContainer>
 
-                  <StInnerNavi onClick={() => navigate('/voted')}>
-                    <StInnerTitle>
-                      <div>
-                        <img src={IconVoteTab} alt="IconVoteTab" />
-                      </div>
-                      <div>내가 투표한 고민 투표</div>
-                    </StInnerTitle>
-                    <StInnerArrow>
-                      <img src={IconNext} alt="IconNext" />
-                    </StInnerArrow>
-                  </StInnerNavi>
-                </StBox>
+                <BodyPadding>
+                  <StTitle>고민투표</StTitle>
+                  <StBox>
+                    <StInnerNavi onClick={() => navigate('/postvoted')}>
+                      <StInnerTitle>
+                        <div>
+                          <img src={IconEdit} alt="IconEdit" />
+                        </div>
+                        <div>내가 등록한 고민 투표</div>
+                      </StInnerTitle>
+                      <StInnerArrow>
+                        <img src={IconNext} alt="IconNext" />
+                      </StInnerArrow>
+                    </StInnerNavi>
 
-                <StTitle>고민상담</StTitle>
-                <StBox>
-                  <StInnerNavi onClick={() => navigate('/maderoom')}>
-                    <StInnerTitle>
-                      <div>
-                        <img src={IconEdit} alt="IconEdit" />
-                      </div>
-                      <div>내가 만든 고민 상담방</div>
-                    </StInnerTitle>
-                    <StInnerArrow>
-                      <img src={IconNext} alt="IconNext" />
-                    </StInnerArrow>
-                  </StInnerNavi>
+                    <StInnerNavi onClick={() => navigate('/voted')}>
+                      <StInnerTitle>
+                        <div>
+                          <img src={IconVoteTab} alt="IconVoteTab" />
+                        </div>
+                        <div>내가 투표한 고민 투표</div>
+                      </StInnerTitle>
+                      <StInnerArrow>
+                        <img src={IconNext} alt="IconNext" />
+                      </StInnerArrow>
+                    </StInnerNavi>
+                  </StBox>
 
-                  <StInnerNavi onClick={() => navigate('/operatingroom')}>
-                    <StInnerTitle>
-                      <div>
-                        <img src={IconChatting} alt="IconChatting" />
-                      </div>
-                      <div>대화중인 고민 상담방</div>
-                    </StInnerTitle>
-                    <StInnerArrow>
-                      <img src={IconNext} alt="IconNext" />
-                    </StInnerArrow>
-                  </StInnerNavi>
-                </StBox>
-              </BodyPadding>
-            </>
-          )}
-        </>
-      ) : (
-        //비로그인시
-        <>
-          <MyPageHeadContainer>
-            로그인하고 곰곰의 <br />
-            다양한 서비스를 경험해보세요.
-          </MyPageHeadContainer>
-          <ButtonWrap>
-            <StUserButton onClick={() => navigate('/login')}>
-              로그인
-            </StUserButton>
-            <StUserButton onClick={() => navigate('/signup')}>
-              회원가입
-            </StUserButton>
-          </ButtonWrap>
-          <BodyPadding>
-            <StTitle>고민투표</StTitle>
-            <StBox>
-              <StInnerNavi onClick={() => setModal('로그인 후 사용해주세요.')}>
-                <StInnerTitle>
-                  <div>
-                    <img src={IconEdit} alt="IconEdit" />
-                  </div>
-                  <div>내가 등록한 고민 투표</div>
-                </StInnerTitle>
-                <StInnerArrow>
-                  <img src={IconNext} alt="IconNext" />
-                </StInnerArrow>
-              </StInnerNavi>
+                  <StTitle>고민상담</StTitle>
+                  <StBox>
+                    <StInnerNavi onClick={() => navigate('/maderoom')}>
+                      <StInnerTitle>
+                        <div>
+                          <img src={IconEdit} alt="IconEdit" />
+                        </div>
+                        <div>내가 만든 고민 상담방</div>
+                      </StInnerTitle>
+                      <StInnerArrow>
+                        <img src={IconNext} alt="IconNext" />
+                      </StInnerArrow>
+                    </StInnerNavi>
 
-              <StInnerNavi onClick={() => setModal('로그인 후 사용해주세요.')}>
-                <StInnerTitle>
-                  <div>
-                    <img src={IconVoteTab} alt="IconVoteTab" />
-                  </div>
-                  <div>내가 투표한 고민 투표</div>
-                </StInnerTitle>
-                <StInnerArrow>
-                  <img src={IconNext} alt="IconNext" />
-                </StInnerArrow>
-              </StInnerNavi>
-            </StBox>
+                    <StInnerNavi onClick={() => navigate('/operatingroom')}>
+                      <StInnerTitle>
+                        <div>
+                          <img src={IconChatting} alt="IconChatting" />
+                        </div>
+                        <div>대화중인 고민 상담방</div>
+                      </StInnerTitle>
+                      <StInnerArrow>
+                        <img src={IconNext} alt="IconNext" />
+                      </StInnerArrow>
+                    </StInnerNavi>
+                  </StBox>
+                </BodyPadding>
+              </>
+            )}
+          </>
+        ) : (
+          //비로그인시
+          <>
+            <MyPageHeadContainer>
+              로그인하고 곰곰의 <br />
+              다양한 서비스를 경험해보세요.
+            </MyPageHeadContainer>
+            <ButtonWrap>
+              <StUserButton onClick={() => navigate('/login')}>
+                로그인
+              </StUserButton>
+              <StUserButton onClick={() => navigate('/signup')}>
+                회원가입
+              </StUserButton>
+            </ButtonWrap>
+            <BodyPadding>
+              <StTitle>고민투표</StTitle>
+              <StBox>
+                <StInnerNavi
+                  onClick={() => setModal('로그인 후 사용해주세요.')}
+                >
+                  <StInnerTitle>
+                    <div>
+                      <img src={IconEdit} alt="IconEdit" />
+                    </div>
+                    <div>내가 등록한 고민 투표</div>
+                  </StInnerTitle>
+                  <StInnerArrow>
+                    <img src={IconNext} alt="IconNext" />
+                  </StInnerArrow>
+                </StInnerNavi>
 
-            <StTitle>고민상담</StTitle>
-            <StBox>
-              <StInnerNavi onClick={() => setModal('로그인 후 사용해주세요.')}>
-                <StInnerTitle>
-                  <div>
-                    <img src={IconEdit} alt="IconEdit" />
-                  </div>
-                  <div>내가 만든 고민 상담방</div>
-                </StInnerTitle>
-                <StInnerArrow>
-                  <img src={IconNext} alt="IconNext" />
-                </StInnerArrow>
-              </StInnerNavi>
+                <StInnerNavi
+                  onClick={() => setModal('로그인 후 사용해주세요.')}
+                >
+                  <StInnerTitle>
+                    <div>
+                      <img src={IconVoteTab} alt="IconVoteTab" />
+                    </div>
+                    <div>내가 투표한 고민 투표</div>
+                  </StInnerTitle>
+                  <StInnerArrow>
+                    <img src={IconNext} alt="IconNext" />
+                  </StInnerArrow>
+                </StInnerNavi>
+              </StBox>
 
-              <StInnerNavi onClick={() => setModal('로그인 후 사용해주세요.')}>
-                <StInnerTitle>
-                  <div>
-                    <img src={IconChatting} alt="IconChatting" />
-                  </div>
-                  <div>대화중인 고민 상담방</div>
-                </StInnerTitle>
-                <StInnerArrow>
-                  <img src={IconNext} alt="IconNext" />
-                </StInnerArrow>
-              </StInnerNavi>
-            </StBox>
-          </BodyPadding>
-        </>
-      )}
-      {loggined !== null && modalMode === false ? (
-        <Logout onClick={onClickLogOut}>로그아웃</Logout>
-      ) : null}
-      <Footer state={state} />
-    </div>
+              <StTitle>고민상담</StTitle>
+              <StBox>
+                <StInnerNavi
+                  onClick={() => setModal('로그인 후 사용해주세요.')}
+                >
+                  <StInnerTitle>
+                    <div>
+                      <img src={IconEdit} alt="IconEdit" />
+                    </div>
+                    <div>내가 만든 고민 상담방</div>
+                  </StInnerTitle>
+                  <StInnerArrow>
+                    <img src={IconNext} alt="IconNext" />
+                  </StInnerArrow>
+                </StInnerNavi>
+
+                <StInnerNavi
+                  onClick={() => setModal('로그인 후 사용.')}
+                >
+                  <StInnerTitle>
+                    <div>
+                      <img src={IconChatting} alt="IconChatting" />
+                    </div>
+                    <div>대화중인 고민 상담방</div>
+                  </StInnerTitle>
+                  <StInnerArrow>
+                    <img src={IconNext} alt="IconNext" />
+                  </StInnerArrow>
+                </StInnerNavi>
+              </StBox>
+            </BodyPadding>
+          </>
+        )}
+        {loggined !== null && modalMode === false ? (
+          <Logout onClick={onClickLogOut}>로그아웃</Logout>
+        ) : null}
+        <Footer state={state} />
+      </div>
+    </>        
   );
 };
 

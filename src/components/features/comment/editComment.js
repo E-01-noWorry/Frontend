@@ -16,8 +16,11 @@ import BodyPadding from '../../common/BodyPadding';
 import ProfileImg from '../../elements/ProfileImg';
 import Recomment from './recomment';
 import { writeRecommentThunk } from '../../../app/module/commentSlice';
+import { ModalBasic } from '../../common/Modal';
 
 const EditComment = (props) => {
+  const [modals, setModals] = useState('');
+
   const dispatch = useDispatch();
 
   const getUserKey = localStorage.getItem('userKey');
@@ -65,18 +68,35 @@ const EditComment = (props) => {
   const [reply, setReply] = useState('');
 
   const onClickCancelReply = () => {
-    setReplyMode((status) => !status);
+    if (localStorage.getItem('accessToken') !== null) {
+      setReplyMode((status) => !status);
+    }
+    if (localStorage.getItem('accessToken') === null) {
+      setModals('로그인 후 이용하세요');
+    }
   };
 
   const onClickReplyButton = () => {
     setReplyMode((status) => !status);
-    if (reply !== '') {
+    if (reply.comment?.length >= 5) {
       dispatch(
         writeRecommentThunk({
           ...reply,
           commentKey: props.allComments.commentKey,
         }),
       );
+    } else if (
+      reply.comment?.length > 0 &&
+      reply.comment?.length < 5 &&
+      localStorage.getItem('accessToken') !== null
+    ) {
+      setModals('5글자 이상 입력하세요');
+    }
+    if (
+      reply === '' ||
+      (reply.comment === '' && localStorage.getItem('accessToken') !== null)
+    ) {
+      setModals('내용을 입력해주세요');
     }
   };
 
@@ -85,102 +105,109 @@ const EditComment = (props) => {
   };
 
   return (
-    <BodyPadding>
-      {edit ? (
-        <>
-          <EditContainer>
-            <ProfileImg point={props.allComments.point} />
-            <EditNickname>{props.allComments.nickname}</EditNickname>
-          </EditContainer>
-
-          <EditInput
-            type="text"
-            onChange={onChange}
-            name="comment"
-            placeholder="입력해주세요."
-            value={editComment.comment}
-          />
-
-          <EditButtons>
-            <Button onClick={onClickEditMode}>취소</Button>
-            <Button
-              onClick={() => {
-                onClickEdit(props.allComments.commentKey);
-                onClickEditMode();
-              }}
-            >
-              수정
-            </Button>
-          </EditButtons>
-        </>
-      ) : (
-        <>
-          <DefaultBox>
-            <Names>
+    <>
+      {modals && <ModalBasic setter={() => setModals('')}>{modals}</ModalBasic>}
+      <BodyPadding>
+        {edit ? (
+          <>
+            <EditContainer>
               <ProfileImg point={props.allComments.point} />
-              <Nickname>{props.allComments.nickname}</Nickname>
-              <MinutesBefore>
-                {seconds < 60
-                  ? '방금 전'
-                  : minutes < 60
-                  ? `${Math.floor(minutes)}분 전`
-                  : hours < 24
-                  ? `${Math.floor(hours)}시간 전`
-                  : days < 7
-                  ? `${Math.floor(days)}일 전`
-                  : weeks < 5
-                  ? `${Math.floor(weeks)}주 전`
-                  : months < 12
-                  ? `${Math.floor(months)}개월 전`
-                  : null}
-              </MinutesBefore>
-            </Names>
-            <Buttons>
-              {props.allComments.userKey === parseInt(getUserKey) ? (
-                <Button
-                  onClick={(commentKey) =>
-                    onClickDelete(String(props.allComments.commentKey))
-                  }
-                >
-                  삭제
-                </Button>
-              ) : null}
+              <EditNickname>{props.allComments.nickname}</EditNickname>
+            </EditContainer>
 
-              {props.allComments.userKey === parseInt(getUserKey) ? (
-                <Button
-                  onClick={() => {
-                    onClickEditMode();
-                    //작성했던 내용 불러오기
-                    setEditComment({
-                      comment: commentValue,
-                    });
-                  }}
-                >
-                  수정
-                </Button>
+            <EditInput
+              type="text"
+              onChange={onChange}
+              name="comment"
+              placeholder="입력해주세요."
+              value={editComment.comment}
+            />
+
+            <EditButtons>
+              <Button onClick={onClickEditMode}>취소</Button>
+              <Button
+                onClick={() => {
+                  onClickEdit(props.allComments.commentKey);
+                  onClickEditMode();
+                }}
+              >
+                수정
+              </Button>
+            </EditButtons>
+          </>
+        ) : (
+          <>
+            <DefaultBox>
+              <Names>
+                <ProfileImg point={props.allComments.point} />
+                <Nickname>{props.allComments.nickname}</Nickname>
+                <MinutesBefore>
+                  {seconds < 60
+                    ? '방금 전'
+                    : minutes < 60
+                    ? `${Math.floor(minutes)}분 전`
+                    : hours < 24
+                    ? `${Math.floor(hours)}시간 전`
+                    : days < 7
+                    ? `${Math.floor(days)}일 전`
+                    : weeks < 5
+                    ? `${Math.floor(weeks)}주 전`
+                    : months < 12
+                    ? `${Math.floor(months)}개월 전`
+                    : null}
+                </MinutesBefore>
+              </Names>
+              <Buttons>
+                {props.allComments.userKey === parseInt(getUserKey) ? (
+                  <Button
+                    onClick={(commentKey) =>
+                      onClickDelete(String(props.allComments.commentKey))
+                    }
+                  >
+                    삭제
+                  </Button>
+                ) : null}
+
+                {props.allComments.userKey === parseInt(getUserKey) ? (
+                  <Button
+                    onClick={() => {
+                      onClickEditMode();
+                      //작성했던 내용 불러오기
+                      setEditComment({
+                        comment: commentValue,
+                      });
+                    }}
+                  >
+                    수정
+                  </Button>
+                ) : null}
+              </Buttons>
+            </DefaultBox>
+            <CommentBox>
+              <span>{props.allComments.comment}</span>
+              {replyMode ? (
+                <ReplyInput
+                  maxLength="50"
+                  type="text"
+                  onChange={onChangeReply}
+                />
               ) : null}
-            </Buttons>
-          </DefaultBox>
-          <CommentBox>
-            <span>{props.allComments.comment}</span>
-            {replyMode ? (
-              <ReplyInput maxLength="50" type="text" onChange={onChangeReply} />
-            ) : null}
-            <MakeItRow>
-              <ReplyButton onClick={onClickCancelReply}>
-                {replyMode ? '작성 취소' : '답글 달기'}
-              </ReplyButton>
-              <CancelReply onClick={onClickReplyButton}>
-                {replyMode ? '작성 완료' : null}
-              </CancelReply>
-            </MakeItRow>
-          </CommentBox>
-        </>
-      )}
-      {props.allComments.recomment?.map((a) => (
-        <Recomment key={a.recommentKey} state={a} />
-      ))}
-    </BodyPadding>
+              <MakeItRow>
+                <ReplyButton onClick={onClickCancelReply}>
+                  {replyMode ? '작성 취소' : '답글 달기'}
+                </ReplyButton>
+                <CancelReply onClick={onClickReplyButton}>
+                  {replyMode ? '작성 완료' : null}
+                </CancelReply>
+              </MakeItRow>
+            </CommentBox>
+          </>
+        )}
+        {props.allComments.recomment?.map((a) => (
+          <Recomment key={a.recommentKey} state={a} />
+        ))}
+      </BodyPadding>
+    </>
   );
 };
 
@@ -204,7 +231,7 @@ const DefaultBox = styled.div`
 const EditInput = styled.input`
   padding: 0.8rem 0 0.8rem 1rem;
   width: 84%;
-  height: 4vh;
+  height: 40px;
   margin-bottom: -0.5rem;
   margin-left: 5.5rem;
   border-radius: 20px;
@@ -293,8 +320,8 @@ const ReplyInput = styled.input`
   border: none;
   border-radius: 2rem;
   width: 100%;
-  height: 4vh;
-  padding: 0.5rem 0 0 1rem;
+  height: 40px;
+  padding: 0.5rem 0 0.5rem 1rem;
 `;
 
 const CancelReply = styled.p`
