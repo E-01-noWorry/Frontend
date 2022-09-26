@@ -51,7 +51,8 @@ const Recomment = (state) => {
   };
 
   //본인확인
-  const auth = state.state?.User?.nickname === localStorage.getItem('nickname');
+  const auth =
+    state.state?.userKey === parseInt(localStorage.getItem('userKey'));
 
   return (
     <div>

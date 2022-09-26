@@ -27,7 +27,7 @@ export const getMyPointThunk = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const data = await instance.get(`/my`);
-
+      localStorage.setItem('nickname', data.data.result.nickname);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -45,7 +45,7 @@ export const myPageSlice = createSlice({
     },
     [editNickNameThunk.rejected]: (state, action) => {},
     [getMyPointThunk.fulfilled]: (state, action) => {
-      state.point = action.payload.result?.point;
+      state.point = action.payload.result;
     },
     [getMyPointThunk.rejected]: (state, action) => {},
   },
