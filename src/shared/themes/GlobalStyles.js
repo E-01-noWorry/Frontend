@@ -13,6 +13,7 @@ const GlobalStyles = createGlobalStyle`
   * {
     box-sizing: border-box;
 
+    font-size: 1.6rem;
     font-family: 'Noto Sans KR', sans-serif;
     font-weight: 400;
   }
@@ -34,6 +35,11 @@ const GlobalStyles = createGlobalStyle`
 
   a {
     text-decoration: none;
+  }
+
+  textarea,
+  input {
+    ${fontMedium};
   }
 
   ::placeholder {
