@@ -244,6 +244,9 @@ const StTitle = styled.div`
   ${fontExtraBold};
   line-height: 3rem;
   text-align: center;
+
+  word-wrap: break-word;
+  word-break: break-all;
 `;
 
 const StDeadLine = styled.div`
