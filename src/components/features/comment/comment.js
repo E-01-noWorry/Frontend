@@ -79,10 +79,6 @@ const CommentContainer = styled.div`
 `;
 
 const CommentsDetail = styled.div`
-  @media ${({ theme }) => theme.device.PC} {
-    margin: 0;
-  }
-
   border-top: 1px solid #d9d9d9;
   margin: 0 -2rem;
   height: 100%;

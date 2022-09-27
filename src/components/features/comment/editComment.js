@@ -54,7 +54,7 @@ const EditComment = (props) => {
   };
 
   // 댓글의 시간이 얼마나 지났느냐?
-  const writtenTime = new Date(props.allComments.time);
+  const writtenTime = new Date(props.allComments.updatedAt);
 
   const seconds = (new Date() - writtenTime) / 1000;
   const minutes = seconds / 60;

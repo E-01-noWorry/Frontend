@@ -174,6 +174,9 @@ const Comment = styled.div`
   margin-left: 4.6rem;
   ${fontMedium}
   width: 22.3rem;
+
+  word-wrap: break-word;
+  word-break: break-all;
 `;
 
 const Buttons = styled.div`
