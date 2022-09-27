@@ -16,7 +16,7 @@ import {
 } from '../../app/module/myPageSlice';
 import { css } from 'styled-components';
 import { IconLarge, IconMedium } from '../../shared/themes/iconStyle';
-import { ModalBasic } from '../../components/common/Modal';
+import { ModalBasic, ModalLogout } from '../../components/common/Modal';
 import ProfileImg from '../../components/elements/ProfileImg';
 import MypageModal from '../../components/features/mypage/mypageModal';
 
@@ -35,6 +35,7 @@ const MyPage = () => {
   const userPoint = useSelector((state) => state.myPageSlice.point.point);
 
   const [modal, setModal] = useState('');
+  const [logoutModal, setLogoutModal] = useState(false);
 
   //나의 포인트 조회
   useEffect(() => {
@@ -58,8 +59,7 @@ const MyPage = () => {
 
   //로그아웃
   const onClickLogOut = () => {
-    localStorage.clear();
-    window.location.reload('/mypage');
+    setLogoutModal(true);
   };
 
   //닉네임변경
@@ -100,6 +100,18 @@ const MyPage = () => {
     <>
       <div style={{ paddingBottom: '9rem' }}>
         {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+
+        {logoutModal && (
+          <ModalLogout
+            setter={() => {
+              setLogoutModal(false);
+            }}
+            logout={() => {
+              localStorage.clear();
+              window.location.reload('/mypage');
+            }}
+          />
+        )}
 
         {loggined !== null ? (
           //로그인시
@@ -201,8 +213,8 @@ const MyPage = () => {
                   </MyScore>
                 </ScoreContainer>
 
-                <TierLetter>
-                  <span onClick={onClickModal}>등급 별 달성 조건</span>
+                <TierLetter onClick={onClickModal}>
+                  <span>등급 별 달성 조건</span>
                   <img src={IconInformation} alt="IconInformation" />
                 </TierLetter>
 
@@ -435,7 +447,7 @@ const StMypageWrap = styled.div`
     transform: ${({ theme }) => theme.style.transform};
 
     padding: ${(props) =>
-      props.login ? '29rem 2rem 0 2rem' : '21.5rem 2rem 0 2rem'};
+      props.login ? '29rem 2rem 9rem 2rem' : '21.5rem 2rem 9rem 2rem'};
     min-height: calc(100%);
 
     z-index: -1;

@@ -81,7 +81,11 @@ const Answer = () => {
             <StThinking>곰곰이 생각하는 중...</StThinking>
           ) : gomgomAnswer ? (
             <StThinking>{gomgomAnswer}</StThinking>
-          ) : null}
+          ) : (
+            <StThinking style={{ textAlign: 'center' }}>
+              고민을 떠올리고 <br /> 하단 버튼을 눌러주세요
+            </StThinking>
+          )}
         </StContentsWrap>
         <StGlobalButton
           think={gomgomThink}
