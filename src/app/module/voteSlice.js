@@ -13,6 +13,19 @@ export const __getVoteResult = createAsyncThunk(
   },
 );
 
+export const __postVote = createAsyncThunk(
+  '/postVote',
+  async (payload, thunkAPI) => {
+    try {
+      await instance.post(`/select/vote/${payload.selectKey}`, {
+        choice: payload.isSelect,
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.errMsg);
+    }
+  },
+);
+
 const initialState = {
   voteResult: {},
   msg: '',
@@ -26,6 +39,9 @@ const voteSlice = createSlice({
     cleanUpVote: (state) => {
       state = { ...state, initialState };
     },
+    cleanUpError: (state) => {
+      state.error = null;
+    },
   },
   extraReducers: {
     //투표 결과 조회
@@ -36,8 +52,13 @@ const voteSlice = createSlice({
     [__getVoteResult.rejected]: (state, action) => {
       state.error = action.payload;
     },
+
+    //투표 하기
+    [__postVote.rejected]: (state, action) => {
+      state.error = action.payload;
+    },
   },
 });
 
-export const { cleanUpVote } = voteSlice.actions;
+export const { cleanUpVote, cleanUpError } = voteSlice.actions;
 export default voteSlice.reducer;

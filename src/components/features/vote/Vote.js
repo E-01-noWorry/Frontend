@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import instance from '../../../app/module/instance';
-import { cleanUpVote, __getVoteResult } from '../../../app/module/voteSlice';
+import {
+  cleanUpVote,
+  __getVoteResult,
+  __postVote,
+} from '../../../app/module/voteSlice';
 
 import GlobalButton from '../../elements/GlobalButton';
-import { ModalBasic } from '../../common/Modal';
 
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import {
@@ -22,7 +24,6 @@ const Vote = ({ content, selectKey }) => {
   const voteResult = useSelector((state) => state.vote.voteResult);
   const msg = useSelector((state) => state.vote.msg); //msg의 값으로 UI를 구분합니다
 
-  const [modal, setModal] = useState('');
   const [isSelect, setIsSelect] = useState(); //투표 선택을 관리하는 State
 
   useEffect(() => {
@@ -35,18 +36,12 @@ const Vote = ({ content, selectKey }) => {
 
   //투표 POST API
   const voteHandler = async () => {
-    try {
-      await instance.post(`/select/vote/${selectKey}`, { choice: isSelect });
-      setIsSelect(0);
-    } catch (error) {
-      setModal(error.response.data.errMsg);
-    }
+    dispatch(__postVote({ selectKey, isSelect }));
+    setIsSelect(0);
   };
 
   return (
     <>
-      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
-
       <StVoteWrap>
         {msg.includes('조회 성공') || content.completion ? (
           //자기 자신의 게시물을 봤을때, 투표를 했을때, 마감 기한이 끝난 게시물을 누구나 확인할때
