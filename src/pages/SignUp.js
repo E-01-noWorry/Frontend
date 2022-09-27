@@ -110,6 +110,8 @@ const SignUp = () => {
               onChange={onChangeHandler}
               placeholder="아이디 입력"
               type="text"
+              minLength={6}
+              maxLength={12}
             />
             {userIdValid === true &&
             signUpInfo.userId.match(userIdRegEx) === null ? (
@@ -200,6 +202,8 @@ const SignUp = () => {
               onChange={onChangeHandler}
               placeholder="최소 2자 입력"
               type="text"
+              minLength={2}
+              maxLength={10}
             />
             {nicknameValid === true &&
             signUpInfo.nickname.match(nicknameRegEx) === null ? (

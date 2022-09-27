@@ -64,6 +64,7 @@ const Login = () => {
               name="userId"
               type="text"
               placeholder="아이디를 입력해주세요"
+              maxLength={12}
             />
             <LoginSignUpInput
               onChange={onChangeHandler}

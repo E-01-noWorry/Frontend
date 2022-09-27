@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import instance from '../app/module/instance';
 import { cleanUp, __getDetailSelect } from '../app/module/selectSlice';
+import { cleanUpError } from '../app/module/voteSlice';
 import { writeCommentThunk } from '../app/module/commentSlice';
 
 import Header from '../components/common/Header';
@@ -36,6 +37,7 @@ const Detail = () => {
   const { state } = useLocation();
 
   const content = useSelector((state) => state.select.select);
+  const error = useSelector((state) => state.vote.error);
   const user = useSelector((state) => state);
 
   const { selectKey } = useParams();
@@ -71,7 +73,7 @@ const Detail = () => {
       comment: '',
     });
     if (localStorage.getItem('accessToken') === null) {
-      setModal('로그인 후 이용해주세요.');
+      setModal('로그인 후 사용해주세요.');
     }
     if (
       writeComment.comment === '' &&
@@ -82,11 +84,16 @@ const Detail = () => {
   };
 
   useEffect(() => {
+    setModal(error);
+  }, [error]);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(__getDetailSelect(selectKey));
 
     return () => {
       dispatch(cleanUp());
+      dispatch(cleanUpError());
     };
   }, [dispatch, selectKey]);
 
@@ -278,6 +285,8 @@ const WriteBox = styled.div`
   height: 8.8rem;
 
   background-color: ${({ theme }) => theme.bg};
+
+  z-index: 9;
 `;
 
 const Write = styled.input`
