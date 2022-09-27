@@ -64,6 +64,23 @@ export const ModalDelete = ({ setter, del }) => {
   );
 };
 
+export const ModalLogout = ({ setter, logout }) => {
+  return (
+    <>
+      <StModalWindow>
+        <StModalText>
+          <span>로그아웃 하시겠습니까?</span>
+        </StModalText>
+        <StModalButton>
+          <div onClick={logout}>로그아웃</div>
+          <div onClick={setter}>취소</div>
+        </StModalButton>
+      </StModalWindow>
+      <StModalBg onClick={setter} />
+    </>
+  );
+};
+
 export const ModalWrite = ({ setter, write }) => {
   return (
     <>
