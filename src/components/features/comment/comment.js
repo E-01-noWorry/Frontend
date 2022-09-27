@@ -56,10 +56,6 @@ const Container = styled.div`
 `;
 
 const NoComments = styled.p`
-  @media ${({ theme }) => theme.device.PC} {
-    margin: 0;
-  }
-
   display: flex;
   border-top: 1px solid #dbdbdb;
   margin: 0 -2rem;
