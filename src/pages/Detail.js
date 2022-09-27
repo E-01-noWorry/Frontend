@@ -205,6 +205,7 @@ const StInfoWrap = styled.div`
     transform: ${({ theme }) => theme.style.transform};
     margin-top: 6.4rem;
     min-height: calc(100% - 6.4rem);
+    padding: 0 2rem;
   }
 
   display: flex;
