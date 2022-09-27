@@ -8,6 +8,11 @@ const GlobalStyles = createGlobalStyle`
 
   html {
     font-size: 62.5%; //1rem을 10px로 변환
+    overflow-y: scroll;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   * {
