@@ -201,6 +201,9 @@ const StChat = styled.div`
       ${fontMedium};
       line-height: 2.1rem;
       color: ${({ theme }) => theme.white};
+
+      word-wrap: break-word;
+      word-break: break-all;
     }
 
     .time {
@@ -251,6 +254,9 @@ const StChat = styled.div`
 
       ${fontMedium};
       line-height: 2.1rem;
+
+      word-wrap: break-word;
+      word-break: break-all;
     }
 
     .time {
