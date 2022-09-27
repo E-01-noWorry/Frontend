@@ -27,7 +27,7 @@ const Answer = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIntoText(false);
-    }, 2000);
+    }, 700);
 
     return () => clearTimeout(timer);
   }, []);
