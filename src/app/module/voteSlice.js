@@ -20,6 +20,8 @@ export const __postVote = createAsyncThunk(
       await instance.post(`/select/vote/${payload.selectKey}`, {
         choice: payload.isSelect,
       });
+      const { data } = await instance.get(`/select/vote/${payload.selectKey}`);
+      return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.errMsg);
     }
@@ -54,6 +56,10 @@ const voteSlice = createSlice({
     },
 
     //투표 하기
+    [__postVote.fulfilled]: (state, action) => {
+      state.msg = action.payload.msg;
+      state.voteResult = action.payload.result;
+    },
     [__postVote.rejected]: (state, action) => {
       state.error = action.payload;
     },
