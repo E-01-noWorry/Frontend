@@ -35,7 +35,7 @@ const MyPage = () => {
   const userPoint = useSelector((state) => state.myPageSlice.point.point);
 
   const [modal, setModal] = useState('');
-  console.log(userNickname);
+
   //나의 포인트 조회
   useEffect(() => {
     window.scrollTo(0, 0);
