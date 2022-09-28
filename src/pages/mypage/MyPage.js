@@ -35,7 +35,9 @@ const MyPage = () => {
   const userPoint = useSelector((state) => state.myPageSlice.point.point);
 
   const [modal, setModal] = useState('');
+
   const [logoutModal, setLogoutModal] = useState(false);
+
 
   //나의 포인트 조회
   useEffect(() => {

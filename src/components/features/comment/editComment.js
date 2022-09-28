@@ -76,8 +76,9 @@ const EditComment = (props) => {
     }
   };
 
-  const onClickReplyButton = () => {
+  const onClickReplyButton = (event) => {
     setReplyMode((status) => !status);
+    event.preventDefault();
     if (reply.comment?.length >= 2) {
       dispatch(
         writeRecommentThunk({
@@ -185,21 +186,22 @@ const EditComment = (props) => {
             </DefaultBox>
             <CommentBox>
               <span>{props.allComments.comment}</span>
-              {replyMode ? (
-                <ReplyInput
-                  maxLength="50"
-                  type="text"
-                  onChange={onChangeReply}
-                />
-              ) : null}
-              <MakeItRow>
-                <ReplyButton onClick={onClickCancelReply}>
-                  {replyMode ? '작성 취소' : '답글 달기'}
-                </ReplyButton>
-                <CancelReply onClick={onClickReplyButton}>
-                  {replyMode ? '작성 완료' : null}
-                </CancelReply>
-              </MakeItRow>
+              <form onSubmit={onClickReplyButton}>
+                {replyMode ? (
+                  <ReplyInput
+                    maxLength="50"
+                    type="text"
+                    onChange={onChangeReply}
+                  />
+                ) : null}
+                <MakeItRow>
+                  <ReplyButton onClick={onClickCancelReply}>
+                    {replyMode ? '작성 취소' : '답글 달기'}
+                  </ReplyButton>
+
+                  <CancelReply>{replyMode ? '작성 완료' : null}</CancelReply>
+                </MakeItRow>
+              </form>
             </CommentBox>
           </>
         )}

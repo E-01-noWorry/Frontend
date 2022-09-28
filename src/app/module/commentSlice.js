@@ -177,7 +177,6 @@ export const commentSlice = createSlice({
     [deleteRecommentThunk.rejected]: (state, action) => {},
 
     [editRecommentThunk.fulfilled]: (state, action) => {
-      console.log(action.payload);
       const a = current(state).data.filter(
         (a) => a.commentKey === parseInt(action.payload.data.result.commentKey),
       );
