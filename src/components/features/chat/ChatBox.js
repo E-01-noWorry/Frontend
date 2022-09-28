@@ -140,6 +140,8 @@ const StNewMessage = styled.div`
     border-radius: 1.6rem;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
 
+    cursor: pointer;
+
     span {
       ${fontSmall};
       line-height: 2rem;

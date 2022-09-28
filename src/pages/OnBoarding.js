@@ -135,6 +135,8 @@ const StPrev = styled.div`
   height: 3.2rem;
 
   z-index: 9;
+
+  cursor: pointer;
 `;
 
 const StNext = styled.div`
@@ -149,6 +151,8 @@ const StNext = styled.div`
   height: 3.2rem;
 
   z-index: 9;
+
+  cursor: pointer;
 
   img {
     transform: rotate(180deg);

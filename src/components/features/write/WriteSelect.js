@@ -319,11 +319,15 @@ const StInnerCategory = styled.div`
       width: 2.2rem;
       height: 2.2rem;
       accent-color: ${({ theme }) => theme.black};
+
+      cursor: pointer;
     }
 
     label {
       ${fontMedium};
       margin-left: 1.1rem;
+
+      cursor: pointer;
     }
   }
 `;
@@ -347,6 +351,10 @@ const StInnerSubtitle = styled.div`
     ${fontSmall}
     ${fontBold}
     line-height: 2.1rem;
+  }
+
+  div:nth-child(2) {
+    cursor: pointer;
   }
 `;
 

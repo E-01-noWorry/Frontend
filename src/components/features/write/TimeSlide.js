@@ -43,6 +43,8 @@ const StTimeSlide = styled.div`
 
     ${fontMedium}
     z-index: 2;
+
+    cursor: pointer;
   }
 
   div:nth-child(1) {

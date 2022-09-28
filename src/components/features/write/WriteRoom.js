@@ -349,6 +349,5 @@ const StCountButton = styled.div`
 
   border-radius: 1.4rem;
 
-  img {
-  }
+  cursor: pointer;
 `;

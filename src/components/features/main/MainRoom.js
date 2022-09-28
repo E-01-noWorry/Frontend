@@ -266,6 +266,8 @@ const StSearchWrap = styled.div`
       top: 0.8rem;
       right: 0.8rem;
       ${IconMedium};
+
+      cursor: pointer;
     }
   }
 `;
@@ -274,6 +276,8 @@ const StCancel = styled.div`
   width: 3rem;
 
   ${fontMedium}
+
+  cursor: pointer;
 `;
 
 const StContentBoxWrap = styled.div`

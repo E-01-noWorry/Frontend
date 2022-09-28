@@ -336,6 +336,8 @@ const StSendIcon = styled.div`
   top: 2rem;
 
   ${IconLarge};
+
+  cursor: pointer;
 `;
 
 const StUserInfoWrap = styled.div`
