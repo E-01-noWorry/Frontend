@@ -86,6 +86,12 @@ const Footer = ({ state }) => {
 export default Footer;
 
 const StFooter = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
   position: fixed;
   bottom: 0;
   left: 0;

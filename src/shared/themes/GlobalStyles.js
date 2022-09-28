@@ -8,6 +8,11 @@ const GlobalStyles = createGlobalStyle`
 
   html {
     font-size: 62.5%; //1rem을 10px로 변환
+    overflow-y: scroll;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   * {
@@ -19,6 +24,10 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
+    @media ${({ theme }) => theme.device.PC} {
+      background-color: ${({ theme }) => theme.sub5};
+      /* background-color: #FFBC50; */
+    }
     box-sizing: border-box;
     
     font-size: 1.6rem;

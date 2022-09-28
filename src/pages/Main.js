@@ -11,7 +11,9 @@ import Footer from '../components/common/Footer';
 import { ModalBasic, ModalWrite } from '../components/common/Modal';
 
 import { IconLarge } from '../shared/themes/iconStyle';
+import { fontBold, fontExtraSmall } from '../shared/themes/textStyle';
 
+import IconNext from '../static/icons/Variety=next, Status=untab, Size=M.svg';
 import IconSurvey from '../static/icons/Variety=Survey, Status=untab, Size=L.svg';
 import Logo from '../static/images/Logo.svg';
 
@@ -25,6 +27,7 @@ const Main = () => {
   const userKey = localStorage.getItem('userKey');
 
   const [modal, setModal] = useState('');
+  const [feedbackBadge, setFeedbackBadge] = useState('');
   const [writeModal, setWriteModal] = useState(false);
 
   //로그인을 한 유저가 알림 허용까지 했다면 deviceToken을 서버에 보냅니다
@@ -41,6 +44,14 @@ const Main = () => {
   useEffect(() => {
     postDeviceToken();
   }, [postDeviceToken]);
+
+  useEffect(() => {
+    setFeedbackBadge('on');
+
+    setTimeout(() => {
+      setFeedbackBadge('off');
+    }, 1500);
+  }, []);
 
   const writeButtonHandler = () => {
     if (localStorage.getItem('accessToken') && state.now === 'select') {
@@ -84,19 +95,25 @@ const Main = () => {
         <StLogo onClick={() => window.location.reload()}>
           <img src={Logo} alt="Logo" />
         </StLogo>
-        <a
-          target="_blank"
-          href="https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform"
-        >
-          <StIcon>
+        <StIcon>
+          <span style={{ opacity: `${feedbackBadge === 'on' ? 1 : 0}` }}>
+            피드백 남기기
+            <img src={IconNext} alt="IconNext" />
+          </span>
+          <a
+            target="_blank"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform"
+          >
             <img src={IconSurvey} alt="IconSurvey" />
-          </StIcon>
-        </a>
+          </a>
+        </StIcon>
       </Header>
 
       {state?.now === 'room' ? <MainRoom /> : <MainSelect />}
 
-      <WriteButton onClick={writeButtonHandler} />
+      <StButtonWrap>
+        <WriteButton onClick={writeButtonHandler} />
+      </StButtonWrap>
 
       <Footer state={state} />
     </>
@@ -116,6 +133,59 @@ const StLogo = styled.div`
   }
 `;
 
+const StButtonWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
+  position: fixed;
+  bottom: 7.2rem;
+
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 2rem;
+  padding-right: 2rem;
+
+  width: 100%;
+`;
+
 const StIcon = styled.div`
+  display: flex;
   ${IconLarge};
+
+  span {
+    animation: motion 0.4s linear 0s infinite alternate;
+    margin-right: 0;
+
+    @keyframes motion {
+      0% {
+        margin-right: 0;
+      }
+      100% {
+        margin-right: 0.3rem;
+      }
+    }
+
+    transition: opacity 0.3s;
+    position: absolute;
+    right: 5.2rem;
+
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0 0.5rem 0.5rem;
+    background-color: ${({ theme }) => theme.main2};
+
+    border-radius: 1.15rem;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
+
+    ${fontExtraSmall};
+    ${fontBold};
+    color: ${({ theme }) => theme.white};
+
+    img {
+      height: 1.6rem;
+    }
+  }
 `;

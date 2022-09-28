@@ -147,6 +147,12 @@ const MainSelect = () => {
 export default MainSelect;
 
 const StFilterDiv = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
   position: fixed;
   top: 6.4rem;
 
@@ -176,6 +182,10 @@ const StFilter = styled.div`
 `;
 
 const StFilterModal = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    top: 4.3rem;
+  }
+
   position: fixed;
   top: 10.8rem;
 

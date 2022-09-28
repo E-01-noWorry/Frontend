@@ -91,12 +91,22 @@ const StNoneContents = styled.div`
 `;
 
 const StContentBoxWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+    padding: 0 2rem 9.6rem 2rem;
+    min-height: calc(100% - 12.8rem);
+  }
+
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
 
   margin-top: 12.8rem;
   margin-bottom: 9.6rem;
+  background-color: ${({ theme }) => theme.bg};
 `;
 
 const StContentBox = styled.div`

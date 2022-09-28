@@ -64,6 +64,23 @@ export const ModalDelete = ({ setter, del }) => {
   );
 };
 
+export const ModalLogout = ({ setter, logout }) => {
+  return (
+    <>
+      <StModalWindow>
+        <StModalText>
+          <span>로그아웃 하시겠습니까?</span>
+        </StModalText>
+        <StModalButton>
+          <div onClick={logout}>로그아웃</div>
+          <div onClick={setter}>취소</div>
+        </StModalButton>
+      </StModalWindow>
+      <StModalBg onClick={setter} />
+    </>
+  );
+};
+
 export const ModalWrite = ({ setter, write }) => {
   return (
     <>
@@ -119,6 +136,12 @@ export const ModalRecommend = ({
 };
 
 const StModalBg = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
   position: fixed;
   top: 0;
   left: 0;

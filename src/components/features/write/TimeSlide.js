@@ -42,6 +42,7 @@ const StTimeSlide = styled.div`
     transition-delay: 0.1s;
 
     ${fontMedium}
+    z-index: 2;
   }
 
   div:nth-child(1) {
@@ -118,5 +119,5 @@ const StInnerTime = styled.span`
   transition-duration: 0.3s;
   border-radius: 2rem;
 
-  z-index: -1;
+  z-index: 1;
 `;
