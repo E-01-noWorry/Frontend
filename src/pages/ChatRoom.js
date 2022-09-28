@@ -257,9 +257,7 @@ const ChatRoom = () => {
         <span>{roomInfo.title}</span>
       </StHeaderTitle>
 
-      <BodyPadding>
-        <ChatBox chatState={chatState} userKey={userKey} />
-      </BodyPadding>
+      <ChatBox chatState={chatState} userKey={userKey} />
 
       <FooterInput>
         <form onSubmit={sendMessageHandler}>

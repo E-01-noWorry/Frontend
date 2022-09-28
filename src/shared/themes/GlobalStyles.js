@@ -9,10 +9,16 @@ const GlobalStyles = createGlobalStyle`
   html {
     font-size: 62.5%; //1rem을 10px로 변환
     overflow-y: scroll;
-  }
-
-  html::-webkit-scrollbar {
-    display: none;
+    overflow: overlay;
+    
+    &::-webkit-scrollbar {      
+      width: 0.5rem;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: ${({ theme }) => theme.main2};
+      border-radius: 0.25rem;
+    }
   }
 
   * {

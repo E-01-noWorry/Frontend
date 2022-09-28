@@ -179,6 +179,8 @@ const StFilter = styled.div`
     ${fontMedium}
     color: ${({ theme }) => theme.sub2};
   }
+
+  cursor: pointer;
 `;
 
 const StFilterModal = styled.div`
@@ -208,6 +210,11 @@ const StFilterModal = styled.div`
     padding: 0 1.5rem;
 
     line-height: 3rem;
+
+    &:hover,
+    &:active {
+      color: ${({ theme }) => theme.main2};
+    }
   }
 `;
 

@@ -84,7 +84,7 @@ export default SelectContentBox;
 
 const StNoneContents = styled.div`
   width: 100%;
-  margin-top: 4.1rem;
+  margin-top: 5.3rem;
 
   ${fontMedium}
   text-align: center;
@@ -96,16 +96,16 @@ const StContentBoxWrap = styled.div`
     width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
-    padding: 0 2rem 9.6rem 2rem;
-    min-height: calc(100% - 12.8rem);
+    padding: 12.8rem 2rem 9.6rem 2rem;
+    min-height: calc(100%);
   }
 
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
 
-  margin-top: 12.8rem;
-  margin-bottom: 9.6rem;
+  padding-top: 12.8rem;
+  padding-bottom: 9.6rem;
   background-color: ${({ theme }) => theme.bg};
 `;
 
@@ -120,6 +120,8 @@ const StContentBox = styled.div`
   padding: 1.6rem;
   background-color: ${(props) =>
     props.completion ? props.theme.sub4 : props.theme.white};
+
+  cursor: pointer;
 `;
 
 const StContentHeader = styled.div`

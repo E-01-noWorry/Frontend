@@ -18,4 +18,10 @@ const StWriteButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  cursor: pointer;
+
+  img {
+    z-index: 9;
+  }
 `;

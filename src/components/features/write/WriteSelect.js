@@ -139,11 +139,11 @@ const WriteSelect = () => {
               <textarea
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
-                maxLength={40}
+                maxLength={60}
                 placeholder="고민을 작성해주세요."
                 style={{ height: '8.9rem' }}
               />
-              <span>{title.length}/40자</span>
+              <span>{title.length}/60자</span>
             </StInnerText>
           </StContentBox>
 
