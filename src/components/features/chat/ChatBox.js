@@ -25,7 +25,7 @@ const ChatBox = ({ chatState, userKey }) => {
     const scrollHeight = window.innerHeight;
     const myHeight = event.srcElement.scrollingElement.scrollTop;
 
-    setScrollState(totalHeight <= scrollHeight + myHeight + 100);
+    setScrollState(totalHeight <= scrollHeight + myHeight + 500);
   }, 200);
 
   useEffect(() => {
@@ -41,7 +41,11 @@ const ChatBox = ({ chatState, userKey }) => {
     <>
       {!scrollState && (
         <StNewMessage>
-          <div onClick={() => scrollRef.current.scrollIntoView()}>
+          <div
+            onClick={() =>
+              scrollRef.current.scrollIntoView({ behavior: 'smooth' })
+            }
+          >
             <span>마지막 메세지</span>
             <img src={IconDropdown} alt="IconDropdown" />
           </div>

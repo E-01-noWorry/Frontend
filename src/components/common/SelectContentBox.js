@@ -13,7 +13,13 @@ import IconTimeOver from '../../static/icons/Variety=Timeover, Status=Untab, Siz
 
 import styled from 'styled-components';
 
-const SelectContentBox = ({ contents, setRef, filter }) => {
+const SelectContentBox = ({
+  contents,
+  setRef,
+  filter,
+  category,
+  proceeding,
+}) => {
   const navigate = useNavigate();
   const { state } = useLocation();
 
@@ -27,7 +33,7 @@ const SelectContentBox = ({ contents, setRef, filter }) => {
           key={content.selectKey}
           onClick={() =>
             navigate(`/detail/${content.selectKey}`, {
-              state: { now: state.now, filter },
+              state: { now: state.now, filter, category, proceeding },
             })
           }
           //마지막 게시글에 ref를 달아줍니다
@@ -52,6 +58,12 @@ const SelectContentBox = ({ contents, setRef, filter }) => {
           </StInnerOption>
 
           <StContentFooter>
+            <StInnerCurrent>
+              <StIcon>
+                <img src={IconPeople} alt="IconPeople" />
+              </StIcon>
+              <span>{content.total || 0}</span>
+            </StInnerCurrent>
             <StInnerTime>
               {content.completion ? (
                 <StIcon>
@@ -67,12 +79,6 @@ const SelectContentBox = ({ contents, setRef, filter }) => {
               )}
               <span>{content.completion ? '투표마감' : '남음'}</span>
             </StInnerTime>
-            <StInnerCurrent>
-              <StIcon>
-                <img src={IconPeople} alt="IconPeople" />
-              </StIcon>
-              <span>{content.total || 0}</span>
-            </StInnerCurrent>
           </StContentFooter>
         </StContentBox>
       ))}
@@ -96,7 +102,7 @@ const StContentBoxWrap = styled.div`
     width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
-    padding: 12.8rem 2rem 9.6rem 2rem;
+    padding: 17rem 2rem 9.6rem 2rem;
     min-height: calc(100%);
   }
 
@@ -104,7 +110,7 @@ const StContentBoxWrap = styled.div`
   flex-direction: column;
   gap: 2.4rem;
 
-  padding-top: 12.8rem;
+  padding-top: 17rem;
   padding-bottom: 9.6rem;
   background-color: ${({ theme }) => theme.bg};
 `;
@@ -199,6 +205,9 @@ const StIcon = styled.div`
 `;
 
 const StInnerTime = styled.div`
+  position: absolute;
+  right: 3.6rem;
+
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -208,9 +217,6 @@ const StInnerTime = styled.div`
 `;
 
 const StInnerCurrent = styled.div`
-  position: absolute;
-  right: 3.6rem;
-
   display: flex;
   align-items: center;
   gap: 0.4rem;

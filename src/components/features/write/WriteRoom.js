@@ -46,6 +46,9 @@ const WriteRoom = () => {
     if (keywordArr.includes(keyword)) {
       setModal('중복된 해시태그가 존재합니다.');
       document.body.style.overflow = 'hidden';
+    } else if (keyword.length === 0) {
+      setModal('태그를 입력해주세요');
+      document.body.style.overflow = 'hidden';
     } else {
       setKeywordArr((prev) => [...prev, keyword.replace(' ', '')]);
     }

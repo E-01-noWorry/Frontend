@@ -143,7 +143,12 @@ const Detail = () => {
           onClick={() => {
             state?.now === 'select' || state?.now === false
               ? navigate('/main', {
-                  state: { now: 'select', filter: state.filter },
+                  state: {
+                    now: 'select',
+                    filter: state.filter,
+                    category: state.category,
+                    proceeding: state.proceeding,
+                  },
                 })
               : navigate(-1);
           }}

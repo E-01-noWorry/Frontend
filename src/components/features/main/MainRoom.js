@@ -181,7 +181,7 @@ const MainRoom = () => {
                     cur={room.currentPeople}
                     max={room.max}
                   >
-                    #{item}{' '}
+                    #{item}
                   </StInnerKeyword>
                 ))}
               </StInnerKeywordWrap>
