@@ -339,11 +339,11 @@ const StFilter = styled.div`
 
 const StFilterModal = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    top: 4.3rem;
+    top: 3rem;
   }
 
   position: fixed;
-  top: 10.8rem;
+  top: 16rem;
 
   display: flex;
   flex-direction: column;
