@@ -257,9 +257,7 @@ const ChatRoom = () => {
         <span>{roomInfo.title}</span>
       </StHeaderTitle>
 
-      <BodyPadding>
-        <ChatBox chatState={chatState} userKey={userKey} />
-      </BodyPadding>
+      <ChatBox chatState={chatState} userKey={userKey} />
 
       <FooterInput>
         <form onSubmit={sendMessageHandler}>
@@ -338,6 +336,8 @@ const StSendIcon = styled.div`
   top: 2rem;
 
   ${IconLarge};
+
+  cursor: pointer;
 `;
 
 const StUserInfoWrap = styled.div`

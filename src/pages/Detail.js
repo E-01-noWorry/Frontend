@@ -12,7 +12,11 @@ import BodyPadding from '../components/common/BodyPadding';
 import Vote from '../components/features/vote/Vote';
 import Comment from '../components/features/comment/comment';
 import ProfileImg from '../components/elements/ProfileImg';
-import { ModalBasic, ModalDelete } from '../components/common/Modal';
+import {
+  ModalBasic,
+  ModalDelete,
+  ModalLogin,
+} from '../components/common/Modal';
 
 import { remainedTime } from '../shared/timeCalculation';
 
@@ -45,6 +49,8 @@ const Detail = () => {
 
   const [modal, setModal] = useState('');
   const [deleteModal, setDeleteModal] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
+
   const [writeComment, setWriteComment] = useState({
     comment: '',
   });
@@ -74,7 +80,7 @@ const Detail = () => {
       comment: '',
     });
     if (localStorage.getItem('accessToken') === null) {
-      setModal('로그인 후 사용해주세요.');
+      setLoginModal(true);
     }
     if (
       writeComment.comment === '' &&
@@ -85,7 +91,7 @@ const Detail = () => {
   };
 
   useEffect(() => {
-    setModal(error);
+    setLoginModal(error);
   }, [error]);
 
   useEffect(() => {
@@ -120,12 +126,30 @@ const Detail = () => {
 
       {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
 
+      {loginModal && (
+        <ModalLogin
+          login={() => {
+            navigate('/login');
+            document.body.style.overflow = 'unset';
+          }}
+          setter={() => {
+            setLoginModal(false);
+            document.body.style.overflow = 'unset';
+          }}
+        />
+      )}
+
       <Header>
         <StHeaderIcon
           onClick={() => {
             state?.now === 'select' || state?.now === false
               ? navigate('/main', {
-                  state: { now: 'select', filter: state.filter },
+                  state: {
+                    now: 'select',
+                    filter: state.filter,
+                    category: state.category,
+                    proceeding: state.proceeding,
+                  },
                 })
               : navigate(-1);
           }}

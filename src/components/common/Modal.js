@@ -28,6 +28,40 @@ export const ModalInfo = () => {
   );
 };
 
+export const ModalJoin = ({ join, setter }) => {
+  return (
+    <>
+      <StModalWindow>
+        <StModalText>
+          <span>채팅방에 들어갈까요?</span>
+        </StModalText>
+        <StModalButton>
+          <div onClick={join}>들어가기</div>
+          <div onClick={setter}>취소</div>
+        </StModalButton>
+      </StModalWindow>
+      <StModalBg onClick={setter} />
+    </>
+  );
+};
+
+export const ModalLogin = ({ login, setter }) => {
+  return (
+    <>
+      <StModalWindow>
+        <StModalText>
+          <span>로그인 후 사용해주세요.</span>
+        </StModalText>
+        <StModalButton>
+          <div onClick={setter}>확인</div>
+          <div onClick={login}>로그인 하기</div>
+        </StModalButton>
+      </StModalWindow>
+      <StModalBg onClick={setter} />
+    </>
+  );
+};
+
 export const ModalExit = ({ leave, setter }) => {
   return (
     <>
@@ -263,6 +297,10 @@ const StModalButton = styled.div`
 
     width: 100%;
     height: 100%;
+
+    ${fontMedium}
+
+    cursor: pointer;
   }
 
   div:nth-child(2) {

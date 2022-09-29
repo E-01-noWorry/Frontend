@@ -131,6 +131,8 @@ const StIconWrap = styled.div`
   align-items: center;
 
   color: ${({ theme }) => theme.sub2};
+
+  cursor: pointer;
 `;
 
 const StIcon = styled.div`

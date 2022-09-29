@@ -24,14 +24,21 @@ const StFooterInput = styled.div`
   padding: 0.8rem 0.8rem 2.4rem 0.8rem;
   background-color: ${({ theme }) => theme.bg};
 
-  input {
+  form {
+    display: flex;
+    align-items: center;
+
     width: 100%;
     height: 5.6rem;
-    padding: 0 2rem;
+    padding: 0 5rem 0 2rem;
+    background-color: ${({ theme }) => theme.white};
 
-    border: none;
     border-radius: 2rem;
+  }
 
+  input {
+    width: 100%;
+    border: none;
     &:focus {
       outline: none;
     }

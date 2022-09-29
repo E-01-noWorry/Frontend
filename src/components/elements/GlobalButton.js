@@ -24,4 +24,6 @@ const StGlobalButton = styled.div`
 
   ${(props) => (props.fw === 'bold' ? fontBold : fontExtraBold)}
   color: ${(props) => props.font || props.theme.white};
+
+  cursor: pointer;
 `;
