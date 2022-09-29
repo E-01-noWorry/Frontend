@@ -27,4 +27,9 @@ const StHeader = styled.div`
   background-color: ${({ theme }) => theme.bg};
 
   z-index: 9;
+
+  div:nth-child(1),
+  div:nth-child(3) {
+    cursor: pointer;
+  }
 `;

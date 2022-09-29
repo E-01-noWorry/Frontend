@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import instance from '../../../app/module/instance';
 
 import BodyPadding from '../../common/BodyPadding';
-import { ModalBasic } from '../../common/Modal';
+import { ModalBasic, ModalJoin, ModalLogin } from '../../common/Modal';
 
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconMedium, IconSmall } from '../../../shared/themes/iconStyle';
@@ -25,7 +25,11 @@ const MainRoom = () => {
   const navigate = useNavigate();
 
   const [modal, setModal] = useState('');
+  const [loginModal, setLoginModal] = useState(false);
+  const [joinModal, setJoinModal] = useState(false);
+
   const [rooms, setRooms] = useState([]);
+  const [roomKey, setRoomKey] = useState(0);
   const [search, setSearch] = useState(false);
   const searchRef = useRef();
 
@@ -69,9 +73,15 @@ const MainRoom = () => {
   const joinRoomHandler = async (roomKey) => {
     try {
       await instance.post(`/room/${roomKey}`);
-      navigate(`/chatroom/${roomKey}`, { state: { now: 'room' } });
+      setRoomKey(roomKey);
+      setJoinModal(true);
     } catch (error) {
-      setModal(error.response.data.errMsg);
+      const msg = error.response.data.errMsg;
+      if (msg.includes('로그인')) {
+        setLoginModal(true);
+      } else {
+        setModal(error.response.data.errMsg);
+      }
     }
   };
 
@@ -102,6 +112,28 @@ const MainRoom = () => {
 
   return (
     <>
+      {loginModal && (
+        <ModalLogin
+          login={() => {
+            navigate('/login');
+            document.body.style.overflow = 'unset';
+          }}
+          setter={() => {
+            setLoginModal(false);
+            document.body.style.overflow = 'unset';
+          }}
+        />
+      )}
+
+      {joinModal && (
+        <ModalJoin
+          join={() =>
+            navigate(`/chatroom/${roomKey}`, { state: { now: 'room' } })
+          }
+          setter={() => setJoinModal(false)}
+        />
+      )}
+
       {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
 
       <StSearchWrap length={rooms.length}>
@@ -123,6 +155,7 @@ const MainRoom = () => {
           {rooms.length === 0 && (
             <StNoneContents>상담방이 없습니다.</StNoneContents>
           )}
+
           {rooms?.map((room, idx) => (
             <StContentBox
               key={room.roomKey}
@@ -148,7 +181,7 @@ const MainRoom = () => {
                     cur={room.currentPeople}
                     max={room.max}
                   >
-                    #{item}{' '}
+                    #{item}
                   </StInnerKeyword>
                 ))}
               </StInnerKeywordWrap>
@@ -233,6 +266,8 @@ const StSearchWrap = styled.div`
       top: 0.8rem;
       right: 0.8rem;
       ${IconMedium};
+
+      cursor: pointer;
     }
   }
 `;
@@ -241,6 +276,8 @@ const StCancel = styled.div`
   width: 3rem;
 
   ${fontMedium}
+
+  cursor: pointer;
 `;
 
 const StContentBoxWrap = styled.div`
@@ -250,17 +287,16 @@ const StContentBoxWrap = styled.div`
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
 
-    margin-top: 12.8rem;
-    padding: 1.2rem 2rem 9.6rem 2rem;
-    min-height: calc(100% - 14rem);
+    padding: 14rem 2rem 9.6rem 2rem;
+    min-height: calc(100%);
   }
 
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
 
-  margin-top: 14rem;
-  margin-bottom: 9.6rem;
+  padding-top: 14rem;
+  padding-bottom: 9.6rem;
   background-color: ${({ theme }) => theme.bg};
 `;
 
@@ -272,6 +308,8 @@ const StContentBox = styled.div`
   padding: 1.6rem;
   background-color: ${(props) =>
     props.cur === props.max ? props.theme.sub4 : props.theme.white};
+
+  cursor: pointer;
 `;
 
 const StInnerTitle = styled.div`

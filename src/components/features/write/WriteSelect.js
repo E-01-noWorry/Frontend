@@ -139,11 +139,11 @@ const WriteSelect = () => {
               <textarea
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
-                maxLength={40}
+                maxLength={60}
                 placeholder="고민을 작성해주세요."
                 style={{ height: '8.9rem' }}
               />
-              <span>{title.length}/40자</span>
+              <span>{title.length}/60자</span>
             </StInnerText>
           </StContentBox>
 
@@ -319,11 +319,15 @@ const StInnerCategory = styled.div`
       width: 2.2rem;
       height: 2.2rem;
       accent-color: ${({ theme }) => theme.black};
+
+      cursor: pointer;
     }
 
     label {
       ${fontMedium};
       margin-left: 1.1rem;
+
+      cursor: pointer;
     }
   }
 `;
@@ -347,6 +351,10 @@ const StInnerSubtitle = styled.div`
     ${fontSmall}
     ${fontBold}
     line-height: 2.1rem;
+  }
+
+  div:nth-child(2) {
+    cursor: pointer;
   }
 `;
 

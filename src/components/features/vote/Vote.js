@@ -209,6 +209,8 @@ const StSelectItem = styled.div`
 
   ${fontBold}
 
+  cursor: pointer;
+
   //클릭 후 투표 버튼
   //안보이다가 onclick 발생시 위의 코드에서 block으로 바뀝니다
   div {

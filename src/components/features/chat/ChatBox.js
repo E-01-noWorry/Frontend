@@ -21,11 +21,11 @@ const ChatBox = ({ chatState, userKey }) => {
   const [scrollState, setScrollState] = useState(true);
 
   const scrollEvent = _.debounce((event) => {
-    const totalHeight = document.body.scrollHeight;
+    const totalHeight = document.documentElement.scrollHeight;
     const scrollHeight = window.innerHeight;
     const myHeight = event.srcElement.scrollingElement.scrollTop;
 
-    setScrollState(totalHeight <= scrollHeight + myHeight + 100);
+    setScrollState(totalHeight <= scrollHeight + myHeight + 500);
   }, 200);
 
   useEffect(() => {
@@ -38,57 +38,64 @@ const ChatBox = ({ chatState, userKey }) => {
   }, [chatState]);
 
   return (
-    <StChatWrap>
+    <>
       {!scrollState && (
-        <StNewMessage onClick={() => scrollRef.current.scrollIntoView()}>
-          <span>최근 메세지 보기</span>
-          <img src={IconDropdown} alt="IconDropdown" />
-        </StNewMessage>
-      )}
-
-      {chatState.map((chat, idx) => (
-        <StChat key={idx}>
-          {/* userKey로 시스템메세지, 내 메세지, 상대의 메세지를 판단합니다 */}
+        <StNewMessage>
           <div
-            className={
-              chat.userKey === 12
-                ? 'system'
-                : chat.userKey === parseInt(userKey)
-                ? 'right'
-                : 'left'
+            onClick={() =>
+              scrollRef.current.scrollIntoView({ behavior: 'smooth' })
             }
           >
-            {chat.userKey === 12 ? (
-              <div className="middle">
-                <div className="chat">{chat.chat}</div>
-              </div>
-            ) : chatState[idx]?.userKey === chatState[idx - 1]?.userKey &&
-              nowTime(chatState[idx].createdAt) ===
-                nowTime(chatState[idx - 1].createdAt) ? (
-              <div className="sametime">
-                <div className="chat">{chat.chat}</div>
-              </div>
-            ) : (
-              <>
-                <ProfileImg className="img" point={chat.User?.point} />
-                <div>
-                  <div className="nickname">
-                    {chat.userKey === parseInt(userKey)
-                      ? ''
-                      : chat.User?.nickname}
-                  </div>
-                  <div className="middle">
-                    <div className="chat">{chat.chat}</div>
-                    <span className="time">{nowTime(chat.createdAt)}</span>
-                  </div>
-                </div>
-              </>
-            )}
+            <span>마지막 메세지</span>
+            <img src={IconDropdown} alt="IconDropdown" />
           </div>
-        </StChat>
-      ))}
-      <div ref={scrollRef} />
-    </StChatWrap>
+        </StNewMessage>
+      )}
+      <StChatWrap>
+        {chatState.map((chat, idx) => (
+          <StChat key={idx}>
+            {/* userKey로 시스템메세지, 내 메세지, 상대의 메세지를 판단합니다 */}
+            <div
+              className={
+                chat.userKey === 12
+                  ? 'system'
+                  : chat.userKey === parseInt(userKey)
+                  ? 'right'
+                  : 'left'
+              }
+            >
+              {chat.userKey === 12 ? (
+                <div className="middle">
+                  <div className="chat">{chat.chat}</div>
+                </div>
+              ) : chatState[idx]?.userKey === chatState[idx - 1]?.userKey &&
+                nowTime(chatState[idx].createdAt) ===
+                  nowTime(chatState[idx - 1].createdAt) ? (
+                <div className="sametime">
+                  <div className="chat">{chat.chat}</div>
+                </div>
+              ) : (
+                <>
+                  <ProfileImg className="img" point={chat.User?.point} />
+                  <div>
+                    <div className="nickname">
+                      {chat.userKey === parseInt(userKey)
+                        ? ''
+                        : chat.User?.nickname}
+                    </div>
+                    <div className="middle">
+                      <div className="chat">{chat.chat}</div>
+                      <span className="time">{nowTime(chat.createdAt)}</span>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </StChat>
+        ))}
+        <div ref={scrollRef} />
+      </StChatWrap>
+    </>
   );
 };
 
@@ -101,36 +108,49 @@ const StChatWrap = styled.div`
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
 
-    padding: 11rem 2rem 8rem 2rem;
     min-height: calc(100%);
   }
 
   width: 100%;
-  padding-top: 11rem;
-  padding-bottom: 8rem;
+  padding: 11rem 2rem 8rem 2rem;
   background-color: ${({ theme }) => theme.bg};
 `;
 
 const StNewMessage = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    width: ${({ theme }) => theme.style.width};
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+  }
+
   position: fixed;
-  left: 50%;
   bottom: 10rem;
-  transform: translateX(-50%);
 
   display: flex;
-  align-items: center;
+  justify-content: center;
 
-  height: 2.6rem;
-  padding: 0.3rem 0.6rem 0.3rem 1rem;
-  background-color: ${({ theme }) => theme.white};
+  width: 100%;
 
-  border-radius: 1.3rem;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
+  z-index: 2;
 
-  span {
-    ${fontSmall};
-    line-height: 2rem;
-    color: ${({ theme }) => theme.sub2};
+  div {
+    display: flex;
+    align-items: center;
+
+    height: 3.2rem;
+    padding: 0.3rem 0.6rem 0.3rem 1rem;
+    background-color: ${({ theme }) => theme.white};
+
+    border-radius: 1.6rem;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
+
+    cursor: pointer;
+
+    span {
+      ${fontSmall};
+      line-height: 2rem;
+      color: ${({ theme }) => theme.sub2};
+    }
   }
 `;
 
