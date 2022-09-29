@@ -26,6 +26,7 @@ import IconNext from '../../static/icons/Variety=next, Status=untab, Size=M.svg'
 import IconVoteTab from '../../static/icons/Variety=vote, Status=tab, Size=L.svg';
 import IconChatting from '../../static/icons/Variety=chating, Status=untab, Size=L.svg';
 import IconInformation from '../../static/icons/Variety=Information, Status=untab, Size=S.svg';
+import IconPerson from '../../static/icons/Variety=person, Status=untab, Size=S.svg';
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -37,7 +38,6 @@ const MyPage = () => {
   const [modal, setModal] = useState('');
 
   const [logoutModal, setLogoutModal] = useState(false);
-
 
   //나의 포인트 조회
   useEffect(() => {
@@ -344,6 +344,37 @@ const MyPage = () => {
                         </StInnerArrow>
                       </StInnerNavi>
                     </StBox>
+                    <StTitle>고객센터</StTitle>
+                    <StBox>
+                      <StInnerNavi
+                        onClick={() => setModal('곧 출시될 기능입니다.')}
+                      >
+                        <StInnerTitle>
+                          <div>
+                            <img src={IconEdit} alt="IconEdit" />
+                          </div>
+                          <div>1 : 1 상담방</div>
+                        </StInnerTitle>
+                        <StInnerArrow>
+                          <img src={IconNext} alt="IconNext" />
+                        </StInnerArrow>
+                      </StInnerNavi>
+
+                      <StInnerNavi
+                        onClick={() => setModal('곧 출시될 기능입니다.')}
+                      >
+                        <StInnerTitle>
+                          <div>
+                            <img src={IconPerson} alt="IconPerson" />
+                          </div>
+                          <div>회원 탈퇴</div>
+                        </StInnerTitle>
+                        <StInnerArrow>
+                          <img src={IconNext} alt="IconNext" />
+                        </StInnerArrow>
+                      </StInnerNavi>
+                    </StBox>
+
                     {loggined !== null && modalMode === false ? (
                       <Logout onClick={onClickLogOut}>로그아웃</Logout>
                     ) : null}
@@ -430,6 +461,35 @@ const MyPage = () => {
                   </StInnerNavi>
                 </StBox>
               </StMypageWrap>
+              <StTitle>고객센터</StTitle>
+              <StBox>
+                <StInnerNavi
+                  onClick={() => setModal('로그인 후 사용해주세요.')}
+                >
+                  <StInnerTitle>
+                    <div>
+                      <img src={IconEdit} alt="IconEdit" />
+                    </div>
+                    <div>1 : 1 상담방</div>
+                  </StInnerTitle>
+                  <StInnerArrow>
+                    <img src={IconNext} alt="IconNext" />
+                  </StInnerArrow>
+                </StInnerNavi>
+                <StInnerNavi
+                  onClick={() => setModal('로그인 후 사용해주세요.')}
+                >
+                  <StInnerTitle>
+                    <div>
+                      <img src={IconPerson} alt="IconPerson" />
+                    </div>
+                    <div>회원 탈퇴</div>
+                  </StInnerTitle>
+                  <StInnerArrow>
+                    <img src={IconNext} alt="IconNext" />
+                  </StInnerArrow>
+                </StInnerNavi>
+              </StBox>
             </BodyPadding>
           </>
         )}

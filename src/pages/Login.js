@@ -157,8 +157,7 @@ const LoginErrorMsg = styled.p`
 `;
 
 const StNaviLogin = styled.div`
-  position: absolute;
-  bottom: 3.2rem;
+  position: relative;
 
   display: flex;
   align-items: center;
