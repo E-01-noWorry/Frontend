@@ -104,6 +104,23 @@ export const ModalWrite = ({ setter, write }) => {
   );
 };
 
+export const ModalDeleteInfo = ({ setter, del }) => {
+  return (
+    <>
+      <StModalWindow>
+        <StModalText>
+          <span>정말 회원탈퇴를 하시겠습니까?</span>
+        </StModalText>
+        <StModalButton>
+          <div onClick={del}>회원탈퇴</div>
+          <div onClick={setter}>취소</div>
+        </StModalButton>
+      </StModalWindow>
+      <StModalBg onClick={setter} />
+    </>
+  );
+};
+
 export const ModalRecommend = ({
   children,
   setter,

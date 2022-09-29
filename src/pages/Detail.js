@@ -184,7 +184,7 @@ const Detail = () => {
             maxLength="50"
             value={writeComment.comment}
           />
-          <SubmitButton>
+          <SubmitButton onClick={onClickSubmit}>
             <img src={IconSend} alt="IconSend" />
           </SubmitButton>
         </WriteBox>
