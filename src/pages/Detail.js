@@ -54,7 +54,8 @@ const Detail = () => {
     setWriteComment({ ...setWriteComment, [name]: value });
   };
 
-  const onClickSubmit = () => {
+  const onClickSubmit = (event) => {
+    event.preventDefault();
     if (writeComment.comment.length >= 2) {
       dispatch(
         writeCommentThunk({
@@ -173,20 +174,21 @@ const Detail = () => {
           <Comment content={content} user={user} />
         </StInfoWrap>
       </BodyPadding>
-
-      <WriteBox>
-        <Write
-          type="text"
-          placeholder="더 좋은 의견을 남겨주세요."
-          name="comment"
-          onChange={onChangeHandler}
-          maxLength="50"
-          value={writeComment.comment}
-        />
-        <SubmitButton onClick={onClickSubmit}>
-          <img src={IconSend} alt="IconSend" />
-        </SubmitButton>
-      </WriteBox>
+      <form onSubmit={onClickSubmit}>
+        <WriteBox>
+          <Write
+            type="text"
+            placeholder="더 좋은 의견을 남겨주세요."
+            name="comment"
+            onChange={onChangeHandler}
+            maxLength="50"
+            value={writeComment.comment}
+          />
+          <SubmitButton onClick={onClickSubmit}>
+            <img src={IconSend} alt="IconSend" />
+          </SubmitButton>
+        </WriteBox>
+      </form>
     </>
   );
 };
