@@ -8,17 +8,6 @@ const GlobalStyles = createGlobalStyle`
 
   html {
     font-size: 62.5%; //1rem을 10px로 변환
-    overflow-y: scroll;
-    overflow: overlay;
-    
-    &::-webkit-scrollbar {      
-      width: 0.5rem;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-      background-color: ${({ theme }) => theme.main2};
-      border-radius: 0.25rem;
-    }
   }
 
   * {
@@ -46,6 +35,17 @@ const GlobalStyles = createGlobalStyle`
     background-color: ${({ theme }) => theme.bg};
 
     cursor: default;
+
+    overflow: overlay;
+    
+    &::-webkit-scrollbar {      
+      width: 0.5rem;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: ${({ theme }) => theme.main2};
+      border-radius: 0.25rem;
+    }
   }
 
   a {

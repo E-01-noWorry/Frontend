@@ -11,7 +11,11 @@ import Footer from '../components/common/Footer';
 import { ModalBasic, ModalLogin, ModalWrite } from '../components/common/Modal';
 
 import { IconLarge } from '../shared/themes/iconStyle';
-import { fontBold, fontExtraSmall } from '../shared/themes/textStyle';
+import {
+  fontBold,
+  fontExtraSmall,
+  fontMedium,
+} from '../shared/themes/textStyle';
 
 import IconNext from '../static/icons/Variety=next, Status=untab, Size=M.svg';
 import IconSurvey from '../static/icons/Variety=Survey, Status=untab, Size=L.svg';
@@ -88,11 +92,11 @@ const Main = () => {
         <ModalWrite
           setter={() => {
             setWriteModal(false);
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = 'overlay';
           }}
           write={() => {
             navigate('/write', { state: { now: state.now } });
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = 'overlay';
           }}
         />
       )}
@@ -149,7 +153,8 @@ const Main = () => {
         <StToTop
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
-          <img src={IconDropdown} alt="IconDropdown" />
+          <span>맨위로</span>
+          {/* <img src={IconDropdown} alt="IconDropdown" /> */}
         </StToTop>
       )}
 
@@ -238,15 +243,20 @@ const StToTop = styled.div`
   justify-content: center;
   align-items: center;
 
-  width: 5rem;
-  height: 3.2rem;
-  padding: 0.3rem 1rem 0.3rem 1rem;
-  background-color: ${({ theme }) => theme.white};
+  width: 9.3rem;
+  height: 3.7rem;
+  padding: 0.8rem;
+  background-color: ${({ theme }) => theme.inactive};
 
-  border-radius: 1.6rem;
+  border-radius: 1.85rem;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
 
   cursor: pointer;
+
+  span {
+    ${fontMedium};
+    color: ${({ theme }) => theme.white};
+  }
 
   img {
     transform: rotate(180deg);

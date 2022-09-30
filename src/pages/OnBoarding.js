@@ -20,9 +20,8 @@ import Logo from '../static/images/Logo.svg';
 import styled from 'styled-components';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectFade, Navigation } from 'swiper';
+import { Navigation } from 'swiper';
 import 'swiper/css';
-import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 
 const OnBoarding = () => {
@@ -51,8 +50,7 @@ const OnBoarding = () => {
         slidesPerView={1}
         centeredSlides={true}
         onSlideChange={(e) => setPagination(e.activeIndex + 1)}
-        effect={'fade'}
-        modules={[EffectFade, Navigation]}
+        modules={[Navigation]}
       >
         <StPrev ref={prevNavi} page={pagination}>
           {pagination === 4 ? (

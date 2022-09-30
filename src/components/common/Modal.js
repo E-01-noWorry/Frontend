@@ -28,23 +28,6 @@ export const ModalInfo = () => {
   );
 };
 
-export const ModalJoin = ({ join, setter }) => {
-  return (
-    <>
-      <StModalWindow>
-        <StModalText>
-          <span>채팅방에 들어갈까요?</span>
-        </StModalText>
-        <StModalButton>
-          <div onClick={join}>들어가기</div>
-          <div onClick={setter}>취소</div>
-        </StModalButton>
-      </StModalWindow>
-      <StModalBg onClick={setter} />
-    </>
-  );
-};
-
 export const ModalLogin = ({ login, setter }) => {
   return (
     <>
@@ -66,7 +49,7 @@ export const ModalExit = ({ leave, setter }) => {
   return (
     <>
       <StModalWindow>
-        <StModalTitle>채팅방 나가기</StModalTitle>
+        <StModalTitle>상담방 나가기</StModalTitle>
         <StModalText>
           <span>나가기를 하면 작성자의 추천을 받을 수 없어요.</span>
           <span>(추천을 받으면 등급이 올라가요!)</span>
@@ -107,6 +90,23 @@ export const ModalLogout = ({ setter, logout }) => {
         </StModalText>
         <StModalButton>
           <div onClick={logout}>로그아웃</div>
+          <div onClick={setter}>취소</div>
+        </StModalButton>
+      </StModalWindow>
+      <StModalBg onClick={setter} />
+    </>
+  );
+};
+
+export const ModalKick = ({ setter, kick, nickname }) => {
+  return (
+    <>
+      <StModalWindow>
+        <StModalText>
+          <span>'{nickname}'님을 상담방에서 내보냅니다.</span>
+        </StModalText>
+        <StModalButton>
+          <div onClick={kick}>내보내기</div>
           <div onClick={setter}>취소</div>
         </StModalButton>
       </StModalWindow>
@@ -171,14 +171,14 @@ export const ModalRecommend = ({
             <div>남아있는 인원이 없어요.</div>
           ) : (
             <>
-              <div>*현재 채팅방에 남아 있는 사람입니다.</div>
+              <div>*현재 상담방에 남아 있는 사람입니다.</div>
               {children}
             </>
           )}
         </StModalTextWide>
         <StModalButton>
-          <div onClick={recommend}>추천하기</div>
-          <div onClick={leave}>채팅방 삭제</div>
+          {user !== 1 && <div onClick={recommend}>추천하고 삭제</div>}
+          <div onClick={leave}>상담방 삭제</div>
         </StModalButton>
       </StModalWindowWide>
       <StModalBg onClick={setter} />
