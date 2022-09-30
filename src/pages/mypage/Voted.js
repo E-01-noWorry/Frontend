@@ -102,6 +102,12 @@ const Voted = () => {
               </StInnerOption>
 
               <StContentFooter>
+                <StInnerCurrent>
+                  <StIcon>
+                    <img src={IconPeople} alt="IconPeople" />
+                  </StIcon>
+                  <span>{content.total || 0}</span>
+                </StInnerCurrent>
                 <StInnerTime>
                   {content.completion ? (
                     <StIcon>
@@ -117,12 +123,6 @@ const Voted = () => {
                   )}
                   <span>{content.completion ? '투표마감' : '남음'}</span>
                 </StInnerTime>
-                <StInnerCurrent>
-                  <StIcon>
-                    <img src={IconPeople} alt="IconPeople" />
-                  </StIcon>
-                  <span>{content.total || 0}</span>
-                </StInnerCurrent>
               </StContentFooter>
             </StContentBox>
           ))}
@@ -266,6 +266,9 @@ const StIcon = styled.div`
 `;
 
 const StInnerTime = styled.div`
+  position: absolute;
+  right: 3.6rem;
+
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -275,9 +278,6 @@ const StInnerTime = styled.div`
 `;
 
 const StInnerCurrent = styled.div`
-  position: absolute;
-  right: 3.6rem;
-
   display: flex;
   align-items: center;
   gap: 0.4rem;
