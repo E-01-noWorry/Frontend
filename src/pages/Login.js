@@ -1,20 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import instance from '../app/module/instance';
-
 import LoginSignUpInput from '../components/elements/LoginSignUpInput';
 import Header from '../components/common/Header';
 import BodyPadding from '../components/common/BodyPadding';
 import GlobalButton from '../components/elements/GlobalButton';
 import SocialLoginButton from '../components/elements/SocialLoginButton';
-
 import { fontSmall, fontLarge } from '../shared/themes/textStyle';
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
-
 import IconBack from '../static/icons/Variety=back, Status=untab, Size=L.svg';
 import IconJoin from '../static/icons/Variety=Join membership, Status=untab, Size=S.svg';
-
 import styled from 'styled-components';
 
 const Login = () => {

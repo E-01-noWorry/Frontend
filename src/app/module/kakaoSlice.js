@@ -1,6 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { current } from '@reduxjs/toolkit';
-import axios from 'axios';
 import instance from './instance';
 
 const initialState = {
@@ -21,7 +19,6 @@ export const kakaoLoginThunk = createAsyncThunk(
       localStorage.setItem('nickname', data.data.user.nickname);
       localStorage.setItem('userKey', data.data.user.userKey);
 
-      window.location.replace('/');
       return thunkAPI.fulfillWithValue(data.response);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
