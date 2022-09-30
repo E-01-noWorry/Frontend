@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { kakaoLoginThunk } from '../app/module/kakaoSlice';
-import { useSelector } from 'react-redux';
 import instance from '../app/module/instance';
 import { ModalBasic } from '../components/common/Modal';
 
 import { fontLarge, fontSmall } from '../shared/themes/textStyle';
-
+import Loading from './Loading';
 const KakaoRedirect = () => {
   const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.kakao);
   const [modal, setModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
 
@@ -33,6 +33,9 @@ const KakaoRedirect = () => {
     try {
       const data = await instance.put(`user/nickname`, editNickname);
       localStorage.setItem('nickname', data.data.nickname);
+      localStorage.setItem('accessToken', userInfo.accessToken);
+      localStorage.setItem('refreshToken', userInfo.refreshToken);
+      localStorage.setItem('userKey', userInfo.userKey);
       setSuccessModal('닉네임 설정에 성공하였습니다.');
     } catch (error) {
       setModal(error.response.data.errMsg);
@@ -46,41 +49,48 @@ const KakaoRedirect = () => {
 
   return (
     <>
-      {modal && (
-        <ModalBasic
-          setter={() => {
-            setModal('');
-          }}
-        >
-          {modal}
-        </ModalBasic>
-      )}
+      {localStorage.getItem('nickname') ? (
+        <Loading />
+      ) : (
+        <>
+          {modal && (
+            <ModalBasic
+              setter={() => {
+                setModal('');
+              }}
+            >
+              {modal}
+            </ModalBasic>
+          )}
 
-      {successModal && (
-        <ModalBasic
-          setter={() => {
-            setSuccessModal('');
-            window.location.replace('/');
-          }}
-        >
-          {successModal}
-        </ModalBasic>
+          {successModal && (
+            <ModalBasic
+              setter={() => {
+                setSuccessModal('');
+                window.location.replace('/');
+              }}
+            >
+              {successModal}
+            </ModalBasic>
+          )}
+          <Container>
+            <Main>닉네임을 설정해주세요.</Main>
+            <Sub></Sub>
+            <Objects>
+              <form onSubmit={onClickEditNickName}>
+                <NicknameInput
+                  name="nickname"
+                  onChange={onChangeEditNickName}
+                  placeholder="2~10자 한글,영어,숫자로만 입력해주세요."
+                ></NicknameInput>
+                <SubmitButton onClick={onClickEditNickName}>제출</SubmitButton>
+              </form>
+            </Objects>
+            <Sub>*익명으로 안심하고 고민을 이야기할 수 있어요. </Sub>
+            <Sub>*닉네임은 마이페이지에서 변경이 가능합니다.</Sub>
+          </Container>
+        </>
       )}
-      <Container>
-        <Main>닉네임을 설정해주세요.</Main>
-        <Sub>*닉네임은 언제든지 하단의 마이페이지에서 수정이 가능합니다.</Sub>
-        <Objects>
-          <form onSubmit={onClickEditNickName}>
-            <NicknameInput
-              name="nickname"
-              onChange={onChangeEditNickName}
-              placeholder="2~10자 한글,영어,숫자로만 입력해주세요."
-            ></NicknameInput>
-            <SubmitButton onClick={onClickEditNickName}>제출</SubmitButton>
-          </form>
-        </Objects>
-        <Sub>닉네임 설정을 완료하시면 메인페이지로 이동합니다.</Sub>
-      </Container>
     </>
   );
 };

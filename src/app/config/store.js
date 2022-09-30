@@ -3,6 +3,7 @@ import select from '../module/selectSlice';
 import vote from '../module/voteSlice';
 import commentSlice from '../module/commentSlice';
 import myPageSlice from '../module/myPageSlice';
+import kakaoLoginSlice from '../module/kakaoSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     myPageSlice: myPageSlice.reducer,
     select,
     vote,
+    kakao: kakaoLoginSlice.reducer,
   },
 
   devTools: process.env.NODE_ENV !== 'production',
