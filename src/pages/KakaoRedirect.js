@@ -3,9 +3,9 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { kakaoLoginThunk } from '../app/module/kakaoSlice';
 import { useSelector } from 'react-redux';
-import { editNickNameThunk } from '../app/module/myPageSlice';
+import instance from '../app/module/instance';
 import { ModalBasic } from '../components/common/Modal';
-import { cleanUpErr } from '../app/module/myPageSlice';
+
 import { fontLarge, fontSmall } from '../shared/themes/textStyle';
 
 const KakaoRedirect = () => {
@@ -15,7 +15,6 @@ const KakaoRedirect = () => {
   let params = new URL(document.URL).searchParams;
   let code = params.get('code');
 
-  const editNicknameErr = useSelector((state) => state.myPageSlice?.err);
   const user = useSelector((state) => state.myPageSlice.data);
   const [editNickname, setEditNickname] = useState({
     nickname: '',
@@ -30,27 +29,18 @@ const KakaoRedirect = () => {
     });
   }, [dispatch]);
 
-  useEffect(() => {
-    setModal(editNicknameErr);
-  }, [editNicknameErr]);
-
-  // useEffect(() => {
-  //   if (localStorage.getItem('nickname')) {
-  //     // window.location.replace('/');
-  //   } else if (!11localStorage.getItem('nickname')) {
-  //     // window.location.replace('/api/auth/kakao/callback');
-  //   }
-  // }, []);
-
-  const onClickEditNickName = (event) => {
+  const onClickEditNickName = async (event) => {
     event.preventDefault();
     setEditMode((status) => !status);
 
     if (editMode === true) {
-      if (editNicknameErr) {
-        setModal(editNicknameErr);
+      try {
+        const data = await instance.put(`user/nickname`, editNickname);
+        localStorage.setItem('nickname', data.data.nickname);
+        window.location.replace('/');
+      } catch (error) {
+        setModal(error.response.data.errMsg);
       }
-      dispatch(editNickNameThunk({ ...editNickname }));
     }
   };
 
@@ -65,7 +55,6 @@ const KakaoRedirect = () => {
         <ModalBasic
           setter={() => {
             setModal('');
-            dispatch(cleanUpErr());
           }}
         >
           {modal}
