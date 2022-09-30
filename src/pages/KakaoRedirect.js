@@ -16,7 +16,7 @@ const KakaoRedirect = () => {
   let code = params.get('code');
 
   const editNicknameErr = useSelector((state) => state.myPageSlice?.err);
-
+  const user = useSelector((state) => state.myPageSlice.data);
   const [editNickname, setEditNickname] = useState({
     nickname: '',
   });
@@ -30,13 +30,13 @@ const KakaoRedirect = () => {
     setModal(editNicknameErr);
   }, [editNicknameErr]);
 
-  useEffect(() => {
-    if (localStorage.getItem('nickname') !== '') {
-      window.location.replace('/');
-    } else if (localStorage.getItem('nickname') === '') {
-      window.location.replace('/api/auth/kakao/callback');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (localStorage.getItem('nickname')) {
+  //     // window.location.replace('/');
+  //   } else if (!11localStorage.getItem('nickname')) {
+  //     // window.location.replace('/api/auth/kakao/callback');
+  //   }
+  // }, []);
 
   const onClickEditNickName = (event) => {
     event.preventDefault();

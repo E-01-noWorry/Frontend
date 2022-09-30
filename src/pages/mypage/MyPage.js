@@ -914,7 +914,7 @@ const TierButtonWhite = styled.button`
   ${(props) =>
     props.tiers.tiers === 'white'
       ? css`
-          background-color: #eaeaea;
+          background-color: #d0d0d0;
           color: #fff;
         `
       : null}
