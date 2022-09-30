@@ -4,9 +4,9 @@ import styled from 'styled-components';
 import { kakaoLoginThunk } from '../app/module/kakaoSlice';
 import instance from '../app/module/instance';
 import { ModalBasic } from '../components/common/Modal';
-
 import { fontLarge, fontSmall } from '../shared/themes/textStyle';
 import Loading from './Loading';
+
 const KakaoRedirect = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.kakao);
@@ -22,7 +22,7 @@ const KakaoRedirect = () => {
 
   useEffect(() => {
     dispatch(kakaoLoginThunk(code)).then(() => {
-      if (localStorage.getItem('nickname') !== '') {
+      if (localStorage.getItem('nickname')) {
         window.location.replace('/');
       }
     });
