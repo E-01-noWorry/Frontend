@@ -36,7 +36,7 @@ const KakaoRedirect = () => {
     } else if (localStorage.getItem('nickname') === '') {
       window.location.replace('/api/auth/kakao/callback');
     }
-  });
+  }, []);
 
   const onClickEditNickName = (event) => {
     event.preventDefault();
