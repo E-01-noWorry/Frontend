@@ -32,7 +32,7 @@ import IconNext from '../../static/icons/Variety=next, Status=untab, Size=M.svg'
 import IconVoteTab from '../../static/icons/Variety=vote, Status=tab, Size=L.svg';
 import IconChatting from '../../static/icons/Variety=chating, Status=untab, Size=L.svg';
 import IconInformation from '../../static/icons/Variety=Information, Status=untab, Size=S.svg';
-import IconPerson from '../../static/icons/Variety=person, Status=untab, Size=S.svg';
+import IconPerson from '../../static/icons/Variety=profile, Status=tab, Size=L.svg';
 import { cleanUpErr } from '../../app/module/myPageSlice';
 
 const MyPage = () => {
