@@ -100,7 +100,6 @@ const Detail = () => {
 
     return () => {
       dispatch(cleanUp());
-      dispatch(cleanUpError());
     };
   }, [dispatch, selectKey]);
 
@@ -130,10 +129,12 @@ const Detail = () => {
         <ModalLogin
           login={() => {
             navigate('/login');
+            dispatch(cleanUpError());
             document.body.style.overflow = 'unset';
           }}
           setter={() => {
             setLoginModal(false);
+            dispatch(cleanUpError());
             document.body.style.overflow = 'unset';
           }}
         />
