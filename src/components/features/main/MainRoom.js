@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import instance from '../../../app/module/instance';
 
 import BodyPadding from '../../common/BodyPadding';
-import { ModalBasic, ModalJoin, ModalLogin } from '../../common/Modal';
+import { ModalBasic, ModalLogin } from '../../common/Modal';
 
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconMedium, IconSmall } from '../../../shared/themes/iconStyle';
@@ -20,6 +20,7 @@ import IconAnnounce from '../../../static/icons/Variety=announce, Status=untab, 
 import IconAnnounced from '../../../static/icons/Variety=announced, Status=untab, Size=M.svg';
 
 import styled from 'styled-components';
+import MainJoinRoom from './MainJoinRoom';
 
 const MainRoom = () => {
   const navigate = useNavigate();
@@ -28,8 +29,9 @@ const MainRoom = () => {
   const [loginModal, setLoginModal] = useState(false);
   const [joinModal, setJoinModal] = useState(false);
 
+  const [enteredRoom, setEnteredRoom] = useState([]);
   const [rooms, setRooms] = useState([]);
-  const [roomKey, setRoomKey] = useState(0);
+  const [roomInfo, setRoomInfo] = useState({});
   const [search, setSearch] = useState(false);
   const searchRef = useRef();
 
@@ -41,6 +43,7 @@ const MainRoom = () => {
     try {
       const { data } = await instance.get(`/room?page=${page}`);
       setRooms((prev) => [...prev, ...data.result]);
+      setEnteredRoom([...data.isRoom]);
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
@@ -72,8 +75,9 @@ const MainRoom = () => {
   //고민 채팅방 입장 POST API
   const joinRoomHandler = async (roomKey) => {
     try {
-      await instance.post(`/room/${roomKey}`);
-      setRoomKey(roomKey);
+      const { data } = await instance.post(`/room/${roomKey}`);
+      document.body.style.overflow = 'hidden';
+      setRoomInfo({ ...data.result });
       setJoinModal(true);
     } catch (error) {
       const msg = error.response.data.errMsg;
@@ -112,29 +116,28 @@ const MainRoom = () => {
 
   return (
     <>
+      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+
       {loginModal && (
         <ModalLogin
           login={() => {
             navigate('/login');
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = 'overlay';
           }}
           setter={() => {
             setLoginModal(false);
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = 'overlay';
           }}
         />
       )}
 
       {joinModal && (
-        <ModalJoin
-          join={() =>
-            navigate(`/chatroom/${roomKey}`, { state: { now: 'room' } })
-          }
-          setter={() => setJoinModal(false)}
+        <MainJoinRoom
+          setJoinModal={setJoinModal}
+          roomInfo={roomInfo}
+          enteredRoom={enteredRoom}
         />
       )}
-
-      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
 
       <StSearchWrap length={rooms.length}>
         <form onSubmit={searchHandler}>
@@ -194,6 +197,9 @@ const MainRoom = () => {
                   <span>
                     {room.currentPeople}/{room.max} 명
                   </span>
+                  {enteredRoom.includes(room.roomKey) && (
+                    <StEnteredBadge>상담 참여중</StEnteredBadge>
+                  )}
                 </StInnerCurrent>
 
                 <StInnerNickname>
@@ -355,6 +361,11 @@ const StInnerKeyword = styled.span`
   color: ${({ theme }) => theme.sub2};
 `;
 
+const StEnteredBadge = styled(StInnerKeyword)`
+  background-color: ${({ theme }) => theme.sub2};
+  color: ${({ theme }) => theme.white};
+`;
+
 const StContentFooter = styled.div`
   position: absolute;
   bottom: 0;
@@ -382,6 +393,7 @@ const StInnerCurrent = styled.div`
   left: 1.6rem;
 
   display: flex;
+  align-items: center;
   gap: 0.25rem;
 
   ${fontMedium};

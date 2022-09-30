@@ -95,7 +95,7 @@ const WriteRoom = () => {
         <ModalBasic
           setter={() => {
             navigate(`/chatroom/${roomkey}`, { state: { now: 'room' } });
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = 'overlay';
           }}
         >
           {uploadModal}
@@ -106,7 +106,7 @@ const WriteRoom = () => {
         <ModalBasic
           setter={() => {
             setModal(false);
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = 'overlay';
           }}
         >
           {modal}
