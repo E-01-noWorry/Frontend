@@ -11,6 +11,7 @@ const initialState = {
 export const editNickNameThunk = createAsyncThunk(
   'mypage/postvoted',
   async (payload, thunkAPI) => {
+    console.log(payload);
     try {
       const data = await instance.put(`user/nickname`, {
         nickname: payload.nickname,

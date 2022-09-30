@@ -30,6 +30,14 @@ const KakaoRedirect = () => {
     setModal(editNicknameErr);
   }, [editNicknameErr]);
 
+  useEffect(() => {
+    if (localStorage.getItem('nickname') !== '') {
+      window.location.replace('/');
+    } else if (localStorage.getItem('nickname') === '') {
+      window.location.replace('/api/auth/kakao/callback');
+    }
+  });
+
   const onClickEditNickName = (event) => {
     event.preventDefault();
     setEditMode((status) => !status);
