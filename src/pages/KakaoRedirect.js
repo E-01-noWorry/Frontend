@@ -15,17 +15,13 @@ const KakaoRedirect = () => {
 
   let params = new URL(document.URL).searchParams;
   let code = params.get('code');
-
+  console.log(userInfo);
   const [editNickname, setEditNickname] = useState({
     nickname: '',
   });
 
   useEffect(() => {
-    dispatch(kakaoLoginThunk(code)).then(() => {
-      if (localStorage.getItem('nickname')) {
-        window.location.replace('/');
-      }
-    });
+    dispatch(kakaoLoginThunk(code));
   }, [dispatch]);
 
   const onClickEditNickName = async (event) => {
@@ -42,9 +38,7 @@ const KakaoRedirect = () => {
         },
       );
       localStorage.setItem('nickname', data.data.nickname);
-      localStorage.setItem('accessToken', userInfo.accessToken);
-      localStorage.setItem('refreshToken', userInfo.refreshToken);
-      localStorage.setItem('userKey', userInfo.userKey);
+
       setSuccessModal('닉네임 설정에 성공하였습니다.');
     } catch (error) {
       setModal(error.response.data.errMsg);
@@ -58,7 +52,7 @@ const KakaoRedirect = () => {
 
   return (
     <>
-      {localStorage.getItem('nickname') ? (
+      {localStorage.getItem('userKey') ? (
         <Loading />
       ) : (
         <>
@@ -76,6 +70,9 @@ const KakaoRedirect = () => {
             <ModalBasic
               setter={() => {
                 setSuccessModal('');
+                localStorage.setItem('accessToken', userInfo.accessToken);
+                localStorage.setItem('refreshToken', userInfo.refreshToken);
+                localStorage.setItem('userKey', userInfo.userKey);
                 window.location.replace('/');
               }}
             >
