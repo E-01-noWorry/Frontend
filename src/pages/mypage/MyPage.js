@@ -55,7 +55,7 @@ const MyPage = () => {
     }
   }, [dispatch]);
 
-  //닉네임변경
+  //닉네임변경시 모달
   useEffect(() => {
     setModal(editNicknameErr);
   }, [editNicknameErr]);
