@@ -23,7 +23,13 @@ const KakaoRedirect = () => {
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    dispatch(kakaoLoginThunk(code));
+    dispatch(
+      kakaoLoginThunk(code).then(() => {
+        if (localStorage.getItem('nickname') !== '') {
+          window.location.replace('/');
+        }
+      }),
+    );
   }, [dispatch]);
 
   useEffect(() => {
