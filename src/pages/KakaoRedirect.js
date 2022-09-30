@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { kakaoLoginThunk } from '../app/module/kakaoSlice';
-import instance from '../app/module/instance';
+import axios from 'axios';
 import { ModalBasic } from '../components/common/Modal';
 import { fontLarge, fontSmall } from '../shared/themes/textStyle';
 import Loading from './Loading';
@@ -31,7 +31,16 @@ const KakaoRedirect = () => {
   const onClickEditNickName = async (event) => {
     event.preventDefault();
     try {
-      const data = await instance.put(`user/nickname`, editNickname);
+      const data = await axios.put(
+        `${process.env.REACT_APP_API}/user/nickname`,
+        editNickname,
+        {
+          headers: {
+            accessToken: `Bearer ${userInfo.accessToken}`,
+            refreshToken: `Bearer ${userInfo.refreshToken}`,
+          },
+        },
+      );
       localStorage.setItem('nickname', data.data.nickname);
       localStorage.setItem('accessToken', userInfo.accessToken);
       localStorage.setItem('refreshToken', userInfo.refreshToken);
