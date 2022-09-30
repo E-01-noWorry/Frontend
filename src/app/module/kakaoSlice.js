@@ -2,10 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import instance from './instance';
 
 const initialState = {
-  userKey: '',
-  snsId: '',
+  accessToken: '',
+  refreshToken: '',
   nickname: '',
-  provider: '',
+  userKey: 0,
 };
 
 export const kakaoLoginThunk = createAsyncThunk(
@@ -14,12 +14,7 @@ export const kakaoLoginThunk = createAsyncThunk(
     try {
       const data = await instance.get(`/auth/kakao/callback?code=${payload}`);
 
-      localStorage.setItem('accessToken', data.data.user.accessToken);
-      localStorage.setItem('refreshToken', data.data.user.refreshToken);
-      localStorage.setItem('nickname', data.data.user.nickname);
-      localStorage.setItem('userKey', data.data.user.userKey);
-
-      return thunkAPI.fulfillWithValue(data.response);
+      return thunkAPI.fulfillWithValue(data.data.user);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -31,7 +26,9 @@ export const kakaoLoginSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [kakaoLoginThunk.fulfilled]: (state, action) => {},
+    [kakaoLoginThunk.fulfilled]: (state, action) => {
+      state = action.payload;
+    },
     [kakaoLoginThunk.rejected]: (state, action) => {},
   },
 });
