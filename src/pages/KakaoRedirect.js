@@ -11,15 +11,14 @@ import { fontLarge, fontSmall } from '../shared/themes/textStyle';
 const KakaoRedirect = () => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
 
   let params = new URL(document.URL).searchParams;
   let code = params.get('code');
 
-  const user = useSelector((state) => state.myPageSlice.data);
   const [editNickname, setEditNickname] = useState({
     nickname: '',
   });
-  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     dispatch(kakaoLoginThunk(code)).then(() => {
@@ -31,16 +30,12 @@ const KakaoRedirect = () => {
 
   const onClickEditNickName = async (event) => {
     event.preventDefault();
-    setEditMode((status) => !status);
-
-    if (editMode === true) {
-      try {
-        const data = await instance.put(`user/nickname`, editNickname);
-        localStorage.setItem('nickname', data.data.nickname);
-        window.location.replace('/');
-      } catch (error) {
-        setModal(error.response.data.errMsg);
-      }
+    try {
+      const data = await instance.put(`user/nickname`, editNickname);
+      localStorage.setItem('nickname', data.data.nickname);
+      setSuccessModal('닉네임 설정에 성공하였습니다.');
+    } catch (error) {
+      setModal(error.response.data.errMsg);
     }
   };
 
@@ -58,6 +53,17 @@ const KakaoRedirect = () => {
           }}
         >
           {modal}
+        </ModalBasic>
+      )}
+
+      {successModal && (
+        <ModalBasic
+          setter={() => {
+            setSuccessModal('');
+            window.location.replace('/');
+          }}
+        >
+          {successModal}
         </ModalBasic>
       )}
       <Container>
