@@ -39,7 +39,7 @@ const voteSlice = createSlice({
   initialState,
   reducers: {
     cleanUpVote: (state) => {
-      state = { ...state, initialState };
+      state.voteResult = {};
     },
     cleanUpError: (state) => {
       state.error = null;

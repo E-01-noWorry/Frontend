@@ -32,7 +32,7 @@ const OnBoarding = () => {
   const nextNavi = useRef(null);
 
   return (
-    <StContensWrap>
+    <StContentsWrap>
       {pagination < 4 && (
         <StNavi pagination={pagination}>
           {[1, 2, 3].map((i) => (
@@ -74,6 +74,7 @@ const OnBoarding = () => {
             <img src={GomGomVote} alt="GomGomVote" />
           </StGomGom>
         </StSwiperSlide>
+
         <StSwiperSlide>
           <StTitle>고민상담</StTitle>
           <StBody>
@@ -84,6 +85,7 @@ const OnBoarding = () => {
             <img src={GomGomRoom} alt="GomGomRoom" />
           </StGomGom>
         </StSwiperSlide>
+
         <StSwiperSlide>
           <StTitle>곰곰해답</StTitle>
           <StBody>
@@ -94,6 +96,7 @@ const OnBoarding = () => {
             <img src={GomGomAnswer} alt="GomGomAnswer" />
           </StGomGom>
         </StSwiperSlide>
+
         <StSwiperSlide>
           <StWrap>
             <StLogo>
@@ -115,11 +118,50 @@ const OnBoarding = () => {
           </StWrap>
         </StSwiperSlide>
       </StSwiper>
-    </StContensWrap>
+    </StContentsWrap>
   );
 };
 
 export default OnBoarding;
+
+const StContentsWrap = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
+  }
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+`;
+
+const StNavi = styled.div`
+  position: absolute;
+  top: 4rem;
+  right: 4rem;
+
+  display: flex;
+  gap: 0.8rem;
+
+  width: 4rem;
+  height: 0.8rem;
+
+  div {
+    width: 0.8rem;
+    height: 0.8rem;
+    background-color: ${({ theme }) => theme.sub3};
+
+    border-radius: 50%;
+  }
+
+  div:nth-child(${(props) => props.pagination}) {
+    background-color: ${({ theme }) => theme.sub1};
+  }
+
+  z-index: 9;
+`;
 
 const StPrev = styled.div`
   position: absolute;
@@ -155,44 +197,6 @@ const StNext = styled.div`
   img {
     transform: rotate(180deg);
   }
-`;
-
-const StContensWrap = styled.div`
-  @media ${({ theme }) => theme.device.PC} {
-    position: absolute;
-    width: ${({ theme }) => theme.style.width};
-    left: ${({ theme }) => theme.style.left};
-    transform: ${({ theme }) => theme.style.transform};
-  }
-
-  width: 100%;
-  height: calc(var(--vh, 1vh) * 100);
-`;
-
-const StNavi = styled.div`
-  position: absolute;
-  top: 4rem;
-  right: 4rem;
-
-  display: flex;
-  gap: 0.8rem;
-
-  width: 4rem;
-  height: 0.8rem;
-
-  div {
-    width: 0.8rem;
-    height: 0.8rem;
-    background-color: ${({ theme }) => theme.sub3};
-
-    border-radius: 50%;
-  }
-
-  div:nth-child(${(props) => props.pagination}) {
-    background-color: ${({ theme }) => theme.sub1};
-  }
-
-  z-index: 9;
 `;
 
 const StSwiper = styled(Swiper)`

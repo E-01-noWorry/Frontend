@@ -21,8 +21,8 @@ const GlobalStyles = createGlobalStyle`
   body {
     @media ${({ theme }) => theme.device.PC} {
       background-color: ${({ theme }) => theme.sub5};
-      /* background-color: #FFBC50; */
     }
+
     box-sizing: border-box;
     
     font-size: 1.6rem;
@@ -33,10 +33,9 @@ const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.black};
 
     background-color: ${({ theme }) => theme.bg};
+    overflow: overlay;
 
     cursor: default;
-
-    overflow: overlay;
     
     &::-webkit-scrollbar {      
       width: 0.5rem;

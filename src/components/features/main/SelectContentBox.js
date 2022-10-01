@@ -1,15 +1,19 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { remainedTime } from '../../shared/timeCalculation';
+import { remainedTime } from '../../../shared/timeCalculation';
 
-import { borderBoxDefault } from '../../shared/themes/boxStyle';
-import { IconSmall } from '../../shared/themes/iconStyle';
-import { fontBold, fontMedium, fontSmall } from '../../shared/themes/textStyle';
+import { borderBoxDefault } from '../../../shared/themes/boxStyle';
+import { IconSmall } from '../../../shared/themes/iconStyle';
+import {
+  fontBold,
+  fontMedium,
+  fontSmall,
+} from '../../../shared/themes/textStyle';
 
-import IconPeople from '../../static/icons/Variety=people, Status=untab, Size=S.svg';
-import IconLeftTime from '../../static/icons/Variety=Left Time, Status=untab, Size=S.svg';
-import IconTimeOver from '../../static/icons/Variety=Timeover, Status=Untab, Size=S.svg';
+import IconPeople from '../../../static/icons/Variety=people, Status=untab, Size=S.svg';
+import IconLeftTime from '../../../static/icons/Variety=Left Time, Status=untab, Size=S.svg';
+import IconTimeOver from '../../../static/icons/Variety=Timeover, Status=Untab, Size=S.svg';
 
 import styled from 'styled-components';
 
@@ -23,6 +27,12 @@ const SelectContentBox = ({
   const navigate = useNavigate();
   const { state } = useLocation();
 
+  const enterDetailHandler = (selectKey) => {
+    navigate(`/detail/${selectKey}`, {
+      state: { now: state.now, filter, category, proceeding },
+    });
+  };
+
   return (
     <StContentBoxWrap>
       {contents.length === 0 && (
@@ -31,11 +41,7 @@ const SelectContentBox = ({
       {contents?.map((content, idx) => (
         <StContentBox
           key={content.selectKey}
-          onClick={() =>
-            navigate(`/detail/${content.selectKey}`, {
-              state: { now: state.now, filter, category, proceeding },
-            })
-          }
+          onClick={() => enterDetailHandler(content.selectKey)}
           //마지막 게시글에 ref를 달아줍니다
           ref={idx === contents.length - 1 ? setRef : null}
           completion={content.completion}
@@ -64,20 +70,22 @@ const SelectContentBox = ({
               </StIcon>
               <span>{content.total || 0}</span>
             </StInnerCurrent>
+
             <StInnerTime>
               {content.completion ? (
                 <StIcon>
                   <img src={IconTimeOver} alt="IconTimeOver" />
                 </StIcon>
               ) : (
-                <>
-                  <StIcon>
-                    <img src={IconLeftTime} alt="IconLeftTime" />
-                  </StIcon>
-                  <span>{remainedTime(content.deadLine)}</span>
-                </>
+                <StIcon>
+                  <img src={IconLeftTime} alt="IconLeftTime" />
+                </StIcon>
               )}
-              <span>{content.completion ? '투표마감' : '남음'}</span>
+              <span>
+                {content.completion
+                  ? '투표마감'
+                  : `${remainedTime(content.deadLine)} 남음`}
+              </span>
             </StInnerTime>
           </StContentFooter>
         </StContentBox>
@@ -99,11 +107,12 @@ const StNoneContents = styled.div`
 const StContentBoxWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
     position: absolute;
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
+    min-height: 100%;
     padding: 17rem 2rem 9.6rem 2rem;
-    min-height: calc(100%);
   }
 
   display: flex;
@@ -116,9 +125,9 @@ const StContentBoxWrap = styled.div`
 `;
 
 const StContentBox = styled.div`
+  ${borderBoxDefault};
   position: relative;
 
-  ${borderBoxDefault};
   align-items: flex-start;
   justify-content: flex-start;
 
@@ -204,24 +213,16 @@ const StIcon = styled.div`
   ${IconSmall};
 `;
 
-const StInnerTime = styled.div`
-  position: absolute;
-  right: 3.6rem;
-
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-
-  ${fontSmall};
-  color: ${({ theme }) => theme.sub2};
-`;
-
 const StInnerCurrent = styled.div`
   display: flex;
   align-items: center;
   gap: 0.4rem;
 
   ${fontSmall}
-  line-height: 2rem;
   color: ${({ theme }) => theme.sub2};
+`;
+
+const StInnerTime = styled(StInnerCurrent)`
+  position: absolute;
+  right: 3.6rem;
 `;

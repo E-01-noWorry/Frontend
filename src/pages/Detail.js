@@ -55,6 +55,49 @@ const Detail = () => {
     comment: '',
   });
 
+  useEffect(() => {
+    setLoginModal(error);
+  }, [error]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    dispatch(__getDetailSelect(selectKey));
+
+    return () => {
+      dispatch(cleanUp());
+    };
+  }, [dispatch, selectKey]);
+
+  //투표 게시글 DELETE API
+  const deleteHandler = async () => {
+    try {
+      await instance.delete(`/select/${selectKey}`);
+      if (state?.now === 'select' || state?.now === false) {
+        navigate('/main', { state: { now: 'select' }, replace: true });
+      } else {
+        navigate(-1, { replace: true });
+      }
+    } catch (error) {
+      console.log(error.response.data.errMsg);
+    }
+  };
+
+  //뒤로가기 버튼
+  const goBackHandler = () => {
+    if (state?.now === 'select' || state?.now === false) {
+      navigate('/main', {
+        state: {
+          now: 'select',
+          filter: state.filter,
+          category: state.category,
+          proceeding: state.proceeding,
+        },
+      });
+    } else {
+      navigate(-1);
+    }
+  };
+
   const onChangeHandler = (event) => {
     const { value, name } = event.target;
     setWriteComment({ ...setWriteComment, [name]: value });
@@ -90,33 +133,6 @@ const Detail = () => {
     }
   };
 
-  useEffect(() => {
-    setLoginModal(error);
-  }, [error]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    dispatch(__getDetailSelect(selectKey));
-
-    return () => {
-      dispatch(cleanUp());
-    };
-  }, [dispatch, selectKey]);
-
-  //투표 게시글 DELETE API
-  const deleteHandler = async () => {
-    try {
-      await instance.delete(`/select/${selectKey}`);
-      if (state?.now === 'select' || state?.now === false) {
-        navigate('/main', { state: { now: 'select' } });
-      } else {
-        navigate(-1);
-      }
-    } catch (error) {
-      console.log(error.response.data.errMsg);
-    }
-  };
-
   return (
     <>
       {deleteModal && (
@@ -130,31 +146,16 @@ const Detail = () => {
           login={() => {
             navigate('/login');
             dispatch(cleanUpError());
-            document.body.style.overflow = 'unset';
           }}
           setter={() => {
             setLoginModal(false);
             dispatch(cleanUpError());
-            document.body.style.overflow = 'unset';
           }}
         />
       )}
 
       <Header>
-        <StHeaderIcon
-          onClick={() => {
-            state?.now === 'select' || state?.now === false
-              ? navigate('/main', {
-                  state: {
-                    now: 'select',
-                    filter: state.filter,
-                    category: state.category,
-                    proceeding: state.proceeding,
-                  },
-                })
-              : navigate(-1);
-          }}
-        >
+        <StHeaderIcon onClick={goBackHandler}>
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         {parseInt(userKey) === content?.userKey && (
@@ -199,6 +200,7 @@ const Detail = () => {
           <Comment content={content} user={user} />
         </StInfoWrap>
       </BodyPadding>
+
       <form onSubmit={onClickSubmit}>
         <WriteBox>
           <Write
@@ -227,19 +229,19 @@ const StHeaderIcon = styled.div`
 const StInfoWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
     position: absolute;
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
-    margin-top: 6.4rem;
-    min-height: calc(100% - 6.4rem);
-    padding: 0 2rem;
+
+    width: ${({ theme }) => theme.style.width};
+    min-height: 100%;
+    padding: 6.4rem 2rem 0 2rem;
   }
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  margin-top: 6.4rem;
+  padding-top: 6.4rem;
   background-color: ${({ theme }) => theme.bg};
 `;
 
@@ -300,21 +302,22 @@ const StIcon = styled.div`
 
 const WriteBox = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
+
+  position: fixed;
+  bottom: 0;
 
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0.8rem 0.8rem 0.8rem 0.8rem;
 
-  position: fixed;
-  bottom: 0;
   width: 100%;
   height: 8.8rem;
-
+  padding: 0.8rem;
   background-color: ${({ theme }) => theme.bg};
 
   z-index: 9;
@@ -323,8 +326,10 @@ const WriteBox = styled.div`
 const Write = styled.input`
   width: 100%;
   padding: 1.75rem 10rem 1.75rem 2rem;
+
   border-radius: 20px;
   border: 0 solid black;
+
   resize: none;
 `;
 
