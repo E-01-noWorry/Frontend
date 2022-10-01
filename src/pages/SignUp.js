@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import instance from '../app/module/instance';
+
 import Header from '../components/common/Header';
 import BodyPadding from '../components/common/BodyPadding';
 import LoginSignUpInput from '../components/elements/LoginSignUpInput';
 import GlobalButton from '../components/elements/GlobalButton';
+import { ModalBasic } from '../components/common/Modal';
 
 import { fontBold, fontLarge, fontSmall } from '../shared/themes/textStyle';
 import { IconLarge } from '../shared/themes/iconStyle';
@@ -12,14 +15,13 @@ import { IconLarge } from '../shared/themes/iconStyle';
 import IconBack from '../static/icons/Variety=back, Status=untab, Size=L.svg';
 
 import styled from 'styled-components';
-import instance from '../app/module/instance';
-import { ModalBasic } from '../components/common/Modal';
 
 const SignUp = () => {
   const navigate = useNavigate();
 
   const [modal, setModal] = useState('');
   const [successModal, setSuccessModal] = useState('');
+
   const [signUpInfo, setSignUpInfo] = useState({
     userId: '',
     password: '',
@@ -80,7 +82,7 @@ const SignUp = () => {
   };
 
   return (
-    <div>
+    <>
       {successModal && (
         <ModalBasic setter={() => navigate('/login')}>
           {successModal}
@@ -91,10 +93,10 @@ const SignUp = () => {
 
       <Header>
         <StHeaderIcon onClick={() => navigate(-1)}>
-          <img src={IconBack} />
+          <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         <StHeaderTitle>회원가입</StHeaderTitle>
-        <StHeaderIcon></StHeaderIcon>
+        <StHeaderIcon />
       </Header>
 
       <BodyPadding>
@@ -131,6 +133,7 @@ const SignUp = () => {
               <Correct>*사용가능한 아이디 입니다</Correct>
             ) : null}
           </div>
+
           <div>
             <StInnerTitle>비밀번호</StInnerTitle>
             <LoginSignUpInput
@@ -193,6 +196,7 @@ const SignUp = () => {
               <Correct>*비밀번호와 일치합니다</Correct>
             ) : null}
           </div>
+
           <div>
             <StInnerTitle>닉네임</StInnerTitle>
             <LoginSignUpInput
@@ -223,7 +227,7 @@ const SignUp = () => {
           <GlobalButton onClick={onClickSignUp}>가입하기</GlobalButton>
         </SignUpContainer>
       </BodyPadding>
-    </div>
+    </>
   );
 };
 
@@ -240,20 +244,19 @@ const StHeaderTitle = styled.div`
 const SignUpContainer = styled.div`
   @media ${({ theme }) => theme.device.PC} {
     position: absolute;
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
 
-    margin-top: 6.4rem;
-    padding: 0 2rem;
-    min-height: calc(100% - 6.4rem);
+    width: ${({ theme }) => theme.style.width};
+    min-height: 100%;
+    padding: 8.4rem 2rem 0 2rem;
   }
 
   display: flex;
   flex-direction: column;
   gap: 2rem;
 
-  margin-top: 6.4rem;
+  padding-top: 8.4rem;
   background-color: ${({ theme }) => theme.bg};
 `;
 

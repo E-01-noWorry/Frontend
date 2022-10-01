@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import BodyPadding from '../components/common/BodyPadding';
 import { ModalBasic } from '../components/common/Modal';
 
 import { isLogin } from '../shared/isLogin';
@@ -66,11 +65,11 @@ export default Start;
 const StStartWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
     position: absolute;
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
 
-    min-height: calc(100%);
+    width: ${({ theme }) => theme.style.width};
+    min-height: 100%;
   }
 
   background-color: ${({ theme }) => theme.bg};
@@ -80,14 +79,13 @@ const StLogo = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 0.7rem;
-
-  transform: translate(-50%, -50%);
 
   span {
     ${fontMedium};

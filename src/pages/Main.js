@@ -8,7 +8,9 @@ import MainRoom from '../components/features/main/MainRoom';
 import MainSelect from '../components/features/main/MainSelect';
 import WriteButton from '../components/elements/WriteButton';
 import Footer from '../components/common/Footer';
-import { ModalBasic, ModalLogin, ModalWrite } from '../components/common/Modal';
+import { ModalLogin, ModalWrite } from '../components/common/Modal';
+
+import { isLogin } from '../shared/isLogin';
 
 import { IconLarge } from '../shared/themes/iconStyle';
 import {
@@ -19,31 +21,37 @@ import {
 
 import IconNext from '../static/icons/Variety=next, Status=untab, Size=M.svg';
 import IconSurvey from '../static/icons/Variety=Survey, Status=untab, Size=L.svg';
-import IconDropdown from '../static/icons/Variety=Dropdown, Status=untab, Size=S.svg';
 
 import Logo from '../static/images/Logo.svg';
 
-import _ from 'lodash';
-
 import styled from 'styled-components';
+
+import _ from 'lodash';
 
 const Main = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
 
   const deviceToken = sessionStorage.getItem('deviceToken');
-  const userKey = localStorage.getItem('userKey');
 
-  const [scrollState, setScrollState] = useState(false);
-  const [feedbackBadge, setFeedbackBadge] = useState('');
-
-  const [modal, setModal] = useState('');
   const [loginModal, setLoginModal] = useState(false);
   const [writeModal, setWriteModal] = useState(false);
 
+  const [feedbackBadge, setFeedbackBadge] = useState(false);
+  const [scrollState, setScrollState] = useState(false);
+
+  //피드백 뱃지 on/off
+  useEffect(() => {
+    setFeedbackBadge(true);
+
+    setTimeout(() => {
+      setFeedbackBadge(false);
+    }, 1500);
+  }, []);
+
   //로그인을 한 유저가 알림 허용까지 했다면 deviceToken을 서버에 보냅니다
   const postDeviceToken = useCallback(async () => {
-    if (userKey && deviceToken) {
+    if (isLogin() && deviceToken) {
       try {
         instance.post('/token', { deviceToken });
       } catch (error) {
@@ -56,14 +64,7 @@ const Main = () => {
     postDeviceToken();
   }, [postDeviceToken]);
 
-  useEffect(() => {
-    setFeedbackBadge('on');
-
-    setTimeout(() => {
-      setFeedbackBadge('off');
-    }, 1500);
-  }, []);
-
+  //일정 스크롤이 내려가면 맨위로 버튼 on
   const scrollEvent = _.debounce((event) => {
     const myHeight = event.srcElement.scrollingElement.scrollTop;
 
@@ -72,13 +73,14 @@ const Main = () => {
 
   useEffect(() => {
     window.addEventListener('scroll', scrollEvent);
-  }, []);
+  }, [scrollEvent]);
 
+  //메인화면 글 작성 버튼
   const writeButtonHandler = () => {
-    if (localStorage.getItem('accessToken') && state.now === 'select') {
+    if (isLogin() && state.now === 'select') {
       setWriteModal(true);
       document.body.style.overflow = 'hidden';
-    } else if (localStorage.getItem('accessToken') && state.now === 'room') {
+    } else if (isLogin() && state.now === 'room') {
       navigate('/write', { state });
     } else {
       setLoginModal(true);
@@ -101,26 +103,15 @@ const Main = () => {
         />
       )}
 
-      {modal && (
-        <ModalBasic
-          setter={() => {
-            setModal('');
-            document.body.style.overflow = 'unset';
-          }}
-        >
-          {modal}
-        </ModalBasic>
-      )}
-
       {loginModal && (
         <ModalLogin
-          login={() => {
-            navigate('/login');
-            document.body.style.overflow = 'unset';
-          }}
           setter={() => {
             setLoginModal(false);
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = 'overlay';
+          }}
+          login={() => {
+            navigate('/login');
+            document.body.style.overflow = 'overlay';
           }}
         />
       )}
@@ -130,12 +121,13 @@ const Main = () => {
           <img src={Logo} alt="Logo" />
         </StLogo>
         <StIcon>
-          <span style={{ opacity: `${feedbackBadge === 'on' ? 1 : 0}` }}>
+          <span style={{ opacity: `${feedbackBadge ? 1 : 0}` }}>
             피드백 남기기
             <img src={IconNext} alt="IconNext" />
           </span>
           <a
             target="_blank"
+            rel="noreferrer"
             href="https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform"
           >
             <img src={IconSurvey} alt="IconSurvey" />
@@ -154,7 +146,6 @@ const Main = () => {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <span>맨위로</span>
-          {/* <img src={IconDropdown} alt="IconDropdown" /> */}
         </StToTop>
       )}
 
@@ -178,9 +169,10 @@ const StLogo = styled.div`
 
 const StButtonWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   position: fixed;
@@ -196,11 +188,12 @@ const StButtonWrap = styled.div`
 
 const StIcon = styled.div`
   display: flex;
+
   ${IconLarge};
 
   span {
     animation: motion 0.4s linear 0s infinite alternate;
-    margin-right: 0;
+    transition: opacity 0.3s;
 
     @keyframes motion {
       0% {
@@ -211,13 +204,14 @@ const StIcon = styled.div`
       }
     }
 
-    transition: opacity 0.3s;
     position: absolute;
     right: 5.2rem;
 
     display: flex;
     align-items: center;
+
     padding: 0.5rem 0 0.5rem 0.5rem;
+    margin-right: 0;
     background-color: ${({ theme }) => theme.main2};
 
     border-radius: 1.15rem;
@@ -256,9 +250,5 @@ const StToTop = styled.div`
   span {
     ${fontMedium};
     color: ${({ theme }) => theme.white};
-  }
-
-  img {
-    transform: rotate(180deg);
   }
 `;

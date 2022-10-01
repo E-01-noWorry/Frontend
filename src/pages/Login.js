@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import instance from '../app/module/instance';
+
 import LoginSignUpInput from '../components/elements/LoginSignUpInput';
 import Header from '../components/common/Header';
 import BodyPadding from '../components/common/BodyPadding';
 import GlobalButton from '../components/elements/GlobalButton';
 import SocialLoginButton from '../components/elements/SocialLoginButton';
+
 import { fontSmall, fontLarge } from '../shared/themes/textStyle';
 import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
+
 import IconBack from '../static/icons/Variety=back, Status=untab, Size=L.svg';
 import IconJoin from '../static/icons/Variety=Join membership, Status=untab, Size=S.svg';
+
 import styled from 'styled-components';
 
 const Login = () => {
@@ -42,13 +47,13 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <>
       <Header>
         <StHeaderIcon onClick={() => navigate(-1)}>
           <img src={IconBack} alt="IconBack" />
         </StHeaderIcon>
         <StHeaderTitle>로그인</StHeaderTitle>
-        <StHeaderIcon></StHeaderIcon>
+        <StHeaderIcon />
       </Header>
 
       <BodyPadding>
@@ -95,7 +100,7 @@ const Login = () => {
           </StNaviLogin>
         </StLoginWrap>
       </BodyPadding>
-    </div>
+    </>
   );
 };
 
@@ -112,13 +117,12 @@ const StHeaderTitle = styled.div`
 const StLoginWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
     position: absolute;
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
 
-    margin-top: 6.4rem;
-    padding: 2rem 2rem 0 2rem;
-    min-height: calc(100% - 6.4rem);
+    width: ${({ theme }) => theme.style.width};
+    min-height: 100%;
+    padding: 8.4rem 2rem 0 2rem;
   }
 
   display: flex;
@@ -126,7 +130,7 @@ const StLoginWrap = styled.div`
   align-items: center;
   gap: 3.4rem;
 
-  margin-top: 8.4rem;
+  padding-top: 8.4rem;
   background-color: ${({ theme }) => theme.bg};
 `;
 

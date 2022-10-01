@@ -3,8 +3,9 @@ import { useLocation } from 'react-router-dom';
 
 import instance from '../../../app/module/instance';
 
+import SelectContentBox from './SelectContentBox';
 import BodyPadding from '../../common/BodyPadding';
-import SelectContentBox from '../../common/SelectContentBox';
+import { ModalBasic } from '../../common/Modal';
 
 import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/Array';
 
@@ -15,7 +16,6 @@ import IconDropdown from '../../../static/icons/Variety=Dropdown, Status=untab, 
 import IconSearch from '../../../static/icons/Variety=search, Status=untab, Size=M.svg';
 
 import styled from 'styled-components';
-import { ModalBasic } from '../../common/Modal';
 
 const MainSelect = () => {
   const { state } = useLocation();
@@ -32,14 +32,15 @@ const MainSelect = () => {
   const [categoryModal, setCategoryModal] = useState(false);
   const [proceedingModal, setProceedingModal] = useState(false);
 
-  const [search, setSearch] = useState(false);
-  const searchRef = useRef();
-
   //무한 스크롤을 관리하는 State
   const [page, setPage] = useState(1);
   const [ref, setRef] = useState(null);
 
-  //선택 게시글 불러오기
+  //검색 관리
+  const [search, setSearch] = useState(false);
+  const searchRef = useRef();
+
+  //고민 투표글 GET API
   const getScrollSelect = useCallback(async () => {
     try {
       if (proceeding !== '모든 투표') {
@@ -62,13 +63,39 @@ const MainSelect = () => {
     }
   }, [proceeding, filter, category, page]);
 
+  //고민 투표글 검색 GET API
+  const searchHandler = async (event) => {
+    event.preventDefault();
+    try {
+      const { data } = await instance.get(
+        `/select/search?searchWord=${searchRef.current.value}`,
+      );
+      setSearch(true);
+      setContents([...data.result]);
+    } catch (error) {
+      setModal(error.response.data.errMsg);
+    }
+    searchRef.current.value = '';
+  };
+
+  //고민 투표글 검색 취소버튼
+  const searchCancelHandler = () => {
+    if (search) {
+      setSearch(false);
+      setContents([]);
+      setPage(1);
+    }
+    searchRef.current.value = '';
+  };
+
+  //검색 결과를 보여줄땐 GET 요청을 하지 않는다
   useEffect(() => {
     if (search) return;
 
     getScrollSelect();
-  }, [getScrollSelect]);
+  }, [search, getScrollSelect]);
 
-  //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다.
+  //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다
   const onIntersect = ([entry], observer) => {
     if (entry.isIntersecting) {
       setPage((prev) => prev + 1);
@@ -85,31 +112,6 @@ const MainSelect = () => {
     }
     return () => observer?.disconnect();
   }, [ref]);
-
-  //고민 채팅방 키워드 검색
-  const searchHandler = async (event) => {
-    event.preventDefault();
-    try {
-      const { data } = await instance.get(
-        `/select/search?searchWord=${searchRef.current.value}`,
-      );
-      setSearch(true);
-      setContents([...data.result]);
-    } catch (error) {
-      setModal(error.response.data.errMsg);
-    }
-    searchRef.current.value = '';
-  };
-
-  //고민 채팅방 검색 취소버튼
-  const searchCancelHandler = () => {
-    searchRef.current.value = '';
-    if (search) {
-      setContents([]);
-      setPage(1);
-      setSearch(false);
-    }
-  };
 
   //필터 핸들러
   const filterHandler = (event) => {
@@ -147,7 +149,7 @@ const MainSelect = () => {
     setProceedingModal(false);
   };
 
-  //진행 중인 투표만 보기 핸들러
+  //진행 중인 투표 핸들러
   const proceedingHandler = (event) => {
     if (proceeding !== event.target.getAttribute('value')) {
       setProceeding(event.target.getAttribute('value'));
@@ -158,6 +160,7 @@ const MainSelect = () => {
     }
   };
 
+  //진행 중인 투표 셀렉트 박스 토클
   const proceedingOpenHandler = () => {
     setProceedingModal((prev) => !prev);
     setCategoryModal(false);
@@ -202,13 +205,13 @@ const MainSelect = () => {
           <StArrowIcon>
             <img src={IconDropdown} alt="IconDropdown" />
           </StArrowIcon>
-          <StCategoryModal setter={categoryModal}>
+          <StFilterModal setter={categoryModal}>
             {CATEGORY_ARR.map((item) => (
               <span key={item} value={item} onClick={categoryHandler}>
                 {item}
               </span>
             ))}
-          </StCategoryModal>
+          </StFilterModal>
         </StFilter>
 
         <StFilter onClick={proceedingOpenHandler}>
@@ -216,13 +219,13 @@ const MainSelect = () => {
           <StArrowIcon>
             <img src={IconDropdown} alt="IconDropdown" />
           </StArrowIcon>
-          <StCategoryModal setter={proceedingModal}>
+          <StFilterModal setter={proceedingModal}>
             {['모든 투표', '진행중인 투표'].map((item) => (
               <span key={item} value={item} onClick={proceedingHandler}>
                 {item}
               </span>
             ))}
-          </StCategoryModal>
+          </StFilterModal>
         </StFilter>
       </StFilterDiv>
 
@@ -243,9 +246,10 @@ export default MainSelect;
 
 const StSearchWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   position: fixed;
@@ -265,6 +269,7 @@ const StSearchWrap = styled.div`
 
   form {
     position: relative;
+
     width: 100%;
 
     input {
@@ -302,9 +307,10 @@ const StCancel = styled.div`
 
 const StFilterDiv = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   position: fixed;
@@ -329,12 +335,12 @@ const StFilter = styled.div`
   display: flex;
   align-items: center;
 
+  cursor: pointer;
+
   span {
     ${fontMedium}
     color: ${({ theme }) => theme.sub2};
   }
-
-  cursor: pointer;
 `;
 
 const StFilterModal = styled.div`
@@ -348,14 +354,14 @@ const StFilterModal = styled.div`
   display: flex;
   flex-direction: column;
 
-  transform-origin: center top;
-  transition-duration: 0.1s;
-  transform: scaleY(${(props) => (props.setter ? 1 : 0)});
-
   background-color: #fff;
 
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
   border-radius: 1rem;
+
+  transform-origin: center top;
+  transition-duration: 0.1s;
+  transform: scaleY(${(props) => (props.setter ? 1 : 0)});
 
   span {
     display: block;
@@ -370,10 +376,6 @@ const StFilterModal = styled.div`
       color: ${({ theme }) => theme.main2};
     }
   }
-`;
-
-const StCategoryModal = styled(StFilterModal)`
-  transform: scaleY(${(props) => (props.setter ? 1 : 0)});
 `;
 
 const StArrowIcon = styled.div`

@@ -177,9 +177,9 @@ const ChatRoom = () => {
       await instance.delete(`/room/${roomKey}`);
 
       if (state?.now === 'room' || state?.now === false) {
-        navigate('/main', { state: { now: 'room' } });
+        navigate('/main', { state: { now: 'room' }, replace: true });
       } else {
-        navigate(-1);
+        navigate(-1, { replace: true });
       }
       document.body.style.overflow = 'overlay';
     } catch (error) {
@@ -358,7 +358,9 @@ const ChatRoom = () => {
 
       {hostByeModal && (
         <ModalBasic
-          setter={() => navigate('/main', { state: { now: 'room' } })}
+          setter={() =>
+            navigate('/main', { state: { now: 'room' }, replace: true })
+          }
         >
           {hostByeModal}
         </ModalBasic>
@@ -366,7 +368,9 @@ const ChatRoom = () => {
 
       {kickByeModal.key === userKey && (
         <ModalBasic
-          setter={() => navigate('/main', { state: { now: 'room' } })}
+          setter={() =>
+            navigate('/main', { state: { now: 'room' }, replace: true })
+          }
         >
           {kickByeModal.msg}
         </ModalBasic>
