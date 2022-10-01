@@ -396,14 +396,20 @@ const MyPage = () => {
                     </StBox>
                     <StTitle>고객센터</StTitle>
                     <StBox>
-                      <StInnerNavi
-                        onClick={() => setModal('곧 출시될 기능입니다.')}
-                      >
+                      <StInnerNavi>
                         <StInnerTitle>
                           <div>
                             <img src={IconEdit} alt="IconEdit" />
                           </div>
-                          <div>1 : 1 문의</div>
+                          <div>
+                            <a
+                              href="https://forms.gle/daCzxS5nhRZXzrUr9"
+                              target="_blank"
+                              style={{ color: 'black', cursor: 'default' }}
+                            >
+                              1 : 1 문의
+                            </a>
+                          </div>
                         </StInnerTitle>
                         <StInnerArrow>
                           <img src={IconNext} alt="IconNext" />
