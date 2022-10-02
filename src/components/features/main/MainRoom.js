@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import instance from '../../../app/module/instance';
 
+import MainJoinRoom from './MainJoinRoom';
 import BodyPadding from '../../common/BodyPadding';
 import { ModalBasic, ModalLogin } from '../../common/Modal';
 
@@ -20,7 +21,6 @@ import IconAnnounce from '../../../static/icons/Variety=announce, Status=untab, 
 import IconAnnounced from '../../../static/icons/Variety=announced, Status=untab, Size=M.svg';
 
 import styled from 'styled-components';
-import MainJoinRoom from './MainJoinRoom';
 
 const MainRoom = () => {
   const navigate = useNavigate();
@@ -29,9 +29,10 @@ const MainRoom = () => {
   const [loginModal, setLoginModal] = useState(false);
   const [joinModal, setJoinModal] = useState(false);
 
-  const [enteredRoom, setEnteredRoom] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [roomInfo, setRoomInfo] = useState({});
+  const [enteredRoom, setEnteredRoom] = useState([]);
+
   const [search, setSearch] = useState(false);
   const searchRef = useRef();
 
@@ -39,7 +40,7 @@ const MainRoom = () => {
   const [page, setPage] = useState(1);
   const [ref, setRef] = useState(null);
 
-  const getAllRoom = async () => {
+  const getAllRoom = useCallback(async () => {
     try {
       const { data } = await instance.get(`/room?page=${page}`);
       setRooms((prev) => [...prev, ...data.result]);
@@ -47,12 +48,12 @@ const MainRoom = () => {
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
-  };
+  }, [page]);
 
   useEffect(() => {
     if (search) return;
     getAllRoom();
-  }, [page]);
+  }, [search, getAllRoom]);
 
   //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다.
   const onIntersect = ([entry], observer) => {
@@ -76,15 +77,17 @@ const MainRoom = () => {
   const joinRoomHandler = async (roomKey) => {
     try {
       const { data } = await instance.post(`/room/${roomKey}`);
-      document.body.style.overflow = 'hidden';
       setRoomInfo({ ...data.result });
       setJoinModal(true);
+      document.body.style.overflow = 'hidden';
     } catch (error) {
       const msg = error.response.data.errMsg;
       if (msg.includes('로그인')) {
         setLoginModal(true);
+        document.body.style.overflow = 'hidden';
       } else {
         setModal(error.response.data.errMsg);
+        document.body.style.overflow = 'hidden';
       }
     }
   };
@@ -106,17 +109,26 @@ const MainRoom = () => {
 
   //고민 채팅방 검색 취소버튼
   const searchCancelHandler = () => {
-    searchRef.current.value = '';
     if (search) {
+      setSearch(false);
       setRooms([]);
       setPage(1);
-      setSearch(false);
     }
+    searchRef.current.value = '';
   };
 
   return (
     <>
-      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+      {modal && (
+        <ModalBasic
+          setter={() => {
+            setModal('');
+            document.body.style.overflow = 'overlay';
+          }}
+        >
+          {modal}
+        </ModalBasic>
+      )}
 
       {loginModal && (
         <ModalLogin
@@ -226,9 +238,10 @@ const StNoneContents = styled.div`
 
 const StSearchWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   position: fixed;
@@ -271,6 +284,7 @@ const StSearchWrap = styled.div`
       position: absolute;
       top: 0.8rem;
       right: 0.8rem;
+
       ${IconMedium};
 
       cursor: pointer;
@@ -289,12 +303,12 @@ const StCancel = styled.div`
 const StContentBoxWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
     position: absolute;
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
 
+    width: ${({ theme }) => theme.style.width};
     padding: 14rem 2rem 9.6rem 2rem;
-    min-height: calc(100%);
+    min-height: 100%;
   }
 
   display: flex;
@@ -307,8 +321,8 @@ const StContentBoxWrap = styled.div`
 `;
 
 const StContentBox = styled.div`
-  position: relative;
   ${borderBoxDefault};
+  position: relative;
 
   height: 11.4rem;
   padding: 1.6rem;

@@ -30,12 +30,12 @@ const ChatBox = ({ chatState, userKey }) => {
 
   useEffect(() => {
     window.addEventListener('scroll', scrollEvent);
-  }, []);
+  }, [scrollEvent]);
 
   useEffect(() => {
     if (!scrollState) return;
     scrollRef.current.scrollIntoView();
-  }, [chatState]);
+  }, [chatState, scrollState]);
 
   return (
     <>
@@ -51,6 +51,7 @@ const ChatBox = ({ chatState, userKey }) => {
           </div>
         </StNewMessage>
       )}
+
       <StChatWrap>
         {chatState.map((chat, idx) => (
           <StChat key={idx}>
@@ -104,11 +105,11 @@ export default ChatBox;
 const StChatWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
     position: absolute;
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
 
-    min-height: calc(100%);
+    width: ${({ theme }) => theme.style.width};
+    min-height: 100%;
   }
 
   width: 100%;
@@ -118,9 +119,10 @@ const StChatWrap = styled.div`
 
 const StNewMessage = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   position: fixed;

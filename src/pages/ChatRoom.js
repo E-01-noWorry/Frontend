@@ -46,13 +46,13 @@ const ChatRoom = () => {
   const socket = useRef();
   const sendMessage = useRef();
 
-  const [kickByeModal, setKickByeModal] = useState({ key: null, msg: '' });
-  const [hostByeModal, setHostByeModal] = useState('');
+  const [mainModal, setMainModal] = useState(false);
   const [modalExit, setModalExit] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
   const [modalKick, setModalKick] = useState(false);
 
-  const [mainModal, setMainModal] = useState(false);
+  const [kickByeModal, setKickByeModal] = useState({ key: null, msg: '' });
+  const [hostByeModal, setHostByeModal] = useState('');
 
   const [isSelect, setIsSelect] = useState(0);
   const [roomInfo, setRoomInfo] = useState({});
@@ -74,7 +74,7 @@ const ChatRoom = () => {
     getAllchat();
 
     socket.current = io(process.env.REACT_APP_SOCKET);
-    const param = { roomKey: parseInt(roomKey), userKey: parseInt(userKey) };
+    const param = { roomKey: Number(roomKey), userKey: Number(userKey) };
     socket.current.emit('join-room', param);
 
     return () => {
@@ -120,11 +120,11 @@ const ChatRoom = () => {
     socket.current.on('expulsion', (data) => {
       if (data.userKey === userKey) {
         setChatState([]);
-        setKickByeModal({
-          ...kickByeModal,
+        setKickByeModal((prev) => ({
+          ...prev,
           key: data.userKey,
           msg: `${data.nickname}님이 강퇴되었습니다.`,
-        });
+        }));
       } else {
         setChatState([
           ...chatState,
@@ -139,9 +139,9 @@ const ChatRoom = () => {
 
     socket.current.on('byeHost', () => {
       setChatState([]);
-      setHostByeModal(`호스트가 채팅방을 삭제했습니다.`);
+      setHostByeModal('호스트가 채팅방을 삭제했습니다.');
     });
-  }, [chatState]);
+  }, [chatState, userKey]);
 
   //채팅을 보냅니다
   const sendMessageHandler = (event) => {
@@ -149,19 +149,20 @@ const ChatRoom = () => {
     if (sendMessage.current.value.trim()) {
       const param = {
         message: sendMessage.current.value,
-        roomKey: parseInt(roomKey),
-        userKey: parseInt(userKey),
+        roomKey: Number(roomKey),
+        userKey: Number(userKey),
       };
       socket.current.emit('chat_message', param);
       sendMessage.current.value = '';
     }
   };
 
+  //메인 모달을 켜고 현재 참여자 목록을 불러옵니다
   const mainModalOpenHandler = () => {
     setMainModal(true);
     document.body.style.overflow = 'hidden';
 
-    const param = { roomKey: parseInt(roomKey), userKey: parseInt(userKey) };
+    const param = { roomKey: Number(roomKey), userKey: Number(userKey) };
     socket.current.emit('showUsers', param);
     socket.current.on('receive', (data) => {
       setNowUsers([...data]);
@@ -171,7 +172,7 @@ const ChatRoom = () => {
   //나가기 혹은 삭제 버튼을 눌렀을때 동작합니다
   const leaveRoomHandler = async () => {
     try {
-      const param = { roomKey: parseInt(roomKey), userKey: parseInt(userKey) };
+      const param = { roomKey: Number(roomKey), userKey: Number(userKey) };
       socket.current.emit('leave-room', param);
 
       await instance.delete(`/room/${roomKey}`);
@@ -192,9 +193,9 @@ const ChatRoom = () => {
     setModalDelete(true);
     setMainModal(false);
     document.body.style.overflow = 'hidden';
-    const param = { roomKey: parseInt(roomKey), userKey: parseInt(userKey) };
-    socket.current.emit('showUsers', param);
 
+    const param = { roomKey: Number(roomKey), userKey: Number(userKey) };
+    socket.current.emit('showUsers', param);
     socket.current.on('receive', (data) => {
       setNowUsers([...data]);
     });
@@ -211,38 +212,29 @@ const ChatRoom = () => {
   //호스트가 삭제 버튼을 누른 후 뜬 모달에서 유저를 추천할때 동작합니다
   const recommendHandler = () => {
     const param = {
-      roomKey: parseInt(roomKey),
-      userKey: parseInt(nowUsers[isSelect]?.userKey),
+      roomKey: Number(roomKey),
+      userKey: Number(nowUsers[isSelect]?.userKey),
     };
     socket.current.emit('recommend', param);
+
     leaveRoomHandler();
   };
 
+  //유저를 채팅방에서 내보냅니다
   const kickUserHandler = () => {
     const param = {
       roomKey: Number(roomKey),
       userKey: Number(kickUser.key),
     };
     socket.current.emit('expulsion', param);
+
     setModalKick(false);
     setKickUser({ key: null, nickname: '' });
     document.body.style.overflow = 'overlay';
   };
 
   return (
-    <div>
-      {modalKick && (
-        <ModalKick
-          kick={kickUserHandler}
-          nickname={kickUser.nickname}
-          setter={() => {
-            mainModalOpenHandler();
-            setModalKick(false);
-            setKickUser({ key: null, nickname: '' });
-          }}
-        />
-      )}
-
+    <>
       {mainModal && (
         <StModalBg>
           <StMainModal>
@@ -356,6 +348,18 @@ const ChatRoom = () => {
         </ModalRecommend>
       )}
 
+      {modalKick && (
+        <ModalKick
+          kick={kickUserHandler}
+          nickname={kickUser.nickname}
+          setter={() => {
+            mainModalOpenHandler();
+            setModalKick(false);
+            setKickUser({ key: null, nickname: '' });
+          }}
+        />
+      )}
+
       {hostByeModal && (
         <ModalBasic
           setter={() =>
@@ -416,7 +420,7 @@ const ChatRoom = () => {
           </StSendIcon>
         </form>
       </FooterInput>
-    </div>
+    </>
   );
 };
 
@@ -424,9 +428,10 @@ export default ChatRoom;
 
 const StModalBg = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   position: fixed;
@@ -603,9 +608,10 @@ const StHeaderInfo = styled.div`
 
 const StHeaderTitle = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   position: fixed;
@@ -621,6 +627,7 @@ const StHeaderTitle = styled.div`
   height: 3.4rem;
   padding: 0 5rem;
   background-color: ${({ theme }) => theme.bg};
+
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
 
   z-index: 8;

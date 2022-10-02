@@ -19,61 +19,57 @@ const Footer = ({ state }) => {
   const navigate = useNavigate();
 
   return (
-    <>
-      <StFooter state={state}>
-        <StIconWrap
-          onClick={() => navigate('/main', { state: { now: 'select' } })}
-        >
-          <StIcon>
-            {state.now === 'select' ? (
-              <img src={IconVoteTab} alt="IconVoteTab" />
-            ) : (
-              <img src={IconVoteUntab} alt="IconVoteUntab" />
-            )}
-          </StIcon>
-          <StText>고민투표</StText>
-        </StIconWrap>
+    <StFooter state={state}>
+      <StIconWrap
+        onClick={() => navigate('/main', { state: { now: 'select' } })}
+      >
+        <StIcon>
+          {state.now === 'select' ? (
+            <img src={IconVoteTab} alt="IconVoteTab" />
+          ) : (
+            <img src={IconVoteUntab} alt="IconVoteUntab" />
+          )}
+        </StIcon>
+        <StText>고민투표</StText>
+      </StIconWrap>
 
-        <StIconWrap
-          onClick={() => navigate('/main', { state: { now: 'room' } })}
-        >
-          <StIcon>
-            {state.now === 'room' ? (
-              <img src={IconChatTab} alt="IconChatTab" />
-            ) : (
-              <img src={IconChatUntab} alt="IconChatUntab" />
-            )}
-          </StIcon>
-          <StText>고민상담</StText>
-        </StIconWrap>
+      <StIconWrap onClick={() => navigate('/main', { state: { now: 'room' } })}>
+        <StIcon>
+          {state.now === 'room' ? (
+            <img src={IconChatTab} alt="IconChatTab" />
+          ) : (
+            <img src={IconChatUntab} alt="IconChatUntab" />
+          )}
+        </StIcon>
+        <StText>고민상담</StText>
+      </StIconWrap>
 
-        <StIconWrap
-          onClick={() => navigate('/answer', { state: { now: 'answer' } })}
-        >
-          <StIcon>
-            {state.now === 'answer' ? (
-              <img src={IconGomTab} alt="IconGomTab" />
-            ) : (
-              <img src={IconGomUntab} alt="IconGomUntab" />
-            )}
-          </StIcon>
-          <StText>곰곰해답</StText>
-        </StIconWrap>
+      <StIconWrap
+        onClick={() => navigate('/answer', { state: { now: 'answer' } })}
+      >
+        <StIcon>
+          {state.now === 'answer' ? (
+            <img src={IconGomTab} alt="IconGomTab" />
+          ) : (
+            <img src={IconGomUntab} alt="IconGomUntab" />
+          )}
+        </StIcon>
+        <StText>곰곰해답</StText>
+      </StIconWrap>
 
-        <StIconWrap
-          onClick={() => navigate('/mypage', { state: { now: 'mypage' } })}
-        >
-          <StIcon>
-            {state.now === 'mypage' ? (
-              <img src={IconProfileTab} alt="IconProfileTab" />
-            ) : (
-              <img src={IconProfileUntab} alt="IconProfileUntab" />
-            )}
-          </StIcon>
-          <StText>마이페이지</StText>
-        </StIconWrap>
-      </StFooter>
-    </>
+      <StIconWrap
+        onClick={() => navigate('/mypage', { state: { now: 'mypage' } })}
+      >
+        <StIcon>
+          {state.now === 'mypage' ? (
+            <img src={IconProfileTab} alt="IconProfileTab" />
+          ) : (
+            <img src={IconProfileUntab} alt="IconProfileUntab" />
+          )}
+        </StIcon>
+        <StText>마이페이지</StText>
+      </StIconWrap>
+    </StFooter>
   );
 };
 
