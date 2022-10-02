@@ -5,17 +5,17 @@ import Header from '../../common/Header';
 import GlobalButton from '../../elements/GlobalButton';
 import ProfileImg from '../../elements/ProfileImg';
 
-import { IconLarge } from '../../../shared/themes/iconStyle';
-
-import IconCloseWhite from '../../../static/icons/Variety=close white, Status=untab, Size=L.svg';
-
-import styled from 'styled-components';
 import {
   fontBold,
   fontExtraBold,
   fontLarge,
   fontMedium,
 } from '../../../shared/themes/textStyle';
+import { IconLarge } from '../../../shared/themes/iconStyle';
+
+import IconCloseWhite from '../../../static/icons/Variety=close white, Status=untab, Size=L.svg';
+
+import styled from 'styled-components';
 
 const MainJoinRoom = ({ setJoinModal, roomInfo, enteredRoom }) => {
   const navigate = useNavigate();
@@ -32,6 +32,7 @@ const MainJoinRoom = ({ setJoinModal, roomInfo, enteredRoom }) => {
           <img src={IconCloseWhite} alt="IconCloseWhite" />
         </StIcon>
       </Header>
+
       <StRoomInfo>
         <StSubtitle>고민상담방</StSubtitle>
         <StTitle>{roomInfo.title}</StTitle>
@@ -40,6 +41,7 @@ const MainJoinRoom = ({ setJoinModal, roomInfo, enteredRoom }) => {
             <div key={item}>#{item}</div>
           ))}
         </StHashTag>
+
         <StFooter>
           <ProfileImg point={roomInfo.point} />
           <StInfo>
@@ -50,6 +52,7 @@ const MainJoinRoom = ({ setJoinModal, roomInfo, enteredRoom }) => {
           </StInfo>
         </StFooter>
       </StRoomInfo>
+
       <StGlobalButton
         onClick={() => {
           navigate(`/chatroom/${roomInfo.roomKey}`, { state: { now: 'room' } });
@@ -68,9 +71,10 @@ export default MainJoinRoom;
 
 const StJoinBg = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   position: fixed;
@@ -123,6 +127,10 @@ const StHashTag = styled.div`
 
 const StInfo = styled.div`
   line-height: 2.1rem;
+
+  div:nth-child(1) {
+    ${fontBold};
+  }
 `;
 
 const StFooter = styled.div`

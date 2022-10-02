@@ -67,4 +67,4 @@ const voteSlice = createSlice({
 });
 
 export const { cleanUpVote, cleanUpError } = voteSlice.actions;
-export default voteSlice.reducer;
+export default voteSlice;

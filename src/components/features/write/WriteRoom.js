@@ -5,6 +5,7 @@ import instance from '../../../app/module/instance';
 
 import BodyPadding from '../../common/BodyPadding';
 import Header from '../../common/Header';
+import { ModalBasic } from '../../common/Modal';
 import GlobalButton from '../../elements/GlobalButton';
 
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
@@ -22,16 +23,16 @@ import IconPlus from '../../../static/icons/Variety=plus, Status=untab, Size=XL.
 import IconMinus from '../../../static/icons/Variety=minus, Status=untab, Size=XL.svg';
 
 import styled from 'styled-components';
-import { ModalBasic } from '../../common/Modal';
 
 const WriteRoom = () => {
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState('');
-  const [keyword, setKeyword] = useState('');
   const [roomkey, setRoomkey] = useState(0);
-  const [keywordArr, setKeywordArr] = useState([]);
+
+  const [title, setTitle] = useState('');
   const [countPeople, setCountPeople] = useState(1);
+  const [keyword, setKeyword] = useState('');
+  const [keywordArr, setKeywordArr] = useState([]);
 
   const [modal, setModal] = useState(false);
   const [uploadModal, setUploadModal] = useState('');
@@ -46,7 +47,7 @@ const WriteRoom = () => {
     if (keywordArr.includes(keyword)) {
       setModal('중복된 해시태그가 존재합니다.');
       document.body.style.overflow = 'hidden';
-    } else if (keyword.length === 0) {
+    } else if (keyword.trim().length === 0) {
       setModal('태그를 입력해주세요');
       document.body.style.overflow = 'hidden';
     } else {
@@ -208,11 +209,12 @@ const StHeaderTitle = styled.div`
 const StContainer = styled.div`
   @media ${({ theme }) => theme.device.PC} {
     position: absolute;
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
-    padding: 0 2rem;
-    min-height: calc(100% - 6.4rem);
+
+    width: ${({ theme }) => theme.style.width};
+    min-height: 100%;
+    padding: 6.4rem 2rem 2rem 2rem;
   }
 
   display: flex;
@@ -220,8 +222,7 @@ const StContainer = styled.div`
   gap: 3.2rem;
 
   width: 100%;
-  margin-top: 6.4rem;
-  margin-bottom: 1.6rem;
+  padding: 6.4rem 0 2rem 0;
   background-color: ${({ theme }) => theme.bg};
 `;
 
@@ -238,9 +239,9 @@ const StInnerTitle = styled.div`
 `;
 
 const StInnerText = styled.div`
+  ${borderBoxDefault};
   position: relative;
 
-  ${borderBoxDefault};
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
@@ -326,6 +327,7 @@ const StInnerSubtitle = styled.div`
 
 const StCountBox = styled.div`
   ${borderBoxDefault};
+
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

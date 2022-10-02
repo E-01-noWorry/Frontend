@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import instance from '../app/module/instance';
 
 import Footer from '../components/common/Footer';
 import Header from '../components/common/Header';
@@ -10,16 +10,19 @@ import { ModalInfo } from '../components/common/Modal';
 import { IconLarge } from '../shared/themes/iconStyle';
 import { fontBold } from '../shared/themes/textStyle';
 
+import IconSurvey from '../static/icons/Variety=Survey grey, Status=untab, Size=L.svg';
+
+import Logo from '../static/images/Logo.svg';
 import ImageBubble1 from '../static/images/speach bubble1.svg';
 import ImageBubble2 from '../static/images/speach bubble2.svg';
 import ImageCharacter1 from '../static/images/Character1.svg';
 import ImageCharacter2 from '../static/images/Character2.svg';
-import IconSurvey from '../static/icons/Variety=Survey grey, Status=untab, Size=L.svg';
-import Logo from '../static/images/Logo.svg';
-import instance from '../app/module/instance';
+
+import styled, { css } from 'styled-components';
 
 const Answer = () => {
   const { state } = useLocation();
+
   const [infoText, setIntoText] = useState(true);
   const [gomgomThink, setGomgomThink] = useState(false);
   const [gomgomAnswer, setGomgomAnswer] = useState('');
@@ -41,7 +44,7 @@ const Answer = () => {
       setTimeout(() => {
         setGomgomAnswer(data.msg);
         setGomgomThink(false);
-      }, 2000);
+      }, 1500);
     } catch (error) {
       console.log(error);
     }
@@ -50,12 +53,14 @@ const Answer = () => {
   return (
     <>
       {infoText && <ModalInfo />}
+
       <StHeader>
         <StLogo onClick={() => window.location.reload()}>
           <img src={Logo} alt="Logo" />
         </StLogo>
         <a
           target="_blank"
+          rel="noreferrer"
           href="https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform"
         >
           <StIcon>
@@ -63,6 +68,7 @@ const Answer = () => {
           </StIcon>
         </a>
       </StHeader>
+
       <StAnswerWrap>
         <StContentsWrap>
           {gomgomAnswer ? (
@@ -83,7 +89,8 @@ const Answer = () => {
             <StThinking>{gomgomAnswer}</StThinking>
           ) : (
             <StThinking style={{ textAlign: 'center' }}>
-              고민을 떠올리고 <br /> 하단 버튼을 눌러주세요
+              고민을 떠올리고 <br />
+              하단 버튼을 눌러주세요
             </StThinking>
           )}
         </StContentsWrap>
@@ -94,6 +101,7 @@ const Answer = () => {
           {gomgomAnswer ? '곰곰의 해답 다시 듣기' : '곰곰의 해답 듣기'}
         </StGlobalButton>
       </StAnswerWrap>
+
       <Footer state={state} />
     </>
   );
@@ -123,9 +131,10 @@ const StThinking = styled.div`
 
 const StAnswerWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   position: relative;
