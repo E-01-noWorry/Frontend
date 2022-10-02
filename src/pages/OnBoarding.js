@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import GlobalButton from '../components/elements/GlobalButton';
@@ -20,9 +20,8 @@ import Logo from '../static/images/Logo.svg';
 import styled from 'styled-components';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectFade, Navigation } from 'swiper';
+import { Navigation } from 'swiper';
 import 'swiper/css';
-import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 
 const OnBoarding = () => {
@@ -33,7 +32,7 @@ const OnBoarding = () => {
   const nextNavi = useRef(null);
 
   return (
-    <StContensWrap>
+    <StContentsWrap>
       {pagination < 4 && (
         <StNavi pagination={pagination}>
           {[1, 2, 3].map((i) => (
@@ -51,8 +50,7 @@ const OnBoarding = () => {
         slidesPerView={1}
         centeredSlides={true}
         onSlideChange={(e) => setPagination(e.activeIndex + 1)}
-        effect={'fade'}
-        modules={[EffectFade, Navigation]}
+        modules={[Navigation]}
       >
         <StPrev ref={prevNavi} page={pagination}>
           {pagination === 4 ? (
@@ -76,6 +74,7 @@ const OnBoarding = () => {
             <img src={GomGomVote} alt="GomGomVote" />
           </StGomGom>
         </StSwiperSlide>
+
         <StSwiperSlide>
           <StTitle>고민상담</StTitle>
           <StBody>
@@ -86,6 +85,7 @@ const OnBoarding = () => {
             <img src={GomGomRoom} alt="GomGomRoom" />
           </StGomGom>
         </StSwiperSlide>
+
         <StSwiperSlide>
           <StTitle>곰곰해답</StTitle>
           <StBody>
@@ -96,6 +96,7 @@ const OnBoarding = () => {
             <img src={GomGomAnswer} alt="GomGomAnswer" />
           </StGomGom>
         </StSwiperSlide>
+
         <StSwiperSlide>
           <StWrap>
             <StLogo>
@@ -117,50 +118,19 @@ const OnBoarding = () => {
           </StWrap>
         </StSwiperSlide>
       </StSwiper>
-    </StContensWrap>
+    </StContentsWrap>
   );
 };
 
 export default OnBoarding;
 
-const StPrev = styled.div`
-  position: absolute;
-  top: ${(props) => (props.page !== 4 ? '50%' : '4.8%')};
-  left: ${(props) => (props.page !== 4 ? '1.2rem' : '2rem')};
-  transform: translateY(-50%);
-
-  display: ${(props) => (props.page !== 1 ? 'flex' : 'none')};
-
-  width: 3.2rem;
-  height: 3.2rem;
-
-  z-index: 9;
-`;
-
-const StNext = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 1.2rem;
-  transform: translateY(-50%);
-
-  display: ${(props) => (props.page !== 4 ? 'flex' : 'none')};
-
-  width: 3.2rem;
-  height: 3.2rem;
-
-  z-index: 9;
-
-  img {
-    transform: rotate(180deg);
-  }
-`;
-
-const StContensWrap = styled.div`
+const StContentsWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
     position: absolute;
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   width: 100%;
@@ -191,6 +161,42 @@ const StNavi = styled.div`
   }
 
   z-index: 9;
+`;
+
+const StPrev = styled.div`
+  position: absolute;
+  top: ${(props) => (props.page !== 4 ? '50%' : '4.8%')};
+  left: ${(props) => (props.page !== 4 ? '1.2rem' : '2rem')};
+  transform: translateY(-50%);
+
+  display: ${(props) => (props.page !== 1 ? 'flex' : 'none')};
+
+  width: 3.2rem;
+  height: 3.2rem;
+
+  z-index: 9;
+
+  cursor: pointer;
+`;
+
+const StNext = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 1.2rem;
+  transform: translateY(-50%);
+
+  display: ${(props) => (props.page !== 4 ? 'flex' : 'none')};
+
+  width: 3.2rem;
+  height: 3.2rem;
+
+  z-index: 9;
+
+  cursor: pointer;
+
+  img {
+    transform: rotate(180deg);
+  }
 `;
 
 const StSwiper = styled(Swiper)`

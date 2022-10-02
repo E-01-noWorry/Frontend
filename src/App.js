@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Router from './router/router';
 
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
@@ -10,9 +10,9 @@ import { isLogin } from './shared/isLogin';
 
 import theme from './shared/themes/Theme';
 import GlobalStyles from './shared/themes/GlobalStyles';
-
 import { ThemeProvider } from 'styled-components';
-import { useCallback } from 'react';
+
+import _ from 'lodash';
 
 //아이폰이 아닐때만 작동합니다
 if (!detectIphone(window.navigator.userAgent)) {
@@ -50,10 +50,13 @@ const App = () => {
   }, []);
 
   const [vh, setVh] = useState(window.innerHeight * 0.01);
-  const screenSize = useCallback(() => {
-    setVh(window.innerHeight * 0.01);
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }, [vh]);
+  const screenSize = useCallback(
+    _.debounce(() => {
+      setVh(window.innerHeight * 0.01);
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }, 100),
+    [vh],
+  );
 
   useEffect(() => {
     screenSize();

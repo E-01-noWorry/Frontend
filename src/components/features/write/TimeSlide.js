@@ -43,6 +43,8 @@ const StTimeSlide = styled.div`
 
     ${fontMedium}
     z-index: 2;
+
+    cursor: pointer;
   }
 
   div:nth-child(1) {
@@ -52,7 +54,7 @@ const StTimeSlide = styled.div`
 
   div:nth-child(2) {
     ${(props) =>
-      parseInt(props.selectTime) !== 1 &&
+      Number(props.selectTime) !== 1 &&
       css`
         color: ${({ theme }) => theme.white};
         ${fontBold}
@@ -61,8 +63,8 @@ const StTimeSlide = styled.div`
 
   div:nth-child(3) {
     ${(props) =>
-      parseInt(props.selectTime) !== 1 &&
-      parseInt(props.selectTime) !== 4 &&
+      Number(props.selectTime) !== 1 &&
+      Number(props.selectTime) !== 4 &&
       css`
         color: ${({ theme }) => theme.white};
         ${fontBold}
@@ -71,9 +73,9 @@ const StTimeSlide = styled.div`
 
   div:nth-child(4) {
     ${(props) =>
-      parseInt(props.selectTime) !== 1 &&
-      parseInt(props.selectTime) !== 4 &&
-      parseInt(props.selectTime) !== 8 &&
+      Number(props.selectTime) !== 1 &&
+      Number(props.selectTime) !== 4 &&
+      Number(props.selectTime) !== 8 &&
       css`
         color: ${({ theme }) => theme.white};
         ${fontBold}
@@ -82,10 +84,10 @@ const StTimeSlide = styled.div`
 
   div:nth-child(5) {
     ${(props) =>
-      parseInt(props.selectTime) !== 1 &&
-      parseInt(props.selectTime) !== 4 &&
-      parseInt(props.selectTime) !== 8 &&
-      parseInt(props.selectTime) !== 12 &&
+      Number(props.selectTime) !== 1 &&
+      Number(props.selectTime) !== 4 &&
+      Number(props.selectTime) !== 8 &&
+      Number(props.selectTime) !== 12 &&
       css`
         color: ${({ theme }) => theme.white};
         ${fontBold}
@@ -101,15 +103,15 @@ const StInnerTime = styled.span`
   display: inline-block;
 
   width: ${(props) => {
-    if (parseInt(props.time) === 1) {
+    if (Number(props.time) === 1) {
       return '20%';
-    } else if (parseInt(props.time) === 4) {
+    } else if (Number(props.time) === 4) {
       return '40%';
-    } else if (parseInt(props.time) === 8) {
+    } else if (Number(props.time) === 8) {
       return '60%';
-    } else if (parseInt(props.time) === 12) {
+    } else if (Number(props.time) === 12) {
       return '80%';
-    } else if (parseInt(props.time) === 24) {
+    } else if (Number(props.time) === 24) {
       return '100%';
     }
   }};

@@ -199,7 +199,9 @@ const EditComment = (props) => {
                     {replyMode ? '작성 취소' : '답글 달기'}
                   </ReplyButton>
 
-                  <CancelReply>{replyMode ? '작성 완료' : null}</CancelReply>
+                  <CancelReply onClick={onClickReplyButton}>
+                    {replyMode ? '작성 완료' : null}
+                  </CancelReply>
                 </MakeItRow>
               </form>
             </CommentBox>

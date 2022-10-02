@@ -1,8 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
 
-import imageCompression from 'browser-image-compression';
-
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconMedium, IconSmall } from '../../../shared/themes/iconStyle';
 import { fontBold, fontSmall } from '../../../shared/themes/textStyle';
@@ -11,6 +9,8 @@ import IconImage from '../../../static/icons/Variety=image, Status=untab, Size=S
 import IconImageDelete from '../../../static/icons/Variety=image delete, Status=Untab, Size=L.svg';
 
 import styled from 'styled-components';
+
+import imageCompression from 'browser-image-compression';
 
 const WriteImageUpload = ({ setImages, num }) => {
   const [previewImg, setPreviewImg] = useState({});
@@ -117,6 +117,8 @@ const StImageLabel = styled.label`
   display: flex;
   align-items: center;
   gap: 0.4rem;
+
+  cursor: pointer;
 `;
 
 const StImageIcon = styled.div`

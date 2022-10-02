@@ -28,11 +28,28 @@ export const ModalInfo = () => {
   );
 };
 
+export const ModalLogin = ({ login, setter }) => {
+  return (
+    <>
+      <StModalWindow>
+        <StModalText>
+          <span>로그인 후 사용해주세요.</span>
+        </StModalText>
+        <StModalButton>
+          <div onClick={setter}>확인</div>
+          <div onClick={login}>로그인 하기</div>
+        </StModalButton>
+      </StModalWindow>
+      <StModalBg onClick={setter} />
+    </>
+  );
+};
+
 export const ModalExit = ({ leave, setter }) => {
   return (
     <>
       <StModalWindow>
-        <StModalTitle>채팅방 나가기</StModalTitle>
+        <StModalTitle>상담방 나가기</StModalTitle>
         <StModalText>
           <span>나가기를 하면 작성자의 추천을 받을 수 없어요.</span>
           <span>(추천을 받으면 등급이 올라가요!)</span>
@@ -81,6 +98,23 @@ export const ModalLogout = ({ setter, logout }) => {
   );
 };
 
+export const ModalKick = ({ setter, kick, nickname }) => {
+  return (
+    <>
+      <StModalWindow>
+        <StModalText>
+          <span>'{nickname}'님을 상담방에서 내보냅니다.</span>
+        </StModalText>
+        <StModalButton>
+          <div onClick={kick}>내보내기</div>
+          <div onClick={setter}>취소</div>
+        </StModalButton>
+      </StModalWindow>
+      <StModalBg onClick={setter} />
+    </>
+  );
+};
+
 export const ModalWrite = ({ setter, write }) => {
   return (
     <>
@@ -96,6 +130,23 @@ export const ModalWrite = ({ setter, write }) => {
         </StModalText>
         <StModalButton>
           <div onClick={write}>투표 작성</div>
+          <div onClick={setter}>취소</div>
+        </StModalButton>
+      </StModalWindow>
+      <StModalBg onClick={setter} />
+    </>
+  );
+};
+
+export const ModalDeleteInfo = ({ setter, del }) => {
+  return (
+    <>
+      <StModalWindow>
+        <StModalText>
+          <span>정말 회원탈퇴를 하시겠습니까?</span>
+        </StModalText>
+        <StModalButton>
+          <div onClick={del}>회원탈퇴</div>
           <div onClick={setter}>취소</div>
         </StModalButton>
       </StModalWindow>
@@ -120,14 +171,14 @@ export const ModalRecommend = ({
             <div>남아있는 인원이 없어요.</div>
           ) : (
             <>
-              <div>*현재 채팅방에 남아 있는 사람입니다.</div>
+              <div>*현재 상담방에 남아 있는 사람입니다.</div>
               {children}
             </>
           )}
         </StModalTextWide>
         <StModalButton>
-          <div onClick={recommend}>추천하기</div>
-          <div onClick={leave}>채팅방 삭제</div>
+          {user !== 1 && <div onClick={recommend}>추천하고 삭제</div>}
+          <div onClick={leave}>상담방 삭제</div>
         </StModalButton>
       </StModalWindowWide>
       <StModalBg onClick={setter} />
@@ -246,6 +297,10 @@ const StModalButton = styled.div`
 
     width: 100%;
     height: 100%;
+
+    ${fontMedium}
+
+    cursor: pointer;
   }
 
   div:nth-child(2) {

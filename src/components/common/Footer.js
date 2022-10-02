@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import { ModalBasic } from './Modal';
 
 import { IconLarge } from '../../shared/themes/iconStyle';
 import { fontBold, fontExtraSmall } from '../../shared/themes/textStyle';
@@ -20,66 +18,58 @@ import styled from 'styled-components';
 const Footer = ({ state }) => {
   const navigate = useNavigate();
 
-  const [modal, setModal] = useState(false);
-
   return (
-    <>
-      {modal && <ModalBasic setter={() => setModal(false)}>{modal}</ModalBasic>}
+    <StFooter state={state}>
+      <StIconWrap
+        onClick={() => navigate('/main', { state: { now: 'select' } })}
+      >
+        <StIcon>
+          {state.now === 'select' ? (
+            <img src={IconVoteTab} alt="IconVoteTab" />
+          ) : (
+            <img src={IconVoteUntab} alt="IconVoteUntab" />
+          )}
+        </StIcon>
+        <StText>고민투표</StText>
+      </StIconWrap>
 
-      <StFooter state={state}>
-        <StIconWrap
-          onClick={() => navigate('/main', { state: { now: 'select' } })}
-        >
-          <StIcon>
-            {state.now === 'select' ? (
-              <img src={IconVoteTab} alt="IconVoteTab" />
-            ) : (
-              <img src={IconVoteUntab} alt="IconVoteUntab" />
-            )}
-          </StIcon>
-          <StText>고민투표</StText>
-        </StIconWrap>
+      <StIconWrap onClick={() => navigate('/main', { state: { now: 'room' } })}>
+        <StIcon>
+          {state.now === 'room' ? (
+            <img src={IconChatTab} alt="IconChatTab" />
+          ) : (
+            <img src={IconChatUntab} alt="IconChatUntab" />
+          )}
+        </StIcon>
+        <StText>고민상담</StText>
+      </StIconWrap>
 
-        <StIconWrap
-          onClick={() => navigate('/main', { state: { now: 'room' } })}
-        >
-          <StIcon>
-            {state.now === 'room' ? (
-              <img src={IconChatTab} alt="IconChatTab" />
-            ) : (
-              <img src={IconChatUntab} alt="IconChatUntab" />
-            )}
-          </StIcon>
-          <StText>고민상담</StText>
-        </StIconWrap>
+      <StIconWrap
+        onClick={() => navigate('/answer', { state: { now: 'answer' } })}
+      >
+        <StIcon>
+          {state.now === 'answer' ? (
+            <img src={IconGomTab} alt="IconGomTab" />
+          ) : (
+            <img src={IconGomUntab} alt="IconGomUntab" />
+          )}
+        </StIcon>
+        <StText>곰곰해답</StText>
+      </StIconWrap>
 
-        <StIconWrap
-          onClick={() => navigate('/answer', { state: { now: 'answer' } })}
-        >
-          <StIcon>
-            {state.now === 'answer' ? (
-              <img src={IconGomTab} alt="IconGomTab" />
-            ) : (
-              <img src={IconGomUntab} alt="IconGomUntab" />
-            )}
-          </StIcon>
-          <StText>곰곰해답</StText>
-        </StIconWrap>
-
-        <StIconWrap
-          onClick={() => navigate('/mypage', { state: { now: 'mypage' } })}
-        >
-          <StIcon>
-            {state.now === 'mypage' ? (
-              <img src={IconProfileTab} alt="IconProfileTab" />
-            ) : (
-              <img src={IconProfileUntab} alt="IconProfileUntab" />
-            )}
-          </StIcon>
-          <StText>마이페이지</StText>
-        </StIconWrap>
-      </StFooter>
-    </>
+      <StIconWrap
+        onClick={() => navigate('/mypage', { state: { now: 'mypage' } })}
+      >
+        <StIcon>
+          {state.now === 'mypage' ? (
+            <img src={IconProfileTab} alt="IconProfileTab" />
+          ) : (
+            <img src={IconProfileUntab} alt="IconProfileUntab" />
+          )}
+        </StIcon>
+        <StText>마이페이지</StText>
+      </StIconWrap>
+    </StFooter>
   );
 };
 
@@ -87,9 +77,10 @@ export default Footer;
 
 const StFooter = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   position: fixed;
@@ -105,8 +96,8 @@ const StFooter = styled.div`
   padding: 0.5rem 2.5rem 1.7rem 2.5rem;
   background-color: ${(props) =>
     props.state.now === 'answer' ? 'transparent' : props.theme.bg};
-  box-sizing: border-box;
 
+  box-sizing: border-box;
   border-top: ${(props) =>
     props.state.now === 'answer' ? 'none' : `1px solid ${props.theme.sub4}`};
 
@@ -131,6 +122,8 @@ const StIconWrap = styled.div`
   align-items: center;
 
   color: ${({ theme }) => theme.sub2};
+
+  cursor: pointer;
 `;
 
 const StIcon = styled.div`

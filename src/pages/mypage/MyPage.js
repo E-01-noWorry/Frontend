@@ -11,12 +11,18 @@ import {
 import { fontExtraBold, fontBold } from '../../shared/themes/textStyle';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
+  deleteInfoThunk,
   editNickNameThunk,
   getMyPointThunk,
 } from '../../app/module/myPageSlice';
 import { css } from 'styled-components';
 import { IconLarge, IconMedium } from '../../shared/themes/iconStyle';
-import { ModalBasic, ModalLogout } from '../../components/common/Modal';
+import {
+  ModalBasic,
+  ModalDelete,
+  ModalDeleteInfo,
+  ModalLogout,
+} from '../../components/common/Modal';
 import ProfileImg from '../../components/elements/ProfileImg';
 import MypageModal from '../../components/features/mypage/mypageModal';
 
@@ -26,6 +32,8 @@ import IconNext from '../../static/icons/Variety=next, Status=untab, Size=M.svg'
 import IconVoteTab from '../../static/icons/Variety=vote, Status=tab, Size=L.svg';
 import IconChatting from '../../static/icons/Variety=chating, Status=untab, Size=L.svg';
 import IconInformation from '../../static/icons/Variety=Information, Status=untab, Size=S.svg';
+import IconPerson from '../../static/icons/Variety=profile, Status=tab, Size=L.svg';
+import { cleanUpErr } from '../../app/module/myPageSlice';
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -33,11 +41,11 @@ const MyPage = () => {
   const { state } = useLocation();
   const userNickname = useSelector((state) => state.myPageSlice.data.nickname);
   const userPoint = useSelector((state) => state.myPageSlice.point.point);
-
+  const editNicknameErr = useSelector((state) => state.myPageSlice?.err);
   const [modal, setModal] = useState('');
 
   const [logoutModal, setLogoutModal] = useState(false);
-
+  const [deleteInfoModal, setDeleteInfoModal] = useState(false);
 
   //나의 포인트 조회
   useEffect(() => {
@@ -46,6 +54,11 @@ const MyPage = () => {
       dispatch(getMyPointThunk());
     }
   }, [dispatch]);
+
+  //닉네임변경시 모달
+  useEffect(() => {
+    setModal(editNicknameErr);
+  }, [editNicknameErr]);
 
   //티어별 상세정보
   const [tiers, setTiers] = useState({
@@ -69,21 +82,21 @@ const MyPage = () => {
     nickname: '',
   });
   const [editMode, setEditMode] = useState(false);
-  const userKey = localStorage.getItem('userKey');
 
   const onClickEditNickName = () => {
     setEditMode((status) => !status);
     setEditNickname({ nickname: localStorage.getItem('nickname') });
     if (editMode === true) {
-      if (
-        editNickname.nickname === '' ||
-        editNickname.nickname === localStorage.getItem('nickname')
-      ) {
-        setModal('닉네임을 변경해주세요.');
-        setEditMode(true);
+      if (editNicknameErr) {
+        setModal(editNicknameErr);
       }
-      dispatch(editNickNameThunk({ ...editNickname, userKey: userKey }));
+
+      dispatch(editNickNameThunk({ ...editNickname }));
     }
+  };
+
+  const onClickEditMode = () => {
+    setEditMode((status) => !status);
   };
 
   const onChangeEditNickName = (event) => {
@@ -98,10 +111,24 @@ const MyPage = () => {
     setModalMode((status) => !status);
   };
 
+  //회원삭제
+  const onClickDeleteInfo = () => {
+    dispatch(deleteInfoThunk()).then(() => localStorage.clear());
+  };
+
   return (
     <>
       <div style={{ paddingBottom: '9rem' }}>
-        {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+        {modal && (
+          <ModalBasic
+            setter={() => {
+              setModal('');
+              dispatch(cleanUpErr());
+            }}
+          >
+            {modal}
+          </ModalBasic>
+        )}
 
         {logoutModal && (
           <ModalLogout
@@ -111,6 +138,19 @@ const MyPage = () => {
             logout={() => {
               localStorage.clear();
               window.location.reload('/mypage');
+            }}
+          />
+        )}
+
+        {deleteInfoModal && (
+          <ModalDeleteInfo
+            setter={() => {
+              setDeleteInfoModal(false);
+            }}
+            del={() => {
+              onClickDeleteInfo();
+              setDeleteInfoModal(false);
+              setModal('회원탈퇴가 완료되었습니다.');
             }}
           />
         )}
@@ -145,12 +185,17 @@ const MyPage = () => {
                     <StNicknameWrap>
                       <Nickname>
                         {editMode ? (
-                          <EditNicknameInput
-                            name="nickname"
-                            onChange={onChangeEditNickName}
-                            type="text"
-                            value={editNickname.nickname}
-                          />
+                          <>
+                            <EditNicknameInput
+                              name="nickname"
+                              onChange={onChangeEditNickName}
+                              type="text"
+                              value={editNickname.nickname}
+                            />
+                            <Incorrect>
+                              *한글, 영문, 숫자로만 2~10자로 입력해주세요
+                            </Incorrect>
+                          </>
                         ) : (
                           <>
                             {userNickname || localStorage.getItem('nickname')}
@@ -158,13 +203,18 @@ const MyPage = () => {
                           </>
                         )}
                       </Nickname>
-                      <EditNickname onClick={onClickEditNickName}>
+                      <EditNickname>
                         {editMode ? (
-                          <EditButton>
-                            <span>변경</span>
-                          </EditButton>
+                          <>
+                            <EditButton onClick={onClickEditNickName}>
+                              <span>변경</span>
+                            </EditButton>
+                            <EditButton onClick={onClickEditMode}>
+                              <span>취소</span>
+                            </EditButton>
+                          </>
                         ) : (
-                          <EditButton>
+                          <EditButton onClick={onClickEditNickName}>
                             <img width="20" src={IconChange} alt="IconChange" />
                             <span>변경</span>
                           </EditButton>
@@ -344,6 +394,41 @@ const MyPage = () => {
                         </StInnerArrow>
                       </StInnerNavi>
                     </StBox>
+                    <StTitle>고객센터</StTitle>
+                    <StBox>
+                      <StInnerNavi>
+                        <StInnerTitle>
+                          <div>
+                            <img src={IconEdit} alt="IconEdit" />
+                          </div>
+                          <div>
+                            <a
+                              href="https://forms.gle/daCzxS5nhRZXzrUr9"
+                              target="_blank"
+                              style={{ color: 'black', cursor: 'default' }}
+                            >
+                              1 : 1 문의
+                            </a>
+                          </div>
+                        </StInnerTitle>
+                        <StInnerArrow>
+                          <img src={IconNext} alt="IconNext" />
+                        </StInnerArrow>
+                      </StInnerNavi>
+
+                      <StInnerNavi onClick={() => setDeleteInfoModal(true)}>
+                        <StInnerTitle>
+                          <div>
+                            <img src={IconPerson} alt="IconPerson" />
+                          </div>
+                          <div>회원 탈퇴</div>
+                        </StInnerTitle>
+                        <StInnerArrow>
+                          <img src={IconNext} alt="IconNext" />
+                        </StInnerArrow>
+                      </StInnerNavi>
+                    </StBox>
+
                     {loggined !== null && modalMode === false ? (
                       <Logout onClick={onClickLogOut}>로그아웃</Logout>
                     ) : null}
@@ -423,6 +508,36 @@ const MyPage = () => {
                         <img src={IconChatting} alt="IconChatting" />
                       </div>
                       <div>대화중인 고민 상담방</div>
+                    </StInnerTitle>
+                    <StInnerArrow>
+                      <img src={IconNext} alt="IconNext" />
+                    </StInnerArrow>
+                  </StInnerNavi>
+                </StBox>
+
+                <StTitle>고객센터</StTitle>
+                <StBox>
+                  <StInnerNavi
+                    onClick={() => setModal('로그인 후 사용해주세요.')}
+                  >
+                    <StInnerTitle>
+                      <div>
+                        <img src={IconEdit} alt="IconEdit" />
+                      </div>
+                      <div>1 : 1 문의</div>
+                    </StInnerTitle>
+                    <StInnerArrow>
+                      <img src={IconNext} alt="IconNext" />
+                    </StInnerArrow>
+                  </StInnerNavi>
+                  <StInnerNavi
+                    onClick={() => setModal('로그인 후 사용해주세요.')}
+                  >
+                    <StInnerTitle>
+                      <div>
+                        <img src={IconPerson} alt="IconPerson" />
+                      </div>
+                      <div>회원 탈퇴</div>
                     </StInnerTitle>
                     <StInnerArrow>
                       <img src={IconNext} alt="IconNext" />
@@ -805,7 +920,7 @@ const TierButtonWhite = styled.button`
   ${(props) =>
     props.tiers.tiers === 'white'
       ? css`
-          background-color: #eaeaea;
+          background-color: #d0d0d0;
           color: #fff;
         `
       : null}
@@ -920,4 +1035,12 @@ const Logout = styled.div`
   text-align: center;
   ${fontSmall}
   color:#767676;
+`;
+const Correct = styled.p`
+  font-size: 0.5rem;
+  margin-top: -0.2rem;
+  color: ${({ theme }) => theme.sub2};
+`;
+const Incorrect = styled(Correct)`
+  color: #999999;
 `;

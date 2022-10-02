@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import instance from '../../../app/module/instance';
 
+import MainJoinRoom from './MainJoinRoom';
 import BodyPadding from '../../common/BodyPadding';
-import { ModalBasic } from '../../common/Modal';
+import { ModalBasic, ModalLogin } from '../../common/Modal';
 
 import { borderBoxDefault } from '../../../shared/themes/boxStyle';
 import { IconMedium, IconSmall } from '../../../shared/themes/iconStyle';
@@ -25,7 +26,13 @@ const MainRoom = () => {
   const navigate = useNavigate();
 
   const [modal, setModal] = useState('');
+  const [loginModal, setLoginModal] = useState(false);
+  const [joinModal, setJoinModal] = useState(false);
+
   const [rooms, setRooms] = useState([]);
+  const [roomInfo, setRoomInfo] = useState({});
+  const [enteredRoom, setEnteredRoom] = useState([]);
+
   const [search, setSearch] = useState(false);
   const searchRef = useRef();
 
@@ -33,19 +40,20 @@ const MainRoom = () => {
   const [page, setPage] = useState(1);
   const [ref, setRef] = useState(null);
 
-  const getAllRoom = async () => {
+  const getAllRoom = useCallback(async () => {
     try {
       const { data } = await instance.get(`/room?page=${page}`);
       setRooms((prev) => [...prev, ...data.result]);
+      setEnteredRoom([...data.isRoom]);
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
-  };
+  }, [page]);
 
   useEffect(() => {
     if (search) return;
     getAllRoom();
-  }, [page]);
+  }, [search, getAllRoom]);
 
   //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다.
   const onIntersect = ([entry], observer) => {
@@ -68,10 +76,19 @@ const MainRoom = () => {
   //고민 채팅방 입장 POST API
   const joinRoomHandler = async (roomKey) => {
     try {
-      await instance.post(`/room/${roomKey}`);
-      navigate(`/chatroom/${roomKey}`, { state: { now: 'room' } });
+      const { data } = await instance.post(`/room/${roomKey}`);
+      setRoomInfo({ ...data.result });
+      setJoinModal(true);
+      document.body.style.overflow = 'hidden';
     } catch (error) {
-      setModal(error.response.data.errMsg);
+      const msg = error.response.data.errMsg;
+      if (msg.includes('로그인')) {
+        setLoginModal(true);
+        document.body.style.overflow = 'hidden';
+      } else {
+        setModal(error.response.data.errMsg);
+        document.body.style.overflow = 'hidden';
+      }
     }
   };
 
@@ -92,17 +109,47 @@ const MainRoom = () => {
 
   //고민 채팅방 검색 취소버튼
   const searchCancelHandler = () => {
-    searchRef.current.value = '';
     if (search) {
+      setSearch(false);
       setRooms([]);
       setPage(1);
-      setSearch(false);
     }
+    searchRef.current.value = '';
   };
 
   return (
     <>
-      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+      {modal && (
+        <ModalBasic
+          setter={() => {
+            setModal('');
+            document.body.style.overflow = 'overlay';
+          }}
+        >
+          {modal}
+        </ModalBasic>
+      )}
+
+      {loginModal && (
+        <ModalLogin
+          login={() => {
+            navigate('/login');
+            document.body.style.overflow = 'overlay';
+          }}
+          setter={() => {
+            setLoginModal(false);
+            document.body.style.overflow = 'overlay';
+          }}
+        />
+      )}
+
+      {joinModal && (
+        <MainJoinRoom
+          setJoinModal={setJoinModal}
+          roomInfo={roomInfo}
+          enteredRoom={enteredRoom}
+        />
+      )}
 
       <StSearchWrap length={rooms.length}>
         <form onSubmit={searchHandler}>
@@ -123,6 +170,7 @@ const MainRoom = () => {
           {rooms.length === 0 && (
             <StNoneContents>상담방이 없습니다.</StNoneContents>
           )}
+
           {rooms?.map((room, idx) => (
             <StContentBox
               key={room.roomKey}
@@ -148,7 +196,7 @@ const MainRoom = () => {
                     cur={room.currentPeople}
                     max={room.max}
                   >
-                    #{item}{' '}
+                    #{item}
                   </StInnerKeyword>
                 ))}
               </StInnerKeywordWrap>
@@ -161,6 +209,9 @@ const MainRoom = () => {
                   <span>
                     {room.currentPeople}/{room.max} 명
                   </span>
+                  {enteredRoom.includes(room.roomKey) && (
+                    <StEnteredBadge>상담 참여중</StEnteredBadge>
+                  )}
                 </StInnerCurrent>
 
                 <StInnerNickname>
@@ -187,9 +238,10 @@ const StNoneContents = styled.div`
 
 const StSearchWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   position: fixed;
@@ -232,7 +284,10 @@ const StSearchWrap = styled.div`
       position: absolute;
       top: 0.8rem;
       right: 0.8rem;
+
       ${IconMedium};
+
+      cursor: pointer;
     }
   }
 `;
@@ -241,37 +296,40 @@ const StCancel = styled.div`
   width: 3rem;
 
   ${fontMedium}
+
+  cursor: pointer;
 `;
 
 const StContentBoxWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
     position: absolute;
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
 
-    margin-top: 12.8rem;
-    padding: 1.2rem 2rem 9.6rem 2rem;
-    min-height: calc(100% - 14rem);
+    width: ${({ theme }) => theme.style.width};
+    padding: 14rem 2rem 9.6rem 2rem;
+    min-height: 100%;
   }
 
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
 
-  margin-top: 14rem;
-  margin-bottom: 9.6rem;
+  padding-top: 14rem;
+  padding-bottom: 9.6rem;
   background-color: ${({ theme }) => theme.bg};
 `;
 
 const StContentBox = styled.div`
-  position: relative;
   ${borderBoxDefault};
+  position: relative;
 
   height: 11.4rem;
   padding: 1.6rem;
   background-color: ${(props) =>
     props.cur === props.max ? props.theme.sub4 : props.theme.white};
+
+  cursor: pointer;
 `;
 
 const StInnerTitle = styled.div`
@@ -317,6 +375,11 @@ const StInnerKeyword = styled.span`
   color: ${({ theme }) => theme.sub2};
 `;
 
+const StEnteredBadge = styled(StInnerKeyword)`
+  background-color: ${({ theme }) => theme.sub2};
+  color: ${({ theme }) => theme.white};
+`;
+
 const StContentFooter = styled.div`
   position: absolute;
   bottom: 0;
@@ -344,6 +407,7 @@ const StInnerCurrent = styled.div`
   left: 1.6rem;
 
   display: flex;
+  align-items: center;
   gap: 0.25rem;
 
   ${fontMedium};

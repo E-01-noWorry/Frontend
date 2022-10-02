@@ -1,21 +1,37 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { remainedTime } from '../../shared/timeCalculation';
+import { remainedTime } from '../../../shared/timeCalculation';
 
-import { borderBoxDefault } from '../../shared/themes/boxStyle';
-import { IconSmall } from '../../shared/themes/iconStyle';
-import { fontBold, fontMedium, fontSmall } from '../../shared/themes/textStyle';
+import { borderBoxDefault } from '../../../shared/themes/boxStyle';
+import { IconSmall } from '../../../shared/themes/iconStyle';
+import {
+  fontBold,
+  fontMedium,
+  fontSmall,
+} from '../../../shared/themes/textStyle';
 
-import IconPeople from '../../static/icons/Variety=people, Status=untab, Size=S.svg';
-import IconLeftTime from '../../static/icons/Variety=Left Time, Status=untab, Size=S.svg';
-import IconTimeOver from '../../static/icons/Variety=Timeover, Status=Untab, Size=S.svg';
+import IconPeople from '../../../static/icons/Variety=people, Status=untab, Size=S.svg';
+import IconLeftTime from '../../../static/icons/Variety=Left Time, Status=untab, Size=S.svg';
+import IconTimeOver from '../../../static/icons/Variety=Timeover, Status=Untab, Size=S.svg';
 
 import styled from 'styled-components';
 
-const SelectContentBox = ({ contents, setRef, filter }) => {
+const SelectContentBox = ({
+  contents,
+  setRef,
+  filter,
+  category,
+  proceeding,
+}) => {
   const navigate = useNavigate();
   const { state } = useLocation();
+
+  const enterDetailHandler = (selectKey) => {
+    navigate(`/detail/${selectKey}`, {
+      state: { now: state.now, filter, category, proceeding },
+    });
+  };
 
   return (
     <StContentBoxWrap>
@@ -25,11 +41,7 @@ const SelectContentBox = ({ contents, setRef, filter }) => {
       {contents?.map((content, idx) => (
         <StContentBox
           key={content.selectKey}
-          onClick={() =>
-            navigate(`/detail/${content.selectKey}`, {
-              state: { now: state.now, filter },
-            })
-          }
+          onClick={() => enterDetailHandler(content.selectKey)}
           //마지막 게시글에 ref를 달아줍니다
           ref={idx === contents.length - 1 ? setRef : null}
           completion={content.completion}
@@ -52,27 +64,29 @@ const SelectContentBox = ({ contents, setRef, filter }) => {
           </StInnerOption>
 
           <StContentFooter>
-            <StInnerTime>
-              {content.completion ? (
-                <StIcon>
-                  <img src={IconTimeOver} alt="IconTimeOver" />
-                </StIcon>
-              ) : (
-                <>
-                  <StIcon>
-                    <img src={IconLeftTime} alt="IconLeftTime" />
-                  </StIcon>
-                  <span>{remainedTime(content.deadLine)}</span>
-                </>
-              )}
-              <span>{content.completion ? '투표마감' : '남음'}</span>
-            </StInnerTime>
             <StInnerCurrent>
               <StIcon>
                 <img src={IconPeople} alt="IconPeople" />
               </StIcon>
               <span>{content.total || 0}</span>
             </StInnerCurrent>
+
+            <StInnerTime>
+              {content.completion ? (
+                <StIcon>
+                  <img src={IconTimeOver} alt="IconTimeOver" />
+                </StIcon>
+              ) : (
+                <StIcon>
+                  <img src={IconLeftTime} alt="IconLeftTime" />
+                </StIcon>
+              )}
+              <span>
+                {content.completion
+                  ? '투표마감'
+                  : `${remainedTime(content.deadLine)} 남음`}
+              </span>
+            </StInnerTime>
           </StContentFooter>
         </StContentBox>
       ))}
@@ -84,7 +98,7 @@ export default SelectContentBox;
 
 const StNoneContents = styled.div`
   width: 100%;
-  margin-top: 4.1rem;
+  margin-top: 5.3rem;
 
   ${fontMedium}
   text-align: center;
@@ -93,26 +107,27 @@ const StNoneContents = styled.div`
 const StContentBoxWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
     position: absolute;
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
-    padding: 0 2rem 9.6rem 2rem;
-    min-height: calc(100% - 12.8rem);
+
+    width: ${({ theme }) => theme.style.width};
+    min-height: 100%;
+    padding: 17rem 2rem 9.6rem 2rem;
   }
 
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
 
-  margin-top: 12.8rem;
-  margin-bottom: 9.6rem;
+  padding-top: 17rem;
+  padding-bottom: 9.6rem;
   background-color: ${({ theme }) => theme.bg};
 `;
 
 const StContentBox = styled.div`
+  ${borderBoxDefault};
   position: relative;
 
-  ${borderBoxDefault};
   align-items: flex-start;
   justify-content: flex-start;
 
@@ -120,6 +135,8 @@ const StContentBox = styled.div`
   padding: 1.6rem;
   background-color: ${(props) =>
     props.completion ? props.theme.sub4 : props.theme.white};
+
+  cursor: pointer;
 `;
 
 const StContentHeader = styled.div`
@@ -196,24 +213,16 @@ const StIcon = styled.div`
   ${IconSmall};
 `;
 
-const StInnerTime = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-
-  ${fontSmall};
-  color: ${({ theme }) => theme.sub2};
-`;
-
 const StInnerCurrent = styled.div`
-  position: absolute;
-  right: 3.6rem;
-
   display: flex;
   align-items: center;
   gap: 0.4rem;
 
   ${fontSmall}
-  line-height: 2rem;
   color: ${({ theme }) => theme.sub2};
+`;
+
+const StInnerTime = styled(StInnerCurrent)`
+  position: absolute;
+  right: 3.6rem;
 `;

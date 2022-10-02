@@ -37,4 +37,4 @@ const selectSlice = createSlice({
 });
 
 export const { cleanUp } = selectSlice.actions;
-export default selectSlice.reducer;
+export default selectSlice;

@@ -1,17 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import instance from '../../../app/module/instance';
 
+import SelectContentBox from './SelectContentBox';
 import BodyPadding from '../../common/BodyPadding';
-import SelectContentBox from '../../common/SelectContentBox';
+import { ModalBasic } from '../../common/Modal';
 
 import { FILTER_ARR, CATEGORY_ARR } from '../../../shared/Array';
 
 import { fontMedium } from '../../../shared/themes/textStyle';
-import { IconSmall } from '../../../shared/themes/iconStyle';
+import { IconMedium, IconSmall } from '../../../shared/themes/iconStyle';
 
 import IconDropdown from '../../../static/icons/Variety=Dropdown, Status=untab, Size=S.svg';
+import IconSearch from '../../../static/icons/Variety=search, Status=untab, Size=M.svg';
 
 import styled from 'styled-components';
 
@@ -22,19 +24,29 @@ const MainSelect = () => {
 
   //필터와 카테고리를 관리하는 State
   const [filter, setFilter] = useState(state.filter || '기본순');
-  const [category, setCategory] = useState('카테고리');
+  const [category, setCategory] = useState(state.category || '카테고리');
+  const [proceeding, setProceeding] = useState(state.proceeding || '모든 투표');
 
+  const [modal, setModal] = useState('');
   const [filterModal, setFilterModal] = useState(false);
   const [categoryModal, setCategoryModal] = useState(false);
+  const [proceedingModal, setProceedingModal] = useState(false);
 
   //무한 스크롤을 관리하는 State
   const [page, setPage] = useState(1);
   const [ref, setRef] = useState(null);
 
-  //선택 게시글 불러오기
+  //검색 관리
+  const [search, setSearch] = useState(false);
+  const searchRef = useRef();
+
+  //고민 투표글 GET API
   const getScrollSelect = useCallback(async () => {
     try {
-      if (filter === '인기순') {
+      if (proceeding !== '모든 투표') {
+        const { data } = await instance.get(`/select/ongoing?page=${page}`);
+        setContents((prev) => [...prev, ...data.result]);
+      } else if (filter === '인기순') {
         const { data } = await instance.get(`/select/filter?page=${page}`);
         setContents((prev) => [...prev, ...data.data]);
       } else if (category && category !== '카테고리') {
@@ -42,20 +54,48 @@ const MainSelect = () => {
           `/select/category/${category}?page=${page}`,
         );
         setContents((prev) => [...prev, ...data.result]);
-      } else if (filter === '기본순' || category === '카테고리') {
+      } else {
         const { data } = await instance.get(`/select?page=${page}`);
         setContents((prev) => [...prev, ...data.result]);
       }
     } catch (error) {
       console.log(error.response.data.errMsg);
     }
-  }, [filter, category, page]);
+  }, [proceeding, filter, category, page]);
 
+  //고민 투표글 검색 GET API
+  const searchHandler = async (event) => {
+    event.preventDefault();
+    try {
+      const { data } = await instance.get(
+        `/select/search?searchWord=${searchRef.current.value}`,
+      );
+      setSearch(true);
+      setContents([...data.result]);
+    } catch (error) {
+      setModal(error.response.data.errMsg);
+    }
+    searchRef.current.value = '';
+  };
+
+  //고민 투표글 검색 취소버튼
+  const searchCancelHandler = () => {
+    if (search) {
+      setSearch(false);
+      setContents([]);
+      setPage(1);
+    }
+    searchRef.current.value = '';
+  };
+
+  //검색 결과를 보여줄땐 GET 요청을 하지 않는다
   useEffect(() => {
-    getScrollSelect();
-  }, [getScrollSelect]);
+    if (search) return;
 
-  //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다.
+    getScrollSelect();
+  }, [search, getScrollSelect]);
+
+  //지정한 대상이 관찰되면 page를 1 올려주고 대상을 해제한다
   const onIntersect = ([entry], observer) => {
     if (entry.isIntersecting) {
       setPage((prev) => prev + 1);
@@ -77,6 +117,7 @@ const MainSelect = () => {
   const filterHandler = (event) => {
     if (filter !== event.target.getAttribute('value')) {
       setFilter(event.target.getAttribute('value'));
+      setProceeding('모든 투표');
       setCategory('카테고리');
       setContents([]);
       setPage(1);
@@ -87,12 +128,14 @@ const MainSelect = () => {
   const filterOpenHandler = () => {
     setFilterModal((prev) => !prev);
     setCategoryModal(false);
+    setProceedingModal(false);
   };
 
   //카테고리 핸들러
   const categoryHandler = (event) => {
     if (category !== event.target.getAttribute('value')) {
       setCategory(event.target.getAttribute('value'));
+      setProceeding('모든 투표');
       setFilter('기본순');
       setContents([]);
       setPage(1);
@@ -103,10 +146,45 @@ const MainSelect = () => {
   const categoryOpenHandler = () => {
     setCategoryModal((prev) => !prev);
     setFilterModal(false);
+    setProceedingModal(false);
+  };
+
+  //진행 중인 투표 핸들러
+  const proceedingHandler = (event) => {
+    if (proceeding !== event.target.getAttribute('value')) {
+      setProceeding(event.target.getAttribute('value'));
+      setFilter('기본순');
+      setCategory('카테고리');
+      setContents([]);
+      setPage(1);
+    }
+  };
+
+  //진행 중인 투표 셀렉트 박스 토클
+  const proceedingOpenHandler = () => {
+    setProceedingModal((prev) => !prev);
+    setCategoryModal(false);
+    setFilterModal(false);
   };
 
   return (
     <>
+      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+
+      <StSearchWrap>
+        <form onSubmit={searchHandler}>
+          <input
+            maxLength={10}
+            placeholder="고민 투표/제목 검색(10자 이내)"
+            ref={searchRef}
+          />
+          <div onClick={searchHandler}>
+            <img src={IconSearch} alt="IconSearch" />
+          </div>
+        </form>
+        <StCancel onClick={searchCancelHandler}>취소</StCancel>
+      </StSearchWrap>
+
       <StFilterDiv length={contents.length}>
         <StFilter onClick={filterOpenHandler}>
           <span>{filter}</span>
@@ -127,18 +205,38 @@ const MainSelect = () => {
           <StArrowIcon>
             <img src={IconDropdown} alt="IconDropdown" />
           </StArrowIcon>
-          <StCategoryModal setter={categoryModal}>
+          <StFilterModal setter={categoryModal}>
             {CATEGORY_ARR.map((item) => (
               <span key={item} value={item} onClick={categoryHandler}>
                 {item}
               </span>
             ))}
-          </StCategoryModal>
+          </StFilterModal>
+        </StFilter>
+
+        <StFilter onClick={proceedingOpenHandler}>
+          <span>{proceeding}</span>
+          <StArrowIcon>
+            <img src={IconDropdown} alt="IconDropdown" />
+          </StArrowIcon>
+          <StFilterModal setter={proceedingModal}>
+            {['모든 투표', '진행중인 투표'].map((item) => (
+              <span key={item} value={item} onClick={proceedingHandler}>
+                {item}
+              </span>
+            ))}
+          </StFilterModal>
         </StFilter>
       </StFilterDiv>
 
       <BodyPadding>
-        <SelectContentBox contents={contents} setRef={setRef} filter={filter} />
+        <SelectContentBox
+          contents={contents}
+          setRef={setRef}
+          filter={filter}
+          category={category}
+          proceeding={proceeding}
+        />
       </BodyPadding>
     </>
   );
@@ -146,23 +244,85 @@ const MainSelect = () => {
 
 export default MainSelect;
 
-const StFilterDiv = styled.div`
+const StSearchWrap = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
   }
 
   position: fixed;
   top: 6.4rem;
 
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 2.9rem;
+  gap: 2rem;
 
   width: 100%;
   height: 6.4rem;
   padding: 0 2rem;
+  background-color: ${({ theme }) => theme.bg};
+
+  z-index: 9;
+
+  form {
+    position: relative;
+
+    width: 100%;
+
+    input {
+      width: 100%;
+      height: 4rem;
+      padding: 0 1.5rem;
+      background-color: ${({ theme }) => theme.white};
+
+      border: none;
+      border-radius: 2rem;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    div {
+      position: absolute;
+      top: 0.8rem;
+      right: 0.8rem;
+      ${IconMedium};
+
+      cursor: pointer;
+    }
+  }
+`;
+
+const StCancel = styled.div`
+  width: 3rem;
+
+  ${fontMedium}
+
+  cursor: pointer;
+`;
+
+const StFilterDiv = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
+  }
+
+  position: fixed;
+  top: 12.8rem;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 2.5rem;
+
+  width: 100%;
+  height: 4.2rem;
+  padding: 0.4rem 2rem 0 2rem;
   background-color: ${({ theme }) => theme.bg};
 
   border-bottom: ${(props) =>
@@ -175,6 +335,8 @@ const StFilter = styled.div`
   display: flex;
   align-items: center;
 
+  cursor: pointer;
+
   span {
     ${fontMedium}
     color: ${({ theme }) => theme.sub2};
@@ -183,23 +345,23 @@ const StFilter = styled.div`
 
 const StFilterModal = styled.div`
   @media ${({ theme }) => theme.device.PC} {
-    top: 4.3rem;
+    top: 3rem;
   }
 
   position: fixed;
-  top: 10.8rem;
+  top: 16rem;
 
   display: flex;
   flex-direction: column;
-
-  transform-origin: center top;
-  transition-duration: 0.1s;
-  transform: scaleY(${(props) => (props.setter ? 1 : 0)});
 
   background-color: #fff;
 
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
   border-radius: 1rem;
+
+  transform-origin: center top;
+  transition-duration: 0.1s;
+  transform: scaleY(${(props) => (props.setter ? 1 : 0)});
 
   span {
     display: block;
@@ -208,11 +370,12 @@ const StFilterModal = styled.div`
     padding: 0 1.5rem;
 
     line-height: 3rem;
-  }
-`;
 
-const StCategoryModal = styled(StFilterModal)`
-  transform: scaleY(${(props) => (props.setter ? 1 : 0)});
+    &:hover,
+    &:active {
+      color: ${({ theme }) => theme.main2};
+    }
+  }
 `;
 
 const StArrowIcon = styled.div`

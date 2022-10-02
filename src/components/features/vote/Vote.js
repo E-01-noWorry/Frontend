@@ -43,7 +43,7 @@ const Vote = ({ content, selectKey }) => {
   return (
     <>
       <StVoteWrap>
-        {msg.includes('조회 성공') || content.completion ? (
+        {msg?.includes('조회 성공') || content.completion ? (
           //자기 자신의 게시물을 봤을때, 투표를 했을때, 마감 기한이 끝난 게시물을 누구나 확인할때
           <StVoteResultBox>
             {content.options?.map((option, idx) => (
@@ -208,6 +208,8 @@ const StSelectItem = styled.div`
   background-color: #fff;
 
   ${fontBold}
+
+  cursor: pointer;
 
   //클릭 후 투표 버튼
   //안보이다가 onclick 발생시 위의 코드에서 block으로 바뀝니다

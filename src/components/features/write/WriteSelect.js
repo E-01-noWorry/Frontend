@@ -30,15 +30,16 @@ const WriteSelect = () => {
   const navigate = useNavigate();
 
   const [numArr, setNumArr] = useState([1, 2]);
-  const [modal, setModal] = useState('');
-  const [uploadModal, setUploadModal] = useState('');
 
   //서버에 전송할 payload
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [options, setOptions] = useState({ 1: '', 2: '' });
-  const [images, setImages] = useState({ 1: '', 2: '' });
   const [time, setTime] = useState(1);
+  const [images, setImages] = useState({ 1: '', 2: '' });
+
+  const [modal, setModal] = useState('');
+  const [uploadModal, setUploadModal] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -88,7 +89,7 @@ const WriteSelect = () => {
         await instance.post('/select', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
-        setUploadModal('게시글 등록 완료!');
+        setUploadModal(true);
         document.body.style.overflow = 'hidden';
       } catch (error) {
         setModal(error.response.data.errMsg);
@@ -103,10 +104,10 @@ const WriteSelect = () => {
         <ModalBasic
           setter={() => {
             navigate('/main', { state: { now: 'select' } });
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = 'overlay';
           }}
         >
-          {uploadModal}
+          게시글 등록 완료!
         </ModalBasic>
       )}
 
@@ -114,7 +115,7 @@ const WriteSelect = () => {
         <ModalBasic
           setter={() => {
             setModal('');
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = 'overlay';
           }}
         >
           {modal}
@@ -139,11 +140,11 @@ const WriteSelect = () => {
               <textarea
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
-                maxLength={40}
+                maxLength={60}
                 placeholder="고민을 작성해주세요."
                 style={{ height: '8.9rem' }}
               />
-              <span>{title.length}/40자</span>
+              <span>{title.length}/60자</span>
             </StInnerText>
           </StContentBox>
 
@@ -236,11 +237,11 @@ const StHeaderTitle = styled.div`
 const StContainer = styled.div`
   @media ${({ theme }) => theme.device.PC} {
     position: absolute;
-    width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
 
-    padding: 0 2rem 2rem 2rem;
+    width: ${({ theme }) => theme.style.width};
+    padding: 6.4rem 2rem 2rem 2rem;
   }
 
   display: flex;
@@ -248,8 +249,7 @@ const StContainer = styled.div`
   gap: 3.2rem;
 
   width: 100%;
-  margin-top: 6.4rem;
-  margin-bottom: 1.6rem;
+  padding: 6.4rem 0 2rem 0;
   background-color: ${({ theme }) => theme.bg};
 `;
 
@@ -266,9 +266,9 @@ const StInnerTitle = styled.div`
 `;
 
 const StInnerText = styled.div`
+  ${borderBoxDefault};
   position: relative;
 
-  ${borderBoxDefault};
   align-items: flex-start;
 
   height: 100%;
@@ -319,11 +319,15 @@ const StInnerCategory = styled.div`
       width: 2.2rem;
       height: 2.2rem;
       accent-color: ${({ theme }) => theme.black};
+
+      cursor: pointer;
     }
 
     label {
       ${fontMedium};
       margin-left: 1.1rem;
+
+      cursor: pointer;
     }
   }
 `;
@@ -347,6 +351,10 @@ const StInnerSubtitle = styled.div`
     ${fontSmall}
     ${fontBold}
     line-height: 2.1rem;
+  }
+
+  div:nth-child(2) {
+    cursor: pointer;
   }
 `;
 
