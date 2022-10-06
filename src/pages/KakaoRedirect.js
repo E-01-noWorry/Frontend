@@ -104,11 +104,21 @@ const KakaoRedirect = () => {
 export default KakaoRedirect;
 
 const Container = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
+  }
+
+  width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: ${({ theme }) => theme.bg};
 `;
 const Main = styled.div`
   ${fontLarge}
