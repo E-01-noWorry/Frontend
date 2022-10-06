@@ -81,15 +81,15 @@ const KakaoRedirect = () => {
           )}
           <Container>
             <Main>닉네임을 설정해주세요.</Main>
-            <Sub></Sub>
+            <Main2>닉네임 설정 완료 시 메인 페이지로 이동합니다.</Main2>
             <Objects>
               <form onSubmit={onClickEditNickName}>
                 <NicknameInput
                   name="nickname"
                   onChange={onChangeEditNickName}
-                  placeholder="2~10자 한글,영어,숫자로만 입력해주세요."
+                  placeholder="닉네임 입력"
                 ></NicknameInput>
-                <SubmitButton onClick={onClickEditNickName}>제출</SubmitButton>
+                <SubmitButton onClick={onClickEditNickName}>저장</SubmitButton>
               </form>
             </Objects>
             <Sub>*익명으로 안심하고 고민을 이야기할 수 있어요. </Sub>
@@ -104,19 +104,35 @@ const KakaoRedirect = () => {
 export default KakaoRedirect;
 
 const Container = styled.div`
+  @media ${({ theme }) => theme.device.PC} {
+    position: absolute;
+    left: ${({ theme }) => theme.style.left};
+    transform: ${({ theme }) => theme.style.transform};
+
+    width: ${({ theme }) => theme.style.width};
+  }
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  width: 100%;
+  height: 100vh;
+  background-color: ${({ theme }) => theme.bg};
 `;
 const Main = styled.div`
   ${fontLarge}
-  margin-top: 10rem;
+  margin-bottom: 0.8rem;
+`;
+
+const Main2 = styled.div`
+  ${fontSmall}
 `;
 const Sub = styled.div`
   ${fontSmall}
   margin-top: 1rem;
-  color: gray;
+  color: #95918c;
 `;
 const Objects = styled.div`
   display: flex;
@@ -125,18 +141,20 @@ const Objects = styled.div`
 const NicknameInput = styled.input`
   border: none;
   border-radius: 2rem;
-  height: 35px;
-  padding: 0.5rem;
+  width: 22.1rem;
+  height: 56px;
+  padding: 0.8rem 1.2rem;
   margin-top: 2rem;
   margin-right: 1rem;
   ::placeholder {
-    font-size: 1rem;
+    font-size: 1.4rem;
   }
 `;
 const SubmitButton = styled.button`
   border: none;
   border-radius: 2rem;
-  height: 30px;
+  height: 56px;
+  width: 10.6rem;
   background-color: ${({ theme }) => theme.main1};
   color: #fff;
 `;
