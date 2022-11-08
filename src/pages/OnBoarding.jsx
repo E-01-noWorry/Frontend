@@ -51,7 +51,7 @@ const OnBoarding = () => {
         </S.Next>
 
         <S.SwiperSlide>
-          <h1>고민투표</h1>
+          <h2>고민투표</h2>
           <span>
             선택에 어려움이 있나요? <br />
             투표를 열어 고민을 해결해보세요!
@@ -60,7 +60,7 @@ const OnBoarding = () => {
         </S.SwiperSlide>
 
         <S.SwiperSlide>
-          <h1>고민상담</h1>
+          <h2>고민상담</h2>
           <span>
             주변에 말하기 어려운 고민이 있나요? <br />
             익명으로 안심하고 고민을 말할 수 있어요!
@@ -69,7 +69,7 @@ const OnBoarding = () => {
         </S.SwiperSlide>
 
         <S.SwiperSlide>
-          <h1>곰곰해답</h1>
+          <h2>곰곰해답</h2>
           <span>
             해결하기 힘든 고민이 있나요? <br />
             곰곰의 명쾌한 해답을 들어보세요!
@@ -96,7 +96,7 @@ const S = {
   SwiperSlide: styled(SwiperSlide)`
     background-color: ${({ theme }) => theme.bg};
 
-    > h1 {
+    > h2 {
       position: absolute;
       top: 8rem;
       left: 4rem;
