@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 function GlobalInput({ children, ...rest }) {
   return <S.Input {...rest}>{children}</S.Input>;
@@ -19,5 +19,11 @@ const S = {
 
     border: none;
     border-radius: 2rem;
+
+    ${(props) =>
+      props.isError &&
+      css`
+        border: 1px solid ${({ theme }) => theme.warning};
+      `}
   `,
 };
