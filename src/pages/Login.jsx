@@ -16,16 +16,21 @@ import IconBack from "static/icons/Variety=back, Status=untab, Size=L.svg";
 import IconJoin from "static/icons/Variety=Join membership, Status=untab, Size=S.svg";
 import styled from "styled-components";
 
+const initialValue = {
+  userId: "",
+  password: "",
+};
+
 const Login = () => {
   const navigate = useNavigate();
 
   const [error, setError] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    userId: "",
-    password: "",
-  });
+  const [userInfo, setUserInfo] = useState(initialValue);
 
   const handleOnChange = (event) => {
+    if (!userInfo.password.length && !userInfo.password.length) {
+      setError(false);
+    }
     const { value, name } = event.target;
     setUserInfo((prev) => ({ ...prev, [name]: value }));
   };
@@ -37,6 +42,7 @@ const Login = () => {
       window.location.replace("/");
     } catch (error) {
       setError(true);
+      setUserInfo(initialValue);
     }
   };
 
@@ -51,17 +57,19 @@ const Login = () => {
         <S.Container>
           <S.InnerContainer>
             <GlobalInput
-              onChange={handleOnChange}
               name="userId"
               type="text"
               placeholder="아이디를 입력해주세요"
               maxLength={12}
+              onChange={handleOnChange}
+              isError={error}
             />
             <GlobalInput
-              onChange={handleOnChange}
               name="password"
               type="password"
               placeholder="패스워드를 입력해주세요"
+              onChange={handleOnChange}
+              isError={error}
             />
             {error && <S.ErrorMsg>*아이디와 비밀번호를 확인해주세요</S.ErrorMsg>}
           </S.InnerContainer>
@@ -73,7 +81,7 @@ const Login = () => {
 
           <S.NaviSignUp>
             <span>아직 회원이 아닌가요?</span>
-            <button onClick={() => navigate("/signUp")}>
+            <button onClick={() => navigate("/signup")}>
               회원가입
               <img src={IconJoin} alt="IconJoin" />
             </button>
