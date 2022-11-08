@@ -1,7 +1,7 @@
-import { createGlobalStyle } from 'styled-components';
-import { fontMedium } from './textStyle';
-import reset from 'styled-reset';
-import '../../static/fonts/fonts.css';
+import "static/fonts/fonts.css";
+import { createGlobalStyle } from "styled-components";
+import reset from "styled-reset";
+import { fontMedium } from "shared/themes/textStyle";
 
 const GlobalStyles = createGlobalStyle`
   ${reset}
@@ -49,6 +49,14 @@ const GlobalStyles = createGlobalStyle`
 
   a {
     text-decoration: none;
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    text-decoration: none;
+    
+    cursor: pointer;
   }
 
   textarea,
