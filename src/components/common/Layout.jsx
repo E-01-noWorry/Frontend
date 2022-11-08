@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
 };
 
 const S = {
-  Layout: styled.div`
+  Layout: styled.main`
     @media ${({ theme }) => theme.device.PC} {
       position: absolute;
       left: ${({ theme }) => theme.style.left};
@@ -17,6 +17,8 @@ const S = {
 
     width: 100%;
     height: 100vh;
+    padding: 0 2rem;
+    background-color: ${({ theme }) => theme.bg};
     /* height: calc(var(--vh, 1vh) * 100); */
   `,
 };
