@@ -21,7 +21,7 @@ const S = {
     left: 0;
 
     display: grid;
-    grid-template-columns: 3.2rem auto 3.2rem;
+    grid-template-columns: ${(props) => props.w || "3.2rem"} auto 3.2rem;
     justify-content: space-between;
     align-items: center;
 
@@ -33,6 +33,7 @@ const S = {
     z-index: 9;
 
     > img {
+      width: 100%;
       cursor: pointer;
     }
 

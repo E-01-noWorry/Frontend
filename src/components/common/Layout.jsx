@@ -16,10 +16,9 @@ const S = {
     }
 
     width: 100%;
-    height: 100vh;
+    min-height: 100%;
     padding: 0 2rem;
     background-color: ${({ theme }) => theme.bg};
-    /* height: calc(var(--vh, 1vh) * 100); */
   `,
 };
 
