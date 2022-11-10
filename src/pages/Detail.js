@@ -1,39 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-import instance from '../app/module/instance';
-import { cleanUp, __getDetailSelect } from '../app/module/selectSlice';
-import { cleanUpError } from '../app/module/voteSlice';
-import { writeCommentThunk } from '../app/module/commentSlice';
+import instance from "../app/module/instance";
+import { cleanUpError } from "../app/module/voteSlice";
+import { writeCommentThunk } from "../app/module/commentSlice";
 
-import Header from '../components/common/Header';
-import BodyPadding from '../components/common/BodyPadding';
-import Vote from '../components/features/vote/Vote';
-import Comment from '../components/features/comment/comment';
-import ProfileImg from '../components/elements/ProfileImg';
-import {
-  ModalBasic,
-  ModalDelete,
-  ModalLogin,
-} from '../components/common/Modal';
+import Header from "../components/common/Header";
+import BodyPadding from "../components/common/BodyPadding";
+import Vote from "../components/features/vote/Vote";
+import Comment from "../components/features/comment/comment";
+import ProfileImg from "../components/elements/ProfileImg";
+import { ModalBasic, ModalDelete, ModalLogin } from "../components/common/Modal";
 
-import { remainedTime } from '../shared/timeCalculation';
+import { remainedTime } from "../shared/timeCalculation";
 
-import {
-  fontExtraBold,
-  fontLarge,
-  fontMedium,
-} from '../shared/themes/textStyle';
-import { IconLarge, IconSmall } from '../shared/themes/iconStyle';
+import { fontExtraBold, fontLarge, fontMedium } from "../shared/themes/textStyle";
+import { IconLarge, IconSmall } from "../shared/themes/iconStyle";
 
-import IconBack from '../static/icons/Variety=back, Status=untab, Size=L.svg';
-import IconDelete from '../static/icons/Variety=delete, Status=untab, Size=L.svg';
-import IconTimeWarning from '../static/icons/Variety=Time warning, Status=untab, Size=S.svg';
-import IconTimeOver from '../static/icons/Variety=Timeover, Status=Untab, Size=S.svg';
-import IconSend from '../static/icons/Variety=send, Status=untab, Size=L.svg';
+import IconBack from "../static/icons/Variety=back, Status=untab, Size=L.svg";
+import IconDelete from "../static/icons/Variety=delete, Status=untab, Size=L.svg";
+import IconTimeWarning from "../static/icons/Variety=Time warning, Status=untab, Size=S.svg";
+import IconTimeOver from "../static/icons/Variety=Timeover, Status=Untab, Size=S.svg";
+import IconSend from "../static/icons/Variety=send, Status=untab, Size=L.svg";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Detail = () => {
   const dispatch = useDispatch();
@@ -45,14 +36,14 @@ const Detail = () => {
   const user = useSelector((state) => state);
 
   const { selectKey } = useParams();
-  const userKey = localStorage.getItem('userKey');
+  const userKey = localStorage.getItem("userKey");
 
-  const [modal, setModal] = useState('');
+  const [modal, setModal] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
 
   const [writeComment, setWriteComment] = useState({
-    comment: '',
+    comment: "",
   });
 
   useEffect(() => {
@@ -61,10 +52,10 @@ const Detail = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(__getDetailSelect(selectKey));
+    // dispatch(__getDetailSelect(selectKey));
 
     return () => {
-      dispatch(cleanUp());
+      // dispatch(cleanUp());
     };
   }, [dispatch, selectKey]);
 
@@ -72,8 +63,8 @@ const Detail = () => {
   const deleteHandler = async () => {
     try {
       await instance.delete(`/select/${selectKey}`);
-      if (state?.now === 'select' || state?.now === false) {
-        navigate('/main', { state: { now: 'select' }, replace: true });
+      if (state?.now === "select" || state?.now === false) {
+        navigate("/main", { state: { now: "select" }, replace: true });
       } else {
         navigate(-1, { replace: true });
       }
@@ -84,10 +75,10 @@ const Detail = () => {
 
   //뒤로가기 버튼
   const goBackHandler = () => {
-    if (state?.now === 'select' || state?.now === false) {
-      navigate('/main', {
+    if (state?.now === "select" || state?.now === false) {
+      navigate("/main", {
         state: {
-          now: 'select',
+          now: "select",
           filter: state.filter,
           category: state.category,
           proceeding: state.proceeding,
@@ -115,36 +106,31 @@ const Detail = () => {
     } else if (
       writeComment.comment.length > 0 &&
       writeComment.comment.length < 2 &&
-      localStorage.getItem('accessToken') !== null
+      localStorage.getItem("accessToken") !== null
     ) {
-      setModal('최소 2글자 입력하세요.');
+      setModal("최소 2글자 입력하세요.");
     }
     setWriteComment({
-      comment: '',
+      comment: "",
     });
-    if (localStorage.getItem('accessToken') === null) {
+    if (localStorage.getItem("accessToken") === null) {
       setLoginModal(true);
     }
-    if (
-      writeComment.comment === '' &&
-      localStorage.getItem('accessToken') !== null
-    ) {
-      setModal('내용을 입력해주세요.');
+    if (writeComment.comment === "" && localStorage.getItem("accessToken") !== null) {
+      setModal("내용을 입력해주세요.");
     }
   };
 
   return (
     <>
-      {deleteModal && (
-        <ModalDelete setter={() => setDeleteModal(false)} del={deleteHandler} />
-      )}
+      {deleteModal && <ModalDelete setter={() => setDeleteModal(false)} del={deleteHandler} />}
 
-      {modal && <ModalBasic setter={() => setModal('')}>{modal}</ModalBasic>}
+      {modal && <ModalBasic setter={() => setModal("")}>{modal}</ModalBasic>}
 
       {loginModal && (
         <ModalLogin
           login={() => {
-            navigate('/login');
+            navigate("/login");
             dispatch(cleanUpError());
           }}
           setter={() => {
@@ -188,9 +174,7 @@ const Detail = () => {
                 <StIcon>
                   <img src={IconTimeWarning} alt="IconTimeWarning" />
                 </StIcon>
-                <span className="deadline">
-                  {remainedTime(content.deadLine)}
-                </span>
+                <span className="deadline">{remainedTime(content.deadLine)}</span>
               </>
             )}
           </StDeadLine>

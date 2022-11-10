@@ -1,39 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import BodyPadding from '../../components/common/BodyPadding';
-import Footer from '../../components/common/Footer';
-import {
-  fontLarge,
-  fontSmall,
-  fontMedium,
-} from '../../shared/themes/textStyle';
-import { fontExtraBold, fontBold } from '../../shared/themes/textStyle';
-import { useLocation, useNavigate } from 'react-router-dom';
-import {
-  deleteInfoThunk,
-  editNickNameThunk,
-  getMyPointThunk,
-} from '../../app/module/myPageSlice';
-import { css } from 'styled-components';
-import { IconLarge, IconMedium } from '../../shared/themes/iconStyle';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+import BodyPadding from "../../components/common/BodyPadding";
+// import Footer from '../../components/common/Footer';
+import { fontLarge, fontSmall, fontMedium } from "../../shared/themes/textStyle";
+import { fontExtraBold, fontBold } from "../../shared/themes/textStyle";
+import { useLocation, useNavigate } from "react-router-dom";
+import { deleteInfoThunk, editNickNameThunk, getMyPointThunk } from "../../app/module/myPageSlice";
+import { css } from "styled-components";
+import { IconLarge, IconMedium } from "../../shared/themes/iconStyle";
 import {
   ModalBasic,
   ModalDelete,
   ModalDeleteInfo,
   ModalLogout,
-} from '../../components/common/Modal';
-import ProfileImg from '../../components/elements/ProfileImg';
-import MypageModal from '../../components/features/mypage/mypageModal';
+} from "../../components/common/Modal";
+import ProfileImg from "../../components/elements/ProfileImg";
+import MypageModal from "../../components/features/mypage/mypageModal";
 
-import IconChange from '../../static/icons/Variety=Change, Status=untab, Size=S.svg';
-import IconEdit from '../../static/icons/Variety=edit, Status=untab, Size=L.svg';
-import IconNext from '../../static/icons/Variety=next, Status=untab, Size=M.svg';
-import IconVoteTab from '../../static/icons/Variety=vote, Status=tab, Size=L.svg';
-import IconChatting from '../../static/icons/Variety=chating, Status=untab, Size=L.svg';
-import IconInformation from '../../static/icons/Variety=Information, Status=untab, Size=S.svg';
-import IconPerson from '../../static/icons/Variety=profile, Status=tab, Size=L.svg';
-import { cleanUpErr } from '../../app/module/myPageSlice';
+import IconChange from "../../static/icons/Variety=Change, Status=untab, Size=S.svg";
+import IconEdit from "../../static/icons/Variety=edit, Status=untab, Size=L.svg";
+import IconNext from "../../static/icons/Variety=next, Status=untab, Size=M.svg";
+import IconVoteTab from "../../static/icons/Variety=vote, Status=tab, Size=L.svg";
+import IconChatting from "../../static/icons/Variety=chating, Status=untab, Size=L.svg";
+import IconInformation from "../../static/icons/Variety=Information, Status=untab, Size=S.svg";
+import IconPerson from "../../static/icons/Variety=profile, Status=tab, Size=L.svg";
+import { cleanUpErr } from "../../app/module/myPageSlice";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -42,7 +34,7 @@ const MyPage = () => {
   const userNickname = useSelector((state) => state.myPageSlice.data.nickname);
   const userPoint = useSelector((state) => state.myPageSlice.point.point);
   const editNicknameErr = useSelector((state) => state.myPageSlice?.err);
-  const [modal, setModal] = useState('');
+  const [modal, setModal] = useState("");
 
   const [logoutModal, setLogoutModal] = useState(false);
   const [deleteInfoModal, setDeleteInfoModal] = useState(false);
@@ -50,7 +42,7 @@ const MyPage = () => {
   //나의 포인트 조회
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (localStorage.getItem('userKey')) {
+    if (localStorage.getItem("userKey")) {
       dispatch(getMyPointThunk());
     }
   }, [dispatch]);
@@ -62,7 +54,7 @@ const MyPage = () => {
 
   //티어별 상세정보
   const [tiers, setTiers] = useState({
-    tiers: '',
+    tiers: "",
   });
 
   const onClickTiers = (event) => {
@@ -70,7 +62,7 @@ const MyPage = () => {
   };
 
   //로그인 여부
-  const loggined = localStorage.getItem('accessToken');
+  const loggined = localStorage.getItem("accessToken");
 
   //로그아웃
   const onClickLogOut = () => {
@@ -79,13 +71,13 @@ const MyPage = () => {
 
   //닉네임변경
   const [editNickname, setEditNickname] = useState({
-    nickname: '',
+    nickname: "",
   });
   const [editMode, setEditMode] = useState(false);
 
   const onClickEditNickName = () => {
     setEditMode((status) => !status);
-    setEditNickname({ nickname: localStorage.getItem('nickname') });
+    setEditNickname({ nickname: localStorage.getItem("nickname") });
     if (editMode === true) {
       if (editNicknameErr) {
         setModal(editNicknameErr);
@@ -118,11 +110,11 @@ const MyPage = () => {
 
   return (
     <>
-      <div style={{ paddingBottom: '9rem' }}>
+      <div style={{ paddingBottom: "9rem" }}>
         {modal && (
           <ModalBasic
             setter={() => {
-              setModal('');
+              setModal("");
               dispatch(cleanUpErr());
             }}
           >
@@ -137,7 +129,7 @@ const MyPage = () => {
             }}
             logout={() => {
               localStorage.clear();
-              window.location.reload('/mypage');
+              window.location.reload("/mypage");
             }}
           />
         )}
@@ -150,7 +142,7 @@ const MyPage = () => {
             del={() => {
               onClickDeleteInfo();
               setDeleteInfoModal(false);
-              setModal('회원탈퇴가 완료되었습니다.');
+              setModal("회원탈퇴가 완료되었습니다.");
             }}
           />
         )}
@@ -170,15 +162,15 @@ const MyPage = () => {
                     <div>
                       <Badge userPoint={userPoint}>
                         {userPoint <= 10
-                          ? 'White'
+                          ? "White"
                           : userPoint > 10 && userPoint <= 25
-                          ? 'Yellow'
+                          ? "Yellow"
                           : userPoint > 25 && userPoint <= 50
-                          ? 'Green'
+                          ? "Green"
                           : userPoint > 50 && userPoint <= 100
-                          ? 'Blue'
+                          ? "Blue"
                           : userPoint > 100
-                          ? 'Purple'
+                          ? "Purple"
                           : null}
                       </Badge>
                     </div>
@@ -192,14 +184,12 @@ const MyPage = () => {
                               type="text"
                               value={editNickname.nickname}
                             />
-                            <Incorrect>
-                              *한글, 영문, 숫자로만 2~10자로 입력해주세요
-                            </Incorrect>
+                            <Incorrect>*한글, 영문, 숫자로만 2~10자로 입력해주세요</Incorrect>
                           </>
                         ) : (
                           <>
-                            {userNickname || localStorage.getItem('nickname')}
-                            <span style={{ fontWeight: '400' }}>님</span>
+                            {userNickname || localStorage.getItem("nickname")}
+                            <span style={{ fontWeight: "400" }}>님</span>
                           </>
                         )}
                       </Nickname>
@@ -230,23 +220,21 @@ const MyPage = () => {
                       현재등급
                       <ScoreDetail>
                         {userPoint <= 10
-                          ? 'White'
+                          ? "White"
                           : userPoint > 10 && userPoint <= 25
-                          ? 'Yellow'
+                          ? "Yellow"
                           : userPoint > 25 && userPoint <= 50
-                          ? 'Green'
+                          ? "Green"
                           : userPoint > 50 && userPoint <= 100
-                          ? 'Blue'
+                          ? "Blue"
                           : userPoint > 100
-                          ? 'Purple'
+                          ? "Purple"
                           : null}
                       </ScoreDetail>
                     </ScoreInfo1>
                     <ScoreInfo2>
                       모은점수
-                      <ScoreDetail>
-                        {userPoint === null ? '0' : userPoint}점
-                      </ScoreDetail>
+                      <ScoreDetail>{userPoint === null ? "0" : userPoint}점</ScoreDetail>
                     </ScoreInfo2>
                     <ScoreInfo3>
                       다음등급 까지
@@ -259,7 +247,7 @@ const MyPage = () => {
                           ? `${51 - userPoint}점 남음`
                           : userPoint >= 51 && userPoint <= 100
                           ? `${101 - userPoint}점 남음`
-                          : '-'}
+                          : "-"}
                       </ScoreDetail>
                     </ScoreInfo3>
                   </MyScore>
@@ -273,39 +261,19 @@ const MyPage = () => {
                 <TierInfoContainer>
                   <TierInfo>
                     <Tiers>
-                      <TierButtonWhite
-                        onClick={onClickTiers}
-                        tiers={tiers}
-                        id="white"
-                      >
+                      <TierButtonWhite onClick={onClickTiers} tiers={tiers} id="white">
                         White
                       </TierButtonWhite>
-                      <TierButtonYellow
-                        onClick={onClickTiers}
-                        tiers={tiers}
-                        id="yellow"
-                      >
+                      <TierButtonYellow onClick={onClickTiers} tiers={tiers} id="yellow">
                         Yellow
                       </TierButtonYellow>
-                      <TierButtonGreen
-                        onClick={onClickTiers}
-                        tiers={tiers}
-                        id="green"
-                      >
+                      <TierButtonGreen onClick={onClickTiers} tiers={tiers} id="green">
                         Green
                       </TierButtonGreen>
-                      <TierButtonBlue
-                        onClick={onClickTiers}
-                        tiers={tiers}
-                        id="blue"
-                      >
+                      <TierButtonBlue onClick={onClickTiers} tiers={tiers} id="blue">
                         Blue
                       </TierButtonBlue>
-                      <TierButtonPurple
-                        onClick={onClickTiers}
-                        tiers={tiers}
-                        id="purple"
-                      >
+                      <TierButtonPurple onClick={onClickTiers} tiers={tiers} id="purple">
                         Purple
                       </TierButtonPurple>
                     </Tiers>
@@ -315,35 +283,25 @@ const MyPage = () => {
                 <BodyPadding>
                   <StMypageWrap login={loggined}>
                     <TierInfoLetter>
-                      {tiers.tiers === 'white' ? (
-                        <Line>
-                          '고민 서비스 참여를 통해 0~10점을 획득했을 때'
-                        </Line>
+                      {tiers.tiers === "white" ? (
+                        <Line>'고민 서비스 참여를 통해 0~10점을 획득했을 때'</Line>
                       ) : null}
-                      {tiers.tiers === 'yellow' ? (
-                        <Line>
-                          '고민 서비스 참여를 통해 11~25점을 획득했을 때'
-                        </Line>
+                      {tiers.tiers === "yellow" ? (
+                        <Line>'고민 서비스 참여를 통해 11~25점을 획득했을 때'</Line>
                       ) : null}
-                      {tiers.tiers === 'green' ? (
-                        <Line>
-                          '고민 서비스 참여를 통해 26~50점을 획득했을 때'
-                        </Line>
+                      {tiers.tiers === "green" ? (
+                        <Line>'고민 서비스 참여를 통해 26~50점을 획득했을 때'</Line>
                       ) : null}
-                      {tiers.tiers === 'blue' ? (
-                        <Line>
-                          '고민 서비스 참여를 통해 51~100점을 획득했을 때'
-                        </Line>
+                      {tiers.tiers === "blue" ? (
+                        <Line>'고민 서비스 참여를 통해 51~100점을 획득했을 때'</Line>
                       ) : null}
-                      {tiers.tiers === 'purple' ? (
-                        <Line>
-                          '고민 서비스 참여를 통해 101점 이상을 획득했을 때'
-                        </Line>
+                      {tiers.tiers === "purple" ? (
+                        <Line>'고민 서비스 참여를 통해 101점 이상을 획득했을 때'</Line>
                       ) : null}
                     </TierInfoLetter>
                     <StTitle>고민투표</StTitle>
                     <StBox>
-                      <StInnerNavi onClick={() => navigate('/postvoted')}>
+                      <StInnerNavi onClick={() => navigate("/postvoted")}>
                         <StInnerTitle>
                           <div>
                             <img src={IconEdit} alt="IconEdit" />
@@ -355,7 +313,7 @@ const MyPage = () => {
                         </StInnerArrow>
                       </StInnerNavi>
 
-                      <StInnerNavi onClick={() => navigate('/voted')}>
+                      <StInnerNavi onClick={() => navigate("/voted")}>
                         <StInnerTitle>
                           <div>
                             <img src={IconVoteTab} alt="IconVoteTab" />
@@ -370,7 +328,7 @@ const MyPage = () => {
 
                     <StTitle>고민상담</StTitle>
                     <StBox>
-                      <StInnerNavi onClick={() => navigate('/maderoom')}>
+                      <StInnerNavi onClick={() => navigate("/maderoom")}>
                         <StInnerTitle>
                           <div>
                             <img src={IconEdit} alt="IconEdit" />
@@ -382,7 +340,7 @@ const MyPage = () => {
                         </StInnerArrow>
                       </StInnerNavi>
 
-                      <StInnerNavi onClick={() => navigate('/operatingroom')}>
+                      <StInnerNavi onClick={() => navigate("/operatingroom")}>
                         <StInnerTitle>
                           <div>
                             <img src={IconChatting} alt="IconChatting" />
@@ -405,7 +363,7 @@ const MyPage = () => {
                             <a
                               href="https://forms.gle/daCzxS5nhRZXzrUr9"
                               target="_blank"
-                              style={{ color: 'black', cursor: 'default' }}
+                              style={{ color: "black", cursor: "default" }}
                             >
                               1 : 1 문의
                             </a>
@@ -445,20 +403,14 @@ const MyPage = () => {
               다양한 서비스를 경험해보세요.
             </MyPageHeadContainer>
             <ButtonWrap>
-              <StUserButton onClick={() => navigate('/login')}>
-                로그인
-              </StUserButton>
-              <StUserButton onClick={() => navigate('/signup')}>
-                회원가입
-              </StUserButton>
+              <StUserButton onClick={() => navigate("/login")}>로그인</StUserButton>
+              <StUserButton onClick={() => navigate("/signup")}>회원가입</StUserButton>
             </ButtonWrap>
             <BodyPadding>
               <StMypageWrap login={loggined}>
                 <StTitle>고민투표</StTitle>
                 <StBox>
-                  <StInnerNavi
-                    onClick={() => setModal('로그인 후 사용해주세요.')}
-                  >
+                  <StInnerNavi onClick={() => setModal("로그인 후 사용해주세요.")}>
                     <StInnerTitle>
                       <div>
                         <img src={IconEdit} alt="IconEdit" />
@@ -470,9 +422,7 @@ const MyPage = () => {
                     </StInnerArrow>
                   </StInnerNavi>
 
-                  <StInnerNavi
-                    onClick={() => setModal('로그인 후 사용해주세요.')}
-                  >
+                  <StInnerNavi onClick={() => setModal("로그인 후 사용해주세요.")}>
                     <StInnerTitle>
                       <div>
                         <img src={IconVoteTab} alt="IconVoteTab" />
@@ -487,9 +437,7 @@ const MyPage = () => {
 
                 <StTitle>고민상담</StTitle>
                 <StBox>
-                  <StInnerNavi
-                    onClick={() => setModal('로그인 후 사용해주세요.')}
-                  >
+                  <StInnerNavi onClick={() => setModal("로그인 후 사용해주세요.")}>
                     <StInnerTitle>
                       <div>
                         <img src={IconEdit} alt="IconEdit" />
@@ -500,9 +448,7 @@ const MyPage = () => {
                       <img src={IconNext} alt="IconNext" />
                     </StInnerArrow>
                   </StInnerNavi>
-                  <StInnerNavi
-                    onClick={() => setModal('로그인 후 사용해주세요.')}
-                  >
+                  <StInnerNavi onClick={() => setModal("로그인 후 사용해주세요.")}>
                     <StInnerTitle>
                       <div>
                         <img src={IconChatting} alt="IconChatting" />
@@ -517,9 +463,7 @@ const MyPage = () => {
 
                 <StTitle>고객센터</StTitle>
                 <StBox>
-                  <StInnerNavi
-                    onClick={() => setModal('로그인 후 사용해주세요.')}
-                  >
+                  <StInnerNavi onClick={() => setModal("로그인 후 사용해주세요.")}>
                     <StInnerTitle>
                       <div>
                         <img src={IconEdit} alt="IconEdit" />
@@ -530,9 +474,7 @@ const MyPage = () => {
                       <img src={IconNext} alt="IconNext" />
                     </StInnerArrow>
                   </StInnerNavi>
-                  <StInnerNavi
-                    onClick={() => setModal('로그인 후 사용해주세요.')}
-                  >
+                  <StInnerNavi onClick={() => setModal("로그인 후 사용해주세요.")}>
                     <StInnerTitle>
                       <div>
                         <img src={IconPerson} alt="IconPerson" />
@@ -548,7 +490,7 @@ const MyPage = () => {
             </BodyPadding>
           </>
         )}
-        <Footer state={state} />
+        {/* <Footer state={state} /> */}
       </div>
     </>
   );
@@ -563,8 +505,7 @@ const StMypageWrap = styled.div`
     left: ${({ theme }) => theme.style.left};
     transform: ${({ theme }) => theme.style.transform};
 
-    padding: ${(props) =>
-      props.login ? '29rem 2rem 9rem 2rem' : '21.5rem 2rem 9rem 2rem'};
+    padding: ${(props) => (props.login ? "29rem 2rem 9rem 2rem" : "21.5rem 2rem 9rem 2rem")};
     min-height: calc(100%);
 
     z-index: -1;
@@ -918,7 +859,7 @@ const TierButtonWhite = styled.button`
   border-radius: 99rem;
 
   ${(props) =>
-    props.tiers.tiers === 'white'
+    props.tiers.tiers === "white"
       ? css`
           background-color: #d0d0d0;
           color: #fff;
@@ -938,7 +879,7 @@ const TierButtonYellow = styled.button`
   border-radius: 99rem;
 
   ${(props) =>
-    props.tiers.tiers === 'yellow'
+    props.tiers.tiers === "yellow"
       ? css`
           background-color: #fdd74f;
           color: #fff;
@@ -958,7 +899,7 @@ const TierButtonGreen = styled.button`
   border-radius: 99rem;
 
   ${(props) =>
-    props.tiers.tiers === 'green'
+    props.tiers.tiers === "green"
       ? css`
           background-color: #91dc6e;
           color: #fff;
@@ -978,7 +919,7 @@ const TierButtonBlue = styled.button`
   border-radius: 99rem;
 
   ${(props) =>
-    props.tiers.tiers === 'blue'
+    props.tiers.tiers === "blue"
       ? css`
           background-color: #70a0ff;
           color: #fff;
@@ -998,7 +939,7 @@ const TierButtonPurple = styled.button`
   border-radius: 99rem;
 
   ${(props) =>
-    props.tiers.tiers === 'purple'
+    props.tiers.tiers === "purple"
       ? css`
           background-color: #a57aff;
 

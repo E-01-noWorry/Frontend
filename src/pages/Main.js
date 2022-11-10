@@ -1,38 +1,34 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import instance from '../app/module/instance';
+import instance from "../app/module/instance";
 
-import Header from '../components/common/Header';
-import MainRoom from '../components/features/main/MainRoom';
-import MainSelect from '../components/features/main/MainSelect';
-import WriteButton from '../components/elements/WriteButton';
-import Footer from '../components/common/Footer';
-import { ModalLogin, ModalWrite } from '../components/common/Modal';
+import Header from "../components/common/Header";
+import MainRoom from "../components/features/main/MainRoom";
+import MainSelect from "../components/features/main/MainSelect";
+import WriteButton from "../components/elements/WriteButton";
+// import Footer from '../components/common/Footer';
+import { ModalLogin, ModalWrite } from "../components/common/Modal";
 
-import { isLogin } from '../shared/isLogin';
+import { isLogin } from "../shared/isLogin";
 
-import { IconLarge } from '../shared/themes/iconStyle';
-import {
-  fontBold,
-  fontExtraSmall,
-  fontMedium,
-} from '../shared/themes/textStyle';
+import { IconLarge } from "../shared/themes/iconStyle";
+import { fontBold, fontExtraSmall, fontMedium } from "../shared/themes/textStyle";
 
-import IconNext from '../static/icons/Variety=next, Status=untab, Size=M.svg';
-import IconSurvey from '../static/icons/Variety=Survey, Status=untab, Size=L.svg';
+import IconNext from "../static/icons/Variety=next, Status=untab, Size=M.svg";
+import IconSurvey from "../static/icons/Variety=Survey, Status=untab, Size=L.svg";
 
-import Logo from '../static/images/Logo.svg';
+import Logo from "../static/images/Logo.svg";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import _ from 'lodash';
+import _ from "lodash";
 
 const Main = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  const deviceToken = sessionStorage.getItem('deviceToken');
+  const deviceToken = sessionStorage.getItem("deviceToken");
 
   const [loginModal, setLoginModal] = useState(false);
   const [writeModal, setWriteModal] = useState(false);
@@ -53,7 +49,7 @@ const Main = () => {
   const postDeviceToken = useCallback(async () => {
     if (isLogin() && deviceToken) {
       try {
-        instance.post('/token', { deviceToken });
+        instance.post("/token", { deviceToken });
       } catch (error) {
         console.log(error.response.data.errMsg);
       }
@@ -72,19 +68,19 @@ const Main = () => {
   }, 200);
 
   useEffect(() => {
-    window.addEventListener('scroll', scrollEvent);
+    window.addEventListener("scroll", scrollEvent);
   }, [scrollEvent]);
 
   //메인화면 글 작성 버튼
   const writeButtonHandler = () => {
-    if (isLogin() && state.now === 'select') {
+    if (isLogin() && state.now === "select") {
       setWriteModal(true);
-      document.body.style.overflow = 'hidden';
-    } else if (isLogin() && state.now === 'room') {
-      navigate('/write', { state });
+      document.body.style.overflow = "hidden";
+    } else if (isLogin() && state.now === "room") {
+      navigate("/write", { state });
     } else {
       setLoginModal(true);
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
   };
 
@@ -94,11 +90,11 @@ const Main = () => {
         <ModalWrite
           setter={() => {
             setWriteModal(false);
-            document.body.style.overflow = 'overlay';
+            document.body.style.overflow = "overlay";
           }}
           write={() => {
-            navigate('/write', { state: { now: state.now } });
-            document.body.style.overflow = 'overlay';
+            navigate("/write", { state: { now: state.now } });
+            document.body.style.overflow = "overlay";
           }}
         />
       )}
@@ -107,11 +103,11 @@ const Main = () => {
         <ModalLogin
           setter={() => {
             setLoginModal(false);
-            document.body.style.overflow = 'overlay';
+            document.body.style.overflow = "overlay";
           }}
           login={() => {
-            navigate('/login');
-            document.body.style.overflow = 'overlay';
+            navigate("/login");
+            document.body.style.overflow = "overlay";
           }}
         />
       )}
@@ -135,21 +131,19 @@ const Main = () => {
         </StIcon>
       </Header>
 
-      {state?.now === 'room' ? <MainRoom /> : <MainSelect />}
+      {state?.now === "room" ? <MainRoom /> : <MainSelect />}
 
       <StButtonWrap>
         <WriteButton onClick={writeButtonHandler} />
       </StButtonWrap>
 
       {scrollState && (
-        <StToTop
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        >
+        <StToTop onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
           <span>맨위로</span>
         </StToTop>
       )}
 
-      <Footer state={state} />
+      {/* <Footer state={state} /> */}
     </>
   );
 };

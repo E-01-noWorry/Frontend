@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import instance from '../app/module/instance';
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import instance from "../app/module/instance";
 
-import Footer from '../components/common/Footer';
-import Header from '../components/common/Header';
-import GlobalButton from '../components/elements/GlobalButton';
-import { ModalInfo } from '../components/common/Modal';
+// import Footer from '../components/common/Footer';
+import Header from "../components/common/Header";
+import GlobalButton from "../components/elements/GlobalButton";
+import { ModalInfo } from "../components/common/Modal";
 
-import { IconLarge } from '../shared/themes/iconStyle';
-import { fontBold } from '../shared/themes/textStyle';
+import { IconLarge } from "../shared/themes/iconStyle";
+import { fontBold } from "../shared/themes/textStyle";
 
-import IconSurvey from '../static/icons/Variety=Survey grey, Status=untab, Size=L.svg';
+import IconSurvey from "../static/icons/Variety=Survey grey, Status=untab, Size=L.svg";
 
-import Logo from '../static/images/Logo.svg';
-import ImageBubble1 from '../static/images/speach bubble1.svg';
-import ImageBubble2 from '../static/images/speach bubble2.svg';
-import ImageCharacter1 from '../static/images/Character1.svg';
-import ImageCharacter2 from '../static/images/Character2.svg';
+import Logo from "../static/images/Logo.svg";
+import ImageBubble1 from "../static/images/speach bubble1.svg";
+import ImageBubble2 from "../static/images/speach bubble2.svg";
+import ImageCharacter1 from "../static/images/Character1.svg";
+import ImageCharacter2 from "../static/images/Character2.svg";
 
-import styled, { css } from 'styled-components';
+import styled, { css } from "styled-components";
 
 const Answer = () => {
   const { state } = useLocation();
 
   const [infoText, setIntoText] = useState(true);
   const [gomgomThink, setGomgomThink] = useState(false);
-  const [gomgomAnswer, setGomgomAnswer] = useState('');
+  const [gomgomAnswer, setGomgomAnswer] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -40,7 +40,7 @@ const Answer = () => {
     setGomgomAnswer(false);
 
     try {
-      const { data } = await instance.get('/advice');
+      const { data } = await instance.get("/advice");
       setTimeout(() => {
         setGomgomAnswer(data.msg);
         setGomgomThink(false);
@@ -88,21 +88,18 @@ const Answer = () => {
           ) : gomgomAnswer ? (
             <StThinking>{gomgomAnswer}</StThinking>
           ) : (
-            <StThinking style={{ textAlign: 'center' }}>
+            <StThinking style={{ textAlign: "center" }}>
               고민을 떠올리고 <br />
               하단 버튼을 눌러주세요
             </StThinking>
           )}
         </StContentsWrap>
-        <StGlobalButton
-          think={gomgomThink}
-          onClick={gomgomThink ? null : clickAnswerHandler}
-        >
-          {gomgomAnswer ? '곰곰의 해답 다시 듣기' : '곰곰의 해답 듣기'}
+        <StGlobalButton think={gomgomThink} onClick={gomgomThink ? null : clickAnswerHandler}>
+          {gomgomAnswer ? "곰곰의 해답 다시 듣기" : "곰곰의 해답 듣기"}
         </StGlobalButton>
       </StAnswerWrap>
 
-      <Footer state={state} />
+      {/* <Footer state={state} /> */}
     </>
   );
 };
@@ -141,11 +138,7 @@ const StAnswerWrap = styled.div`
 
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
-  background: radial-gradient(
-    15rem 32rem at 50% 45%,
-    #ff9b25 0%,
-    #000000 82.03%
-  );
+  background: radial-gradient(15rem 32rem at 50% 45%, #ff9b25 0%, #000000 82.03%);
 
   border-left: 2rem solid transparent;
   border-right: 2rem solid transparent;
