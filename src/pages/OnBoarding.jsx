@@ -24,7 +24,7 @@ const OnBoarding = () => {
   const nextNavi = useRef(null);
 
   return (
-    <Layout>
+    <S.Layout>
       <Navi pagination={pagination} />
 
       <S.Swiper
@@ -81,13 +81,28 @@ const OnBoarding = () => {
           <LastSwiper />
         </S.SwiperSlide>
       </S.Swiper>
-    </Layout>
+    </S.Layout>
   );
 };
 
 export default OnBoarding;
 
 const S = {
+  Layout: styled.main`
+    @media ${({ theme }) => theme.device.PC} {
+      position: absolute;
+      left: ${({ theme }) => theme.style.left};
+      transform: ${({ theme }) => theme.style.transform};
+
+      width: ${({ theme }) => theme.style.width};
+    }
+
+    width: 100%;
+    height: 100vh;
+    padding: 0 2rem;
+    background-color: ${({ theme }) => theme.bg};
+  `,
+
   Swiper: styled(Swiper)`
     width: 100%;
     height: 100%;

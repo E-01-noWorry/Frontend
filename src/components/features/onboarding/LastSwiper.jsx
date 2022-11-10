@@ -20,7 +20,7 @@ const LastSwiper = () => {
         <GlobalButton
           bgc={({ theme }) => theme.white}
           font={({ theme }) => theme.main2}
-          onClick={() => navigate("/main", { state: { now: "select" } })}
+          onClick={() => navigate("/select")}
         >
           서비스 둘러보기
         </GlobalButton>
