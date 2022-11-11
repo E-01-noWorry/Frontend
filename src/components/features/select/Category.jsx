@@ -4,10 +4,10 @@ import { changeSelected } from "app/module/selectSlice";
 import useDropdown from "hooks/useDropdown";
 import { ReactComponent as IconDropdown } from "static/icons/Variety=Dropdown, Status=untab, Size=S.svg";
 import { fontMedium } from "shared/themes/textStyle";
-import { CATEGORY_ARR, FILTER_ARR } from "shared/Array";
+import { CATEGORY_ARR, FILTER_ARR } from "shared/utils/arr";
 import styled from "styled-components";
 
-const Category = ({ filter, category, proceeding, length }) => {
+const Category = ({ filter, category, proceeding, length, refreshPage }) => {
   const dispatch = useDispatch();
 
   const [isOpenFilter, dropFilterRef, handleClickFilter] = useDropdown();
@@ -15,6 +15,7 @@ const Category = ({ filter, category, proceeding, length }) => {
   const [isOpenProceeding, dropProceedingRef, handleClickProceeding] = useDropdown();
 
   const handleClickSelected = (value, item) => {
+    refreshPage();
     dispatch(changeSelected({ value, item }));
   };
 

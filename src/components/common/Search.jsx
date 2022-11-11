@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { clearQuery, __getSelectBySearch } from "app/module/selectSlice";
 
 import { fontMedium } from "shared/themes/textStyle";
 import { IconMedium } from "shared/themes/iconStyle";
 import IconSearch from "static/icons/Variety=search, Status=untab, Size=M.svg";
 import styled from "styled-components";
 
-const Search = ({ query }) => {
+const Search = ({ query, refreshPage, clearQuery, getListBySearch, text }) => {
   const dispatch = useDispatch();
   const [searchWord, setSearchWord] = useState("");
 
@@ -17,24 +16,21 @@ const Search = ({ query }) => {
 
   const handleCancel = () => {
     if (!query) return;
+
+    refreshPage();
     dispatch(clearQuery());
   };
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    dispatch(__getSelectBySearch(searchWord));
+    dispatch(getListBySearch(searchWord));
     setSearchWord("");
   };
 
   return (
     <S.Container>
       <S.Form onSubmit={handleOnSubmit}>
-        <input
-          value={searchWord}
-          onChange={handleOnChange}
-          maxLength={10}
-          placeholder="고민 투표/제목 검색(10자 이내)"
-        />
+        <input value={searchWord} onChange={handleOnChange} maxLength={10} placeholder={text} />
         <button type="submit" onClick={handleOnSubmit}>
           <img src={IconSearch} alt="IconSearch" />
         </button>
