@@ -22,6 +22,7 @@ const S = {
     border-radius: ${(props) => props.borderR || "2rem"};
 
     ${(props) => (props.fw === "bold" ? fontBold : fontExtraBold)}
+    font-size: ${(props) => props.fs || "1.6rem"};
     color: ${(props) => props.font || props.theme.white};
   `,
 };
