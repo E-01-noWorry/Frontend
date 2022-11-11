@@ -61,6 +61,8 @@ const GlobalStyles = createGlobalStyle`
 
   textarea,
   input {
+    border: none;
+    background-color: transparent;
     ${fontMedium};
   }
 
