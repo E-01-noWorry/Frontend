@@ -3,18 +3,21 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const Loading = lazy(() => import("pages/Loading"));
 const Start = lazy(() => import("pages/Start"));
-const OnBoarding = lazy(() => import("../pages/OnBoarding"));
+const OnBoarding = lazy(() => import("pages/OnBoarding"));
 
 const SignUp = lazy(() => import("pages/SignUp"));
 const Login = lazy(() => import("pages/Login"));
 const KakaoRedirect = lazy(() => import("pages/KakaoRedirect"));
 const GoogleRedirect = lazy(() => import("pages/GoogleRedirect"));
 
-const Main = lazy(() => import("pages/Main"));
+// const Main = lazy(() => import("pages/Main"));
 const Select = lazy(() => import("pages/Select"));
+const Room = lazy(() => import("pages/Room"));
 const Answer = lazy(() => import("pages/Answer"));
+const MyPage = lazy(() => import("pages/MyPage"));
 
-const MyPage = lazy(() => import("pages/mypage/MyPage"));
+const MySelect = lazy(() => import("pages/MySelect"));
+
 const PostVoted = lazy(() => import("pages/mypage/PostVoted"));
 const Voted = lazy(() => import("pages/mypage/Voted"));
 const MadeRoom = lazy(() => import("pages/mypage/MadeRoom"));
@@ -37,13 +40,14 @@ const Router = () => {
           <Route path="/api/auth/kakao/callback" element={<KakaoRedirect />} />
           <Route path="/api/auth/google/callback" element={<GoogleRedirect />} />
 
-          <Route path="/main" element={<Main />} />
+          {/* <Route path="/main" element={<Main />} /> */}
           <Route path="/select" element={<Select />} />
+          <Route path="/room" element={<Room />} />
           <Route path="/answer" element={<Answer />} />
-
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/postvoted" element={<PostVoted />} />
-          <Route path="/voted" element={<Voted />} />
+
+          <Route path="/postvoted" element={<MySelect />} />
+          <Route path="/voted" element={<MySelect />} />
           <Route path="/maderoom" element={<MadeRoom />} />
           <Route path="/operatingroom" element={<OperatingRoom />} />
 
