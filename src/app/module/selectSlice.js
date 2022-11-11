@@ -46,7 +46,6 @@ export const __getSelectBySelected = createAsyncThunk(
 
 const initialState = {
   data: [],
-  page: 1,
   selected: {
     query: "",
     filter: "기본순",
@@ -60,23 +59,21 @@ const selectSlice = createSlice({
   name: "selectSlice",
   initialState,
   reducers: {
-    incrementPage: (state) => {
-      state.page = state.page + 1;
-    },
-
     clearError: (state) => {
       state.error = null;
     },
 
     clearQuery: (state) => {
       state.data = [];
-      state.page = 1;
       state.selected.query = "";
+    },
+
+    clearData: (state) => {
+      state.data = [];
     },
 
     changeSelected: (state, action) => {
       state.data = [];
-      state.page = 1;
       state.selected = { ...initialState.selected, [action.payload.value]: action.payload.item };
     },
   },
@@ -105,5 +102,5 @@ const selectSlice = createSlice({
   },
 });
 
-export const { incrementPage, clearError, clearQuery, changeSelected } = selectSlice.actions;
-export default selectSlice;
+export const { clearError, clearQuery, clearData, changeSelected } = selectSlice.actions;
+export default selectSlice.reducer;
