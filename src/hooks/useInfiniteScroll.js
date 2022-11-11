@@ -1,20 +1,19 @@
-import { incrementPage } from "app/module/selectSlice";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 
 const useInfiniteScroll = () => {
-  const dispatch = useDispatch();
   const [lastItemRef, setLastItemRef] = useState(null);
+  const [page, setPage] = useState(1);
 
-  const onIntersect = useCallback(
-    ([entry], observer) => {
-      if (entry.isIntersecting) {
-        dispatch(incrementPage());
-        observer.unobserve(entry.target);
-      }
-    },
-    [dispatch],
-  );
+  const onIntersect = useCallback(([entry], observer) => {
+    if (entry.isIntersecting) {
+      setPage((prev) => ++prev);
+      observer.unobserve(entry.target);
+    }
+  }, []);
+
+  const refreshPage = () => {
+    setPage(1);
+  };
 
   useEffect(() => {
     let observer;
@@ -25,7 +24,7 @@ const useInfiniteScroll = () => {
     return () => observer?.disconnect();
   }, [lastItemRef, onIntersect]);
 
-  return { setLastItemRef };
+  return { page, setLastItemRef, refreshPage };
 };
 
 export default useInfiniteScroll;
