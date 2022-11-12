@@ -4,7 +4,6 @@ import select from "app/module/selectSlice";
 import room from "app/module/roomSlice";
 
 import commentSlice from "../module/commentSlice";
-import myPageSlice from "../module/myPageSlice";
 import kakaoLoginSlice from "../module/kakaoSlice";
 import voteSlice from "../module/voteSlice";
 
@@ -14,7 +13,6 @@ export const store = configureStore({
     room,
 
     comment: commentSlice.reducer,
-    myPageSlice: myPageSlice.reducer,
     kakao: kakaoLoginSlice.reducer,
     vote: voteSlice.reducer,
   },
