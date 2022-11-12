@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { fontMedium } from "shared/themes/textStyle";
+import { fontBold, fontMedium } from "shared/themes/textStyle";
 
 const MS = {
   Window: styled.div`
@@ -16,6 +16,21 @@ const MS = {
     line-height: 2.1rem;
 
     z-index: 9999;
+  `,
+
+  TitleConatiner: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 5.6rem;
+    background-color: ${({ theme }) => theme.main2};
+
+    border-radius: 2rem 2rem 0 0;
+
+    ${fontBold};
+    color: ${({ theme }) => theme.white};
   `,
 
   TextContainer: styled.div`
