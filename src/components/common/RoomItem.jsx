@@ -43,6 +43,7 @@ const S = {
     ${borderBoxDefault};
     position: relative;
 
+    width: 100%;
     height: 11.4rem;
     padding: 1.6rem;
     background-color: ${(props) =>

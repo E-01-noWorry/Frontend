@@ -32,6 +32,10 @@ const roomSlice = createSlice({
   name: "roomSlice",
   initialState,
   reducers: {
+    clearErrorRoom: (state) => {
+      state.error = null;
+    },
+
     clearQueryRoom: (state) => {
       state.data.all = [];
       state.query = "";
@@ -60,5 +64,5 @@ const roomSlice = createSlice({
   },
 });
 
-export const { clearQueryRoom, clearDataRoom } = roomSlice.actions;
+export const { clearErrorRoom, clearQueryRoom, clearDataRoom } = roomSlice.actions;
 export default roomSlice.reducer;
