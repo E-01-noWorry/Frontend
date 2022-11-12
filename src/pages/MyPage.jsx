@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import instance from "app/module/instance";
 
 import BasicModal from "components/common/modal/BasicModal";
 import LoginModal from "components/common/modal/LoginModal";
 import LogoutModal from "components/features/mypage/LogoutModal";
+import UserDeleteModal from "components/features/mypage/UserDeleteModal";
+
 import Layout from "components/common/Layout";
 import UserContainer from "components/features/mypage/UserContainer";
 import GradeContainer from "components/features/mypage/GradeContainer";
@@ -14,6 +15,7 @@ import GradeInfo from "components/features/mypage/GradeInfo";
 import Logout from "components/features/mypage/Logout";
 import Nav from "components/common/Nav";
 
+import useGetMyInfo from "hooks/useGetMyInfo";
 import useModalState from "hooks/useModalState";
 import { userStorage } from "shared/utils/localStorage";
 
@@ -23,25 +25,12 @@ import styled from "styled-components";
 const MyPage = () => {
   const { pathname } = useLocation();
 
+  const myInfo = useGetMyInfo();
+
+  const [modal, handleModal, message] = useModalState(false);
   const [loginModal, handleLoginModal] = useModalState(false);
   const [logoutModal, handleLogoutModal] = useModalState(false);
-  const [modal, handleModal, message] = useModalState(false);
-
-  const [myInfo, setMyInfo] = useState({});
-  const __getMyPoint = async () => {
-    try {
-      const { data } = await instance.get("/my");
-      setMyInfo(data.result);
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
-
-  useEffect(() => {
-    if (!userStorage.getToken()) return;
-
-    __getMyPoint();
-  }, []);
+  const [userDeleteModal, handleUserDeleteModal] = useModalState(false);
 
   const [selectedGrade, setSelectedGrade] = useState(0);
   const handleSelectGrade = (idx) => {
@@ -53,6 +42,9 @@ const MyPage = () => {
       {modal && <BasicModal handleClick={handleModal}>{message}</BasicModal>}
       {loginModal && <LoginModal handleClick={handleLoginModal} />}
       {logoutModal && <LogoutModal handleClick={handleLogoutModal} />}
+      {userDeleteModal && (
+        <UserDeleteModal handleClick={handleUserDeleteModal} handleModal={handleModal} />
+      )}
 
       <Layout>
         <S.HeaderTop>
@@ -78,9 +70,12 @@ const MyPage = () => {
           )}
         </S.HeaderBottom>
 
-        <GradeInfo selectedGrade={selectedGrade} />
+        {userStorage.getToken() && <GradeInfo selectedGrade={selectedGrade} />}
 
-        <MyService handleLoginModal={handleLoginModal} />
+        <MyService
+          handleLoginModal={handleLoginModal}
+          handleUserDeleteModal={handleUserDeleteModal}
+        />
 
         {userStorage.getToken() && <Logout handleLogoutModal={handleLogoutModal} />}
       </Layout>

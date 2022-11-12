@@ -11,7 +11,9 @@ import IconPerson from "static/icons/Variety=profile, Status=tab, Size=L.svg";
 import IconNext from "static/icons/Variety=next, Status=untab, Size=M.svg";
 import styled from "styled-components";
 
-const MyService = ({ handleLoginModal }) => {
+export const QNA_LINK = "https://forms.gle/daCzxS5nhRZXzrUr9";
+
+const MyService = ({ handleLoginModal, handleUserDeleteModal }) => {
   const navigate = useNavigate();
 
   const handleClickService = (path) => {
@@ -19,6 +21,14 @@ const MyService = ({ handleLoginModal }) => {
       handleLoginModal();
     } else {
       navigate(`/${path}`);
+    }
+  };
+
+  const handleClickUserDelete = () => {
+    if (!userStorage.getToken()) {
+      handleLoginModal();
+    } else {
+      handleUserDeleteModal();
     }
   };
 
@@ -56,13 +66,13 @@ const MyService = ({ handleLoginModal }) => {
 
       <S.Title>고객센터</S.Title>
       <S.ItemContainer>
-        <div>
+        <a href={QNA_LINK} target="_blank" rel="noreferrer">
           <img src={IconEdit} alt="IconEdit" />
           <span>1 : 1 문의</span>
           <img src={IconNext} alt="IconNext" />
-        </div>
+        </a>
 
-        <div>
+        <div onClick={handleClickUserDelete}>
           <img src={IconPerson} alt="IconPerson" />
           <span>회원 탈퇴</span>
           <img src={IconNext} alt="IconNext" />
@@ -87,7 +97,8 @@ const S = {
 
     border-radius: 2rem;
 
-    div {
+    div,
+    a {
       display: grid;
       grid-template-columns: 3.25rem auto 2.4rem;
       align-items: center;

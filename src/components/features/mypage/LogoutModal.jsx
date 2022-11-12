@@ -1,5 +1,5 @@
-import { MS } from "components/common/modal/modalStyles";
 import React from "react";
+import { MS } from "components/common/modal/modalStyles";
 import { userStorage } from "shared/utils/localStorage";
 
 const LogoutModal = ({ handleClick }) => {
