@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { clearData, clearError, clearQuery } from "app/module/selectSlice";
-import { __getSelectAll, __getSelectBySearch, __getSelectBySelected } from "app/module/selectSlice";
+import { __getSelectBySearch, clearError, clearQuery } from "app/module/selectSlice";
+
+import BasicModal from "components/common/modal/BasicModal";
+import LoginModal from "components/common/modal/LoginModal";
+import WriteModal from "components/features/select/WriteModal";
 
 import Header from "components/common/Header";
 import Layout from "components/common/Layout";
@@ -10,59 +13,46 @@ import Search from "components/common/Search";
 import Category from "components/features/select/Category";
 import SelectItem from "components/common/SelectItem";
 import Nav from "components/common/Nav";
-import ModalBasic from "components/common/modal/BasicModal";
+import WriteButton from "components/elements/WriteButton";
 
 import useInfiniteScroll from "hooks/useInfiniteScroll";
+import useGetSelect from "hooks/useGetSelect";
+import useModalState from "hooks/useModalState";
 
 import Logo from "static/images/Logo.svg";
 import IconSurvey from "static/icons/Variety=Survey, Status=untab, Size=L.svg";
+import { fontMedium } from "shared/themes/textStyle";
 import styled from "styled-components";
+
+export const FEEDBACK_LINK =
+  "https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform";
 
 const Select = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
+
   const { page, setLastItemRef, refreshPage } = useInfiniteScroll();
+  const { data, selected, error } = useGetSelect(page);
 
-  const data = useSelector((state) => state.select.data);
-  const { query, filter, category, proceeding } = useSelector((state) => state.select.selected);
-  const error = useSelector((state) => state.select.error);
-
-  useEffect(() => {
-    if (query) return;
-
-    if (filter === "인기순") {
-      dispatch(__getSelectBySelected({ value: filter, page }));
-    } else if (category !== "카테고리") {
-      dispatch(__getSelectBySelected({ value: category, page }));
-    } else if (proceeding === "진행중인 투표") {
-      dispatch(__getSelectBySelected({ value: proceeding, page }));
-    } else {
-      dispatch(__getSelectAll(page));
-    }
-  }, [dispatch, page, query, filter, category, proceeding]);
-
-  useEffect(() => {
-    return () => dispatch(clearData());
-  }, [dispatch]);
+  const [loginModal, handleLoginModal] = useModalState(false);
+  const [writeModal, handleWriteModal] = useModalState(false);
 
   return (
     <>
-      {error && <ModalBasic handleClick={() => dispatch(clearError())}>{error}</ModalBasic>}
+      {error && <BasicModal handleClick={() => dispatch(clearError())}>{error}</BasicModal>}
+      {loginModal && <LoginModal handleClick={handleLoginModal} />}
+      {writeModal && <WriteModal handleClick={handleWriteModal} />}
 
       <Header w={"4.5rem"}>
         <img onClick={() => window.location.reload()} src={Logo} alt="Logo" />
         <div />
-        <a
-          target="_blank"
-          rel="noreferrer"
-          href="https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform"
-        >
+        <a href={FEEDBACK_LINK} target="_blank" rel="noreferrer">
           <img src={IconSurvey} alt="IconSurvey" />
         </a>
       </Header>
 
       <Search
-        query={query}
+        query={selected.query}
         refreshPage={refreshPage}
         clearQuery={clearQuery}
         getListBySearch={__getSelectBySearch}
@@ -70,15 +60,16 @@ const Select = () => {
       />
 
       <Category
-        filter={filter}
-        category={category}
-        proceeding={proceeding}
+        filter={selected.filter}
+        category={selected.category}
+        proceeding={selected.proceeding}
         length={data.length}
         refreshPage={refreshPage}
       />
 
       <Layout>
         <S.Container>
+          {!data.length && <span>투표가 없습니다.</span>}
           {data?.map((item, idx) => (
             <SelectItem
               key={item.selectKey}
@@ -91,6 +82,12 @@ const Select = () => {
         </S.Container>
       </Layout>
 
+      <WriteButton
+        pathname={pathname}
+        handleWriteModal={handleWriteModal}
+        handleLoginModal={handleLoginModal}
+      />
+
       <Nav nowLocation={pathname} />
     </>
   );
@@ -100,9 +97,15 @@ const S = {
   Container: styled.section`
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 2.4rem;
 
     padding: 17rem 0 9.6rem 0;
+
+    > span {
+      margin-top: 4rem;
+      ${fontMedium};
+    }
   `,
 };
 

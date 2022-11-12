@@ -28,7 +28,7 @@ const SelectItem = ({ item, idx, setRef, length }) => {
         </span>
       </S.Header>
 
-      <S.Body>
+      <S.Body completion={item.completion}>
         <span>{item.title}</span>
         <span>{item.options?.join(" vs ")}</span>
       </S.Body>
@@ -63,6 +63,7 @@ const S = {
     display: flex;
     flex-direction: column;
 
+    width: 100%;
     height: 13.9rem;
     padding: 1.6rem;
     background-color: ${(props) => (props.completion ? props.theme.sub4 : props.theme.white)};
