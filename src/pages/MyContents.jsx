@@ -63,10 +63,9 @@ const MyContents = () => {
               {list?.map((item, idx) => (
                 <RoomItem
                   key={item.roomKey}
-                  room={item}
                   idx={idx}
                   setRef={setLastItemRef}
-                  length={list.length}
+                  roomItem={{ room: item, length: list.length }}
                 />
               ))}
             </>
