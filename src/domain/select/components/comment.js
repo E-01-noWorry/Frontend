@@ -20,7 +20,7 @@ const Comment = (props) => {
 
   useEffect(() => {
     dispatch(getCommentThunk({ params }));
-  }, [dispatch]);
+  }, [dispatch, params]);
 
   return (
     <Container allComments={allComments}>
