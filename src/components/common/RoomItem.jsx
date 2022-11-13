@@ -1,4 +1,6 @@
 import React from "react";
+import instance from "app/module/instance";
+
 import { borderBoxDefault } from "shared/themes/boxStyle";
 import { fontBold, fontMedium, fontSmall } from "shared/themes/textStyle";
 
@@ -7,9 +9,35 @@ import { ReactComponent as IconAnnounce } from "static/icons/Variety=announce, S
 import { ReactComponent as IconAnnounced } from "static/icons/Variety=announced, Status=untab, Size=M.svg";
 import styled from "styled-components";
 
-const RoomItem = ({ room, idx, entered, setRef, length }) => {
+const RoomItem = ({
+  roomItem: { room, entered, length },
+  handleModal: { handleModal, handleLoginModal, handleJoinModal },
+  handleRoomInfo,
+  idx,
+  setRef,
+}) => {
+  const handleJoin = async () => {
+    try {
+      const { data } = await instance.post(`/room/${room.roomKey}`);
+      handleRoomInfo({ ...data.result });
+      handleJoinModal();
+    } catch (error) {
+      const msg = error.response.data.errMsg;
+      if (msg.includes("로그인")) {
+        handleLoginModal(true);
+      } else {
+        handleModal(msg);
+      }
+    }
+  };
+
   return (
-    <S.Container cur={room.currentPeople} max={room.max} ref={idx === length - 1 ? setRef : null}>
+    <S.Container
+      onClick={handleJoin}
+      cur={room.currentPeople}
+      max={room.max}
+      ref={idx === length - 1 ? setRef : null}
+    >
       <S.Header cur={room.currentPeople} max={room.max}>
         {room.currentPeople === room.max ? <IconAnnounced /> : <IconAnnounce />}
         <span>{room.title}</span>
@@ -27,7 +55,7 @@ const RoomItem = ({ room, idx, entered, setRef, length }) => {
           <span>
             {room.currentPeople}/{room.max} 명
           </span>
-          {entered.includes(room.roomKey) && <span>상담 참여중</span>}
+          {entered?.includes(room.roomKey) && <span>상담 참여중</span>}
         </div>
 
         <div>

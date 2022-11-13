@@ -18,11 +18,13 @@ import WriteButton from "components/elements/WriteButton";
 import useInfiniteScroll from "hooks/useInfiniteScroll";
 import useGetSelect from "hooks/useGetSelect";
 import useModalState from "hooks/useModalState";
+import useScrollTop from "hooks/useScrollTop";
 
 import Logo from "static/images/Logo.svg";
 import IconSurvey from "static/icons/Variety=Survey, Status=untab, Size=L.svg";
 import { fontMedium } from "shared/themes/textStyle";
 import styled from "styled-components";
+import ScrollTopButton from "components/elements/ScrollTopButton";
 
 export const FEEDBACK_LINK =
   "https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform";
@@ -33,6 +35,7 @@ const Select = () => {
 
   const { page, setLastItemRef, refreshPage } = useInfiniteScroll();
   const { data, selected, error } = useGetSelect(page);
+  const isScroll = useScrollTop();
 
   const [loginModal, handleLoginModal] = useModalState(false);
   const [writeModal, handleWriteModal] = useModalState(false);
@@ -87,6 +90,8 @@ const Select = () => {
         handleWriteModal={handleWriteModal}
         handleLoginModal={handleLoginModal}
       />
+
+      {isScroll && <ScrollTopButton />}
 
       <Nav nowLocation={pathname} />
     </>

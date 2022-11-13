@@ -13,7 +13,7 @@ const S = {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.9rem;
+    gap: 0.4rem;
 
     width: 100%;
     height: ${(props) => props.h || "5.6rem"};

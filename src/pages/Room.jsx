@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { __getRoomBySearch, clearErrorRoom, clearQueryRoom } from "app/module/roomSlice";
 
 import BasicModal from "components/common/modal/BasicModal";
 import LoginModal from "components/common/modal/LoginModal";
+import JoinModal from "components/features/room/JoinModal";
 
 import Header from "components/common/Header";
 import Layout from "components/common/Layout";
@@ -12,16 +13,18 @@ import Nav from "components/common/Nav";
 import Search from "components/common/Search";
 import RoomItem from "components/common/RoomItem";
 import WriteButton from "components/elements/WriteButton";
+import ScrollTopButton from "components/elements/ScrollTopButton";
 import { FEEDBACK_LINK } from "pages/Select";
 
 import useInfiniteScroll from "hooks/useInfiniteScroll";
+import useGetRoom from "hooks/useGetRoom";
+import useScrollTop from "hooks/useScrollTop";
 import useModalState from "hooks/useModalState";
 
 import Logo from "static/images/Logo.svg";
 import IconSurvey from "static/icons/Variety=Survey, Status=untab, Size=L.svg";
 import { fontMedium } from "shared/themes/textStyle";
 import styled from "styled-components";
-import useGetRoom from "hooks/useGetRoom";
 
 const Room = () => {
   const dispatch = useDispatch();
@@ -29,13 +32,30 @@ const Room = () => {
 
   const { page, setLastItemRef, refreshPage } = useInfiniteScroll();
   const { data, query, error } = useGetRoom(page);
+  const isScroll = useScrollTop();
 
+  const [roomInfo, setRoomInfo] = useState({});
+  const handleRoomInfo = (payload) => {
+    setRoomInfo(payload);
+  };
+
+  const [modal, handleModal, message] = useModalState(false);
   const [loginModal, handleLoginModal] = useModalState(false);
+  const [joinModal, handleJoinModal] = useModalState(false);
 
   return (
     <>
       {error && <BasicModal handleClick={() => dispatch(clearErrorRoom())}>{error}</BasicModal>}
+      {modal && <BasicModal handleClick={handleModal}>{message}</BasicModal>}
       {loginModal && <LoginModal handleClick={handleLoginModal} />}
+      {joinModal && (
+        <JoinModal
+          pathname={pathname}
+          handleJoinModal={handleJoinModal}
+          entered={data.entered}
+          roomInfo={roomInfo}
+        />
+      )}
 
       <Header w={"4.5rem"}>
         <img onClick={() => window.location.reload()} src={Logo} alt="Logo" />
@@ -59,17 +79,19 @@ const Room = () => {
           {data?.all.map((room, idx) => (
             <RoomItem
               key={room.roomKey}
-              room={room}
               idx={idx}
-              entered={data.entered}
               setRef={setLastItemRef}
-              length={data.all.length}
+              roomItem={{ room, entered: data.entered, length: data.all.length }}
+              handleModal={{ handleModal, handleLoginModal, handleJoinModal }}
+              handleRoomInfo={handleRoomInfo}
             />
           ))}
         </S.Container>
       </Layout>
 
       <WriteButton pathname={pathname} handleLoginModal={handleLoginModal} />
+
+      {isScroll && <ScrollTopButton />}
 
       <Nav nowLocation={pathname} />
     </>
