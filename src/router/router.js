@@ -1,25 +1,25 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-const Loading = lazy(() => import("pages/Loading"));
-const Start = lazy(() => import("pages/Start"));
-const OnBoarding = lazy(() => import("pages/OnBoarding"));
+const Loading = lazy(() => import("common/components/Loading"));
+const Start = lazy(() => import("domain/onboarding/Start"));
+const OnBoarding = lazy(() => import("domain/onboarding/OnBoarding"));
 
-const SignUp = lazy(() => import("pages/SignUp"));
-const Login = lazy(() => import("pages/Login"));
-const KakaoRedirect = lazy(() => import("pages/KakaoRedirect"));
-const GoogleRedirect = lazy(() => import("pages/GoogleRedirect"));
+const SignUp = lazy(() => import("domain/sign/SignUp"));
+const Login = lazy(() => import("domain/sign/Login"));
+const KakaoRedirect = lazy(() => import("domain/sign/KakaoRedirect"));
+const GoogleRedirect = lazy(() => import("domain/sign/GoogleRedirect"));
 
-const Select = lazy(() => import("pages/Select"));
-const Room = lazy(() => import("pages/Room"));
-const Answer = lazy(() => import("pages/Answer"));
-const MyPage = lazy(() => import("pages/MyPage"));
+const Select = lazy(() => import("domain/select/Select"));
+const Room = lazy(() => import("domain/room/Room"));
+const Answer = lazy(() => import("domain/answer/Answer"));
+const MyPage = lazy(() => import("domain/mypage/MyPage"));
 
-const MyContents = lazy(() => import("pages/MyContents"));
+const MyContents = lazy(() => import("domain/mypage/MyContents"));
 
-const Write = lazy(() => import("pages/Write"));
-const Detail = lazy(() => import("pages/Detail"));
-const ChatRoom = lazy(() => import("pages/ChatRoom"));
+const Write = lazy(() => import("domain/write/Write"));
+const Detail = lazy(() => import("domain/select/Detail"));
+const ChatRoom = lazy(() => import("domain/room/ChatRoom"));
 
 const Router = () => {
   return (
