@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 const useModalState = (initialState) => {
   const [modal, setModal] = useState(initialState);
   const [message, setMessage] = useState("");
 
-  const handleModal = (msg) => {
+  const handleModal = useCallback((msg) => {
     setModal((prev) => !prev);
 
     if (msg) {
@@ -12,7 +12,7 @@ const useModalState = (initialState) => {
     } else {
       setMessage("");
     }
-  };
+  }, []);
 
   return [modal, handleModal, message];
 };
