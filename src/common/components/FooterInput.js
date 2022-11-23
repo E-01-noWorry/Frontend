@@ -1,6 +1,5 @@
-import React from 'react';
-
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const FooterInput = ({ children, ...rest }) => {
   return <StFooterInput {...rest}>{children}</StFooterInput>;
@@ -8,7 +7,7 @@ const FooterInput = ({ children, ...rest }) => {
 
 export default FooterInput;
 
-const StFooterInput = styled.div`
+const StFooterInput = styled.footer`
   @media ${({ theme }) => theme.device.PC} {
     width: ${({ theme }) => theme.style.width};
     left: ${({ theme }) => theme.style.left};
@@ -30,7 +29,7 @@ const StFooterInput = styled.div`
 
     width: 100%;
     height: 5.6rem;
-    padding: 0 5rem 0 2rem;
+    padding: 0 2rem 0 2rem;
     background-color: ${({ theme }) => theme.white};
 
     border-radius: 2rem;
