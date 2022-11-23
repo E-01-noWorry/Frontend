@@ -18,6 +18,10 @@ const userStorage = {
     return localStorage.getItem("nickname");
   },
 
+  getUserKey: () => {
+    return Number(localStorage.getItem("userKey"));
+  },
+
   setNickname: (nickname) => {
     localStorage.setItem("nickname", nickname);
   },

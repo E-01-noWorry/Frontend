@@ -1,6 +1,5 @@
 export const remainedTime = (value) => {
-  const time = new Date(value) - new Date();
-  if (time <= 0) return null;
+  const time = Math.abs(new Date(value) - new Date());
 
   const minutes = time / 60000;
   if (minutes < 60) return `${Math.floor(minutes)}분`;
@@ -13,10 +12,13 @@ export const remainedTime = (value) => {
 
   const weeks = days / 7;
   if (weeks < 5) return `${Math.floor(weeks)}주`;
+
+  const months = days / 30;
+  if (months < 12) return `${Math.floor(months)}개월`;
 };
 
 export const nowTime = (value) => {
   const date = new Date(value);
 
-  return date.toLocaleTimeString('ko-kr').slice(0, -3);
+  return date.toLocaleTimeString("ko-kr").slice(0, -3);
 };

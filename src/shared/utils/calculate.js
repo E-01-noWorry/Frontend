@@ -4,11 +4,11 @@ const colorFromPoint = (point) => {
   } else if (11 <= point && point <= 25) {
     return "Yellow";
   } else if (26 <= point && point <= 50) {
-    return "Blue";
+    return "Green";
   } else if (51 <= point && point <= 100) {
+    return "Blue";
+  } else if (101 <= point) {
     return "Purple";
-  } else {
-    return null;
   }
 };
 
