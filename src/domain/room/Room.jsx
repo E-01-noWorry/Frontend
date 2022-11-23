@@ -75,7 +75,7 @@ const Room = () => {
 
       <Layout>
         <S.Container>
-          {!data.all.length && <span>투표가 없습니다.</span>}
+          {!data.all.length && <span>상담방이 없습니다.</span>}
           {data?.all.map((room, idx) => (
             <RoomItem
               key={room.roomKey}
