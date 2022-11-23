@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import { fontBold, fontMedium } from '../../shared/themes/textStyle';
+import { fontBold, fontMedium } from "../../shared/themes/textStyle";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const ModalBasic = ({ children, setter }) => {
   return (
@@ -13,31 +13,6 @@ export const ModalBasic = ({ children, setter }) => {
         </StModalText>
         <StModalButton>
           <div onClick={setter}>확인</div>
-        </StModalButton>
-      </StModalWindow>
-      <StModalBg onClick={setter} />
-    </>
-  );
-};
-
-export const ModalInfo = () => {
-  return (
-    <StModalBg>
-      <StInfoText>고민을 떠올리고 하단 버튼을 눌러주세요</StInfoText>
-    </StModalBg>
-  );
-};
-
-export const ModalLogin = ({ login, setter }) => {
-  return (
-    <>
-      <StModalWindow>
-        <StModalText>
-          <span>로그인 후 사용해주세요.</span>
-        </StModalText>
-        <StModalButton>
-          <div onClick={setter}>확인</div>
-          <div onClick={login}>로그인 하기</div>
         </StModalButton>
       </StModalWindow>
       <StModalBg onClick={setter} />
@@ -64,40 +39,6 @@ export const ModalExit = ({ leave, setter }) => {
   );
 };
 
-export const ModalDelete = ({ setter, del }) => {
-  return (
-    <>
-      <StModalWindow>
-        <StModalText>
-          <span>정말 투표를 삭제할까요?</span>
-        </StModalText>
-        <StModalButton>
-          <div onClick={del}>삭제</div>
-          <div onClick={setter}>취소</div>
-        </StModalButton>
-      </StModalWindow>
-      <StModalBg onClick={setter} />
-    </>
-  );
-};
-
-export const ModalLogout = ({ setter, logout }) => {
-  return (
-    <>
-      <StModalWindow>
-        <StModalText>
-          <span>로그아웃 하시겠습니까?</span>
-        </StModalText>
-        <StModalButton>
-          <div onClick={logout}>로그아웃</div>
-          <div onClick={setter}>취소</div>
-        </StModalButton>
-      </StModalWindow>
-      <StModalBg onClick={setter} />
-    </>
-  );
-};
-
 export const ModalKick = ({ setter, kick, nickname }) => {
   return (
     <>
@@ -115,53 +56,7 @@ export const ModalKick = ({ setter, kick, nickname }) => {
   );
 };
 
-export const ModalWrite = ({ setter, write }) => {
-  return (
-    <>
-      <StModalWindow>
-        <StModalTitle>고민투표 만들기</StModalTitle>
-        <StModalText>
-          <span>
-            투표는 <span style={{ fontWeight: '700' }}>5분 당 1회</span>만
-            작성할 수 있습니다.
-            <br />
-            투표를 작성하시겠습니까?
-          </span>
-        </StModalText>
-        <StModalButton>
-          <div onClick={write}>투표 작성</div>
-          <div onClick={setter}>취소</div>
-        </StModalButton>
-      </StModalWindow>
-      <StModalBg onClick={setter} />
-    </>
-  );
-};
-
-export const ModalDeleteInfo = ({ setter, del }) => {
-  return (
-    <>
-      <StModalWindow>
-        <StModalText>
-          <span>정말 회원탈퇴를 하시겠습니까?</span>
-        </StModalText>
-        <StModalButton>
-          <div onClick={del}>회원탈퇴</div>
-          <div onClick={setter}>취소</div>
-        </StModalButton>
-      </StModalWindow>
-      <StModalBg onClick={setter} />
-    </>
-  );
-};
-
-export const ModalRecommend = ({
-  children,
-  setter,
-  leave,
-  recommend,
-  user,
-}) => {
+export const ModalRecommend = ({ children, setter, leave, recommend, user }) => {
   return (
     <>
       <StModalWindowWide>

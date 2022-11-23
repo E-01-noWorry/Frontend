@@ -6,9 +6,9 @@ import profileYellow from "static/images/profiles/Property 1=Yellow, Property 2=
 
 import styled from "styled-components";
 
-const ProfileImg = ({ point, className }) => {
+const ProfileImg = ({ point, size }) => {
   return (
-    <Profile className={className}>
+    <Profile size={size}>
       {0 <= point && point <= 10 ? (
         <img src={profileWhite} alt="profileWhite" />
       ) : 11 <= point && point <= 25 ? (
@@ -30,8 +30,8 @@ const Profile = styled.div`
   align-items: center;
   justify-content: center;
 
-  width: 100%;
-  height: 100%;
+  width: ${(props) => props.size || "100%"};
+  height: ${(props) => props.size || "100%"};
 
   border-radius: 50%;
 

@@ -1,14 +1,16 @@
 import { MS } from "common/components/modal/modalStyles";
+import React from "react";
 
-const BasicModal = ({ children, handleClick }) => {
+const DeleteModal = ({ handleClick, handleDelete }) => {
   return (
     <>
       <MS.Window>
         <MS.TextContainer>
-          <span>{children}</span>
+          <span>정말 투표를 삭제할까요?</span>
         </MS.TextContainer>
         <MS.ButtonContainer>
-          <div onClick={handleClick}>확인</div>
+          <div onClick={handleDelete}>삭제</div>
+          <div onClick={handleClick}>취소</div>
         </MS.ButtonContainer>
       </MS.Window>
       <MS.Background onClick={handleClick} />
@@ -16,4 +18,4 @@ const BasicModal = ({ children, handleClick }) => {
   );
 };
 
-export default BasicModal;
+export default DeleteModal;
