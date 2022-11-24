@@ -30,7 +30,6 @@ const Detail = () => {
 
   const { data: commentList, error } = useSelector((state) => state.comment);
   const [detailInfo, setDetailInfo] = useState({});
-  console.log(commentList);
 
   const [modal, handleModal, message] = useModalState(false);
   const [loginModal, handleLoginModal] = useModalState(false);
