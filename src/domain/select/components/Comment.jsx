@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { __deleteComment, __editComment } from "app/module/commentSlice";
+import { __deleteComment, __editComment, __postRecomment } from "app/module/commentSlice";
 import ProfileImg from "common/elements/ProfileImg";
 
 import { userStorage } from "shared/utils/localStorage";
 import { remainedTime } from "shared/utils/timeCalculation";
 import { fontBold, fontExtraBold, fontExtraSmall, fontMedium } from "shared/themes/textStyle";
 import styled, { css } from "styled-components";
+import Recomment from "./Recomment";
 
 const Comment = ({ comment, handleModal }) => {
   const dispatch = useDispatch();
@@ -25,10 +26,6 @@ const Comment = ({ comment, handleModal }) => {
     setIsReplyMode((prev) => !prev);
   };
 
-  const handleDeleteComment = (commentKey) => {
-    dispatch(__deleteComment(commentKey));
-  };
-
   const handleEditComment = (commentKey) => {
     if (!newComment.trim().length) {
       handleModal("내용을 입력해주세요.");
@@ -37,6 +34,21 @@ const Comment = ({ comment, handleModal }) => {
 
     dispatch(__editComment({ comment: newComment, commentKey }));
     setIsEditMode((prev) => !prev);
+  };
+
+  const handleDeleteComment = (commentKey) => {
+    dispatch(__deleteComment(commentKey));
+  };
+
+  const handlePostRecomment = (commentKey) => {
+    if (!replyComment.trim().length) {
+      handleModal("내용을 입력해주세요.");
+      return;
+    }
+
+    dispatch(__postRecomment({ comment: replyComment, commentKey }));
+    setIsReplyMode((prev) => !prev);
+    setReplyComment("");
   };
 
   return (
@@ -79,14 +91,25 @@ const Comment = ({ comment, handleModal }) => {
                 <input
                   value={replyComment}
                   onChange={(event) => setReplyComment(event.target.value)}
+                  placeholder="답글을 남겨주세요."
                 />
-                <span>등록</span>
+                <span onClick={() => handlePostRecomment(comment.commentKey)}>등록</span>
               </div>
             </>
           ) : (
             <span onClick={handleReplyToggle}>답글 달기</span>
           )}
         </S.Bottom>
+
+        <S.ReplyContainer>
+          {comment.recomment?.map((recomment) => (
+            <Recomment
+              key={recomment.recommentKey}
+              recomment={recomment}
+              handleModal={handleModal}
+            />
+          ))}
+        </S.ReplyContainer>
       </div>
     </S.Comment>
   );
@@ -98,7 +121,7 @@ const S = {
     grid-template-columns: 4rem auto;
     gap: 1.6rem;
 
-    padding: 2.4rem 2rem;
+    padding: 2.4rem 2rem 0 2rem;
     border-top: 1px solid ${({ theme }) => theme.sub4};
 
     > div:nth-child(2) {
@@ -186,6 +209,14 @@ const S = {
           }
         }
       `}
+  `,
+
+  ReplyContainer: styled.span`
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    margin-top: 1rem;
   `,
 };
 
