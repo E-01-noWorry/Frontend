@@ -1,5 +1,4 @@
 import React from "react";
-import instance from "app/module/instance";
 
 import { borderBoxDefault } from "shared/themes/boxStyle";
 import { fontBold, fontMedium, fontSmall } from "shared/themes/textStyle";
@@ -9,31 +8,10 @@ import { ReactComponent as IconAnnounce } from "static/icons/Variety=announce, S
 import { ReactComponent as IconAnnounced } from "static/icons/Variety=announced, Status=untab, Size=M.svg";
 import styled from "styled-components";
 
-const RoomItem = ({
-  roomItem: { room, entered, length },
-  handleModal: { handleModal, handleLoginModal, handleJoinModal },
-  handleRoomInfo,
-  idx,
-  setRef,
-}) => {
-  const handleJoin = async () => {
-    try {
-      const { data } = await instance.post(`/room/${room.roomKey}`);
-      handleRoomInfo({ ...data.result });
-      handleJoinModal();
-    } catch (error) {
-      const msg = error.response.data.errMsg;
-      if (msg.includes("로그인")) {
-        handleLoginModal(true);
-      } else {
-        handleModal(msg);
-      }
-    }
-  };
-
+const RoomItem = ({ roomItem: { room, entered, length }, handleJoin, idx, setRef }) => {
   return (
     <S.Container
-      onClick={handleJoin}
+      onClick={() => handleJoin(room.roomKey)}
       cur={room.currentPeople}
       max={room.max}
       ref={idx === length - 1 ? setRef : null}

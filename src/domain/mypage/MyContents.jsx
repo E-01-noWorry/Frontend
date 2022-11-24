@@ -35,6 +35,10 @@ const MyContents = () => {
 
   const list = useGetMyContents(page, pathname);
 
+  const handleJoin = (roomKey) => {
+    navigate(`/chatroom/${roomKey}`, { state: { now: pathname } });
+  };
+
   return (
     <>
       <S.Header length={list.length}>
@@ -66,6 +70,7 @@ const MyContents = () => {
                   idx={idx}
                   setRef={setLastItemRef}
                   roomItem={{ room: item, length: list.length }}
+                  handleJoin={handleJoin}
                 />
               ))}
             </>

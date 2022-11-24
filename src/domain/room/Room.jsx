@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { __getRoomBySearch, clearErrorRoom, clearQueryRoom } from "app/module/roomSlice";
+import instance from "app/module/instance";
 
 import BasicModal from "common/components/modal/BasicModal";
 import LoginModal from "common/components/modal/LoginModal";
@@ -29,19 +30,30 @@ import styled from "styled-components";
 const Room = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-
   const { page, setLastItemRef, refreshPage } = useInfiniteScroll();
-  const { data, query, error } = useGetRoom(page);
   const isScroll = useScrollTop();
 
+  const { data, query, error } = useGetRoom(page);
   const [roomInfo, setRoomInfo] = useState({});
-  const handleRoomInfo = (payload) => {
-    setRoomInfo(payload);
-  };
 
   const [modal, handleModal, message] = useModalState(false);
   const [loginModal, handleLoginModal] = useModalState(false);
   const [joinModal, handleJoinModal] = useModalState(false);
+
+  const handleJoin = async (roomKey) => {
+    try {
+      const { data } = await instance.post(`/room/${roomKey}`);
+      setRoomInfo(data.result);
+      handleJoinModal();
+    } catch (error) {
+      const msg = error.response.data.errMsg;
+      if (msg.includes("로그인")) {
+        handleLoginModal(true);
+      } else {
+        handleModal(msg);
+      }
+    }
+  };
 
   return (
     <>
@@ -82,8 +94,7 @@ const Room = () => {
               idx={idx}
               setRef={setLastItemRef}
               roomItem={{ room, entered: data.entered, length: data.all.length }}
-              handleModal={{ handleModal, handleLoginModal, handleJoinModal }}
-              handleRoomInfo={handleRoomInfo}
+              handleJoin={handleJoin}
             />
           ))}
         </S.Container>
