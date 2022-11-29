@@ -18,6 +18,22 @@ const MS = {
     z-index: 9999;
   `,
 
+  WindowWide: styled.div`
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 33rem;
+    background-color: #fff;
+
+    border-radius: 2rem;
+
+    line-height: 2.1rem;
+
+    z-index: 9999;
+  `,
+
   TitleConatiner: styled.div`
     display: flex;
     justify-content: center;
@@ -54,6 +70,37 @@ const MS = {
 
     span:nth-child(2) {
       ${fontMedium}
+      color: ${({ theme }) => theme.sub2};
+    }
+  `,
+
+  TextContainerWide: styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    min-height: 7.2rem;
+    padding: 1rem;
+
+    span {
+      text-align: center;
+      line-height: 2.5rem;
+    }
+
+    span:nth-child(1) {
+      ${fontMedium}
+    }
+
+    span:nth-child(2) {
+      ${fontMedium}
+      color: ${({ theme }) => theme.sub2};
+    }
+
+    > div:nth-child(1) {
+      ${fontMedium};
+      line-height: 1.8rem;
       color: ${({ theme }) => theme.sub2};
     }
   `,

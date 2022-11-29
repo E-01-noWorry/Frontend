@@ -6,9 +6,9 @@ import profileYellow from "static/images/profiles/Property 1=Yellow, Property 2=
 
 import styled from "styled-components";
 
-const ProfileImg = ({ point, size }) => {
+const ProfileImg = ({ className, point, size }) => {
   return (
-    <Profile size={size}>
+    <Profile className={className} size={size}>
       {0 <= point && point <= 10 ? (
         <img src={profileWhite} alt="profileWhite" />
       ) : 11 <= point && point <= 25 ? (
