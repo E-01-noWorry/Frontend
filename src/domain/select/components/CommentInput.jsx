@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { __postComment } from "app/module/commentSlice";
 import FooterInput from "common/components/FooterInput";
-import IconSend from "static/icons/Variety=send, Status=untab, Size=L.svg";
 import { userStorage } from "shared/utils/localStorage";
+import IconSend from "static/icons/Variety=send, Status=untab, Size=L.svg";
 
 const CommentInput = ({ selectKey, handleLoginModal, handleModal }) => {
   const dispatch = useDispatch();
