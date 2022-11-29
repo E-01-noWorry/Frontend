@@ -37,8 +37,12 @@ const S = {
       cursor: pointer;
     }
 
-    > h1 {
+    h1 {
       ${fontLarge}
+
+      > span {
+        color: ${({ theme }) => theme.sub3};
+      }
     }
   `,
 };
