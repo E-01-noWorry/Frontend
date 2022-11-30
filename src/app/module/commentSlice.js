@@ -1,204 +1,177 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import instance from './instance';
-import { current } from '@reduxjs/toolkit';
-import reset from 'styled-reset';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import instance from "./instance";
+
+export const __postComment = createAsyncThunk("/postComment", async (payload, thunkAPI) => {
+  try {
+    const { data } = await instance.post(`/comment/${payload.selectKey}`, {
+      comment: payload.comment,
+    });
+    return thunkAPI.fulfillWithValue(data.result);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data.errMsg);
+  }
+});
+
+export const __getComment = createAsyncThunk("/getComment", async (selectKey, thunkAPI) => {
+  try {
+    const { data } = await instance.get(`/comment/${selectKey}`);
+    return thunkAPI.fulfillWithValue(data.result);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data.errMsg);
+  }
+});
+
+export const __editComment = createAsyncThunk("/editComment", async (payload, thunkAPI) => {
+  try {
+    const { data } = await instance.put(`/comment/${payload.commentKey}`, {
+      comment: payload.comment,
+    });
+    return thunkAPI.fulfillWithValue(data.result);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data.errMsg);
+  }
+});
+
+export const __deleteComment = createAsyncThunk("/deleteComment", async (commentKey, thunkAPI) => {
+  try {
+    const { data } = await instance.delete(`/comment/${commentKey}`);
+    return thunkAPI.fulfillWithValue(data.result);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data.errMsg);
+  }
+});
+
+export const __postRecomment = createAsyncThunk("/postRecomment", async (payload, thunkAPI) => {
+  try {
+    const { data } = await instance.post(`/recomment/${payload.commentKey}`, {
+      comment: payload.comment,
+    });
+    return thunkAPI.fulfillWithValue(data.result);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data.errMsg);
+  }
+});
+
+export const __editRecomment = createAsyncThunk("/editRecomment", async (payload, thunkAPI) => {
+  try {
+    const { data } = await instance.put(`/recomment/${payload.recommentKey}`, {
+      comment: payload.comment,
+    });
+    console.log(data);
+    return thunkAPI.fulfillWithValue(data.result);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data.errMsg);
+  }
+});
+
+export const __deleteRecomment = createAsyncThunk(
+  "/deleteRecomment",
+  async (recommentKey, thunkAPI) => {
+    try {
+      const { data } = await instance.delete(`/recomment/${recommentKey}`);
+      console.log(data);
+      return thunkAPI.fulfillWithValue(data.result);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.errMsg);
+    }
+  },
+);
 
 const initialState = {
   data: [],
   error: null,
 };
 
-export const writeCommentThunk = createAsyncThunk(
-  'user/writeComment',
-  async (payload, thunkAPI) => {
-    try {
-      const data = await instance.post(`/comment/${payload.selectKey}`, {
-        comment: payload.comment,
-      });
-      return thunkAPI.fulfillWithValue(data.data);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  },
-);
-
-export const getCommentThunk = createAsyncThunk(
-  'user/getComment',
-  async (payload, thunkAPI) => {
-    try {
-      const data = await instance.get(`/comment/${payload.params.selectKey}`);
-
-      return thunkAPI.fulfillWithValue(data);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  },
-);
-
-export const deleteCommentThunk = createAsyncThunk(
-  'user/deleteComment',
-  async (payload, thunkAPI) => {
-    try {
-      const data = await instance.delete(`/comment/${payload}`);
-      return thunkAPI.fulfillWithValue(data);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  },
-);
-
-export const editCommentThunk = createAsyncThunk(
-  'user/editComment',
-  async (payload, thunkAPI) => {
-    try {
-      const data = await instance.put(`/comment/${payload.commentKey}`, {
-        comment: payload.comment,
-      });
-      return thunkAPI.fulfillWithValue(data);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  },
-);
-
-//대댓글
-export const writeRecommentThunk = createAsyncThunk(
-  'user/writeRecomment',
-  async (payload, thunkAPI) => {
-    try {
-      const data = await instance.post(`/recomment/${payload.commentKey}`, {
-        comment: payload.comment,
-      });
-
-      return thunkAPI.fulfillWithValue(data);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  },
-);
-
-export const deleteRecommentThunk = createAsyncThunk(
-  'user/deleteRecomment',
-  async (payload, thunkAPI) => {
-    try {
-      const data = await instance.delete(`/recomment/${payload.recommentKey}`);
-      return thunkAPI.fulfillWithValue(data);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  },
-);
-
-export const editRecommentThunk = createAsyncThunk(
-  'user/editRecomment',
-  async (payload, thunkAPI) => {
-    try {
-      const data = await instance.put(`/recomment/${payload.recommentKey}`, {
-        comment: payload.recomment,
-      });
-      return thunkAPI.fulfillWithValue(data);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  },
-);
-
-export const commentSlice = createSlice({
-  name: 'Comment',
+const commentSlice = createSlice({
+  name: "commentSlice",
   initialState,
-  reducers: {},
-  extraReducers: {
-    [writeCommentThunk.fulfilled]: (state, action) => {
-      state.data.push({ ...action.payload?.result, recomment: [] });
+  reducers: {
+    clearErrorComment: (state) => {
+      state.error = null;
     },
-    [writeCommentThunk.rejected]: (state, action) => {
+  },
+  extraReducers: {
+    //댓글 POST
+    [__postComment.fulfilled]: (state, action) => {
+      state.data = [...state.data, { ...action.payload, recomment: [] }];
+    },
+    [__postComment.rejected]: (state, action) => {
       state.error = action.payload;
     },
-    [getCommentThunk.fulfilled]: (state, action) => {
-      state.data = action.payload.data.result;
+
+    //댓글 GET
+    [__getComment.fulfilled]: (state, action) => {
+      state.data = action.payload;
     },
-    [getCommentThunk.rejected]: (state, action) => {
-      console.log(action);
+    [__getComment.rejected]: (state, action) => {
+      state.error = action.payload;
     },
-    [deleteCommentThunk.fulfilled]: (state, action) => {
-      state.data = state.data.filter(
-        (a) => a.commentKey !== action.payload.data.result.commentKey,
+
+    //댓글 PATCH
+    [__editComment.fulfilled]: (state, action) => {
+      state.data = state.data.map((item) =>
+        item.commentKey === action.payload.commentKey ? action.payload : item,
       );
     },
-    [deleteCommentThunk.rejected]: (state, action) => {
-      console.log(action);
+    [__editComment.rejected]: (state, action) => {
+      state.error = action.payload;
     },
-    [editCommentThunk.fulfilled]: (state, action) => {
-      const a = current(state).data.filter(
-        (a) => a.commentKey === parseInt(action.payload.data.result.commentKey),
-      );
 
-      const indexNum = current(state).data.indexOf(a[0]);
+    //댓글 DELETE
+    [__deleteComment.fulfilled]: (state, action) => {
+      state.data = state.data.filter((item) => item.commentKey !== action.payload.commentKey);
+    },
+    [__deleteComment.rejected]: (state, action) => {
+      state.error = action.payload;
+    },
 
-      state.data = state.data.map((item, idx) =>
-        idx === indexNum
-          ? { ...item, comment: action.payload.data.result.comment }
+    //대댓글 POST
+    [__postRecomment.fulfilled]: (state, action) => {
+      state.data = state.data.map((item) =>
+        item.commentKey === Number(action.payload.commentKey)
+          ? { ...item, recomment: [...item.recomment, action.payload] }
           : item,
       );
     },
-    [editCommentThunk.rejected]: (state, action) => {
-      console.log(action);
+    [__postRecomment.rejected]: (state, action) => {
+      state.error = action.payload;
     },
-    [writeRecommentThunk.fulfilled]: (state, action) => {
-      state.data?.map((a) =>
-        a.commentKey === parseInt(action.payload.data.result.commentKey)
-          ? a.recomment?.push(action.payload.data.result)
-          : a,
-      );
-    },
-    [writeRecommentThunk.rejected]: (state, action) => {},
-    [deleteRecommentThunk.fulfilled]: (state, action) => {
-      const a = current(state).data.filter(
-        (a) => a.commentKey === parseInt(action.payload.data.result.commentKey),
-      );
 
-      const indexNum = current(state).data.indexOf(a[0]);
-
-      state.data = state.data.map((item, idx) =>
-        idx === indexNum
+    //대댓글 PATCH
+    [__editRecomment.fulfilled]: (state, action) => {
+      state.data = state.data.map((item) =>
+        item.commentKey === Number(action.payload.commentKey)
           ? {
-              ...a[0],
-              recomment: [
-                ...a[0].recomment?.filter(
-                  (a) =>
-                    a.recommentKey !==
-                    parseInt(action.payload.data.result.recommentKey),
-                ),
-              ],
-            }
-          : item,
-      );
-    },
-    [deleteRecommentThunk.rejected]: (state, action) => {},
-
-    [editRecommentThunk.fulfilled]: (state, action) => {
-      const a = current(state).data.filter(
-        (a) => a.commentKey === parseInt(action.payload.data.result.commentKey),
-      );
-
-      const indexNum = current(state).data.indexOf(a[0]);
-
-      state.data = state.data.map((item, idx) =>
-        idx === indexNum
-          ? {
-              ...a[0],
-              recomment: a[0].recomment.map((item) =>
-                item.recommentKey ===
-                parseInt(action.payload.data.result.recommentKey)
-                  ? action.payload.data.result
-                  : item,
+              ...item,
+              recomment: item.recomment.map((value) =>
+                value.recommentKey === Number(action.payload.recommentKey) ? action.payload : value,
               ),
             }
           : item,
       );
     },
-    [editRecommentThunk.rejected]: (state, action) => {},
+    [__editRecomment.rejected]: (state, action) => {
+      state.error = action.payload;
+    },
+
+    //대댓글 DELETE
+    [__deleteRecomment.fulfilled]: (state, action) => {
+      state.data = state.data.map((item) =>
+        item.commentKey === Number(action.payload.commentKey)
+          ? {
+              ...item,
+              recomment: item.recomment.filter(
+                (value) => value.recommentKey !== Number(action.payload.recommentKey),
+              ),
+            }
+          : item,
+      );
+    },
+    [__deleteRecomment.rejected]: (state, action) => {
+      state.error = action.payload;
+    },
   },
 });
 
-export default commentSlice;
+export const { clearErrorComment } = commentSlice.actions;
+export default commentSlice.reducer;
