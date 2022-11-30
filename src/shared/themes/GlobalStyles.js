@@ -56,6 +56,7 @@ const GlobalStyles = createGlobalStyle`
     background-color: transparent;
     border: none;
     text-decoration: none;
+    color: ${({ theme }) => theme.black};
     
     cursor: pointer;
   }

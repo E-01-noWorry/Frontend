@@ -7,7 +7,6 @@ import { userStorage } from "shared/utils/localStorage";
 
 const GoogleRedirect = () => {
   const [searchParams] = useSearchParams();
-
   const code = searchParams.get("code");
 
   const googleLogin = useCallback(async () => {
