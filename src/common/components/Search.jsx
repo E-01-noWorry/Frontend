@@ -54,9 +54,8 @@ const S = {
     top: 6.4rem;
 
     display: grid;
-    grid-template-columns: auto 4rem;
+    grid-template-columns: auto 6rem;
     align-items: center;
-    gap: 2rem;
 
     width: 100%;
     height: 6.4rem;

@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import Router from "router/router";
+import _ from "lodash";
 
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
-
 import { firebaseApp } from "shared/utils/firebase";
 import { detectIphone } from "shared/utils/deviceDetector";
 import { refreshTokenAPI } from "shared/utils/refreshToken";
@@ -11,8 +11,6 @@ import { userStorage } from "shared/utils/localStorage";
 import theme from "shared/themes/Theme";
 import GlobalStyles from "shared/themes/GlobalStyles";
 import { ThemeProvider } from "styled-components";
-
-import _ from "lodash";
 
 //아이폰이 아닐때만 작동합니다
 if (!detectIphone(window.navigator.userAgent)) {
@@ -40,28 +38,24 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const App = () => {
+  const [vh, setVh] = useState(window.innerHeight * 0.01);
+
+  useEffect(() => {
+    const screenSize = _.debounce(() => {
+      setVh(window.innerHeight * 0.01);
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    }, 100);
+
+    window.addEventListener("resize", screenSize);
+    return () => window.removeEventListener("resize", screenSize);
+  }, [vh]);
+
   // 로그인이 true면 refreshToken 요청을 보냅니다
   useEffect(() => {
     if (!userStorage.getToken()) return;
 
     refreshTokenAPI();
   }, []);
-
-  const [vh, setVh] = useState(window.innerHeight * 0.01);
-  const screenSize = useCallback(
-    _.debounce(() => {
-      setVh(window.innerHeight * 0.01);
-      document.documentElement.style.setProperty("--vh", `${vh}px`);
-    }, 100),
-    [vh],
-  );
-
-  useEffect(() => {
-    screenSize();
-    window.addEventListener("resize", screenSize);
-
-    return () => window.removeEventListener("resize", screenSize);
-  }, [screenSize]);
 
   return (
     <ThemeProvider theme={theme.defaultTheme}>
