@@ -1,10 +1,10 @@
 import { MS } from "common/components/modal/modalStyles";
 import React from "react";
 
-const KickModal = ({ socket, roomKey, userKey, nickname, handleClickKick, handleKickModal }) => {
+const KickModal = ({ socket, roomKey, userKey, nickname, handleClickKick, handleSetKick }) => {
   const handleKickUser = () => {
     socket.current.emit("expulsion", { roomKey, userKey });
-    handleKickModal();
+    handleSetKick();
   };
 
   return (

@@ -44,8 +44,10 @@ const ChatBox = ({ chat, userKey }) => {
         {chat.map((item, idx) => (
           <S.Chat key={idx}>
             <div className={divideMessageType(item.userKey)}>
+              {/* 시스템 메세지 */}
               {item.userKey === 12 && <div className="chat">{item.chat}</div>}
 
+              {/* 유저 메세지 */}
               {item.userKey !== 12 && !isSameTime(idx) && (
                 <>
                   <ProfileImg className="img" point={item.User.point} size={"4rem"} />
@@ -61,6 +63,7 @@ const ChatBox = ({ chat, userKey }) => {
                 </>
               )}
 
+              {/* 같은 시간에 온 유저 메세지 */}
               {item.userKey !== 12 && isSameTime(idx) && (
                 <div className="sametime">
                   <div className="chat">{item.chat}</div>
@@ -83,11 +86,11 @@ const S = {
   NewMessage: styled.div`
     position: fixed;
     bottom: 10rem;
+    left: 50%;
+    transform: translateX(-50%);
 
     display: flex;
     justify-content: center;
-
-    width: 100%;
 
     z-index: 2;
 

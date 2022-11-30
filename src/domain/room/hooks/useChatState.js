@@ -67,13 +67,13 @@ const useChatState = ({ socket, roomKey, userKey }) => {
         setKickMessage((prev) => ({
           ...prev,
           key: data.userKey,
-          msg: `${data.nickname}님이 강퇴되었습니다.`,
+          msg: `${data.nickname}님이 강퇴됐습니다.`,
         }));
       } else {
         setChat((prev) => [
           ...prev,
           {
-            chat: `${data.nickname}님이 강퇴되었습니다.`,
+            chat: `${data.nickname}님이 강퇴됐습니다.`,
             userKey: 12,
             User: { nickname: "admin99" },
           },

@@ -10,7 +10,7 @@ const useScrollHeight = (chat) => {
     const scrollHeight = window.innerHeight;
     const myHeight = event.srcElement.scrollingElement.scrollTop;
 
-    setScrollState(totalHeight <= scrollHeight + myHeight + 500);
+    setScrollState(totalHeight <= scrollHeight + myHeight + 200);
   }, 200);
 
   useEffect(() => {

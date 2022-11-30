@@ -6,6 +6,7 @@ import ChatMenu from "./components/ChatMenu";
 import ExitModal from "./components/ExitModal";
 import DeleteModal from "domain/room/components/DeleteModal";
 import KickModal from "./components/KickModal";
+import BasicModal from "common/components/modal/BasicModal";
 
 import Header from "common/components/Header";
 import Layout from "common/components/Layout";
@@ -21,7 +22,6 @@ import IconBack from "static/icons/Variety=back, Status=untab, Size=L.svg";
 import IconAnnounce from "static/icons/Variety=announce, Status=untab, Size=M.svg";
 import IconDrawer from "static/icons/Variety=drawer, Status=untab, Size=L.svg";
 import styled from "styled-components";
-import BasicModal from "common/components/modal/BasicModal";
 
 const ChatRoom = () => {
   const navigate = useNavigate();
@@ -59,6 +59,11 @@ const ChatRoom = () => {
   const handleClickKick = ({ key, nickname }) => {
     setKickUser((prev) => ({ ...prev, key, nickname }));
     handleChatMenu();
+    handleKickModal();
+  };
+
+  const handleSetKick = () => {
+    setKickUser({ key: null, nickname: "" });
     handleKickModal();
   };
 
@@ -106,7 +111,7 @@ const ChatRoom = () => {
           userKey={kickUser.key}
           nickname={kickUser.nickname}
           handleClickKick={handleClickKick}
-          handleKickModal={handleKickModal}
+          handleSetKick={handleSetKick}
         />
       )}
 
