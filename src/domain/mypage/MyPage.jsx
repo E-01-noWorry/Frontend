@@ -47,37 +47,39 @@ const MyPage = () => {
       )}
 
       <Layout>
-        <S.HeaderTop>
-          {userStorage.getToken() ? (
-            <UserContainer myInfo={myInfo} handleModal={handleModal} />
-          ) : (
-            <h1>
-              로그인하고 곰곰의 <br />
-              고민해결 서비스를 경험해보세요.
-            </h1>
-          )}
-        </S.HeaderTop>
+        <S.MypageContainer>
+          <S.HeaderTop>
+            {userStorage.getToken() ? (
+              <UserContainer myInfo={myInfo} handleModal={handleModal} />
+            ) : (
+              <h1>
+                로그인하고 곰곰의 <br />
+                고민해결 서비스를 경험해보세요.
+              </h1>
+            )}
+          </S.HeaderTop>
 
-        <S.HeaderBottom>
-          {userStorage.getToken() ? (
-            <GradeContainer
-              myInfo={myInfo}
-              selectedGrade={selectedGrade}
-              handleSelectGrade={handleSelectGrade}
-            />
-          ) : (
-            <LoginContainer />
-          )}
-        </S.HeaderBottom>
+          <S.HeaderBottom>
+            {userStorage.getToken() ? (
+              <GradeContainer
+                myInfo={myInfo}
+                selectedGrade={selectedGrade}
+                handleSelectGrade={handleSelectGrade}
+              />
+            ) : (
+              <LoginContainer />
+            )}
+          </S.HeaderBottom>
 
-        {userStorage.getToken() && <GradeInfo selectedGrade={selectedGrade} />}
+          {userStorage.getToken() && <GradeInfo selectedGrade={selectedGrade} />}
 
-        <MyService
-          handleLoginModal={handleLoginModal}
-          handleUserDeleteModal={handleUserDeleteModal}
-        />
+          <MyService
+            handleLoginModal={handleLoginModal}
+            handleUserDeleteModal={handleUserDeleteModal}
+          />
 
-        {userStorage.getToken() && <Logout handleLogoutModal={handleLogoutModal} />}
+          {userStorage.getToken() && <Logout handleLogoutModal={handleLogoutModal} />}
+        </S.MypageContainer>
       </Layout>
 
       <Nav nowLocation={pathname} />
@@ -86,6 +88,10 @@ const MyPage = () => {
 };
 
 const S = {
+  MypageContainer: styled.section`
+    padding-bottom: 8rem;
+  `,
+
   HeaderTop: styled.section`
     display: flex;
     align-items: center;
