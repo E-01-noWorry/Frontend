@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import instance from "app/module/instance";
+import axios from "axios";
 
 import BasicModal from "common/components/modal/BasicModal";
 import Loading from "common/components/Loading";
@@ -39,7 +40,7 @@ const KakaoRedirect = () => {
     kakaoLogin();
   }, [kakaoLogin]);
 
-  const handleOnChange = (event) => {
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(event.target.value);
   };
 
@@ -49,7 +50,9 @@ const KakaoRedirect = () => {
       userStorage.setNickname(data.nickname);
       handleSucessModal();
     } catch (error) {
-      handleModal(error.response.data.errMsg);
+      if (axios.isAxiosError(error)) {
+        handleModal((error.response?.data as { errMsg?: string }).errMsg);
+      }
     }
   };
 
@@ -129,7 +132,7 @@ const S = {
     margin-left: 2rem;
 
     ${fontSmall};
-    color: ${({ theme }) => theme.sub2};
+    color: ${({ theme }) => theme.color.sub2};
     line-height: 1.2rem;
     text-align: left;
   `,

@@ -1,4 +1,3 @@
-import React from "react";
 import { fontMedium } from "shared/themes/textStyle";
 import styled from "styled-components";
 
@@ -24,7 +23,7 @@ const S = {
     width: 9.3rem;
     height: 3.7rem;
     padding: 0.8rem;
-    background-color: ${({ theme }) => theme.inactive};
+    background-color: ${({ theme }) => theme.color.inactive};
 
     border-radius: 1.85rem;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
@@ -33,7 +32,7 @@ const S = {
 
     span {
       ${fontMedium};
-      color: ${({ theme }) => theme.white};
+      color: ${({ theme }) => theme.color.white};
     }
   `,
 };

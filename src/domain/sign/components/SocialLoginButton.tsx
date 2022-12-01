@@ -1,5 +1,3 @@
-import React from "react";
-
 import { KAKAO_AUTH_URL } from "shared/utils/OAuth";
 import { GOOGLE_AUTH_URL } from "shared/utils/OAuth";
 import { fontMedium } from "shared/themes/textStyle";
@@ -11,12 +9,12 @@ import styled from "styled-components";
 const SocialLoginButton = () => {
   return (
     <S.ButtonContainer>
-      <S.Button href={KAKAO_AUTH_URL} bgc={"#FEE500"}>
+      <S.Button href={KAKAO_AUTH_URL} bgc="#FEE500">
         <img src={kakaoIcon} alt="kakaoIcon" />
         <span>카카오</span>
       </S.Button>
 
-      <S.Button href={GOOGLE_AUTH_URL} bgc={"#FFF"}>
+      <S.Button href={GOOGLE_AUTH_URL} bgc="#FFF">
         <img src={googleIcon} alt="googleIcon" />
         <span>구글</span>
       </S.Button>
@@ -32,7 +30,7 @@ const S = {
     gap: 1.6rem;
   `,
 
-  Button: styled.a`
+  Button: styled.a<{ bgc: string }>`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,7 +44,7 @@ const S = {
 
     span {
       ${fontMedium};
-      color: ${({ theme }) => theme.black};
+      color: ${({ theme }) => theme.color.black};
     }
   `,
 };

@@ -41,12 +41,12 @@ const MS = {
 
     width: 100%;
     height: 5.6rem;
-    background-color: ${({ theme }) => theme.main2};
+    background-color: ${({ theme }) => theme.color.main2};
 
     border-radius: 2rem 2rem 0 0;
 
     ${fontBold};
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.color.white};
   `,
 
   TextContainer: styled.div`
@@ -70,7 +70,7 @@ const MS = {
 
     span:nth-child(2) {
       ${fontMedium}
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
     }
   `,
 
@@ -95,13 +95,13 @@ const MS = {
 
     span:nth-child(2) {
       ${fontMedium}
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
     }
 
     > div:nth-child(1) {
       ${fontMedium};
       line-height: 1.8rem;
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
     }
   `,
 

@@ -2,8 +2,8 @@ const userIdRegEx = /^[A-Za-z0-9]{6,20}$/;
 const passwordRegEx = /^[A-Za-z0-9]{6,20}$/;
 const nicknameRegEx = /^[가-힣A-Za-z0-9]{2,10}$/;
 
-const isValidateUserId = (value) => {
-  if (!value) return;
+const isValidateUserId = (value: string) => {
+  if (!value) return "";
 
   if (userIdRegEx.test(value)) {
     return "*사용 가능한 아이디 입니다";
@@ -12,9 +12,9 @@ const isValidateUserId = (value) => {
   }
 };
 
-const isValidatePassword = (value) => {
+const isValidatePassword = (value: string) => {
   if (!value) {
-    return;
+    return "";
   } else if (value.length < 6) {
     return "*6자리 이상 입력해주세요";
   } else if (value.length > 20) {
@@ -28,8 +28,8 @@ const isValidatePassword = (value) => {
   }
 };
 
-const isValidateConfirm = (password, value) => {
-  if (!value) return;
+const isValidateConfirm = (password: string, value: string) => {
+  if (!value) return "";
 
   if (password === value) {
     return "*비밀번호와 일치합니다";
@@ -38,7 +38,7 @@ const isValidateConfirm = (password, value) => {
   }
 };
 
-const isValidateNickname = (value) => {
+const isValidateNickname = (value: string) => {
   if (!value) {
     return "*익명으로 안심하고 고민을 이야기할 수 있어요";
   }

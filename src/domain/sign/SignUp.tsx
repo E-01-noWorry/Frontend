@@ -1,7 +1,6 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-
 import instance from "app/module/instance";
+import axios from "axios";
 
 import ModalBasic from "common/components/modal/BasicModal";
 import Header from "common/components/Header";
@@ -19,7 +18,7 @@ import styled from "styled-components";
 const SignUp = () => {
   const navigate = useNavigate();
 
-  const [signUpInfo, validateInfo, handleOnChange] = useSignUpInput();
+  const { signUpInfo, validateInfo, handleOnChange } = useSignUpInput();
   const [modal, handleModal, message] = useModalState(false);
   const [successModal, handleSuccessModal] = useModalState(false);
 
@@ -28,7 +27,9 @@ const SignUp = () => {
       await instance.post("/user/signup", signUpInfo);
       handleSuccessModal();
     } catch (error) {
-      handleModal(error.response.data.errMsg);
+      if (axios.isAxiosError(error)) {
+        handleModal((error.response?.data as { errMsg?: string }).errMsg);
+      }
     }
   };
 
@@ -111,6 +112,10 @@ const SignUp = () => {
 
 export default SignUp;
 
+interface ValidateProps {
+  validate: string;
+}
+
 const S = {
   Container: styled.section`
     display: flex;
@@ -121,7 +126,7 @@ const S = {
     padding-top: 8.4rem;
   `,
 
-  InnerContainer: styled.article`
+  InnerContainer: styled.article<ValidateProps>`
     display: flex;
     flex-direction: column;
     gap: 1.6rem;
@@ -138,7 +143,8 @@ const S = {
 
       ${fontSmall}
       line-height: 2rem;
-      color: ${(props) => (props.validate === "true" ? props.theme.sub2 : props.theme.warning)};
+      color: ${(props) =>
+        props.validate === "true" ? props.theme.color.sub2 : props.theme.color.warning};
     }
   `,
 };

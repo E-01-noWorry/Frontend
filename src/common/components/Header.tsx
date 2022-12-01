@@ -1,14 +1,22 @@
 import { fontLarge } from "shared/themes/textStyle";
 import styled from "styled-components";
 
-const Header = ({ children, ...rest }) => {
-  return <S.Header {...rest}>{children}</S.Header>;
+interface Props extends WidthProps {
+  children: React.ReactNode;
+}
+
+const Header = ({ children, w }: Props) => {
+  return <S.Header w={w}>{children}</S.Header>;
 };
 
 export default Header;
 
+interface WidthProps {
+  w?: string;
+}
+
 const S = {
-  Header: styled.header`
+  Header: styled.header<WidthProps>`
     @media ${({ theme }) => theme.device.PC} {
       left: ${({ theme }) => theme.style.left};
       transform: ${({ theme }) => theme.style.transform};
@@ -28,7 +36,7 @@ const S = {
     width: 100%;
     height: 6.4rem;
     padding: 0 2rem;
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.color.bg};
 
     z-index: 9;
 
@@ -41,7 +49,7 @@ const S = {
       ${fontLarge}
 
       > span {
-        color: ${({ theme }) => theme.sub3};
+        color: ${({ theme }) => theme.color.sub3};
       }
     }
   `,

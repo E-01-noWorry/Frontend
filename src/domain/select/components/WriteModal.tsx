@@ -1,8 +1,11 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { MS } from "common/components/modal/modalStyles";
 
-const WriteModal = ({ handleClick }) => {
+interface Props {
+  handleClick: () => void;
+}
+
+const WriteModal = ({ handleClick }: Props) => {
   const navigate = useNavigate();
 
   const handleClickWrite = () => {

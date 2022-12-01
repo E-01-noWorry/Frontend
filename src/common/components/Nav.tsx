@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { fontBold, fontExtraSmall } from "shared/themes/textStyle";
@@ -11,10 +10,13 @@ import IconGomTab from "static/icons/Variety=Gom, Status=tab, Size=L.svg";
 import IconGomUntab from "static/icons/Variety=Gom, Status=untab, Size=L.svg";
 import IconProfileTab from "static/icons/Variety=profile, Status=tab, Size=L.svg";
 import IconProfileUntab from "static/icons/Variety=profile, Status=untab, Size=L.svg";
-
 import styled from "styled-components";
 
-const Nav = ({ nowLocation }) => {
+interface Props {
+  nowLocation: string;
+}
+
+const Nav = ({ nowLocation }: Props) => {
   const navigate = useNavigate();
 
   return (
@@ -61,7 +63,7 @@ const Nav = ({ nowLocation }) => {
 export default Nav;
 
 const S = {
-  Nav: styled.nav`
+  Nav: styled.nav<Props>`
     @media ${({ theme }) => theme.device.PC} {
       left: ${({ theme }) => theme.style.left};
       transform: ${({ theme }) => theme.style.transform};
@@ -81,10 +83,10 @@ const S = {
     height: 7.2rem;
     padding: 0.5rem 2.5rem 1.7rem 2.5rem;
     background-color: ${(props) =>
-      props.nowLocation === "/answer" ? "transparent" : props.theme.bg};
+      props.nowLocation === "/answer" ? "transparent" : props.theme.color.bg};
 
     border-top: ${(props) =>
-      props.nowLocation === "/answer" ? "none" : `1px solid ${props.theme.sub4}`};
+      props.nowLocation === "/answer" ? "none" : `1px solid ${props.theme.color.sub4}`};
 
     > div:nth-child(${(props) =>
           props.nowLocation === "/select"
@@ -96,7 +98,7 @@ const S = {
             : props.nowLocation === "/mypage"
             ? 4
             : null}) {
-      color: ${({ theme }) => theme.main2};
+      color: ${({ theme }) => theme.color.main2};
     }
   `,
 
@@ -105,7 +107,7 @@ const S = {
     flex-direction: column;
     align-items: center;
 
-    color: ${({ theme }) => theme.sub2};
+    color: ${({ theme }) => theme.color.sub2};
 
     cursor: pointer;
 

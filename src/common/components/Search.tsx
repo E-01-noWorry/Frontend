@@ -1,16 +1,25 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "app/config/hooks";
+import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 
 import { fontMedium } from "shared/themes/textStyle";
 import { IconMedium } from "shared/themes/iconStyle";
 import IconSearch from "static/icons/Variety=search, Status=untab, Size=M.svg";
 import styled from "styled-components";
 
-const Search = ({ query, refreshPage, clearQuery, getListBySearch, text }) => {
-  const dispatch = useDispatch();
+interface Props {
+  query: string;
+  refreshPage: () => void;
+  clearQuery: ActionCreatorWithoutPayload<string>;
+  getListBySearch: any;
+  text: string;
+}
+
+const Search = ({ query, refreshPage, clearQuery, getListBySearch, text }: Props) => {
+  const dispatch = useAppDispatch();
   const [searchWord, setSearchWord] = useState("");
 
-  const handleOnChange = (event) => {
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchWord(event.target.value);
   };
 
@@ -21,7 +30,7 @@ const Search = ({ query, refreshPage, clearQuery, getListBySearch, text }) => {
     dispatch(clearQuery());
   };
 
-  const handleOnSubmit = (event) => {
+  const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(getListBySearch(searchWord));
     setSearchWord("");
@@ -31,7 +40,7 @@ const Search = ({ query, refreshPage, clearQuery, getListBySearch, text }) => {
     <S.Container>
       <S.Form onSubmit={handleOnSubmit}>
         <input value={searchWord} onChange={handleOnChange} maxLength={10} placeholder={text} />
-        <button type="submit" onClick={handleOnSubmit}>
+        <button type="submit">
           <img src={IconSearch} alt="IconSearch" />
         </button>
       </S.Form>
@@ -60,7 +69,7 @@ const S = {
     width: 100%;
     height: 6.4rem;
     padding: 0 2rem;
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.color.bg};
 
     z-index: 9;
   `,
@@ -73,7 +82,7 @@ const S = {
       width: 100%;
       height: 4rem;
       padding: 0 1.5rem;
-      background-color: ${({ theme }) => theme.white};
+      background-color: ${({ theme }) => theme.color.white};
 
       border: none;
       border-radius: 2rem;

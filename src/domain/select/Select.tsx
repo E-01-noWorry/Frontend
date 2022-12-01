@@ -1,5 +1,4 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "app/config/hooks";
 import { useLocation } from "react-router-dom";
 import { __getSelectBySearch, clearError, clearQuery } from "app/module/selectSlice";
 
@@ -15,6 +14,7 @@ import WriteButton from "common/elements/WriteButton";
 import ScrollTopButton from "common/elements/ScrollTopButton";
 import Nav from "common/components/Nav";
 
+import { SelectItemProps } from "types";
 import useInfiniteScroll from "common/hooks/useInfiniteScroll";
 import useGetSelect from "domain/select/hooks/useGetSelect";
 import useModalState from "common/hooks/useModalState";
@@ -29,7 +29,7 @@ export const FEEDBACK_LINK =
   "https://docs.google.com/forms/d/e/1FAIpQLSeHPoDci-rlaFfTEteUDaJXwnoVvvLUKDBQ831gb1o1U6fF5A/viewform";
 
 const Select = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { pathname } = useLocation();
 
   const { page, setLastItemRef, refreshPage } = useInfiniteScroll();
@@ -45,7 +45,7 @@ const Select = () => {
       {loginModal && <LoginModal handleClick={handleLoginModal} />}
       {writeModal && <WriteModal handleClick={handleWriteModal} />}
 
-      <Header w={"4.5rem"}>
+      <Header w="4.5rem">
         <img onClick={() => window.location.reload()} src={Logo} alt="Logo" />
         <div />
         <a href={FEEDBACK_LINK} target="_blank" rel="noreferrer">
@@ -72,7 +72,7 @@ const Select = () => {
       <Layout>
         <S.Container>
           {!data.length && <span>투표가 없습니다.</span>}
-          {data?.map((item, idx) => (
+          {data?.map((item: SelectItemProps, idx: number) => (
             <SelectItem
               key={item.selectKey}
               item={item}

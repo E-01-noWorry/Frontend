@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { __getSelectAll, __getSelectBySearch, __getSelectBySelected } from "app/module/selectSlice";
 import { clearData } from "app/module/selectSlice";
+import { useAppDispatch, useAppSelector } from "app/config/hooks";
 
-const useGetSelect = (page) => {
-  const dispatch = useDispatch();
+const useGetSelect = (page: number) => {
+  const dispatch = useAppDispatch();
 
-  const data = useSelector((state) => state.select.data);
-  const selected = useSelector((state) => state.select.selected);
-  const error = useSelector((state) => state.select.error);
+  const data = useAppSelector((state) => state.select.data);
+  const selected = useAppSelector((state) => state.select.selected);
+  const error = useAppSelector((state) => state.select.error);
 
   useEffect(() => {
     if (selected.query) {
@@ -28,7 +28,9 @@ const useGetSelect = (page) => {
   }, [dispatch, page, selected.query, selected.filter, selected.category, selected.proceeding]);
 
   useEffect(() => {
-    return () => dispatch(clearData());
+    return () => {
+      dispatch(clearData());
+    };
   }, [dispatch]);
 
   return { data, selected, error };
