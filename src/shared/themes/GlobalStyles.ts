@@ -20,7 +20,7 @@ const GlobalStyles = createGlobalStyle`
 
   body {
     @media ${({ theme }) => theme.device.PC} {
-      background-color: ${({ theme }) => theme.sub5};
+      background-color: ${({ theme }) => theme.color.sub5};
     }
 
     box-sizing: border-box;
@@ -30,9 +30,9 @@ const GlobalStyles = createGlobalStyle`
     font-weight: 400;
 
     letter-spacing: -0.05rem;
-    color: ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.color.black};
 
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.color.bg};
     overflow: overlay;
 
     cursor: default;
@@ -42,21 +42,21 @@ const GlobalStyles = createGlobalStyle`
     }
     
     &::-webkit-scrollbar-thumb {
-      background-color: ${({ theme }) => theme.main2};
+      background-color: ${({ theme }) => theme.color.main2};
       border-radius: 0.25rem;
     }
   }
 
   a {
     text-decoration: none;
-    color: ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.color.black};
   }
 
   button {
     background-color: transparent;
     border: none;
     text-decoration: none;
-    color: ${({ theme }) => theme.black};
+    color: ${({ theme }) => theme.color.black};
     
     cursor: pointer;
   }
@@ -70,7 +70,7 @@ const GlobalStyles = createGlobalStyle`
 
   ::placeholder {
     ${fontMedium};
-    color: ${({ theme }) => theme.sub2};
+    color: ${({ theme }) => theme.color.sub2};
   }
 `;
 

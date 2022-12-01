@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Router from "router/router";
 import _ from "lodash";
 
@@ -8,7 +8,7 @@ import { detectIphone } from "shared/utils/deviceDetector";
 import { refreshTokenAPI } from "shared/utils/refreshToken";
 import { userStorage } from "shared/utils/localStorage";
 
-import theme from "shared/themes/Theme";
+import theme from "shared/themes/theme";
 import GlobalStyles from "shared/themes/GlobalStyles";
 import { ThemeProvider } from "styled-components";
 
@@ -58,7 +58,7 @@ const App = () => {
   }, []);
 
   return (
-    <ThemeProvider theme={theme.defaultTheme}>
+    <ThemeProvider theme={theme}>
       <GlobalStyles />
       <Router />
     </ThemeProvider>

@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-const Navi = ({ pagination }) => {
+interface Props {
+  pagination: number;
+}
+
+const Navi = ({ pagination }: Props) => {
   return (
     <>
       {pagination < 4 && (
@@ -15,8 +19,10 @@ const Navi = ({ pagination }) => {
   );
 };
 
+export default Navi;
+
 const S = {
-  Navi: styled.div`
+  Navi: styled.div<Props>`
     position: absolute;
     top: 4rem;
     right: 4rem;
@@ -30,17 +36,15 @@ const S = {
     div {
       width: 0.8rem;
       height: 0.8rem;
-      background-color: ${({ theme }) => theme.sub3};
+      background-color: ${({ theme }) => theme.color.sub3};
 
       border-radius: 50%;
     }
 
     div:nth-child(${(props) => props.pagination}) {
-      background-color: ${({ theme }) => theme.sub1};
+      background-color: ${({ theme }) => theme.color.sub1};
     }
 
     z-index: 9;
   `,
 };
-
-export default Navi;
