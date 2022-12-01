@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { userStorage } from "shared/utils/localStorage";
@@ -6,7 +5,13 @@ import { userStorage } from "shared/utils/localStorage";
 import IconWrite from "static/icons/Variety=Write, Status=untab, Size=XL.svg";
 import styled from "styled-components";
 
-const WriteButton = ({ pathname, handleWriteModal, handleLoginModal }) => {
+interface Props {
+  pathname: string;
+  handleWriteModal: () => void;
+  handleLoginModal: () => void;
+}
+
+const WriteButton = ({ pathname, handleWriteModal, handleLoginModal }: Props) => {
   const navigate = useNavigate();
 
   const handleClickWrite = () => {

@@ -1,5 +1,5 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
+import { SelectItemProps } from "types";
 
 import { remainedTime } from "shared/utils/timeCalculation";
 import { ReactComponent as IconPeople } from "static/icons/Variety=people, Status=untab, Size=S.svg";
@@ -8,7 +8,14 @@ import { ReactComponent as IconTimeOver } from "static/icons/Variety=Timeover, S
 import { fontBold, fontMedium, fontSmall } from "shared/themes/textStyle";
 import styled from "styled-components";
 
-const SelectItem = ({ item, idx, setRef, length }) => {
+interface Props {
+  item: SelectItemProps;
+  idx: number;
+  setRef: any;
+  length: number;
+}
+
+const SelectItem = ({ item, idx, setRef, length }: Props) => {
   const navigate = useNavigate();
 
   const handleEnterDetail = () => {
@@ -21,7 +28,7 @@ const SelectItem = ({ item, idx, setRef, length }) => {
       completion={item.completion}
       ref={idx === length - 1 ? setRef : null}
     >
-      <S.Header>
+      <S.Header completion={item.completion}>
         <span>{item.category}</span>
         <span>
           작성자 <span>{item.nickname}</span>
@@ -56,8 +63,14 @@ const SelectItem = ({ item, idx, setRef, length }) => {
   );
 };
 
+export default SelectItem;
+
+interface Completion {
+  completion: boolean;
+}
+
 const S = {
-  Container: styled.article`
+  Container: styled.article<Completion>`
     position: relative;
 
     display: flex;
@@ -66,13 +79,14 @@ const S = {
     width: 100%;
     height: 13.9rem;
     padding: 1.6rem;
-    background-color: ${(props) => (props.completion ? props.theme.sub4 : props.theme.white)};
+    background-color: ${(props) =>
+      props.completion ? props.theme.color.sub4 : props.theme.color.white};
     border-radius: 2rem;
 
     cursor: pointer;
   `,
 
-  Header: styled.div`
+  Header: styled.div<Completion>`
     position: absolute;
     top: 1.6rem;
 
@@ -84,19 +98,20 @@ const S = {
 
     > span:nth-child(1) {
       padding: 0 0.6rem;
-      background-color: ${(props) => (props.completion ? props.theme.main4 : props.theme.main2)};
+      background-color: ${(props) =>
+        props.completion ? props.theme.color.main4 : props.theme.color.main2};
 
       border-radius: 1rem;
 
       ${fontSmall}
       line-height: 2rem;
-      color: ${({ theme }) => theme.white};
+      color: ${({ theme }) => theme.color.white};
     }
 
     > span:nth-child(2) {
       ${fontSmall};
       line-height: 2rem;
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
 
       span {
         ${fontBold};
@@ -104,7 +119,7 @@ const S = {
     }
   `,
 
-  Body: styled.div`
+  Body: styled.div<Completion>`
     display: flex;
     flex-direction: column;
 
@@ -123,7 +138,7 @@ const S = {
 
       ${fontBold};
       line-height: 2.1rem;
-      color: ${(props) => (props.completion ? props.theme.sub2 : props.theme.black)};
+      color: ${(props) => (props.completion ? props.theme.color.sub2 : props.theme.color.black)};
     }
 
     > span:nth-child(2) {
@@ -131,7 +146,7 @@ const S = {
 
       ${fontMedium}
       line-height: 1.8rem;
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
     }
   `,
 
@@ -150,7 +165,7 @@ const S = {
       gap: 0.4rem;
 
       ${fontSmall}
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
     }
 
     > div:nth-child(2) {
@@ -159,5 +174,3 @@ const S = {
     }
   `,
 };
-
-export default SelectItem;

@@ -1,10 +1,12 @@
 import { useCallback, useState } from "react";
 
-const useModalState = (initialState) => {
+type ReturnTypes = [boolean, (msg?: string) => void, string];
+
+const useModalState = (initialState: boolean): ReturnTypes => {
   const [modal, setModal] = useState(initialState);
   const [message, setMessage] = useState("");
 
-  const handleModal = useCallback((msg) => {
+  const handleModal = useCallback((msg = "") => {
     setModal((prev) => !prev);
 
     if (msg) {
