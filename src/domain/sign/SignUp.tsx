@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import instance from "app/module/instance";
+import axios from "axios";
 
 import ModalBasic from "common/components/modal/BasicModal";
 import Header from "common/components/Header";
@@ -25,8 +26,10 @@ const SignUp = () => {
     try {
       await instance.post("/user/signup", signUpInfo);
       handleSuccessModal();
-    } catch (error: any) {
-      handleModal(error.response.data.errMsg);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleModal((error.response?.data as { errMsg?: string }).errMsg);
+      }
     }
   };
 

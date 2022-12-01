@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import instance from "app/module/instance";
+import axios from "axios";
 
 import BasicModal from "common/components/modal/BasicModal";
 import Loading from "common/components/Loading";
@@ -48,8 +49,10 @@ const KakaoRedirect = () => {
       const { data } = await instance.put("/user/nickname", nickname);
       userStorage.setNickname(data.nickname);
       handleSucessModal();
-    } catch (error: any) {
-      handleModal(error.response.data.errMsg);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleModal((error.response?.data as { errMsg?: string }).errMsg);
+      }
     }
   };
 
