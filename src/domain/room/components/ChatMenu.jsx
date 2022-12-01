@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+
 import ProfileImg from "common/elements/ProfileImg";
+
 import { fontBold, fontExtraBold } from "shared/themes/textStyle";
 import { fontExtraSmall, fontMedium, fontSmall } from "shared/themes/textStyle";
+
 import IconClose from "static/icons/Variety=close, Status=untab, Size=L.svg";
 import IconDelete from "static/icons/Variety=delete, Status=untab, Size=L.svg";
 import IconLogout from "static/icons/Variety=logout, Status=untab, Size=L.svg";
-
 import styled, { css } from "styled-components";
 
 const ChatMenu = ({
@@ -41,23 +43,25 @@ const ChatMenu = ({
 
         <S.People>
           <div>상담 참여자</div>
-          {nowUser.map((user) => (
-            <S.Person key={user.userKey}>
-              <ProfileImg point={user.point} size={"4rem"} />
+          <div>
+            {nowUser.map((user) => (
+              <S.Person key={user.userKey}>
+                <ProfileImg point={user.point} size={"4rem"} />
 
-              {user.userKey === userKey && <S.MeBadge>나</S.MeBadge>}
+                {user.userKey === userKey && <S.MeBadge>나</S.MeBadge>}
 
-              <S.Nickname isMe={user.userKey === userKey}>{user.nickname}</S.Nickname>
+                <S.Nickname isMe={user.userKey === userKey}>{user.nickname}</S.Nickname>
 
-              {roomInfo.userKey === userKey && user.userKey !== userKey && (
-                <S.KickBadge
-                  onClick={() => handleClickKick({ key: user.userKey, nickname: user.nickname })}
-                >
-                  내보내기
-                </S.KickBadge>
-              )}
-            </S.Person>
-          ))}
+                {roomInfo.userKey === userKey && user.userKey !== userKey && (
+                  <S.KickBadge
+                    onClick={() => handleClickKick({ key: user.userKey, nickname: user.nickname })}
+                  >
+                    내보내기
+                  </S.KickBadge>
+                )}
+              </S.Person>
+            ))}
+          </div>
         </S.People>
 
         <S.Footer>
@@ -151,7 +155,7 @@ const S = {
   People: styled.article`
     padding: 2rem;
 
-    & > div:nth-child(1) {
+    > div:nth-child(1) {
       ${fontMedium};
       ${fontBold};
       line-height: 2.1rem;
@@ -223,6 +227,7 @@ const S = {
     width: 100%;
     height: 6.4rem;
     padding: 0 2rem;
+    background-color: ${({ theme }) => theme.bg};
 
     div {
       display: flex;

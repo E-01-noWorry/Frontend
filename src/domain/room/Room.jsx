@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { __getRoomBySearch, clearErrorRoom, clearQueryRoom } from "app/module/roomSlice";
 import instance from "app/module/instance";
+import { __getRoomBySearch, clearErrorRoom, clearQueryRoom } from "app/module/roomSlice";
 
 import BasicModal from "common/components/modal/BasicModal";
 import LoginModal from "common/components/modal/LoginModal";
 import JoinModal from "domain/room/components/JoinModal";
-
 import Header from "common/components/Header";
 import Layout from "common/components/Layout";
 import Nav from "common/components/Nav";
@@ -15,16 +14,16 @@ import Search from "common/components/Search";
 import RoomItem from "common/components/RoomItem";
 import WriteButton from "common/elements/WriteButton";
 import ScrollTopButton from "common/elements/ScrollTopButton";
-import { FEEDBACK_LINK } from "domain/select/Select";
 
+import { FEEDBACK_LINK } from "domain/select/Select";
 import useInfiniteScroll from "common/hooks/useInfiniteScroll";
 import useGetRoom from "domain/room/hooks/useGetRoom";
 import useScrollTop from "common/hooks/useScrollTop";
 import useModalState from "common/hooks/useModalState";
+import { fontMedium } from "shared/themes/textStyle";
 
 import Logo from "static/images/Logo.svg";
 import IconSurvey from "static/icons/Variety=Survey, Status=untab, Size=L.svg";
-import { fontMedium } from "shared/themes/textStyle";
 import styled from "styled-components";
 
 const Room = () => {

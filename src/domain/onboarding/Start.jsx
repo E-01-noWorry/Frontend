@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import BasicModal from "common/components/modal/BasicModal";
 import useModalState from "common/hooks/useModalState";
+import Layout from "common/components/Layout";
 
 import { userStorage } from "shared/utils/localStorage";
 import { detectInAppBrowser, detectIphone } from "shared/utils/deviceDetector";
@@ -10,7 +11,6 @@ import { fontExtraBold, fontMedium } from "shared/themes/textStyle";
 
 import Logo from "static/images/Logo.svg";
 import styled from "styled-components";
-import Layout from "common/components/Layout";
 
 const Start = () => {
   const navigate = useNavigate();

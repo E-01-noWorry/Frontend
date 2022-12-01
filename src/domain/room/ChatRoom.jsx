@@ -7,17 +7,15 @@ import ExitModal from "./components/ExitModal";
 import DeleteModal from "domain/room/components/DeleteModal";
 import KickModal from "./components/KickModal";
 import BasicModal from "common/components/modal/BasicModal";
-
 import Header from "common/components/Header";
-import Layout from "common/components/Layout";
 import ChatBox from "domain/room/ChatBox";
 import ChatInput from "./components/ChatInput";
 
 import useChatState from "./hooks/useChatState";
 import useModalState from "common/hooks/useModalState";
 import { userStorage } from "shared/utils/localStorage";
-
 import { fontBold, fontMedium } from "shared/themes/textStyle";
+
 import IconBack from "static/icons/Variety=back, Status=untab, Size=L.svg";
 import IconAnnounce from "static/icons/Variety=announce, Status=untab, Size=M.svg";
 import IconDrawer from "static/icons/Variety=drawer, Status=untab, Size=L.svg";
@@ -46,7 +44,7 @@ const ChatRoom = () => {
     if (!state?.now || state.now === "/write") {
       navigate("/room", { replace: true });
     } else {
-      navigate(-1, { replace: true });
+      navigate(-1);
     }
   };
 
@@ -140,9 +138,7 @@ const ChatRoom = () => {
         <span>{roomInfo.title}</span>
       </S.RoomTitle>
 
-      <Layout>
-        <ChatBox chat={chat} userKey={userKey} />
-      </Layout>
+      <ChatBox chat={chat} userKey={userKey} />
 
       <ChatInput socket={socket} roomKey={Number(roomKey)} userKey={userKey} />
     </>

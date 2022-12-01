@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import instance from "app/module/instance";
 
+import ModalBasic from "common/components/modal/BasicModal";
 import Header from "common/components/Header";
 import Layout from "common/components/Layout";
 import GlobalInput from "common/elements/GlobalInput";
 import GlobalButton from "common/elements/GlobalButton";
-import ModalBasic from "common/components/modal/BasicModal";
 
+import useModalState from "common/hooks/useModalState";
 import useSignUpInput from "domain/sign/hooks/useValidate";
 import { fontBold, fontSmall } from "shared/themes/textStyle";
 
@@ -19,15 +20,15 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const [signUpInfo, validateInfo, handleOnChange] = useSignUpInput();
-  const [modal, setModal] = useState(false);
-  const [successModal, setSuccessModal] = useState(false);
+  const [modal, handleModal, message] = useModalState(false);
+  const [successModal, handleSuccessModal] = useModalState(false);
 
-  const onClickSignUp = async () => {
+  const handleClickSignUp = async () => {
     try {
       await instance.post("/user/signup", signUpInfo);
-      setSuccessModal(true);
+      handleSuccessModal();
     } catch (error) {
-      setModal(error.response.data.errMsg);
+      handleModal(error.response.data.errMsg);
     }
   };
 
@@ -39,7 +40,7 @@ const SignUp = () => {
         </ModalBasic>
       )}
 
-      {modal && <ModalBasic handleClick={() => setModal(false)}>{modal}</ModalBasic>}
+      {modal && <ModalBasic handleClick={handleModal}>{message}</ModalBasic>}
 
       <Header>
         <img onClick={() => navigate(-1)} src={IconBack} alt="IconBack" />
@@ -101,7 +102,7 @@ const SignUp = () => {
             <span>{validateInfo.nickname}</span>
           </S.InnerContainer>
 
-          <GlobalButton onClick={onClickSignUp}>가입하기</GlobalButton>
+          <GlobalButton onClick={handleClickSignUp}>가입하기</GlobalButton>
         </S.Container>
       </Layout>
     </>
@@ -132,7 +133,7 @@ const S = {
     }
 
     span {
-      margin-top: -0.6rem;
+      margin-top: -1.2rem;
       margin-left: 1.2rem;
 
       ${fontSmall}

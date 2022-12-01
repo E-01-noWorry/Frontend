@@ -2,7 +2,6 @@ import React from "react";
 
 import { KAKAO_AUTH_URL } from "shared/utils/OAuth";
 import { GOOGLE_AUTH_URL } from "shared/utils/OAuth";
-
 import { fontMedium } from "shared/themes/textStyle";
 
 import kakaoIcon from "static/images/kakao.svg";

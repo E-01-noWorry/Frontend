@@ -3,6 +3,7 @@ import ProfileImg from "common/elements/ProfileImg";
 
 import { remainedTime } from "shared/utils/timeCalculation";
 import { fontExtraBold, fontLarge, fontMedium } from "shared/themes/textStyle";
+
 import IconTimeWarning from "static/icons/Variety=Time warning, Status=untab, Size=S.svg";
 import IconTimeOver from "static/icons/Variety=Timeover, Status=Untab, Size=S.svg";
 import styled from "styled-components";

@@ -35,7 +35,8 @@ const Login = () => {
     setUserInfo((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleClickLogin = async () => {
+  const handleClickLogin = async (event) => {
+    event.preventDefault();
     try {
       const { data } = await instance.post("/user/login", userInfo);
       userStorage.setStorage(data);
@@ -56,21 +57,25 @@ const Login = () => {
       <Layout>
         <S.Container>
           <S.InnerContainer>
-            <GlobalInput
-              name="userId"
-              type="text"
-              placeholder="아이디를 입력해주세요"
-              maxLength={12}
-              onChange={handleOnChange}
-              isError={error}
-            />
-            <GlobalInput
-              name="password"
-              type="password"
-              placeholder="패스워드를 입력해주세요"
-              onChange={handleOnChange}
-              isError={error}
-            />
+            <form onSubmit={handleClickLogin}>
+              <GlobalInput
+                name="userId"
+                type="text"
+                placeholder="아이디를 입력해주세요"
+                maxLength={12}
+                onChange={handleOnChange}
+                isError={error}
+              />
+              <GlobalInput
+                name="password"
+                type="password"
+                placeholder="패스워드를 입력해주세요"
+                onChange={handleOnChange}
+                isError={error}
+              />
+              <input type="submit" hidden />
+            </form>
+
             {error && <S.ErrorMsg>*아이디와 비밀번호를 확인해주세요</S.ErrorMsg>}
           </S.InnerContainer>
 
@@ -112,6 +117,14 @@ const S = {
   `,
 
   InnerContainer: styled.article`
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+
+      width: 100%;
+    }
+
     display: flex;
     flex-direction: column;
     gap: 1.6rem;

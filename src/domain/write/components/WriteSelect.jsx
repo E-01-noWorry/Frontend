@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import instance from "app/module/instance";
 
 import BasicModal from "common/components/modal/BasicModal";
-
 import Header from "common/components/Header";
 import Layout from "common/components/Layout";
 import ImageUpload from "domain/write/components/ImageUpload";
@@ -11,10 +10,10 @@ import GlobalButton from "common/elements/GlobalButton";
 import TimeSlide from "domain/write/components/TimeSlide";
 
 import useModalState from "common/hooks/useModalState";
-
 import { CATEGORY_ARR } from "shared/utils/arr";
 import { fontBold, fontMedium, fontSmall } from "shared/themes/textStyle";
 import { borderBoxDefault } from "shared/themes/boxStyle";
+
 import IconBack from "static/icons/Variety=back, Status=untab, Size=L.svg";
 import IconAdd from "static/icons/Variety=add, Status=untab, Size=L.svg";
 import styled from "styled-components";

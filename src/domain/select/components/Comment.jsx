@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { __deleteComment, __editComment, __postRecomment } from "app/module/commentSlice";
+
 import ProfileImg from "common/elements/ProfileImg";
+import Recomment from "domain/select/components/Recomment";
 
 import { userStorage } from "shared/utils/localStorage";
 import { remainedTime } from "shared/utils/timeCalculation";
+
 import { fontBold, fontExtraBold, fontExtraSmall, fontMedium } from "shared/themes/textStyle";
 import styled, { css } from "styled-components";
-import Recomment from "./Recomment";
 
 const Comment = ({ comment, handleModal }) => {
   const dispatch = useDispatch();
@@ -91,7 +93,7 @@ const Comment = ({ comment, handleModal }) => {
                 <input
                   value={replyComment}
                   onChange={(event) => setReplyComment(event.target.value)}
-                  placeholder="답글을 남겨주세요."
+                  placeholder="답글을 남겨주세요"
                 />
                 <span onClick={() => handlePostRecomment(comment.commentKey)}>등록</span>
               </div>
@@ -182,6 +184,7 @@ const S = {
 
     > span {
       color: ${({ theme }) => theme.main2};
+      cursor: pointer;
     }
 
     ${(props) =>

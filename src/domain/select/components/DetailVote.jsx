@@ -1,9 +1,12 @@
 import React, { useState, useCallback, useEffect } from "react";
 import instance from "app/module/instance";
-import styled, { css } from "styled-components";
+
+import GlobalButton from "common/elements/GlobalButton";
+
 import { fontBold, fontExtra, fontExtraBold, fontMedium } from "shared/themes/textStyle";
 import { borderBoxDefault } from "shared/themes/boxStyle";
-import GlobalButton from "common/elements/GlobalButton";
+
+import styled, { css } from "styled-components";
 
 const DetailVote = ({ info, selectKey, handleLoginModal }) => {
   const [voteResult, setVoteResult] = useState({});
