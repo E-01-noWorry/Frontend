@@ -39,7 +39,7 @@ const KakaoRedirect = () => {
     kakaoLogin();
   }, [kakaoLogin]);
 
-  const handleOnChange = (event) => {
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(event.target.value);
   };
 
@@ -48,7 +48,7 @@ const KakaoRedirect = () => {
       const { data } = await instance.put("/user/nickname", nickname);
       userStorage.setNickname(data.nickname);
       handleSucessModal();
-    } catch (error) {
+    } catch (error: any) {
       handleModal(error.response.data.errMsg);
     }
   };
@@ -129,7 +129,7 @@ const S = {
     margin-left: 2rem;
 
     ${fontSmall};
-    color: ${({ theme }) => theme.sub2};
+    color: ${({ theme }) => theme.color.sub2};
     line-height: 1.2rem;
     text-align: left;
   `,

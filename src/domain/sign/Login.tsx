@@ -27,7 +27,7 @@ const Login = () => {
   const [error, setError] = useState(false);
   const [userInfo, setUserInfo] = useState(initialValue);
 
-  const handleOnChange = (event) => {
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!userInfo.password.length && !userInfo.password.length) {
       setError(false);
     }
@@ -35,7 +35,7 @@ const Login = () => {
     setUserInfo((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleClickLogin = async (event) => {
+  const handleClickLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       const { data } = await instance.post("/user/login", userInfo);
@@ -113,7 +113,7 @@ const S = {
     margin-left: 1.2rem;
 
     ${fontSmall}
-    color: ${({ theme }) => theme.warning};
+    color: ${({ theme }) => theme.color.warning};
   `,
 
   InnerContainer: styled.article`
@@ -139,7 +139,7 @@ const S = {
 
     span {
       ${fontSmall}
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
     }
 
     button {

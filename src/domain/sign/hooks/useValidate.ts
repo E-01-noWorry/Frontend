@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   isValidateConfirm,
   isValidateNickname,
@@ -20,7 +20,7 @@ const useSignUpInput = () => {
     nickname: "*익명으로 안심하고 고민을 이야기할 수 있어요",
   });
 
-  const handleVlidate = (name, value) => {
+  const handleVlidate = (name: string, value: string) => {
     switch (name) {
       case "userId":
         setValidateInfo((prev) => ({ ...prev, userId: isValidateUserId(value) }));
@@ -42,13 +42,13 @@ const useSignUpInput = () => {
     }
   };
 
-  const handleOnChange = (event) => {
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     setSignUpInfo({ ...signUpInfo, [name]: value });
     handleVlidate(name, value);
   };
 
-  return [signUpInfo, validateInfo, handleOnChange];
+  return { signUpInfo, validateInfo, handleOnChange };
 };
 
 export default useSignUpInput;

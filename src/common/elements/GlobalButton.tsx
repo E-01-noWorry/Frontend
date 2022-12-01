@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 interface Props extends ButtonProps {
   children: string;
-  onClick: () => void;
+  onClick: ((event: any) => Promise<void>) | (() => void);
 }
 
 const GlobalButton = ({ children, onClick, h, bgc, borderR, fw, fs, font }: Props) => {

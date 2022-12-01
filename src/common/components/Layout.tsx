@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-const Layout = ({ children }) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+const Layout = ({ children }: Props) => {
   return <S.Layout>{children}</S.Layout>;
 };
 
@@ -18,7 +22,7 @@ const S = {
     width: 100%;
     min-height: 100%;
     padding: 0 2rem;
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.color.bg};
   `,
 };
 
