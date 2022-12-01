@@ -1,16 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 
-const useDropdown = () => {
+type ReturnTypes = [boolean, React.RefObject<HTMLDivElement>, () => void];
+
+const useDropdown = (): ReturnTypes => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropRef = useRef(null);
+  const dropRef = useRef<HTMLDivElement>(null);
 
   const handleClick = () => {
     setIsOpen((prev) => !prev);
   };
 
   useEffect(() => {
-    const onClick = ({ target }) => {
-      if (dropRef.current && !dropRef.current.contains(target)) {
+    const onClick = (event: MouseEvent) => {
+      if (dropRef.current && !dropRef.current.contains(event.target as Node)) {
         setIsOpen((prev) => !prev);
       }
     };

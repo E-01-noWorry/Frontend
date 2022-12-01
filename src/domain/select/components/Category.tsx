@@ -1,5 +1,4 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "app/config/hooks";
 import { changeSelected } from "app/module/selectSlice";
 
 import useDropdown from "domain/select/hooks/useDropdown";
@@ -9,14 +8,22 @@ import { fontMedium } from "shared/themes/textStyle";
 import { ReactComponent as IconDropdown } from "static/icons/Variety=Dropdown, Status=untab, Size=S.svg";
 import styled from "styled-components";
 
-const Category = ({ filter, category, proceeding, length, refreshPage }) => {
-  const dispatch = useDispatch();
+interface Props {
+  filter: string;
+  category: string;
+  proceeding: string;
+  length: number;
+  refreshPage: () => void;
+}
+
+const Category = ({ filter, category, proceeding, length, refreshPage }: Props) => {
+  const dispatch = useAppDispatch();
 
   const [isOpenFilter, dropFilterRef, handleClickFilter] = useDropdown();
   const [isOpenCategory, dropCategoryRef, handleClickCategory] = useDropdown();
   const [isOpenProceeding, dropProceedingRef, handleClickProceeding] = useDropdown();
 
-  const handleClickSelected = (value, item) => {
+  const handleClickSelected = (value: string, item: string) => {
     refreshPage();
     dispatch(changeSelected({ value, item }));
   };
@@ -63,7 +70,7 @@ const Category = ({ filter, category, proceeding, length, refreshPage }) => {
 };
 
 const S = {
-  Container: styled.section`
+  Container: styled.section<{ length: number }>`
     @media ${({ theme }) => theme.device.PC} {
       left: ${({ theme }) => theme.style.left};
       transform: ${({ theme }) => theme.style.transform};
@@ -81,14 +88,14 @@ const S = {
     width: 100%;
     height: 4.2rem;
     padding: 0.4rem 2rem 0 2rem;
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.color.bg};
 
-    border-bottom: ${(props) => (props.length ? null : `1px solid ${props.theme.sub4}`)};
+    border-bottom: ${(props) => (props.length ? null : `1px solid ${props.theme.color.sub4}`)};
 
     z-index: 9;
   `,
 
-  Menu: styled.article`
+  Menu: styled.div`
     display: flex;
     align-items: center;
 
@@ -96,11 +103,11 @@ const S = {
 
     span {
       ${fontMedium};
-      color: ${({ theme }) => theme.sub2};
+      color: ${({ theme }) => theme.color.sub2};
     }
   `,
 
-  Down: styled.div`
+  Down: styled.div<{ isOpen: boolean }>`
     @media ${({ theme }) => theme.device.PC} {
       top: 3rem;
     }
@@ -130,7 +137,7 @@ const S = {
 
       &:hover,
       &:active {
-        color: ${({ theme }) => theme.main2};
+        color: ${({ theme }) => theme.color.main2};
       }
     }
   `,
