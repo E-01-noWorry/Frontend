@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper";
+import { Swiper as SwiperClass, Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 
@@ -19,8 +19,8 @@ import styled from "styled-components";
 
 const OnBoarding = () => {
   const [pagination, setPagination] = useState(1);
-  const prevNavi = useRef(null);
-  const nextNavi = useRef(null);
+  const prevNavi = useRef<HTMLDivElement>(null);
+  const nextNavi = useRef<HTMLDivElement>(null);
 
   return (
     <S.Layout>
@@ -28,9 +28,11 @@ const OnBoarding = () => {
 
       <S.Swiper
         navigation={{ prevEl: prevNavi.current, nextEl: nextNavi.current }}
-        onBeforeInit={(swiper) => {
-          swiper.params.navigation.prevEl = prevNavi.current;
-          swiper.params.navigation.nextEl = nextNavi.current;
+        onBeforeInit={(swiper: SwiperClass) => {
+          if (typeof swiper.params.navigation !== "boolean" && swiper.params.navigation) {
+            swiper.params.navigation.prevEl = prevNavi.current;
+            swiper.params.navigation.nextEl = nextNavi.current;
+          }
         }}
         slidesPerView={1}
         centeredSlides={true}
@@ -86,6 +88,10 @@ const OnBoarding = () => {
 
 export default OnBoarding;
 
+interface Arrow {
+  page: number;
+}
+
 const S = {
   Layout: styled.main`
     @media ${({ theme }) => theme.device.PC} {
@@ -98,7 +104,7 @@ const S = {
 
     width: 100%;
     height: calc(var(--vh, 1vh) * 100);
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.color.bg};
   `,
 
   Swiper: styled(Swiper)`
@@ -107,7 +113,7 @@ const S = {
   `,
 
   SwiperSlide: styled(SwiperSlide)`
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.color.bg};
 
     > h2 {
       position: absolute;
@@ -134,7 +140,7 @@ const S = {
     }
   `,
 
-  Prev: styled.div`
+  Prev: styled.div<Arrow>`
     position: absolute;
     top: ${(props) => (props.page !== 4 ? "50%" : "4.8%")};
     left: ${(props) => (props.page !== 4 ? "1.2rem" : "2rem")};
@@ -150,7 +156,7 @@ const S = {
     cursor: pointer;
   `,
 
-  Next: styled.div`
+  Next: styled.div<Arrow>`
     position: absolute;
     top: 50%;
     right: 1.2rem;

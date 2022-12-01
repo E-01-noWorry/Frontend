@@ -1,9 +1,9 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import GlobalButton from "common/elements/GlobalButton";
 import { fontExtraBold, fontMedium } from "shared/themes/textStyle";
 import Logo from "static/images/Logo.svg";
 import styled from "styled-components";
+import theme from "shared/themes/theme";
 
 const LastSwiper = () => {
   const navigate = useNavigate();
@@ -18,8 +18,8 @@ const LastSwiper = () => {
       <S.ButtonContainer>
         <GlobalButton onClick={() => navigate("/login")}>시작하기</GlobalButton>
         <GlobalButton
-          bgc={({ theme }) => theme.white}
-          font={({ theme }) => theme.main2}
+          bgc={theme.color.white}
+          font={theme.color.main2}
           onClick={() => navigate("/select")}
         >
           서비스 둘러보기
@@ -53,7 +53,7 @@ const S = {
     span {
       ${fontMedium};
       ${fontExtraBold};
-      color: ${({ theme }) => theme.main2};
+      color: ${({ theme }) => theme.color.main2};
     }
   `,
 
