@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import BasicModal from "common/components/modal/BasicModal";
@@ -76,7 +76,7 @@ const S = {
     span {
       ${fontMedium};
       ${fontExtraBold};
-      color: ${({ theme }) => theme.main2};
+      color: ${({ theme }) => theme.color.main2};
     }
   `,
 };
