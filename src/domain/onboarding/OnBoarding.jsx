@@ -9,12 +9,12 @@ import Navi from "domain/onboarding/components/Navi";
 import LastSwiper from "domain/onboarding/components/LastSwiper";
 
 import { fontExtra, fontExtraBold } from "shared/themes/textStyle";
+
 import GomGomVote from "static/images/GomGomVote.svg";
 import GomGomRoom from "static/images/GomGomRoom.svg";
 import GomGomAnswer from "static/images/GomGomAnswer.svg";
 import IconBack from "static/icons/Variety=back, Status=untab, Size=L.svg";
 import IconOnboarding from "static/icons/Variety=onboarding, Status=untab, Size=L.svg";
-
 import styled from "styled-components";
 
 const OnBoarding = () => {
@@ -97,8 +97,7 @@ const S = {
     }
 
     width: 100%;
-    height: 100vh;
-    padding: 0 2rem;
+    height: calc(var(--vh, 1vh) * 100);
     background-color: ${({ theme }) => theme.bg};
   `,
 

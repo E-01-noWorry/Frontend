@@ -1,6 +1,6 @@
 const userIdRegEx = /^[A-Za-z0-9]{6,20}$/;
 const passwordRegEx = /^[A-Za-z0-9]{6,20}$/;
-const nicknameRegEx = /^[가-힣,A-Za-z0-9]{2,10}$/;
+const nicknameRegEx = /^[가-힣A-Za-z0-9]{2,10}$/;
 
 const isValidateUserId = (value) => {
   if (!value) return;

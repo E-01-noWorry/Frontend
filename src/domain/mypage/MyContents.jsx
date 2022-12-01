@@ -24,7 +24,7 @@ const titleTransform = (pathname) => {
     case "/operatingroom":
       return "대화중인 고민 상담방";
     default:
-      break;
+      return "";
   }
 };
 

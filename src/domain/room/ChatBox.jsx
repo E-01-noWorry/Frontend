@@ -1,8 +1,9 @@
 import React from "react";
 
 import ProfileImg from "common/elements/ProfileImg";
-import useScrollHeight from "./hooks/useScrollHeight";
+import Layout from "common/components/Layout";
 
+import useScrollHeight from "domain/room/hooks/useScrollHeight";
 import { nowTime } from "shared/utils/timeCalculation";
 import { fontExtraSmall, fontMedium, fontSmall } from "shared/themes/textStyle";
 
@@ -40,40 +41,42 @@ const ChatBox = ({ chat, userKey }) => {
         </S.NewMessage>
       )}
 
-      <S.ChatContainer>
-        {chat.map((item, idx) => (
-          <S.Chat key={idx}>
-            <div className={divideMessageType(item.userKey)}>
-              {/* 시스템 메세지 */}
-              {item.userKey === 12 && <div className="chat">{item.chat}</div>}
+      <Layout>
+        <S.ChatContainer>
+          {chat.map((item, idx) => (
+            <S.Chat key={idx}>
+              <div className={divideMessageType(item.userKey)}>
+                {/* 시스템 메세지 */}
+                {item.userKey === 12 && <div className="chat">{item.chat}</div>}
 
-              {/* 유저 메세지 */}
-              {item.userKey !== 12 && !isSameTime(idx) && (
-                <>
-                  <ProfileImg className="img" point={item.User.point} size={"4rem"} />
-                  <div>
-                    <div className="nickname">
-                      {item.userKey === parseInt(userKey) ? "" : item.User?.nickname}
+                {/* 유저 메세지 */}
+                {item.userKey !== 12 && !isSameTime(idx) && (
+                  <>
+                    <ProfileImg className="img" point={item.User.point} size={"4rem"} />
+                    <div>
+                      <div className="nickname">
+                        {item.userKey === parseInt(userKey) ? "" : item.User?.nickname}
+                      </div>
+                      <div className="middle">
+                        <div className="chat">{item.chat}</div>
+                        <span className="time">{nowTime(item.createdAt)}</span>
+                      </div>
                     </div>
-                    <div className="middle">
-                      <div className="chat">{item.chat}</div>
-                      <span className="time">{nowTime(item.createdAt)}</span>
-                    </div>
+                  </>
+                )}
+
+                {/* 같은 시간에 온 유저 메세지 */}
+                {item.userKey !== 12 && isSameTime(idx) && (
+                  <div className="sametime">
+                    <div className="chat">{item.chat}</div>
                   </div>
-                </>
-              )}
-
-              {/* 같은 시간에 온 유저 메세지 */}
-              {item.userKey !== 12 && isSameTime(idx) && (
-                <div className="sametime">
-                  <div className="chat">{item.chat}</div>
-                </div>
-              )}
-            </div>
-          </S.Chat>
-        ))}
-        <div ref={scrollRef} />
-      </S.ChatContainer>
+                )}
+              </div>
+            </S.Chat>
+          ))}
+          <div ref={scrollRef} />
+        </S.ChatContainer>
+      </Layout>
     </>
   );
 };
@@ -85,14 +88,15 @@ const S = {
 
   NewMessage: styled.div`
     position: fixed;
-    bottom: 10rem;
     left: 50%;
     transform: translateX(-50%);
+    bottom: 10rem;
 
     display: flex;
     justify-content: center;
+    width: 100%;
 
-    z-index: 2;
+    z-index: 9;
 
     div {
       display: flex;
@@ -101,7 +105,6 @@ const S = {
       height: 3.2rem;
       padding: 0.3rem 0.6rem 0.3rem 1rem;
       background-color: ${({ theme }) => theme.white};
-
       border-radius: 1.6rem;
       box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
 

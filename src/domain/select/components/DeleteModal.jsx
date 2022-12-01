@@ -1,5 +1,5 @@
-import { MS } from "common/components/modal/modalStyles";
 import React from "react";
+import { MS } from "common/components/modal/modalStyles";
 
 const DeleteModal = ({ handleClick, handleDelete }) => {
   return (

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import instance from "app/module/instance";
 
 import BasicModal from "common/components/modal/BasicModal";
@@ -9,14 +8,13 @@ import Layout from "common/components/Layout";
 import GlobalButton from "common/elements/GlobalButton";
 
 import useModalState from "common/hooks/useModalState";
-
 import { borderBoxDefault } from "shared/themes/boxStyle";
 import { fontBold, fontLarge, fontMedium, fontSmall } from "shared/themes/textStyle";
+
 import IconBack from "static/icons/Variety=back, Status=untab, Size=L.svg";
 import IconErase from "static/icons/Variety=erase, Status=untab, Size=S.svg";
 import IconPlus from "static/icons/Variety=plus, Status=untab, Size=XL.svg";
 import IconMinus from "static/icons/Variety=minus, Status=untab, Size=XL.svg";
-
 import styled from "styled-components";
 
 const WriteRoom = () => {

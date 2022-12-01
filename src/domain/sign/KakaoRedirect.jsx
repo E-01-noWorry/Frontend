@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import instance from "app/module/instance";
-import BasicModal from "common/components/modal/BasicModal";
 
+import BasicModal from "common/components/modal/BasicModal";
 import Loading from "common/components/Loading";
 import Layout from "common/components/Layout";
 import GlobalInput from "common/elements/GlobalInput";
@@ -10,6 +10,7 @@ import GlobalButton from "common/elements/GlobalButton";
 
 import useModalState from "common/hooks/useModalState";
 import { userStorage } from "shared/utils/localStorage";
+
 import { fontBold, fontLarge, fontMedium, fontSmall } from "shared/themes/textStyle";
 import styled from "styled-components";
 
@@ -25,7 +26,10 @@ const KakaoRedirect = () => {
     try {
       const { data } = await instance.get(`/auth/kakao/callback?code=${code}`);
       userStorage.setStorage(data.user);
-      window.location.replace("/");
+
+      if (data.user.nickname !== "") {
+        window.location.replace("/");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -54,7 +58,7 @@ const KakaoRedirect = () => {
     window.location.replace("/");
   };
 
-  return userStorage.getNickname() !== "" ? (
+  return userStorage.getNickname() ? (
     <Loading />
   ) : (
     <>

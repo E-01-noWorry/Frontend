@@ -4,7 +4,7 @@ import { colorFromPoint, remainedPoint } from "shared/utils/calculate";
 import IconInformation from "static/icons/Variety=Information, Status=untab, Size=S.svg";
 import styled from "styled-components";
 
-const GradeContainer = ({ myInfo, selectedGrade, handleSelectGrade }) => {
+const GradeContainer = ({ myInfo, selectedGrade, handleSelectGrade, handleGradeInfoModal }) => {
   return (
     <>
       <S.MyGrade>
@@ -27,7 +27,7 @@ const GradeContainer = ({ myInfo, selectedGrade, handleSelectGrade }) => {
       <S.GradeInfo selectedGrade={selectedGrade}>
         <div>
           <span>등급 별 달성 조건</span>
-          <img src={IconInformation} alt="IconInformation" />
+          <img onClick={handleGradeInfoModal} src={IconInformation} alt="IconInformation" />
         </div>
 
         <div>
@@ -79,6 +79,10 @@ const S = {
 
   GradeInfo: styled.article`
     margin-top: 2.4rem;
+
+    img {
+      cursor: pointer;
+    }
 
     > div:nth-child(1) {
       display: flex;

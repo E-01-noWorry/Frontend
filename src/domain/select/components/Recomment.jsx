@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { __deleteRecomment, __editRecomment } from "app/module/commentSlice";
+
 import ProfileImg from "common/elements/ProfileImg";
 
 import { userStorage } from "shared/utils/localStorage";
 import { remainedTime } from "shared/utils/timeCalculation";
+
 import { fontBold, fontExtraBold, fontExtraSmall, fontMedium } from "shared/themes/textStyle";
 import styled from "styled-components";
-import { __deleteRecomment, __editRecomment } from "app/module/commentSlice";
 
 const Recomment = ({ recomment, handleModal }) => {
   const dispatch = useDispatch();

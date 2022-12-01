@@ -1,10 +1,10 @@
 import React from "react";
-
-import IconWrite from "../../static/icons/Variety=Write, Status=untab, Size=XL.svg";
-
-import styled from "styled-components";
-import { userStorage } from "shared/utils/localStorage";
 import { useNavigate } from "react-router-dom";
+
+import { userStorage } from "shared/utils/localStorage";
+
+import IconWrite from "static/icons/Variety=Write, Status=untab, Size=XL.svg";
+import styled from "styled-components";
 
 const WriteButton = ({ pathname, handleWriteModal, handleLoginModal }) => {
   const navigate = useNavigate();
@@ -41,12 +41,12 @@ const S = {
     }
 
     position: fixed;
-    bottom: 7.2rem;
+    bottom: 7rem;
 
     display: flex;
     justify-content: flex-end;
     padding-bottom: 2rem;
-    padding-right: 2rem;
+    padding-right: 1.5rem;
 
     width: 100%;
   `,

@@ -21,6 +21,7 @@ import { userStorage } from "shared/utils/localStorage";
 
 import { fontExtraBold, fontLarge } from "shared/themes/textStyle";
 import styled from "styled-components";
+import GradeInfoModal from "domain/mypage/components/GradeInfoModal";
 
 const MyPage = () => {
   const { pathname } = useLocation();
@@ -28,6 +29,7 @@ const MyPage = () => {
   const myInfo = useGetMyInfo();
 
   const [modal, handleModal, message] = useModalState(false);
+  const [gradeInfoModal, handleGradeInfoModal] = useModalState(false);
   const [loginModal, handleLoginModal] = useModalState(false);
   const [logoutModal, handleLogoutModal] = useModalState(false);
   const [userDeleteModal, handleUserDeleteModal] = useModalState(false);
@@ -40,6 +42,7 @@ const MyPage = () => {
   return (
     <>
       {modal && <BasicModal handleClick={handleModal}>{message}</BasicModal>}
+      {gradeInfoModal && <GradeInfoModal handleClick={handleGradeInfoModal} />}
       {loginModal && <LoginModal handleClick={handleLoginModal} />}
       {logoutModal && <LogoutModal handleClick={handleLogoutModal} />}
       {userDeleteModal && (
@@ -65,6 +68,7 @@ const MyPage = () => {
                 myInfo={myInfo}
                 selectedGrade={selectedGrade}
                 handleSelectGrade={handleSelectGrade}
+                handleGradeInfoModal={handleGradeInfoModal}
               />
             ) : (
               <LoginContainer />
@@ -89,7 +93,7 @@ const MyPage = () => {
 
 const S = {
   MypageContainer: styled.section`
-    padding-bottom: 8rem;
+    padding-bottom: 10rem;
   `,
 
   HeaderTop: styled.section`

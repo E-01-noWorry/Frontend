@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import instance from "app/module/instance";
 
 import Loading from "common/components/Loading";
-import instance from "app/module/instance";
 import { userStorage } from "shared/utils/localStorage";
 
 const GoogleRedirect = () => {
